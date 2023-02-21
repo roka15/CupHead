@@ -68,4 +68,8 @@ namespace yeram_client
 	{
 		return mHwnd;
 	}
+	HDC Application::GetHDC()
+	{
+		return mhdc;
+	}
 }

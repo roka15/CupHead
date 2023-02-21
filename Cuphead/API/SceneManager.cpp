@@ -46,6 +46,7 @@ namespace yeram_client
 				continue;
 			scene->Release();
 			delete scene;
+			scene = nullptr;
 		}
 	}
 

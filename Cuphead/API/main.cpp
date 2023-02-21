@@ -25,7 +25,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPWSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
-
+	//_CrtSetBreakAlloc(1244);
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	UNREFERENCED_PARAMETER(hPrevInstance);
@@ -76,8 +76,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			application.Run();
 		}
 	}
-	return (int)msg.wParam;
+
 	application.Release();
+	return (int)msg.wParam;
 }
 
 

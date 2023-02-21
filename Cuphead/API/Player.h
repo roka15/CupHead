@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Image.h"
 namespace yeram_client
 {
 	class Player :public GameObject
@@ -13,6 +14,7 @@ namespace yeram_client
 		virtual void Release()override;
 		void SetPos(Vector2 _pos) { mPos = _pos; };
 	private:
+		Image* mImage;
 	};
 }
 

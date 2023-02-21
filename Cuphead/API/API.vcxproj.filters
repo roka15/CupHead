@@ -47,12 +47,12 @@
     <Filter Include="Contents\Core\MemoryPool">
       <UniqueIdentifier>{cba3d83b-1109-40f9-a3eb-16528d9679ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Resource">
+      <UniqueIdentifier>{419f4f71-f7e3-4d2a-abac-655a2771f723}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
@@ -109,17 +109,21 @@
     <ClInclude Include="Input.h">
       <Filter>Contents\Core\Input</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="API.rc">
-      <Filter>리소스 파일</Filter>
-    </ResourceCompile>
+    <ClInclude Include="Resources.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="My_Resource.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="API.ico">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
@@ -166,5 +170,19 @@
     <ClCompile Include="Input.cpp">
       <Filter>Contents\Core\Input</Filter>
     </ClCompile>
+    <ClCompile Include="My_Resource.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resources.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="API.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

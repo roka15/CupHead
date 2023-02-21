@@ -3,8 +3,6 @@ namespace yeram_client
 {
 	void Scene::Initalize()
 	{
-		mLayers.resize((UINT)ELayerType::MAX);
-		mLayers[(UINT)ELayerType::Player] = new Layer();
 		for (Layer* layer : mLayers)
 		{
 			if (layer == nullptr)
@@ -41,6 +39,7 @@ namespace yeram_client
 				continue;
 			layer->Release();
 			delete layer;
+			layer = nullptr;
 		}
 	}
 
@@ -51,7 +50,8 @@ namespace yeram_client
 
 	Scene::Scene()
 	{
-		
+		mLayers.resize((UINT)ELayerType::MAX);
+		mLayers[(UINT)ELayerType::Player] = new Layer();
 	}
 
 	Scene::~Scene()

@@ -6,6 +6,7 @@ namespace yeram_client
 	}
 	Layer::~Layer()
 	{
+	
 	}
 	void Layer::Initalize()
 	{   
@@ -42,6 +43,7 @@ namespace yeram_client
 				continue;
 			obj->Release();
 			delete obj;
+			obj = nullptr;
 		}
 	}
 	void Layer::AddGameObject(GameObject* obj)

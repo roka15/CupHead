@@ -10,14 +10,10 @@ namespace yeram_client
 	}
 	void PlayScene::Initalize()
 	{
+		Player* player = new Player();
+		//player->SetPos(Vector2(0.0f, 0.0f + i));
+		AddGameObject(player, ELayerType::Player);
 		Scene::Initalize();
-		for (size_t i = 0; i < 500; i++)
-		{
-			Player* player = new Player();
-			//player->SetPos(Vector2(0.0f, 0.0f + i));
-			AddGameObject(player, ELayerType::Player);
-		}
-		
 	}
 	void PlayScene::Update()
 	{

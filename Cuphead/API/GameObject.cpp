@@ -3,7 +3,7 @@ namespace yeram_client
 {
     void GameObject::Initalize()
     {
-		mComponents.resize((UINT)EComponentType::MAX);
+		//mComponents.resize((UINT)EComponentType::MAX);
     }
     void GameObject::Update()
     {

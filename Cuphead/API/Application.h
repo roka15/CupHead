@@ -17,6 +17,7 @@ namespace yeram_client
 		void Release();
 		
 		HWND GetHandle();
+		HDC GetHDC();
 	private:
 		HWND mHwnd;
 		HDC mhdc;
