@@ -1,9 +1,11 @@
 #include "GameObject.h"
+#include "Transform.h"
 namespace yeram_client
 {
     void GameObject::Initalize()
     {
 		//mComponents.resize((UINT)EComponentType::MAX);
+		mComponents[(UINT)EComponentType::Transform] = new Transform();
     }
     void GameObject::Update()
     {
@@ -16,14 +18,10 @@ namespace yeram_client
     }
 	GameObject::GameObject()
 	{
+		mComponents.resize((UINT)EComponentType::MAX - 1);
 	}
 	GameObject::~GameObject()
 	{
 	}
-	void GameObject::AddComponent(Component* _component)
-	{
-	}
-	void GameObject::DeleteComponent(Component* _component)
-	{
-	}
+	
 }

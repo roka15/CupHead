@@ -26,5 +26,11 @@ enum class EGameObjectType
 enum class EComponentType
 {
 	NONE,
+	Transform,
+	Collider,
+	SpriteRenderer,
+	Animator,
+	Audio,
+	Script,
 	MAX,
 };

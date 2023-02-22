@@ -12,7 +12,7 @@ namespace yeram_client
 		virtual void Update()override;
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
-		void SetPos(Vector2 _pos) { mPos = _pos; };
+		
 	private:
 		Image* mImage;
 	};

@@ -50,6 +50,9 @@
     <Filter Include="Engine\Resource">
       <UniqueIdentifier>{419f4f71-f7e3-4d2a-abac-655a2771f723}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\Scene\TitleScene">
+      <UniqueIdentifier>{0a777d42-c559-46f7-874e-aa170f86945e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -121,6 +124,15 @@
     <ClInclude Include="Image.h">
       <Filter>Engine\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Contents\Scene\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="Animator.h" />
+    <ClInclude Include="Audio.h" />
+    <ClInclude Include="Collider.h" />
+    <ClInclude Include="Script.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -179,6 +191,15 @@
     <ClCompile Include="Image.cpp">
       <Filter>Engine\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Contents\Scene\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="Animator.cpp" />
+    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Script.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

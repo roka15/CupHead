@@ -199,18 +199,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (wParam)
 		{
 		case VK_TAB:
-			/*flag = !flag;
-			if (flag == false)
-			{
-				brush = CreateSolidBrush(RGB(255, 0, 0));
-				pen = CreatePen(PS_SOLID, 4, RGB(0, 255, 0));
-			}
-			else
-			{
-				brush= CreateSolidBrush(RGB(0, 0, 255));
-				pen = CreatePen(PS_SOLID, 4, RGB(255, 0, 0));
-			}
-			InvalidateRect(hWnd, NULL, FALSE);*/
+			
 			break;
 		}
 		break;

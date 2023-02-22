@@ -1,7 +1,7 @@
 #include "Scene.h"
 namespace yeram_client
 {
-	void Scene::Initalize()
+	void Scene::Initialize()
 	{
 		for (Layer* layer : mLayers)
 		{
@@ -42,6 +42,14 @@ namespace yeram_client
 			layer = nullptr;
 		}
 	}
+
+    void Scene::OnEnter()
+    {
+    }
+
+    void Scene::OnExit()
+    {
+    }
 
 	void Scene::AddGameObject(GameObject* obj, ELayerType layer)
 	{

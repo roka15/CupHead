@@ -2,7 +2,7 @@
 #include "My_Resource.h"
 namespace yeram_client
 {
-	
+
 	class Resources
 	{
 	public:
@@ -37,10 +37,20 @@ namespace yeram_client
 
 			return dynamic_cast<T*>(resource);
 		}
+
+		static void Release()
+		{
+			for (auto pair : mResources)
+			{
+				delete pair.second;
+				pair.second = nullptr;
+			}
+			mResources.clear();
+		}
 	private:
 		static std::map<std::wstring, My_Resource*> mResources;
 	};
-	
+
 }
 
 

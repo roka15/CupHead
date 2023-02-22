@@ -8,12 +8,12 @@ namespace yeram_client
 	PlayScene::~PlayScene()
 	{
 	}
-	void PlayScene::Initalize()
+	void PlayScene::Initialize()
 	{
 		Player* player = new Player();
 		//player->SetPos(Vector2(0.0f, 0.0f + i));
 		AddGameObject(player, ELayerType::Player);
-		Scene::Initalize();
+		Scene::Initialize();
 	}
 	void PlayScene::Update()
 	{
@@ -26,5 +26,12 @@ namespace yeram_client
 	void PlayScene::Release()
 	{
 		Scene::Release();
+	}
+	void PlayScene::OnEnter()
+	{
+	}
+	void PlayScene::OnExit()
+	{
+		mLayers[(UINT)ELayerType::Player]->Initalize();
 	}
 }
