@@ -46,7 +46,7 @@ namespace yeram_client
 			obj = nullptr;
 		}
 	}
-	void Layer::AddGameObject(GameObject* obj)
+	void Layer::AddGameObject(GameObject* obj )
 	{
 		mObjs.push_back(obj);
 	}

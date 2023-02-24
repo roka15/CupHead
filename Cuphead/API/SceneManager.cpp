@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "PlayScene.h"
 #include "TitleScene.h"
+#include "MainMenuScene.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -8,8 +9,10 @@ namespace yeram_client
 	void SceneManager::Initalize()
 	{
 		mScenes.resize((UINT)ESceneType::MAX);
-		mScenes[(UINT)ESceneType::Play] = new PlayScene();
 		mScenes[(UINT)ESceneType::Title] = new TitleScene();
+		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene();
+		mScenes[(UINT)ESceneType::Play] = new PlayScene();
+		
 
 		mActiveScene = mScenes[(UINT)ESceneType::Title];
 		for (Scene* scene : mScenes)
@@ -51,6 +54,7 @@ namespace yeram_client
 	void SceneManager::LoadScene(ESceneType _type)
 	{
 		mActiveScene = mScenes[(UINT)_type];
+		mActiveScene->Initialize();
 	}
 
 	SceneManager::~SceneManager()

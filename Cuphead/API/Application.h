@@ -18,6 +18,7 @@ namespace yeram_client
 		
 		HWND GetHandle();
 		HDC GetHDC();
+		Vector2 GetWindowSize();
 	private:
 		HWND mHwnd;
 		HDC mhdc;

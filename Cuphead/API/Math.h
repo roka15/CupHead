@@ -23,6 +23,12 @@ struct Vector2
 	{
 
 	}
+	Vector2(long _x, long _y)
+		:x(_x)
+		,y(_y)
+	{
+
+	}
 	/*Vector2(Vector2& _other)
 	{
 		x = _other.x;

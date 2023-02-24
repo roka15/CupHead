@@ -8,6 +8,10 @@ namespace yeram_client
 {
 	Player::Player():GameObject()
 	{
+	
+	}
+	Player::Player(ERenderType _type): GameObject(_type)
+	{
 		
 	}
 	Player::~Player()
@@ -15,7 +19,11 @@ namespace yeram_client
 	}
 	void Player::Initalize()
 	{
-		mImage = Resources::Load<Image>(L"Cuphead", L"..\\Resources\\chalice_idle_0002.bmp");
+		mRenderType = ERenderType::TransParentBlt;
+		mImage = Resources::Load<Image>(L"Cuphead", L"..\\Resources\\chalice_idle_0001.bmp");
+		Transform* tf = GetComponent<Transform>();
+		tf->SetPos(Vector2(0, 0));
+		tf->SetSize(Vector2(100, 100));
 		GameObject::Initalize();
 	}
 	void Player::Update()
@@ -43,10 +51,7 @@ namespace yeram_client
 	void Player::Render(HDC hdc)
 	{
 		GameObject::Render(hdc);
-		Transform* transform = GetComponent<Transform>();
-		Vector2 pos = transform->GetPos();
-		if (mImage != nullptr)
-			BitBlt(hdc, pos.x, pos.y, mImage->GetWidth(), mImage->GetHeight(), mImage->GetHDC(), 0, 0, SRCCOPY);
+		
 	}
 	void Player::Release()
 	{

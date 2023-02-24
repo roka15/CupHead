@@ -72,4 +72,8 @@ namespace yeram_client
 	{
 		return mhdc;
 	}
+	Vector2 Application::GetWindowSize()
+	{
+		return Vector2((long)mWidth, (long)mHeight);
+	}
 }

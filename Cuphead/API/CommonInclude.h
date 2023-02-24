@@ -10,4 +10,4 @@
 #include <memory.h>
 #include <tchar.h>
 #include <assert.h>
-
+#pragma comment(lib,"msimg32.lib")

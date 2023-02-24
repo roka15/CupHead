@@ -1,4 +1,6 @@
 #include "Scene.h"
+#include "Application.h"
+extern yeram_client::Application application;
 namespace yeram_client
 {
 	void Scene::Initialize()
@@ -43,13 +45,16 @@ namespace yeram_client
 		}
 	}
 
-    void Scene::OnEnter()
-    {
-    }
+	void Scene::OnEnter()
+	{
+	}
 
-    void Scene::OnExit()
-    {
-    }
+	void Scene::OnExit()
+	{
+		RECT rect;
+		GetWindowRect(application.GetHandle(), &rect);
+		InvalidateRect(application.GetHandle(), &rect, false);
+	}
 
 	void Scene::AddGameObject(GameObject* obj, ELayerType layer)
 	{
