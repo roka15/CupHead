@@ -53,6 +53,7 @@ namespace core
 				{
 					mKeys[i].state = EKeyState::NONE;
 				}
+
 				mKeys[i].bPressed = false;
 			}
 		}

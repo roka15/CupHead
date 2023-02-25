@@ -50,7 +50,6 @@ namespace yeram_client
 	}
 	void Application::Render()
 	{
-		Rectangle(mBackHdc, -1, -1, 1602, 902);
 		core::Input::Render(mBackHdc);
 		SceneManager::Render(mBackHdc);
 		Time::Render(mBackHdc);
@@ -75,5 +74,13 @@ namespace yeram_client
 	Vector2 Application::GetWindowSize()
 	{
 		return Vector2((long)mWidth, (long)mHeight);
+	}
+	void Application::ScreenClear()
+	{
+		HBRUSH grayBrush = CreateSolidBrush(RGB(121, 121, 121));
+		HBRUSH OldBrush = (HBRUSH)SelectObject(mBackHdc, grayBrush);
+		Rectangle(mBackHdc, -1, -1, 1602, 902);
+		SelectObject(mBackHdc, OldBrush);
+		DeleteObject(grayBrush);
 	}
 }

@@ -4,6 +4,7 @@ namespace yeram_client
 {
 	PlayScene::PlayScene()
 	{
+		mLayers[(UINT)ELayerType::Player] = new Layer();
 		Player* player = new Player(ERenderType::TransParentBlt);
 		
 		//player->SetPos(Vector2(0.0f, 0.0f + i));
@@ -35,6 +36,7 @@ namespace yeram_client
 	}
 	void PlayScene::OnExit()
 	{
+		Scene::OnExit();
 		mLayers[(UINT)ELayerType::Player]->Initalize();
 	}
 }

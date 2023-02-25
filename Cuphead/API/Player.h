@@ -13,7 +13,8 @@ namespace yeram_client
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
 	private:
-		
+		float mTime;
+		int midx;
 	};
 }
 

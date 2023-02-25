@@ -51,9 +51,7 @@ namespace yeram_client
 
 	void Scene::OnExit()
 	{
-		RECT rect;
-		GetWindowRect(application.GetHandle(), &rect);
-		InvalidateRect(application.GetHandle(), &rect, false);
+		
 	}
 
 	void Scene::AddGameObject(GameObject* obj, ELayerType layer)
@@ -64,7 +62,6 @@ namespace yeram_client
 	Scene::Scene()
 	{
 		mLayers.resize((UINT)ELayerType::MAX);
-		mLayers[(UINT)ELayerType::Player] = new Layer();
 	}
 
 	Scene::~Scene()

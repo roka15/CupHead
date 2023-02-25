@@ -15,6 +15,7 @@ namespace yeram_client
 		
 
 		mActiveScene = mScenes[(UINT)ESceneType::Title];
+
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -26,12 +27,7 @@ namespace yeram_client
 
 	void SceneManager::Update()
 	{
-		for (Scene* scene : mScenes)
-		{
-			if (scene == nullptr)
-				continue;
-			scene->Update();
-		}
+		mActiveScene->Update();
 	}
 
 	void SceneManager::Render(HDC hdc)

@@ -20,6 +20,8 @@ namespace yeram_client
 		HDC GetHDC();
 		Vector2 GetWindowSize();
 	private:
+		void ScreenClear();
+	private:
 		HWND mHwnd;
 		HDC mhdc;
 

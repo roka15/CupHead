@@ -4,6 +4,7 @@
 #include "Resources.h"
 #include "Image.h"
 #include "Transform.h"
+#include "Animator.h"
 namespace yeram_client
 {
 	Player::Player():GameObject()
@@ -25,6 +26,7 @@ namespace yeram_client
 		tf->SetPos(Vector2(0, 0));
 		tf->SetSize(Vector2(100, 100));
 		GameObject::Initalize();
+		AddComponent<Animator>();
 	}
 	void Player::Update()
 	{
@@ -51,6 +53,8 @@ namespace yeram_client
 	void Player::Render(HDC hdc)
 	{
 		GameObject::Render(hdc);
+		
+		
 		
 	}
 	void Player::Release()

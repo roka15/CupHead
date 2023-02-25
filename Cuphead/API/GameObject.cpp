@@ -28,7 +28,6 @@ namespace yeram_client
 			case ERenderType::TransParentBlt:
 			{   
 				HDC tempDc = CreateCompatibleDC(application.GetHDC());
-				
 				TransparentBlt(hdc, pos.x, pos.y, size.x, size.y, mImage->GetHDC(), 0,0, mImage->GetWidth(), mImage->GetHeight(),(RGB(234, 2, 255)));
 				break;
 			}

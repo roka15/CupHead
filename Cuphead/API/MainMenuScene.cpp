@@ -1,6 +1,8 @@
 #include "MainMenuScene.h"
 #include "BackGroundObject.h"
 #include "Application.h"
+#include "SceneManager.h"
+#include "Input.h"
 
 extern yeram_client::Application application;
 yeram_client::MainMenuScene::MainMenuScene()
@@ -12,13 +14,13 @@ yeram_client::MainMenuScene::MainMenuScene()
 
 	BackGroundObject* background
 		= new BackGroundObject
-		(L"BackGround"
+		(L"MenuBackGround"
 			, L"..\\Resources\\mainscreen.bmp"
 			, ERenderType::StretchBlt
 			, Vector2{ 0,0 }
 	, Vector2{ (long)size.x, (long)size.y });
 
-	mLayers[(UINT)ELayerType::BackObject]->AddGameObject(background);
+	AddGameObject(background,ELayerType::BackObject);
 }
 
 yeram_client::MainMenuScene::~MainMenuScene()
@@ -39,6 +41,13 @@ void yeram_client::MainMenuScene::Initialize()
 
 void yeram_client::MainMenuScene::Update()
 {
+	if (core::Input::GetKeyState(core::EKeyCode::MouseLeft) == core::EKeyState::Down)
+	{
+		OnExit();
+		SceneManager::LoadScene(ESceneType::Play);
+	}
+	Scene::Update();
+
 	for (UINT i = (UINT)ELayerType::NONE + 1; i < (UINT)ELayerType::MAX; i++)
 	{
 		if (mLayers[i] == nullptr)
@@ -49,6 +58,7 @@ void yeram_client::MainMenuScene::Update()
 
 void yeram_client::MainMenuScene::Render(HDC hdc)
 {
+	
 	for (UINT i = (UINT)ELayerType::NONE + 1; i < (UINT)ELayerType::MAX; i++)
 	{
 		if (mLayers[i] == nullptr)
@@ -73,4 +83,5 @@ void yeram_client::MainMenuScene::OnEnter()
 
 void yeram_client::MainMenuScene::OnExit()
 {
+	Scene::OnExit();
 }

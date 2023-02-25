@@ -17,7 +17,7 @@ yeram_client::TitleScene::TitleScene()
 	
 	BackGroundObject* title 
 		= new BackGroundObject
-		    (L"BackGround"
+		    (L"TitleBackGround"
 			,L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp"
 	        , ERenderType::StretchBlt
 			, Vector2{ 0,0 }
@@ -52,12 +52,11 @@ yeram_client::TitleScene::TitleScene()
 		, Vector2{ 1000,160 }
 	, Vector2{ 400l, 500l });
 
-	mLayers[(UINT)ELayerType::BackObject]->AddGameObject(title);
-	mLayers[(UINT)ELayerType::BackObject]->AddGameObject(ground);
-	mLayers[(UINT)ELayerType::BackObject]->AddGameObject(playobj1);
-	mLayers[(UINT)ELayerType::BackObject]->AddGameObject(playobj2);
-	mLayers[(UINT)ELayerType::BackObject]->AddGameObject(playobj3);
-
+	AddGameObject(title,ELayerType::BackObject);
+	AddGameObject(ground, ELayerType::BackObject);
+	AddGameObject(playobj1, ELayerType::BackObject);
+	AddGameObject(playobj2, ELayerType::BackObject);
+	AddGameObject(playobj3, ELayerType::BackObject);
 }
 
 yeram_client::TitleScene::~TitleScene()
@@ -75,7 +74,7 @@ void yeram_client::TitleScene::Update()
 	if (core::Input::GetKeyState(core::EKeyCode::MouseLeft) == core::EKeyState::Down)
 	{
 		OnExit();
-		SceneManager::LoadScene(ESceneType::Play);
+		SceneManager::LoadScene(ESceneType::MainMenu);	
 	}
 	Scene::Update();
 }
