@@ -43,11 +43,7 @@ namespace yeram_client
 		HBRUSH brush;
 		HPEN pen;
 		bool flag;
-<<<<<<< HEAD
 		//Image* mImage;
-=======
-		Image* mImage;
->>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 		ERenderType mRenderType;
 	private:
 		std::vector<Component*> mComponents;
