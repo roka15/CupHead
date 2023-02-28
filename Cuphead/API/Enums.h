@@ -4,6 +4,7 @@ enum class ESceneType
 {
 	NONE,
 	Title,
+	MainMenu,
 	Play,
 	Ending,
 	MAX,
@@ -11,9 +12,10 @@ enum class ESceneType
 enum class  ELayerType
 {
 	NONE,
-	BG,
+	BackObject,
 	Monster,
 	Player,
+	FrontObject,
 	Effect,
 	UI,
 	MAX,
@@ -33,4 +35,10 @@ enum class EComponentType
 	Audio,
 	Script,
 	MAX,
+};
+enum class ERenderType
+{
+	BitBlt,
+	TransParentBlt,
+	StretchBlt,
 };

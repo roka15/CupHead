@@ -1,0 +1,32 @@
+#pragma once
+#include "GameObject.h"
+namespace yeram_client
+{
+	class BackGroundObject : public GameObject
+	{
+	public:
+		BackGroundObject();
+		BackGroundObject(const std::wstring& _obj_name,const std::wstring& _image_path, ERenderType _type, Vector2 _pos, Vector2 _size);
+		virtual ~BackGroundObject();
+
+		virtual void Initalize()override;
+		virtual void Update()override;
+		virtual void Render(HDC hdc)override;
+		virtual void Release()override;
+
+	private:
+		void SetImage(Image* _image)
+		{
+			mImage = _image;
+		}
+		void SetRenderType(ERenderType _type)
+		{
+			mRenderType = _type;
+		}
+		void SetTransform(Vector2 _pos, Vector2 _size);
+	
+		
+	};
+
+}
+

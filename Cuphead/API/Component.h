@@ -2,6 +2,7 @@
 #include "Entity.h"
 namespace yeram_client
 {
+	class GameObject;
 	class Component:public Entity
 	{
 	public:
@@ -13,8 +14,11 @@ namespace yeram_client
 		virtual void Render(HDC hdc);
 		virtual void Release();
 		const EComponentType& GetType() { return mType; }
+		void SetOwner(GameObject* _owner) { mOwner = _owner; }
+		GameObject* GetOwner() { return mOwner; }
 	private:
 		const EComponentType mType;
+		GameObject* mOwner;
 	};
 }
 

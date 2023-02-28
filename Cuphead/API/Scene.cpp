@@ -1,4 +1,6 @@
 #include "Scene.h"
+#include "Application.h"
+extern yeram_client::Application application;
 namespace yeram_client
 {
 	void Scene::Initialize()
@@ -43,13 +45,14 @@ namespace yeram_client
 		}
 	}
 
-    void Scene::OnEnter()
-    {
-    }
+	void Scene::OnEnter()
+	{
+	}
 
-    void Scene::OnExit()
-    {
-    }
+	void Scene::OnExit()
+	{
+		
+	}
 
 	void Scene::AddGameObject(GameObject* obj, ELayerType layer)
 	{
@@ -59,7 +62,6 @@ namespace yeram_client
 	Scene::Scene()
 	{
 		mLayers.resize((UINT)ELayerType::MAX);
-		mLayers[(UINT)ELayerType::Player] = new Layer();
 	}
 
 	Scene::~Scene()

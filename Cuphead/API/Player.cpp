@@ -4,9 +4,14 @@
 #include "Resources.h"
 #include "Image.h"
 #include "Transform.h"
+#include "Animator.h"
 namespace yeram_client
 {
 	Player::Player():GameObject()
+	{
+	
+	}
+	Player::Player(ERenderType _type): GameObject(_type)
 	{
 		
 	}
@@ -15,8 +20,14 @@ namespace yeram_client
 	}
 	void Player::Initalize()
 	{
-		mImage = Resources::Load<Image>(L"Cuphead", L"..\\Resources\\chalice_idle_0002.bmp");
+		mRenderType = ERenderType::TransParentBlt;
 		GameObject::Initalize();
+		Image* mImage;//받아오기 시트
+		Animator* animator = AddComponent<Animator>();
+		//animator->CreateAnimation(L"FowardRun", mImage, Vector2::Zero, 16, 8,16, Vector2::Zero, 0.1f);
+		//animator->CreateAnimation(L"FowardRun", mImage, Vector2::Zero, 16, 8,15, Vector2::Zero, 0.1f);
+		animator->Play(L"FowardRun", true);
+
 	}
 	void Player::Update()
 	{
@@ -43,10 +54,9 @@ namespace yeram_client
 	void Player::Render(HDC hdc)
 	{
 		GameObject::Render(hdc);
-		Transform* transform = GetComponent<Transform>();
-		Vector2 pos = transform->GetPos();
-		if (mImage != nullptr)
-			BitBlt(hdc, pos.x, pos.y, mImage->GetWidth(), mImage->GetHeight(), mImage->GetHDC(), 0, 0, SRCCOPY);
+		
+		
+		
 	}
 	void Player::Release()
 	{

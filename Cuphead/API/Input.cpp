@@ -6,8 +6,9 @@ namespace core
 
 	int ASCII[(UINT)EKeyCode::MAX] =
 	{
-		'A','S','D','W'
+		'A','S','D','W',VK_LBUTTON,VK_RBUTTON,
 	};
+	
 	void Input::Initialize()
 	{
 		for (UINT i = 0; i < (UINT)EKeyCode::MAX; i++)
@@ -24,6 +25,7 @@ namespace core
 	{
 		for (UINT i = 0; i < (UINT)EKeyCode::MAX; i++)
 		{
+			
 			if (GetAsyncKeyState(ASCII[i]) & 0x8000)
 			{
 				//이전 플게임에 눌려있었다.
@@ -37,6 +39,10 @@ namespace core
 				}
 				mKeys[i].bPressed = true;
 			}
+			else if (GetAsyncKeyState(ASCII[i]) & 0x8001)//hold
+			{
+
+			}
 			else //현재 안눌려있다.
 			{
 				if (mKeys[i].bPressed)
@@ -47,6 +53,7 @@ namespace core
 				{
 					mKeys[i].state = EKeyState::NONE;
 				}
+
 				mKeys[i].bPressed = false;
 			}
 		}

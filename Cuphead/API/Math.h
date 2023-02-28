@@ -2,6 +2,12 @@
 
 struct Vector2
 {
+	static Vector2 Up;
+	static Vector2 Right;
+
+	static Vector2 One;
+	static Vector2 Zero;
+
 	float x;
 	float y;
 
@@ -20,6 +26,12 @@ struct Vector2
 	Vector2(float _x, float _y)
 		:x(_x)
 		, y(_y)
+	{
+
+	}
+	Vector2(long _x, long _y)
+		:x(_x)
+		,y(_y)
 	{
 
 	}

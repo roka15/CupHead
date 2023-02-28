@@ -1,12 +1,14 @@
 #pragma once
 #include "Engine.h"
 #include "Component.h"
+#include "Image.h"
 namespace yeram_client
 {
 	class GameObject
 	{
 	public:
 		GameObject();
+		GameObject(ERenderType _type);
 		virtual ~GameObject();
 
 		virtual void Initalize();
@@ -20,6 +22,7 @@ namespace yeram_client
 			T* comp = new T();
 			UINT compType = (UINT)comp->GetType();
 			mComponents[compType] = comp;
+			comp->SetOwner(this);
 
 			return comp;
 		}
@@ -35,10 +38,13 @@ namespace yeram_client
 			}
 			return nullptr;
 		}
+	
 	protected:
 		HBRUSH brush;
 		HPEN pen;
 		bool flag;
+		//Image* mImage;
+		ERenderType mRenderType;
 	private:
 		std::vector<Component*> mComponents;
 	};
