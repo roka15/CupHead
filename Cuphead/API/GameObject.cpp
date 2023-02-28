@@ -18,7 +18,11 @@ namespace yeram_client
 		Transform* transform = GetComponent<Transform>();
 		Vector2 pos = transform->GetPos();
 		Vector2 size = transform->GetSize();
+<<<<<<< HEAD
 		/*if (mImage != nullptr)
+=======
+		if (mImage != nullptr)
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 		{
 			switch (mRenderType)
 			{
@@ -35,7 +39,11 @@ namespace yeram_client
 				StretchBlt(hdc, pos.x, pos.y, size.x, size.y, mImage->GetHDC(), 0, 0, mImage->GetWidth(), mImage->GetHeight(), SRCCOPY);
 				break;
 			}
+<<<<<<< HEAD
 		}*/
+=======
+		}
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 
 
 

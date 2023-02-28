@@ -1,4 +1,5 @@
 #pragma once
+<<<<<<< HEAD
 #include "Entity.h"
 #include "Image.h"
 class Image;
@@ -43,5 +44,18 @@ namespace yeram_client
 		int mSpriteIndex;
 		Animator* mAnimator;
 	};
+=======
+
+namespace yeram_client
+{
+	class Animation
+	{
+
+	private:
+		float mTime;
+		int mIdx;
+	};
+
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 }
 

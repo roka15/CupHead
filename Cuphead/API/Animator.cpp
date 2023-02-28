@@ -2,11 +2,15 @@
 
 namespace yeram_client
 {
+<<<<<<< HEAD
 	Animator::Animator(EComponentType _type)
 		: Component(_type)
 		, mActiveAnimation(nullptr)
 		, mSpriteSheet(nullptr)
 		, mbLoop(false)
+=======
+	Animator::Animator(EComponentType _type) : Component(_type)
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 	{
 
 	}
@@ -21,6 +25,7 @@ namespace yeram_client
 
 	void Animator::Update()
 	{
+<<<<<<< HEAD
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Update();
@@ -30,20 +35,26 @@ namespace yeram_client
 				mActiveAnimation->Reset();
 			}
 		}
+=======
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 	}
 
 	void Animator::Render(HDC hdc)
 	{
+<<<<<<< HEAD
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Render(hdc);
 		}
+=======
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 	}
 
 	void Animator::Release()
 	{
 	}
 
+<<<<<<< HEAD
 	void Animator::CreateAnimation(std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration)
 	{
 		Animation* ani = FindAnimation(_name);
@@ -97,4 +108,10 @@ namespace yeram_client
 	//	// TODO: 여기에 return 문을 삽입합니다.
 	//}
 
+=======
+	void Animator::Play(const std::wstring& _name, bool loop)
+	{
+	}
+
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 }

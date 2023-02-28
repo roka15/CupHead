@@ -21,6 +21,7 @@ namespace yeram_client
 	void Player::Initalize()
 	{
 		mRenderType = ERenderType::TransParentBlt;
+<<<<<<< HEAD
 		GameObject::Initalize();
 		Image* mImage;//받아오기 시트
 		Animator* animator = AddComponent<Animator>();
@@ -28,6 +29,14 @@ namespace yeram_client
 		//animator->CreateAnimation(L"FowardRun", mImage, Vector2::Zero, 16, 8,15, Vector2::Zero, 0.1f);
 		animator->Play(L"FowardRun", true);
 
+=======
+		mImage = Resources::Load<Image>(L"Cuphead", L"..\\Resources\\chalice_idle_0001.bmp");
+		Transform* tf = GetComponent<Transform>();
+		tf->SetPos(Vector2(0, 0));
+		tf->SetSize(Vector2(100, 100));
+		GameObject::Initalize();
+		AddComponent<Animator>();
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
 	}
 	void Player::Update()
 	{

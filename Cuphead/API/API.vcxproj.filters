@@ -53,6 +53,9 @@
     <Filter Include="Contents\Scene\TitleScene">
       <UniqueIdentifier>{0a777d42-c559-46f7-874e-aa170f86945e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\Scene\MainMenuScene">
+      <UniqueIdentifier>{dced2d1d-47b8-4070-9589-a1bc19e788ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -133,6 +136,10 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Script.h" />
+    <ClInclude Include="BackGroundObject.h" />
+    <ClInclude Include="MainMenuScene.h">
+      <Filter>Contents\Scene\MainMenuScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -200,6 +207,10 @@
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Script.cpp" />
+    <ClCompile Include="BackGroundObject.cpp" />
+    <ClCompile Include="MainMenuScene.cpp">
+      <Filter>Contents\Scene\MainMenuScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

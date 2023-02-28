@@ -1,4 +1,5 @@
 #include "Animation.h"
+<<<<<<< HEAD
 #include "Animator.h"
 #include "Image.h"
 #include "Time.h"
@@ -84,3 +85,5 @@ namespace yeram_client
 	}
 
 }
+=======
+>>>>>>> 85c5f662ccfb749ecd2ef53254f5677e801cc315
