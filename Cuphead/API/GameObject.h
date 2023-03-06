@@ -8,10 +8,9 @@ namespace yeram_client
 	{
 	public:
 		GameObject();
-		GameObject(ERenderType _type);
 		virtual ~GameObject();
 
-		virtual void Initalize();
+		virtual void Initialize();
 		virtual void Update();
 		virtual void Render(HDC hdc);
 		virtual void Release();
@@ -44,7 +43,7 @@ namespace yeram_client
 		HPEN pen;
 		bool flag;
 		//Image* mImage;
-		ERenderType mRenderType;
+		
 	private:
 		std::vector<Component*> mComponents;
 	};

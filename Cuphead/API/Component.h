@@ -16,7 +16,7 @@ namespace yeram_client
 		const EComponentType& GetType() { return mType; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
 		GameObject* GetOwner() { return mOwner; }
-	private:
+	protected:
 		const EComponentType mType;
 		GameObject* mOwner;
 	};

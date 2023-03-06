@@ -15,9 +15,8 @@ namespace yeram_client
 		};
 
 		Player();
-		Player(ERenderType _type);
 		virtual ~Player();
-		virtual void Initalize()override;
+		virtual void Initialize()override;
 		virtual void Update()override;
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;

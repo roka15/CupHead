@@ -11,24 +11,29 @@ namespace yeram_client
 	{
 
 	}
-	Player::Player(ERenderType _type) : GameObject(_type)
-	{
-
-	}
+	
 	Player::~Player()
 	{
 	}
-	void Player::Initalize()
+	void Player::Initialize()
 	{
-		mState = ECupheadState::Idle;
-		mRenderType = ERenderType::TransParentBlt;
-		GameObject::Initalize();
-		Image* mImage = Resources::Load<Image>(L"MapFowardRun", L"..\\Resources\\cuphead_move.bmp");//받아오기 시트
-		Animator* animator = AddComponent<Animator>();
-		animator->CreateAnimation(L"MapFowardRun", mImage, Vector2::Zero, 16, 8, 16, Vector2::Zero, 0.1f);
-		//animator->CreateAnimation(L"FowardRun", mImage, Vector2::Zero, 16, 8,15, Vector2::Zero, 0.1f);
-		animator->Play(L"MapFowardRun", true);
 
+		Transform* tr = GetComponent<Transform>();
+		tr->SetPos(Vector2(400.0f, 400.0f)); 
+
+		mState = ECupheadState::Idle;
+		
+		Image* mImage = Resources::Load<Image>(L"MapFowardRun", L"..\\Resources\\Cuphead_Stage.bmp");//받아오기 시트
+		mAnimator = AddComponent<Animator>();
+		mAnimator->SetOwner(this);
+		mAnimator->CreateAnimation(L"MapFowardRun", mImage, Vector2::Zero, 16, 8, 16, Vector2::Zero, 0.1f);
+		mAnimator->CreateAnimation(L"MapFowardRight", mImage, Vector2(0.0f, 113.0f), 16, 8, 15, Vector2::Zero, 0.1);
+		mAnimator->CreateAnimation(L"MapIdle", mImage, Vector2(0.0f, 113.0f * 5), 16, 8, 9, Vector2(-50.0f, -50.0f), 0.1);
+		//mAnimator->CreateAnimations(L"..\\Resources\\Chalise\\Idle", Vector2::Zero, 0.1f);
+		//mAnimator->CreateAnimations(L"..\\Resources\\Chalise\\Aim\\Straight", Vector2::Zero, 0.1f);
+		mAnimator->Play(L"MapIdle",true);
+		
+		GameObject::Initialize();
 	}
 	void Player::Update()
 	{
@@ -49,32 +54,10 @@ namespace yeram_client
 			shoot();
 			break;
 		}
-
-		/*Transform* transform = GetComponent<Transform>();
-		Vector2& pos = transform->GetPos();
-		if (core::Input::GetKeyState(core::EKeyCode::A) == core::EKeyState::Pressed)
-		{
-			pos.x -= 100.0f * Time::DeltaTime();
-		}
-		if (core::Input::GetKeyState(core::EKeyCode::D) == core::EKeyState::Pressed)
-		{
-			pos.x += 100.0f * Time::DeltaTime();
-		}
-		if (core::Input::GetKeyState(core::EKeyCode::W) == core::EKeyState::Pressed)
-		{
-			pos.y -= 100.0f * Time::DeltaTime();
-		}
-		if (core::Input::GetKeyState(core::EKeyCode::S) == core::EKeyState::Pressed)
-		{
-			pos.y += 100.0f * Time::DeltaTime();
-		}*/
 	}
 	void Player::Render(HDC hdc)
 	{
 		GameObject::Render(hdc);
-
-
-
 	}
 	void Player::Release()
 	{
@@ -84,14 +67,14 @@ namespace yeram_client
 	{
 		Transform* transform = GetComponent<Transform>();
 		Vector2& pos = transform->GetPos();
-
+		std::wstring ani_name;
 		if (core::Input::GetKeyUp(core::EKeyCode::A)
 			|| core::Input::GetKeyUp(core::EKeyCode::D)
 			|| core::Input::GetKeyUp(core::EKeyCode::W)
 			|| core::Input::GetKeyUp(core::EKeyCode::S))
 		{
 			mState = ECupheadState::Idle;
-			mAnimator->Play(L"Idle", true);
+			ani_name = L"MapIdle";
 		}
 		if (core::Input::GetKey(core::EKeyCode::A))
 		{
@@ -100,14 +83,21 @@ namespace yeram_client
 		if (core::Input::GetKey(core::EKeyCode::D))
 		{
 			pos.x += 100.0f * Time::DeltaTime();
+			ani_name = L"MapFowardRight";
 		}
 		if (core::Input::GetKey(core::EKeyCode::W))
 		{
 			pos.y -= 100.0f * Time::DeltaTime();
+			ani_name = L"MapFowardRun";
 		}
 		if (core::Input::GetKey(core::EKeyCode::S))
 		{
 			pos.y += 100.0f * Time::DeltaTime();
+		}
+		transform->SetPos(pos);
+		if (ani_name.size() > 0)
+		{
+			mAnimator->Play(ani_name.c_str(), true);
 		}
 	}
 	void Player::shoot()
@@ -124,7 +114,12 @@ namespace yeram_client
 			|| core::Input::GetKeyDown(core::EKeyCode::S))
 		{
 			mState = ECupheadState::Move;
-			mAnimator->Play(L"Move", true);
+			//mAnimator->Play(L"Move", true);
+		}
+		if (core::Input::GetKeyDown(core::EKeyCode::K))
+		{
+			mState = ECupheadState::Shoot;
+			mAnimator->Play(L"AimStraight", true);
 		}
 	}
 }

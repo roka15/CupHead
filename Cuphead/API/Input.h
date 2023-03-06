@@ -4,7 +4,7 @@ namespace core
 {
 	enum class EKeyCode
 	{
-		A,S,D,W,
+		A,S,D,W,K,
 		MouseLeft,
 		MouseRight,
 		MAX

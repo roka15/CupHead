@@ -50,6 +50,7 @@ namespace yeram_client
 	}
 	void Application::Render()
 	{
+		ScreenClear();
 		core::Input::Render(mBackHdc);
 		SceneManager::Render(mBackHdc);
 		Time::Render(mBackHdc);

@@ -14,7 +14,7 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::Play] = new PlayScene();
 		
 
-		mActiveScene = mScenes[(UINT)ESceneType::Play];
+		mActiveScene = mScenes[(UINT)ESceneType::Title];
 
 		for (Scene* scene : mScenes)
 		{

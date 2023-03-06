@@ -2,17 +2,14 @@
 #include "Resources.h"
 namespace yeram_client
 {
-	Animator::Animator():Component(EComponentType::Animator)
-	{
-	}
-	Animator::Animator(EComponentType _type)
-		: Component(_type)
+	Animator::Animator()
+		:Component(EComponentType::Animator)
 		, mActiveAnimation(nullptr)
 		, mSpriteSheet(nullptr)
 		, mbLoop(false)
 	{
-
 	}
+	
 
 	Animator::~Animator()
 	{
@@ -98,6 +95,23 @@ namespace yeram_client
 		std::wstring key = fs.parent_path().filename();
 		key += fs.filename();
 		mSpriteSheet = Image::Create(key, width * fileCount, height);
+		int index = 0;
+		for (Image* image : images)
+		{
+			int centerX = (width - image->GetWidth()) / 2;
+			int centerY = (height - image->GetHeight());
+
+			BitBlt(mSpriteSheet->GetHDC()
+				, width * index + centerX
+				, 0 + centerY
+				, image->GetWidth(), image->GetHeight()
+				, image->GetHDC(), 0, 0, SRCCOPY);
+
+			index++;
+		}
+
+		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration);
+
 	}
 
 	Animation* Animator::FindAnimation(const std::wstring& _name)

@@ -9,7 +9,7 @@ namespace yeram_client
 		{
 			if (layer == nullptr)
 				continue;
-			layer->Initalize();
+			layer->Initialize();
 		}
 	}
 
@@ -51,7 +51,7 @@ namespace yeram_client
 
 	void Scene::OnExit()
 	{
-		
+
 	}
 
 	void Scene::AddGameObject(GameObject* obj, ELayerType layer)

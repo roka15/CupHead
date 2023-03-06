@@ -28,7 +28,6 @@ namespace yeram_client
 			Event mEndEvent;
 		};
 		Animator();
-		Animator(EComponentType _type);
 		~Animator();
 
 		virtual void Initialize()override;

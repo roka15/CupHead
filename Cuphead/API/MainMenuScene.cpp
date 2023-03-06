@@ -1,8 +1,10 @@
 #include "MainMenuScene.h"
-#include "BackGroundObject.h"
+#include "Rectangle.h"
 #include "Application.h"
 #include "SceneManager.h"
 #include "Input.h"
+#include "SpriteRenderer.h"
+#include "Transform.h"
 
 extern yeram_client::Application application;
 yeram_client::MainMenuScene::MainMenuScene()
@@ -12,15 +14,19 @@ yeram_client::MainMenuScene::MainMenuScene()
 
 	Vector2 size = application.GetWindowSize();
 
-	/*BackGroundObject* background
-		= new BackGroundObject
-		(L"MenuBackGround"
-			, L"..\\Resources\\mainscreen.bmp"
-			, ERenderType::StretchBlt
-			, Vector2{ 0,0 }
-	, Vector2{ (long)size.x, (long)size.y });*/
+	Rectangle* rectangle = new Rectangle();
 
-	//AddGameObject(background,ELayerType::BackObject);
+	Transform* tf = rectangle->GetComponent<Transform>();
+	tf->SetPos(Vector2{ 0,0 });
+	tf->SetSize(Vector2{ (long)size.x,(long)size.y });
+
+	SpriteRenderer* render = rectangle->AddComponent<SpriteRenderer>();
+	render->SetImage(L"MenuBackGround"
+		, L"..\\Resources\\mainscreen.bmp");
+	render->SetRenderType(ERenderType::StretchBlt);
+	render->SetOwner(rectangle);
+
+	AddGameObject(rectangle, ELayerType::BackObject);
 }
 
 yeram_client::MainMenuScene::~MainMenuScene()
@@ -35,13 +41,13 @@ void yeram_client::MainMenuScene::Initialize()
 	{
 		if (mLayers[i] == nullptr)
 			continue;
-		mLayers[i]->Initalize();
+		mLayers[i]->Initialize();
 	}
 }
 
 void yeram_client::MainMenuScene::Update()
 {
-	if (core::Input::GetKeyState(core::EKeyCode::MouseLeft) == core::EKeyState::Down)
+	if (core::Input::GetKey(core::EKeyCode::MouseLeft))
 	{
 		OnExit();
 		SceneManager::LoadScene(ESceneType::Play);

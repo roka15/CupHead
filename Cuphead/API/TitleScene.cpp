@@ -4,8 +4,10 @@
 #include "Image.h"
 #include "Resources.h"
 #include "Application.h"
-#include "BackGroundObject.h"
-
+#include "Rectangle.h"
+#include "Transform.h"
+#include "SpriteRenderer.h"
+#include "GameObject.h"
 extern yeram_client::Application application;
 
 yeram_client::TitleScene::TitleScene()
@@ -14,49 +16,63 @@ yeram_client::TitleScene::TitleScene()
 	mLayers[(UINT)ELayerType::BackObject] = new Layer();
 
 	Vector2 size = application.GetWindowSize();
+
+	Rectangle* title = new Rectangle();
+	{
+		Transform* tf = title->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 0,0 });
+		tf->SetSize(Vector2{ (long)size.x, (long)size.y });
+		SpriteRenderer* render = title->AddComponent<SpriteRenderer>();
+		render->SetImage(L"TitleBackGround"
+			, L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp");
+		render->SetRenderType(ERenderType::StretchBlt);
+	}
+	Rectangle* ground = new Rectangle();
+	{
+		Transform* tf = ground->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 0l,(long)size.y - 280 });
+		tf->SetSize(Vector2{(long)size.x,280l });
+		SpriteRenderer* render = ground->AddComponent<SpriteRenderer>();
+		render->SetImage(L"TitleGround"
+			, L"..\\Resources\\title_screen\\DLC\\title_chips_left_0001.bmp");
+		render->SetRenderType(ERenderType::TransParentBlt);
+	}
+	Rectangle* playobj1 = new Rectangle();
+	{
+		Transform* tf = playobj1->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 170,140 });
+		tf->SetSize(Vector2{ 400l, 500l });
+		SpriteRenderer* render = playobj1->AddComponent<SpriteRenderer>();
+		render->SetImage(L"TitlePlay1"
+			, L"..\\Resources\\title_screen\\DLC\\Cuphead\\cuphead_title_screen_0001.bmp");
+		render->SetRenderType(ERenderType::TransParentBlt);
+	}
+	Rectangle* playobj2 = new Rectangle();
+	{
+		Transform* tf = playobj2->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 600,210 });
+		tf->SetSize(Vector2{ 400l, 500l });
+		SpriteRenderer* render = playobj2->AddComponent<SpriteRenderer>();
+		render->SetImage(L"TitlePlay2"
+			, L"..\\Resources\\title_screen\\DLC\\Ms Chalice\\chalice_title_screen_0001.bmp");
+		render->SetRenderType(ERenderType::TransParentBlt);
+	}
+	Rectangle* playobj3 = new Rectangle();
+	{
+		Transform* tf = playobj3->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 1000,160 });
+		tf->SetSize(Vector2{ 400l, 500l });
+		SpriteRenderer* render = playobj3->AddComponent<SpriteRenderer>();
+		render->SetImage(L"TitlePlay3"
+			, L"..\\Resources\\title_screen\\DLC\\Mugman\\mugman_title_screen_0001.bmp");
+		render->SetRenderType(ERenderType::TransParentBlt);
+	}
 	
-	/*BackGroundObject* title 
-		= new BackGroundObject
-		    (L"TitleBackGround"
-			,L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp"
-	        , ERenderType::StretchBlt
-			, Vector2{ 0,0 }
-	        , Vector2{ (long)size.x, (long)size.y });
-	
-	
-	BackGroundObject* ground = new BackGroundObject
-	(L"Ground"
-		, L"..\\Resources\\title_screen\\DLC\\title_chips_left_0001.bmp"
-		, ERenderType::TransParentBlt
-		, Vector2{ 0l,(long)size.y-280 }
-	, Vector2{ (long)size.x,280l });
-
-	BackGroundObject* playobj1 = new BackGroundObject
-	(L"PlayImage1"
-		, L"..\\Resources\\title_screen\\DLC\\Cuphead\\cuphead_title_screen_0001.bmp"
-		, ERenderType::TransParentBlt
-		,Vector2{ 170,140 }
-		, Vector2{ 400l, 500l });
-
-	BackGroundObject* playobj2 = new BackGroundObject
-	(L"PlayImage2"
-		, L"..\\Resources\\title_screen\\DLC\\Ms Chalice\\chalice_title_screen_0001.bmp"
-		, ERenderType::TransParentBlt
-		, Vector2{ 600,210 }
-	, Vector2{ 400l, 500l });
-
-	BackGroundObject* playobj3 = new BackGroundObject
-	(L"PlayImage3"
-		, L"..\\Resources\\title_screen\\DLC\\Mugman\\mugman_title_screen_0001.bmp"
-		, ERenderType::TransParentBlt
-		, Vector2{ 1000,160 }
-	, Vector2{ 400l, 500l });
-
 	AddGameObject(title,ELayerType::BackObject);
 	AddGameObject(ground, ELayerType::BackObject);
 	AddGameObject(playobj1, ELayerType::BackObject);
 	AddGameObject(playobj2, ELayerType::BackObject);
-	AddGameObject(playobj3, ELayerType::BackObject);*/
+	AddGameObject(playobj3, ELayerType::BackObject);
 }
 
 yeram_client::TitleScene::~TitleScene()
@@ -71,10 +87,10 @@ void yeram_client::TitleScene::Initialize()
 
 void yeram_client::TitleScene::Update()
 {
-	if (core::Input::GetKeyState(core::EKeyCode::MouseLeft) == core::EKeyState::Down)
+	if (core::Input::GetKey(core::EKeyCode::MouseLeft))
 	{
 		OnExit();
-		SceneManager::LoadScene(ESceneType::MainMenu);	
+		SceneManager::LoadScene(ESceneType::MainMenu);
 	}
 	Scene::Update();
 }

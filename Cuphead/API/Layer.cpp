@@ -8,13 +8,13 @@ namespace yeram_client
 	{
 	
 	}
-	void Layer::Initalize()
+	void Layer::Initialize()
 	{   
 		for (GameObject* obj : mObjs)
 		{
 			if (obj == nullptr)
 				continue;
-			obj->Initalize();
+			obj->Initialize();
 		}
 	}
 	void Layer::Update()

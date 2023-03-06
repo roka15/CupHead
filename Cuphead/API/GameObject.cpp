@@ -5,44 +5,43 @@ extern yeram_client::Application application;
 namespace yeram_client
 {
 	
-	void GameObject::Initalize()
+	void GameObject::Initialize()
 	{
 		//mComponents.resize((UINT)EComponentType::MAX);
-
+		for (Component* com : mComponents)
+		{
+			if (com == nullptr)
+				continue;
+			com->Initialize();
+		}
 	}
 	void GameObject::Update()
 	{
+		for (Component* com : mComponents)
+		{
+			if (com == nullptr)
+				continue;
+			com->Update();
+		}
 	}
 	void GameObject::Render(HDC hdc)
 	{ 
-		//ÄÄÆ÷³ÍÆ® ·»´õ µ¹¸®±â 
-		Transform* transform = GetComponent<Transform>();
-		Vector2 pos = transform->GetPos();
-		Vector2 size = transform->GetScale();
-		/*if (mImage != nullptr)
+		for (Component* com : mComponents)
 		{
-			switch (mRenderType)
-			{
-			case ERenderType::BitBlt:
-				BitBlt(hdc, pos.x, pos.y, mImage->GetWidth(), mImage->GetHeight(), mImage->GetHDC(), 0, 0, SRCCOPY);
-				break;
-			case ERenderType::TransParentBlt:
-			{   
-				HDC tempDc = CreateCompatibleDC(application.GetHDC());
-				TransparentBlt(hdc, pos.x, pos.y, size.x, size.y, mImage->GetHDC(), 0,0, mImage->GetWidth(), mImage->GetHeight(),(RGB(234, 2, 255)));
-				break;
-			}
-			case ERenderType::StretchBlt:
-				StretchBlt(hdc, pos.x, pos.y, size.x, size.y, mImage->GetHDC(), 0, 0, mImage->GetWidth(), mImage->GetHeight(), SRCCOPY);
-				break;
-			}
-		}*/
-
-
-
+			if (com == nullptr)
+				continue;
+			com->Render(hdc);
+		}
+		
 	}
 	void GameObject::Release()
 	{
+		for (Component* com : mComponents)
+		{
+			if (com == nullptr)
+				continue;
+			com->Release();
+		}
 	}
 
 
@@ -52,10 +51,7 @@ namespace yeram_client
 		mComponents.resize((UINT)EComponentType::MAX - 1);
 		AddComponent<Transform>();
 	}
-	GameObject::GameObject(ERenderType _type) :GameObject()
-	{
-		mRenderType = _type;
-	}
+	
 	GameObject::~GameObject()
 	{
 	}

@@ -11,7 +11,7 @@ namespace yeram_client
 		mSheet(nullptr),
 		mTime(0.0f),
 		mbComplete(false),
-		mSpriteIndex(-1)
+		mSpriteIndex(0)
 	{
 	}
 
@@ -53,7 +53,7 @@ namespace yeram_client
 			mSpriteSheet[mSpriteIndex].size.y * tf->GetScale().y,
 			mSheet->GetHDC(),mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y
 			,mSpriteSheet[mSpriteIndex].size.x, mSpriteSheet[mSpriteIndex].size.y,
-			(RGB(234, 2, 255)));
+			(RGB(255, 0, 255)));
 
 	}
 
@@ -61,13 +61,13 @@ namespace yeram_client
 	{
 		mSheet = _sheet;
 		Vector2 size = Vector2::One;
-		size.x = mSheet->GetWidth() / _col;
-		size.y = mSheet->GetHeight() / _row;
+		size.x = mSheet->GetWidth() / (float)_col;
+		size.y = mSheet->GetHeight() / (float)_row;
 
 		for (size_t i = 0; i < _size; i++)
 		{
 			Sprite sprite_info;
-			sprite_info.leftTop.x = _leftTop.x + (size.x+i);
+			sprite_info.leftTop.x = _leftTop.x + (size.x*i);
 			sprite_info.leftTop.y = _leftTop.y;
 			sprite_info.size = size;
 			sprite_info.offset = _offset;

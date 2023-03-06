@@ -9,15 +9,15 @@ namespace yeram_client
     BackGroundObject::BackGroundObject(const std::wstring& _obj_name, const std::wstring& _image_path, ERenderType _type, Vector2 _pos, Vector2 _size):GameObject()
     {
         SetImage(Resources::Load<Image>(_obj_name.c_str(), _image_path.c_str()));
-        SetRenderType(_type);
+        
         SetTransform(_pos, _size);
     }
     BackGroundObject::~BackGroundObject()
     {
     }
-    void BackGroundObject::Initalize()
+    void BackGroundObject::Initialize()
     {
-        GameObject::Initalize();
+        GameObject::Initialize();
     }
     void BackGroundObject::Update()
     {

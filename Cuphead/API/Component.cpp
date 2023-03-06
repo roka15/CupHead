@@ -1,7 +1,9 @@
 #include "Component.h"
 namespace yeram_client
 {
-	Component::Component(EComponentType _type):mType(_type)
+	Component::Component(EComponentType _type)
+        :mType(_type)
+        , mOwner(nullptr)
 	{
 	}
     Component::~Component()

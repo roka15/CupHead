@@ -6,7 +6,7 @@ namespace core
 
 	int ASCII[(UINT)EKeyCode::MAX] =
 	{
-		'A','S','D','W',VK_LBUTTON,VK_RBUTTON,
+		'A','S','D','W','K',VK_LBUTTON,VK_RBUTTON,
 	};
 	
 	void Input::Initialize()
