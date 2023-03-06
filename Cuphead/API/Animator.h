@@ -27,6 +27,7 @@ namespace yeram_client
 			Event mCompleteEvent;
 			Event mEndEvent;
 		};
+		Animator();
 		Animator(EComponentType _type);
 		~Animator();
 
@@ -35,8 +36,8 @@ namespace yeram_client
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
 		
-		void CreateAnimation(std::wstring& _name,Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration);// 이미지 하나에 스프라이트들이 있는 경우
-		void CreateAnimations();// 이미지를 별개로 불러와서 사용해야 할 경우
+		void CreateAnimation(const std::wstring& _name,Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration);// 이미지 하나에 스프라이트들이 있는 경우
+		void CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration);// 이미지를 별개로 불러와서 사용해야 할 경우
 
 		Animation* FindAnimation(const std::wstring& _name);
 		void Play(const std::wstring& _name, bool _loop);

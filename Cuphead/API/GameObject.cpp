@@ -14,10 +14,11 @@ namespace yeram_client
 	{
 	}
 	void GameObject::Render(HDC hdc)
-	{
+	{ 
+		//ÄÄÆ÷³ÍÆ® ·»´õ µ¹¸®±â 
 		Transform* transform = GetComponent<Transform>();
 		Vector2 pos = transform->GetPos();
-		Vector2 size = transform->GetSize();
+		Vector2 size = transform->GetScale();
 		/*if (mImage != nullptr)
 		{
 			switch (mRenderType)

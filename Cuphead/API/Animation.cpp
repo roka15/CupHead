@@ -8,7 +8,7 @@ namespace yeram_client
 {
 	Animation::Animation()
 		:mAnimator(nullptr),
-		mImage(nullptr),
+		mSheet(nullptr),
 		mTime(0.0f),
 		mbComplete(false),
 		mSpriteIndex(-1)
@@ -47,8 +47,10 @@ namespace yeram_client
 	{
 		Transform* tf = mAnimator->GetOwner()->GetComponent<Transform>();
 
-		TransparentBlt(_hdc, tf->GetPos().x,tf->GetPos().y,
-			mSpriteSheet[mSpriteIndex].size.x,mSpriteSheet[mSpriteIndex].size.y,
+		TransparentBlt(_hdc, tf->GetPos().x + mSpriteSheet[mSpriteIndex].offset.x,
+			tf->GetPos().y + mSpriteSheet[mSpriteIndex].offset.y,
+			mSpriteSheet[mSpriteIndex].size.x*tf->GetScale().x,
+			mSpriteSheet[mSpriteIndex].size.y * tf->GetScale().y,
 			mSheet->GetHDC(),mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y
 			,mSpriteSheet[mSpriteIndex].size.x, mSpriteSheet[mSpriteIndex].size.y,
 			(RGB(234, 2, 255)));
@@ -59,8 +61,8 @@ namespace yeram_client
 	{
 		mSheet = _sheet;
 		Vector2 size = Vector2::One;
-		size.x = mSheet->GetWidth / _col;
-		size.y = mSheet->GetHeight / _row;
+		size.x = mSheet->GetWidth() / _col;
+		size.y = mSheet->GetHeight() / _row;
 
 		for (size_t i = 0; i < _size; i++)
 		{

@@ -5,6 +5,8 @@ namespace yeram_client
 	class Image:public My_Resource
 	{
 	public:
+		static Image* Create(const std::wstring& _key,UINT _width,UINT _height);
+
 		Image();
 		~Image();
 

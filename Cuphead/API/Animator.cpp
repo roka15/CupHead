@@ -1,7 +1,10 @@
 #include "Animator.h"
-
+#include "Resources.h"
 namespace yeram_client
 {
+	Animator::Animator():Component(EComponentType::Animator)
+	{
+	}
 	Animator::Animator(EComponentType _type)
 		: Component(_type)
 		, mActiveAnimation(nullptr)
@@ -13,6 +16,11 @@ namespace yeram_client
 
 	Animator::~Animator()
 	{
+		for (auto ani : mAnimations)
+		{
+			delete ani.second;
+			ani.second = nullptr;
+		}
 	}
 
 	void Animator::Initialize()
@@ -44,7 +52,7 @@ namespace yeram_client
 	{
 	}
 
-	void Animator::CreateAnimation(std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration)
+	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration)
 	{
 		Animation* ani = FindAnimation(_name);
 		if (ani != nullptr)
@@ -59,8 +67,37 @@ namespace yeram_client
 		mAnimations.insert(std::make_pair(_name, ani));
 	}
 
-	void Animator::CreateAnimations()
+	void Animator::CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration)
 	{
+		UINT width = 0;
+		UINT height = 0;
+		UINT fileCount = 0;
+		std::filesystem::path fs(_path);
+		std::vector<Image*> images = {};
+		for (auto& itr : std::filesystem::recursive_directory_iterator(_path))
+		{
+			const std::wstring ext = itr.path().extension();
+			if (ext != L".bmp")
+				continue;
+			std::wstring fileName = itr.path().filename();
+			std::wstring fullName = _path + L"\\" + fileName;
+			Image* image = Resources::Load<Image>(fileName, fullName);
+			images.push_back(image);
+
+			if (width < image->GetWidth())
+			{
+				width = image->GetWidth();
+			}
+			if (height < image->GetHeight())
+			{
+				height = image->GetHeight();
+			}
+			fileCount++;
+		}
+		
+		std::wstring key = fs.parent_path().filename();
+		key += fs.filename();
+		mSpriteSheet = Image::Create(key, width * fileCount, height);
 	}
 
 	Animation* Animator::FindAnimation(const std::wstring& _name)

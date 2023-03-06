@@ -37,7 +37,11 @@ namespace yeram_client
 
 			return dynamic_cast<T*>(resource);
 		}
-
+		template<typename T>
+		static void Insert(const std::wstring& _key, T* _resource)
+		{
+			mResources.insert(std::make_pair(_key, _resource));
+		}
 		static void Release()
 		{
 			for (auto pair : mResources)

@@ -1,6 +1,8 @@
 #include "Transform.h"
 
 yeram_client::Transform::Transform():Component(EComponentType::Transform)
+,mPos(Vector2::Zero)
+,mScale(Vector2::One)
 {
 }
 

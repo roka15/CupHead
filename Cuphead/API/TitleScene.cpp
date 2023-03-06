@@ -15,7 +15,7 @@ yeram_client::TitleScene::TitleScene()
 
 	Vector2 size = application.GetWindowSize();
 	
-	BackGroundObject* title 
+	/*BackGroundObject* title 
 		= new BackGroundObject
 		    (L"TitleBackGround"
 			,L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp"
@@ -56,7 +56,7 @@ yeram_client::TitleScene::TitleScene()
 	AddGameObject(ground, ELayerType::BackObject);
 	AddGameObject(playobj1, ELayerType::BackObject);
 	AddGameObject(playobj2, ELayerType::BackObject);
-	AddGameObject(playobj3, ELayerType::BackObject);
+	AddGameObject(playobj3, ELayerType::BackObject);*/
 }
 
 yeram_client::TitleScene::~TitleScene()

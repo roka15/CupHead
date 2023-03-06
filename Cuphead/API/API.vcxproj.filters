@@ -140,6 +140,7 @@
     <ClInclude Include="MainMenuScene.h">
       <Filter>Contents\Scene\MainMenuScene</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -211,6 +212,7 @@
     <ClCompile Include="MainMenuScene.cpp">
       <Filter>Contents\Scene\MainMenuScene</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

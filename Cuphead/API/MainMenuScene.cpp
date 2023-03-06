@@ -12,15 +12,15 @@ yeram_client::MainMenuScene::MainMenuScene()
 
 	Vector2 size = application.GetWindowSize();
 
-	BackGroundObject* background
+	/*BackGroundObject* background
 		= new BackGroundObject
 		(L"MenuBackGround"
 			, L"..\\Resources\\mainscreen.bmp"
 			, ERenderType::StretchBlt
 			, Vector2{ 0,0 }
-	, Vector2{ (long)size.x, (long)size.y });
+	, Vector2{ (long)size.x, (long)size.y });*/
 
-	AddGameObject(background,ELayerType::BackObject);
+	//AddGameObject(background,ELayerType::BackObject);
 }
 
 yeram_client::MainMenuScene::~MainMenuScene()

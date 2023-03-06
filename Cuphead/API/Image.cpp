@@ -1,9 +1,34 @@
 #include "Image.h"
 #include "Application.h"
+#include "Resources.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
-	Image::Image()
+    Image* Image::Create(const std::wstring& _key, UINT _width, UINT _height)
+    {
+		if (_width == 0 || _height == 0)
+			return nullptr;
+
+		Image* image = Resources::Find<Image>(_key);
+		if (image != nullptr)
+			return image;
+		
+		image = new Image();
+		HDC MainHDC = application.GetHDC();
+
+		image->mBitmap = CreateCompatibleBitmap(MainHDC, _width, _height);
+		image->mHdc = CreateCompatibleDC(MainHDC);
+
+		HBITMAP oldBitmap = (HBITMAP)SelectObject(image->mHdc, image->mBitmap);
+		DeleteObject(oldBitmap);
+		image->mWidth = _width;
+		image->mHeight = _height;
+
+		image->SetKey(_key);
+		Resources::Insert(_key, image);
+        return nullptr;
+    }
+    Image::Image()
 		:mBitmap(NULL)
 		,mHdc(NULL)
 		,mWidth(0)

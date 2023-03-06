@@ -17,7 +17,7 @@ namespace yeram_client
 	private:
 		void SetImage(Image* _image)
 		{
-			mImage = _image;
+			//mSheet = _image;
 		}
 		void SetRenderType(ERenderType _type)
 		{

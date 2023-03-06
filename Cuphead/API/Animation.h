@@ -1,11 +1,12 @@
 #pragma once
 #include "Entity.h"
 #include "Image.h"
-class Image;
-class Animator;
+
 namespace yeram_client
 {
-	class Animation:public Entity
+	class Image;
+	class Animator;
+	class Animation :public Entity
 	{
 	public:
 		struct Sprite
@@ -30,7 +31,7 @@ namespace yeram_client
 		void Initialize();
 		void Update();
 		void Render(HDC _hdc);
-		void Create(Image* _sheet,Vector2 _leftTop,UINT _col, UINT _row,UINT _size,Vector2 _offset,float _duration);
+		void Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration);
 		void Reset();
 
 		bool IsComplete() { return mbComplete; }
