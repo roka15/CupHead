@@ -5,18 +5,14 @@ namespace yeram_client
 	PlayScene::PlayScene()
 	{
 		mLayers[(UINT)ELayerType::Player] = new Layer();
-		
-		
+		Player* player = new Player();
+		AddGameObject(player, ELayerType::Player);
 	}
 	PlayScene::~PlayScene()
 	{
 	}
 	void PlayScene::Initialize()
 	{
-		Player* player = new Player();
-
-		//player->SetPos(Vector2(0.0f, 0.0f + i));
-		AddGameObject(player, ELayerType::Player);
 		Scene::Initialize();
 	}
 	void PlayScene::Update()
@@ -37,6 +33,6 @@ namespace yeram_client
 	void PlayScene::OnExit()
 	{
 		Scene::OnExit();
-		mLayers[(UINT)ELayerType::Player]->Initialize();
+		//mLayers[(UINT)ELayerType::Player]->Initialize();
 	}
 }

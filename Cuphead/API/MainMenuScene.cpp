@@ -47,7 +47,7 @@ void yeram_client::MainMenuScene::Initialize()
 
 void yeram_client::MainMenuScene::Update()
 {
-	if (core::Input::GetKey(core::EKeyCode::MouseLeft))
+	if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 	{
 		OnExit();
 		SceneManager::LoadScene(ESceneType::Play);
@@ -75,12 +75,7 @@ void yeram_client::MainMenuScene::Render(HDC hdc)
 
 void yeram_client::MainMenuScene::Release()
 {
-	for (UINT i = (UINT)ELayerType::NONE + 1; i < (UINT)ELayerType::MAX; i++)
-	{
-		if (mLayers[i] == nullptr)
-			continue;
-		mLayers[i]->Release();
-	}
+	Scene::Release();
 }
 
 void yeram_client::MainMenuScene::OnEnter()

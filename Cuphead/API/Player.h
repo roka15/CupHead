@@ -20,13 +20,21 @@ namespace yeram_client
 		virtual void Update()override;
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
+
+		void ChangeCharacter(EPlayerType _type)
+		{
+			mPlayType = _type;
+		}
 	private:
 		void move();
 		void shoot();
 		void death();
 		void idle();
+
+		void idleCompleteEvent();
 	private:
 		ECupheadState mState;
+		EPlayerType mPlayType;
 		Animator* mAnimator;
 		/*float mTime;
 		int midx;*/

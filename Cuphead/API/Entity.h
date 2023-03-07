@@ -9,7 +9,7 @@ namespace yeram_client
 		virtual ~Entity();
 		
 		void SetName(const std::wstring& name) { mName = name; }
-		std::wstring& getName() { return mName; }
+		std::wstring& GetName() { return mName; }
 	private:
 		std::wstring mName;
 	};

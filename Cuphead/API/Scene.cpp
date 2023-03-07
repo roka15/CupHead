@@ -43,6 +43,7 @@ namespace yeram_client
 			delete layer;
 			layer = nullptr;
 		}
+		mLayers.clear();
 	}
 
 	void Scene::OnEnter()

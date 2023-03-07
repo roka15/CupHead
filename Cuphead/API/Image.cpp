@@ -26,7 +26,7 @@ namespace yeram_client
 
 		image->SetKey(_key);
 		Resources::Insert(_key, image);
-        return nullptr;
+        return image;
     }
     Image::Image()
 		:mBitmap(NULL)

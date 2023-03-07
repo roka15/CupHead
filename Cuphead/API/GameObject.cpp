@@ -41,6 +41,8 @@ namespace yeram_client
 			if (com == nullptr)
 				continue;
 			com->Release();
+			delete com;
+			com = nullptr;
 		}
 	}
 

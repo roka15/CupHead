@@ -8,12 +8,14 @@
 #include "Transform.h"
 #include "SpriteRenderer.h"
 #include "GameObject.h"
+#include "Animator.h"
 extern yeram_client::Application application;
 
 yeram_client::TitleScene::TitleScene()
 {
 	mLayers.resize((UINT)ELayerType::MAX);
 	mLayers[(UINT)ELayerType::BackObject] = new Layer();
+	mLayers[(UINT)ELayerType::Player] = new Layer();
 
 	Vector2 size = application.GetWindowSize();
 
@@ -42,37 +44,36 @@ yeram_client::TitleScene::TitleScene()
 		Transform* tf = playobj1->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 170,140 });
 		tf->SetSize(Vector2{ 400l, 500l });
-		SpriteRenderer* render = playobj1->AddComponent<SpriteRenderer>();
-		render->SetImage(L"TitlePlay1"
-			, L"..\\Resources\\title_screen\\DLC\\Cuphead\\cuphead_title_screen_0001.bmp");
-		render->SetRenderType(ERenderType::TransParentBlt);
+
+		Animator* ani = playobj1->AddComponent<Animator>();
+		ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Cuphead", Vector2::Zero, 0.1f);
+		playobj1->SetName(L"DLCCuphead");
 	}
 	Rectangle* playobj2 = new Rectangle();
 	{
 		Transform* tf = playobj2->GetComponent<Transform>();
-		tf->SetPos(Vector2{ 600,210 });
+		tf->SetPos(Vector2{ 650,210 });
 		tf->SetSize(Vector2{ 400l, 500l });
-		SpriteRenderer* render = playobj2->AddComponent<SpriteRenderer>();
-		render->SetImage(L"TitlePlay2"
-			, L"..\\Resources\\title_screen\\DLC\\Ms Chalice\\chalice_title_screen_0001.bmp");
-		render->SetRenderType(ERenderType::TransParentBlt);
+
+		Animator* ani= playobj2->AddComponent<Animator>();
+		ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Ms Chalice", Vector2::Zero, 0.1f);
+		playobj2->SetName(L"DLCMs Chalice");
 	}
 	Rectangle* playobj3 = new Rectangle();
 	{
 		Transform* tf = playobj3->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 1000,160 });
 		tf->SetSize(Vector2{ 400l, 500l });
-		SpriteRenderer* render = playobj3->AddComponent<SpriteRenderer>();
-		render->SetImage(L"TitlePlay3"
-			, L"..\\Resources\\title_screen\\DLC\\Mugman\\mugman_title_screen_0001.bmp");
-		render->SetRenderType(ERenderType::TransParentBlt);
+		Animator* ani = playobj3->AddComponent<Animator>();
+		ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Mugman", Vector2::Zero, 0.1f);
+		playobj3->SetName(L"DLCMugMan");
 	}
 	
 	AddGameObject(title,ELayerType::BackObject);
 	AddGameObject(ground, ELayerType::BackObject);
-	AddGameObject(playobj1, ELayerType::BackObject);
-	AddGameObject(playobj2, ELayerType::BackObject);
-	AddGameObject(playobj3, ELayerType::BackObject);
+	AddGameObject(playobj1, ELayerType::Player);
+	AddGameObject(playobj2, ELayerType::Player);
+	AddGameObject(playobj3, ELayerType::Player);
 }
 
 yeram_client::TitleScene::~TitleScene()
@@ -82,12 +83,11 @@ yeram_client::TitleScene::~TitleScene()
 void yeram_client::TitleScene::Initialize()
 {
 	Scene::Initialize();
-
 }
 
 void yeram_client::TitleScene::Update()
 {
-	if (core::Input::GetKey(core::EKeyCode::MouseLeft))
+	if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 	{
 		OnExit();
 		SceneManager::LoadScene(ESceneType::MainMenu);

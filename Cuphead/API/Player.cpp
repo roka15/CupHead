@@ -8,8 +8,10 @@
 namespace yeram_client
 {
 	Player::Player() :GameObject()
+		,mPlayType(EPlayerType::Cuphead)
+		,mState(ECupheadState::Idle)
 	{
-
+		
 	}
 	
 	Player::~Player()
@@ -17,21 +19,36 @@ namespace yeram_client
 	}
 	void Player::Initialize()
 	{
-
 		Transform* tr = GetComponent<Transform>();
 		tr->SetPos(Vector2(400.0f, 400.0f)); 
-
 		mState = ECupheadState::Idle;
 		
-		Image* mImage = Resources::Load<Image>(L"MapFowardRun", L"..\\Resources\\Cuphead_Stage.bmp");//받아오기 시트
-		mAnimator = AddComponent<Animator>();
-		mAnimator->SetOwner(this);
+		
+		mAnimator = GetComponent<Animator>();
+		if (mAnimator == nullptr)
+		{
+			mAnimator = AddComponent<Animator>();
+		}
+		Image* mImage = nullptr;
+		switch (mPlayType)
+		{
+		case EPlayerType::Cuphead:
+			mImage = Resources::Load<Image>(L"MapFowardRun", L"..\\Resources\\Cuphead_Stage.bmp");//받아오기 시트
+			break;
+		case EPlayerType::MugMan:
+			break;
+		case EPlayerType::MsChalice:
+			break;
+		}
+	
 		mAnimator->CreateAnimation(L"MapFowardRun", mImage, Vector2::Zero, 16, 8, 16, Vector2::Zero, 0.1f);
 		mAnimator->CreateAnimation(L"MapFowardRight", mImage, Vector2(0.0f, 113.0f), 16, 8, 15, Vector2::Zero, 0.1);
-		mAnimator->CreateAnimation(L"MapIdle", mImage, Vector2(0.0f, 113.0f * 5), 16, 8, 9, Vector2(-50.0f, -50.0f), 0.1);
+		mAnimator->CreateAnimation(L"MapIdle", mImage, Vector2(0.0f, 113.0f * 5), 16, 8, 9, Vector2::Zero, 0.1);
 		//mAnimator->CreateAnimations(L"..\\Resources\\Chalise\\Idle", Vector2::Zero, 0.1f);
 		//mAnimator->CreateAnimations(L"..\\Resources\\Chalise\\Aim\\Straight", Vector2::Zero, 0.1f);
-		mAnimator->Play(L"MapIdle",true);
+		
+		//mAnimator->GetStartEvent(L"MapIdle")=std::bind(&Player::idleCompleteEvent,this);
+		mAnimator->Play(L"MapIdle", true);
 		
 		GameObject::Initialize();
 	}
@@ -121,5 +138,9 @@ namespace yeram_client
 			mState = ECupheadState::Shoot;
 			mAnimator->Play(L"AimStraight", true);
 		}
+	}
+	void Player::idleCompleteEvent()
+	{
+		
 	}
 }

@@ -16,6 +16,7 @@ namespace yeram_client
 	
 	SpriteRenderer::~SpriteRenderer()
 	{
+		
 	}
 
 	void SpriteRenderer::Initialize()
@@ -39,7 +40,7 @@ namespace yeram_client
 				BitBlt(hdc, pos.x, pos.y, mImage->GetWidth(), mImage->GetHeight(), mImage->GetHDC(), 0, 0, SRCCOPY);
 				break;
 			case ERenderType::TransParentBlt:
-				TransparentBlt(hdc, pos.x, pos.y, size.x, size.y, mImage->GetHDC(), 0, 0, mImage->GetWidth(), mImage->GetHeight(), (RGB(234, 2, 255)));
+				TransparentBlt(hdc, pos.x, pos.y, size.x, size.y, mImage->GetHDC(), 0, 0, mImage->GetWidth(), mImage->GetHeight(), (RGB(255, 0, 255)));
 				break;
 			case ERenderType::StretchBlt:
 				StretchBlt(hdc, pos.x, pos.y, size.x, size.y, mImage->GetHDC(), 0, 0, mImage->GetWidth(), mImage->GetHeight(), SRCCOPY);

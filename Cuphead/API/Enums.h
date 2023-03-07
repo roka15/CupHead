@@ -42,3 +42,10 @@ enum class ERenderType
 	TransParentBlt,
 	StretchBlt,
 };
+enum class EPlayerType
+{
+	Cuphead,
+	MugMan,
+	MsChalice,
+	MAX
+};

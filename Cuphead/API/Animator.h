@@ -42,9 +42,9 @@ namespace yeram_client
 		void Play(const std::wstring& _name, bool _loop);
 
 		Events* FindEvents(const std::wstring& _name);
-	/*	std::function<void()>& GetStartEvent(const std::wstring& _name);
+		std::function<void()>& GetStartEvent(const std::wstring& _name);
 		std::function<void()>& GetCompleteEvent(const std::wstring& _name);
-		std::function<void()>& GetEndEvent(const std::wstring& _name);*/
+		std::function<void()>& GetEndEvent(const std::wstring& _name);
 	private:
 		std::map<std::wstring, Animation*> mAnimations;
 		std::map <std::wstring, Events*> mEvents;

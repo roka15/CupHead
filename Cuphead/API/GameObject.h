@@ -4,7 +4,7 @@
 #include "Image.h"
 namespace yeram_client
 {
-	class GameObject
+	class GameObject:public Entity
 	{
 	public:
 		GameObject();

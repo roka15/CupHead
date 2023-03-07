@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Time.h"
 #include "Input.h"
+#include "Resources.h"
 namespace yeram_client
 {
 	Application::Application() :mHwnd(NULL), mhdc(NULL)
@@ -63,6 +64,7 @@ namespace yeram_client
 		core::Input::Release();
 		SceneManager::Release();
 		Time::Release();
+		Resources::Release();
 	}
 	HWND Application::GetHandle()
 	{

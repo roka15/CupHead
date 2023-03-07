@@ -17,6 +17,7 @@ namespace yeram_client
 
 	Animation::~Animation()
 	{
+		
 	}
 
 	void Animation::Initialize()
