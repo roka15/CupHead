@@ -23,6 +23,13 @@ namespace yeram_client
 		DeleteObject(oldBitmap);
 		image->mWidth = _width;
 		image->mHeight = _height;
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 255));
+		HBRUSH oldBrush = (HBRUSH)SelectObject(image->mHdc, myBrush);
+
+		Rectangle(image->mHdc, -1, -1,_width+1,_height+1);
+
+		SelectObject(image->mHdc, oldBrush);
+		DeleteObject(myBrush);
 
 		image->SetKey(_key);
 		Resources::Insert(_key, image);

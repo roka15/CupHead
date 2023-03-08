@@ -2,10 +2,10 @@
 #include "Scene.h"
 namespace yeram_client
 {
-	class PlayScene:public Scene
+	class PlayMapScene:public Scene
 	{public:
-		PlayScene();
-		~PlayScene();
+		PlayMapScene();
+		~PlayMapScene();
 		virtual void Initialize()override;
 		virtual void Update()override;
 		virtual void Render(HDC hdc)override;

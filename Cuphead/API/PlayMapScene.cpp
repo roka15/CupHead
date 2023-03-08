@@ -1,36 +1,38 @@
-#include "PlayScene.h"
+#include "PlayMapScene.h"
 #include "Player.h"
 namespace yeram_client
 {
-	PlayScene::PlayScene()
+	PlayMapScene::PlayMapScene()
 	{
 		mLayers[(UINT)ELayerType::Player] = new Layer();
 		Player* player = new Player();
+		player->CreateCharacter(ESceneType::PlayMap, EPlayerType::Cuphead);
+
 		AddGameObject(player, ELayerType::Player);
 	}
-	PlayScene::~PlayScene()
+	PlayMapScene::~PlayMapScene()
 	{
 	}
-	void PlayScene::Initialize()
+	void PlayMapScene::Initialize()
 	{
 		Scene::Initialize();
 	}
-	void PlayScene::Update()
+	void PlayMapScene::Update()
 	{
 		Scene::Update();
 	}
-	void PlayScene::Render(HDC hdc)
+	void PlayMapScene::Render(HDC hdc)
 	{
 		Scene::Render(hdc);
 	}
-	void PlayScene::Release()
+	void PlayMapScene::Release()
 	{
 		Scene::Release();
 	}
-	void PlayScene::OnEnter()
+	void PlayMapScene::OnEnter()
 	{
 	}
-	void PlayScene::OnExit()
+	void PlayMapScene::OnExit()
 	{
 		Scene::OnExit();
 		//mLayers[(UINT)ELayerType::Player]->Initialize();

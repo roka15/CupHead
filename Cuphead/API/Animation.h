@@ -36,6 +36,7 @@ namespace yeram_client
 
 		bool IsComplete() { return mbComplete; }
 		void SetAnimator(Animator* _animator) { mAnimator = _animator; }
+		void SetSpriteIndex(UINT _index) { mSpriteIndex = _index; }
 	private:
 		Image* mSheet;
 		std::vector<Sprite> mSpriteSheet;

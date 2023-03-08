@@ -16,7 +16,7 @@ yeram_client::TitleScene::TitleScene()
 	mLayers.resize((UINT)ELayerType::MAX);
 	mLayers[(UINT)ELayerType::BackObject] = new Layer();
 	mLayers[(UINT)ELayerType::Player] = new Layer();
-
+	mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 	Vector2 size = application.GetWindowSize();
 
 	Rectangle* title = new Rectangle();
@@ -42,38 +42,55 @@ yeram_client::TitleScene::TitleScene()
 	Rectangle* playobj1 = new Rectangle();
 	{
 		Transform* tf = playobj1->GetComponent<Transform>();
-		tf->SetPos(Vector2{ 170,140 });
+		tf->SetPos(Vector2{ 190,100 });
 		tf->SetSize(Vector2{ 400l, 500l });
 
 		Animator* ani = playobj1->AddComponent<Animator>();
-		ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Cuphead", Vector2::Zero, 0.1f);
-		playobj1->SetName(L"DLCCuphead");
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Cuphead", Vector2::Zero, 0.05f);
+		playobj1->SetName(L"MainCupHead");
+		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, playobj1);
+		ani->Play(key,true);
 	}
 	Rectangle* playobj2 = new Rectangle();
 	{
 		Transform* tf = playobj2->GetComponent<Transform>();
-		tf->SetPos(Vector2{ 650,210 });
+		tf->SetPos(Vector2{ 630,210 });
 		tf->SetSize(Vector2{ 400l, 500l });
 
 		Animator* ani= playobj2->AddComponent<Animator>();
-		ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Ms Chalice", Vector2::Zero, 0.1f);
-		playobj2->SetName(L"DLCMs Chalice");
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Ms Chalice", Vector2::Zero, 0.05f);
+		playobj2->SetName(L"MainMSChalice");
+		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, playobj2);
+		ani->Play(key, true);
 	}
 	Rectangle* playobj3 = new Rectangle();
 	{
 		Transform* tf = playobj3->GetComponent<Transform>();
-		tf->SetPos(Vector2{ 1000,160 });
+		tf->SetPos(Vector2{ 970,100 });
 		tf->SetSize(Vector2{ 400l, 500l });
 		Animator* ani = playobj3->AddComponent<Animator>();
-		ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Mugman", Vector2::Zero, 0.1f);
-		playobj3->SetName(L"DLCMugMan");
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Mugman", Vector2::Zero, 0.05f);
+		playobj3->SetName(L"MainMugMan");
+		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, playobj3);
+		ani->Play(key, true);
 	}
-	
+	Rectangle* text = new Rectangle();
+	{
+		Transform* tf = text->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 600,620 });
+		tf->SetSize(Vector2{ 400l, 500l });
+		Animator* ani = text->AddComponent<Animator>();
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Text", Vector2::Zero, 0.5f);
+		text->SetName(L"MainPressText");
+		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, text);
+		ani->Play(key, true);
+	}
 	AddGameObject(title,ELayerType::BackObject);
-	AddGameObject(ground, ELayerType::BackObject);
+	AddGameObject(ground, ELayerType::FrontObject);
 	AddGameObject(playobj1, ELayerType::Player);
 	AddGameObject(playobj2, ELayerType::Player);
 	AddGameObject(playobj3, ELayerType::Player);
+	AddGameObject(text, ELayerType::FrontObject);
 }
 
 yeram_client::TitleScene::~TitleScene()

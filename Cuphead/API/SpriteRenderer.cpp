@@ -31,7 +31,7 @@ namespace yeram_client
 	{
 		Transform* transform = mOwner->GetComponent<Transform>();
 		Vector2 pos = transform->GetPos();
-		Vector2 size = transform->GetScale();
+		Vector2 size = transform->GetSize();
 		if (mImage != nullptr)
 		{
 			switch (mRenderType)

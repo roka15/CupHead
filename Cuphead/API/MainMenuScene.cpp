@@ -50,7 +50,7 @@ void yeram_client::MainMenuScene::Update()
 	if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 	{
 		OnExit();
-		SceneManager::LoadScene(ESceneType::Play);
+		SceneManager::LoadScene(ESceneType::PlayMap);
 	}
 	Scene::Update();
 

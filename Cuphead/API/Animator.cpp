@@ -10,16 +10,16 @@ namespace yeram_client
 		, mbLoop(false)
 	{
 	}
-	
+
 
 	Animator::~Animator()
 	{
-		
+
 	}
 
 	void Animator::Initialize()
 	{
-		Play(mOwner->GetName(), true);
+		//Play(mOwner->GetName(), true);
 	}
 
 	void Animator::Update()
@@ -27,10 +27,14 @@ namespace yeram_client
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Update();
-			if (mbLoop == true 
-				&& mActiveAnimation->IsComplete()==true)
+			if (mbLoop == true
+				&& mActiveAnimation->IsComplete() == true)
 			{
 				mActiveAnimation->Reset();
+				std::wstring str = mActiveAnimation->GetName();
+				Events* event = FindEvents(str);
+				if (event != nullptr)
+					event->mCompleteEvent();
 			}
 		}
 	}
@@ -67,7 +71,8 @@ namespace yeram_client
 			return;
 		}
 		ani = new Animation();
-		ani->Create(_sheet, _leftTop, _col, _row,_size, _offset, _duration);
+		mSpriteSheet = _sheet;
+		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration);
 		ani->SetName(_name);
 		ani->SetAnimator(this);
 		Events* event = new Events();
@@ -75,7 +80,7 @@ namespace yeram_client
 		mEvents.insert(std::make_pair(_name, event));
 	}
 
-	void Animator::CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration)
+	std::wstring Animator::CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration)
 	{
 		UINT width = 0;
 		UINT height = 0;
@@ -102,11 +107,11 @@ namespace yeram_client
 			}
 			fileCount++;
 		}
-		
+
 		std::wstring key = fs.parent_path().filename();
 		key += fs.filename();
 		mSpriteSheet = Image::Create(key, width * fileCount, height);
-		
+
 		int index = 0;
 		for (Image* image : images)
 		{
@@ -119,12 +124,13 @@ namespace yeram_client
 				, image->GetWidth(), image->GetHeight()
 				, image->GetHDC(), 0, 0, SRCCOPY);
 
+			
 			index++;
 
 		}
 
 		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration);
-
+		return key;
 	}
 
 	Animation* Animator::FindAnimation(const std::wstring& _name)
@@ -144,8 +150,11 @@ namespace yeram_client
 			if (prev_events != nullptr)
 				prev_events->mEndEvent();
 		}
+
 		
 		mActiveAnimation = FindAnimation(_name);
+		
+		mActiveAnimation->Reset();
 		mbLoop = _loop;
 
 		Animator::Events* events
@@ -154,9 +163,20 @@ namespace yeram_client
 			events->mStartEvent();
 	}
 
+	const std::wstring& Animator::GetCurAniName()
+	{
+		return mActiveAnimation->GetName();
+	}
+
 	Animator::Events* Animator::FindEvents(const std::wstring& _name)
 	{
-		return nullptr;
+		std::map<std::wstring, Events*>::iterator iter
+			= mEvents.find(_name);
+
+		if (iter == mEvents.end())
+			return nullptr;
+
+		return iter->second;
 	}
 
 	std::function<void()>& Animator::GetStartEvent(const std::wstring& _name)

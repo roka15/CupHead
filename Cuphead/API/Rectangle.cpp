@@ -24,4 +24,7 @@ namespace yeram_client
 	{
 		GameObject::Release();
 	}
+	void Rectangle::aniCompleteEvent()
+	{
+	}
 }

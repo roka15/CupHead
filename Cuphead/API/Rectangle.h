@@ -19,6 +19,7 @@ namespace yeram_client
 			offset.x = std::abs(_start.x - _end.x);
 			offset.y = std::abs(_start.y - _end.y);
 		}
+		void aniCompleteEvent();
 	private:
 		Vector2 mStartPos;
 		Vector2 mEndPos;

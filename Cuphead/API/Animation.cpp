@@ -4,6 +4,7 @@
 #include "Time.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "Input.h"
 namespace yeram_client
 {
 	Animation::Animation()
@@ -17,7 +18,7 @@ namespace yeram_client
 
 	Animation::~Animation()
 	{
-		
+
 	}
 
 	void Animation::Initialize()
@@ -47,18 +48,18 @@ namespace yeram_client
 	void Animation::Render(HDC _hdc)
 	{
 		Transform* tf = mAnimator->GetOwner()->GetComponent<Transform>();
-
+		
 		TransparentBlt(_hdc, tf->GetPos().x + mSpriteSheet[mSpriteIndex].offset.x,
 			tf->GetPos().y + mSpriteSheet[mSpriteIndex].offset.y,
-			mSpriteSheet[mSpriteIndex].size.x*tf->GetScale().x,
+			mSpriteSheet[mSpriteIndex].size.x * tf->GetScale().x,
 			mSpriteSheet[mSpriteIndex].size.y * tf->GetScale().y,
-			mSheet->GetHDC(),mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y
-			,mSpriteSheet[mSpriteIndex].size.x, mSpriteSheet[mSpriteIndex].size.y,
+			mSheet->GetHDC(), mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y
+			, mSpriteSheet[mSpriteIndex].size.x, mSpriteSheet[mSpriteIndex].size.y,
 			(RGB(255, 0, 255)));
 
 	}
 
-	void Animation::Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row,UINT _size, Vector2 _offset, float _duration)
+	void Animation::Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration)
 	{
 		mSheet = _sheet;
 		Vector2 size = Vector2::One;
@@ -68,7 +69,7 @@ namespace yeram_client
 		for (size_t i = 0; i < _size; i++)
 		{
 			Sprite sprite_info;
-			sprite_info.leftTop.x = _leftTop.x + (size.x*i);
+			sprite_info.leftTop.x = _leftTop.x + (size.x * i);
 			sprite_info.leftTop.y = _leftTop.y;
 			sprite_info.size = size;
 			sprite_info.offset = _offset;

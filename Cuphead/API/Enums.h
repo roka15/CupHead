@@ -5,7 +5,8 @@ enum class ESceneType
 	NONE,
 	Title,
 	MainMenu,
-	Play,
+	PlayMap,
+	PlayStage,
 	Ending,
 	MAX,
 };

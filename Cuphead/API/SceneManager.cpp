@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-#include "PlayScene.h"
+#include "PlayMapScene.h"
 #include "TitleScene.h"
 #include "MainMenuScene.h"
 namespace yeram_client
@@ -11,7 +11,7 @@ namespace yeram_client
 		mScenes.resize((UINT)ESceneType::MAX);
 		mScenes[(UINT)ESceneType::Title] = new TitleScene();
 		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene();
-		mScenes[(UINT)ESceneType::Play] = new PlayScene();
+		mScenes[(UINT)ESceneType::PlayMap] = new PlayMapScene();
 		
 
 		mActiveScene = mScenes[(UINT)ESceneType::Title];
