@@ -65,7 +65,7 @@ namespace yeram_client
 			case ESceneType::PlayMap:
 				if (core::Input::GetKeyDown(core::EKeyCode::A))
 				{
-
+					ani_name = L"MapFowardLeft";
 				}
 				if (core::Input::GetKeyDown(core::EKeyCode::D))
 				{
@@ -73,11 +73,11 @@ namespace yeram_client
 				}
 				if (core::Input::GetKeyDown(core::EKeyCode::W))
 				{
-					ani_name = L"MapFowardRun";
+					ani_name = L"MapFowardUp";
 				}
 				if (core::Input::GetKeyDown(core::EKeyCode::S))
 				{
-
+					ani_name = L"MapFowardDown";
 				}
 			}
 			if (ani_name.size() > 0)
