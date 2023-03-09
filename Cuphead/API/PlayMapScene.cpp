@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "SpriteRenderer.h"
 #include "Application.h"
+#include "Camera.h"
 
 extern yeram_client::Application application;
 namespace yeram_client
@@ -14,6 +15,7 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		Player* player = new Player();
 		player->CreateCharacter(ESceneType::PlayMap, EPlayerType::Cuphead);
+		Camera::SetTarger(player);
 		Vector2 size = application.GetWindowSize();
 		//temp map
 		Rectangle* map = new Rectangle();

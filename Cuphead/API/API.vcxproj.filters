@@ -97,9 +97,6 @@
     <ClInclude Include="Entity.h">
       <Filter>Engine\Common</Filter>
     </ClInclude>
-    <ClInclude Include="PlayScene.h">
-      <Filter>Contents\Scene\PlayScene</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Contents\GameObject</Filter>
     </ClInclude>
@@ -130,17 +127,54 @@
     <ClInclude Include="TitleScene.h">
       <Filter>Contents\Scene\TitleScene</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="SpriteRenderer.h" />
-    <ClInclude Include="Animator.h" />
-    <ClInclude Include="Audio.h" />
-    <ClInclude Include="Collider.h" />
-    <ClInclude Include="Script.h" />
-    <ClInclude Include="BackGroundObject.h" />
     <ClInclude Include="MainMenuScene.h">
       <Filter>Contents\Scene\MainMenuScene</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h" />
+    <ClInclude Include="PlayMapScene.h">
+      <Filter>Contents\Scene\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Chalice.h">
+      <Filter>Contents\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Contents\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Cuphead.h">
+      <Filter>Contents\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MugMan.h">
+      <Filter>Contents\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Rectangle.h">
+      <Filter>Contents\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -172,9 +206,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Engine\Common</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
-      <Filter>Contents\Scene\PlayScene</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Contents\GameObject</Filter>
     </ClCompile>
@@ -202,17 +233,51 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>Contents\Scene\TitleScene</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
-    <ClCompile Include="Animator.cpp" />
-    <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="Script.cpp" />
-    <ClCompile Include="BackGroundObject.cpp" />
     <ClCompile Include="MainMenuScene.cpp">
       <Filter>Contents\Scene\MainMenuScene</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="PlayMapScene.cpp">
+      <Filter>Contents\Scene\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Chalice.cpp">
+      <Filter>Contents\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Contents\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Cuphead.cpp">
+      <Filter>Contents\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="MugMan.cpp">
+      <Filter>Contents\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Rectangle.cpp">
+      <Filter>Contents\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

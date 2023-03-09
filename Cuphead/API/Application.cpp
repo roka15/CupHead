@@ -3,6 +3,7 @@
 #include "Time.h"
 #include "Input.h"
 #include "Resources.h"
+#include "Camera.h"
 namespace yeram_client
 {
 	Application::Application() :mHwnd(NULL), mhdc(NULL)
@@ -37,6 +38,7 @@ namespace yeram_client
 		core::Input::Initialize();
 		SceneManager::Initalize();
 		Time::Initailize();
+		Camera::Initialize();
 	}
 	void Application::Run()
 	{
@@ -46,6 +48,7 @@ namespace yeram_client
 	void Application::Update()
 	{
 		core::Input::Update();
+		Camera::Update();
 		SceneManager::Update();
 		Time::Update();
 	}

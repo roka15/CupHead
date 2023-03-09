@@ -40,8 +40,27 @@ struct Vector2
 		x = _other.x;
 		y = _other.y;
 	}*/
+	Vector2& operator/(float _value)
+	{
+		x /= _value;
+		y /= _value;
+		return *this;
+	}
+	Vector2& operator+=(const Vector2& _value)
+	{
+		x += _value.x;
+		y += _value.y;
+		return *this;
+	}
+	Vector2& operator-(const Vector2& _value)
+	{
+		x -= _value.x;
+		y -= _value.y;
+		return *this;
+	}
 	Vector2(const Vector2&) = default;
 	Vector2(Vector2&&) = default;
 	Vector2& operator=(const Vector2&) = default;
 	Vector2& operator=(Vector2&&) = default;
+	
 };

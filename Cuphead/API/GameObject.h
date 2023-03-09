@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "Component.h"
 #include "Image.h"
+#include "Scene.h"
+#include "SceneManager.h"
 namespace yeram_client
 {
 	class GameObject:public Entity
@@ -14,7 +16,26 @@ namespace yeram_client
 		virtual void Update();
 		virtual void Render(HDC hdc);
 		virtual void Release();
-		
+
+		template<typename T>
+		static inline T* Instantiate(ELayerType _type)
+		{
+			T* obj = new T();
+			//object 持失.
+			//Scene* cur; //=SceneManager::GetActiveScene();
+			//cur->AddGameObject(obj, _type);
+			return 
+		}
+		template<typename T>
+		static inline T* Instantiate(Vector2 _pos,ELayerType _type)
+		{
+			T* obj = new T();
+			//object 持失.
+			//Scene* cur; //=SceneManager::GetActiveScene();
+			//cur->AddGameObject(obj, _type);
+			//obj->GameObject::GetComponent<Transform>().SetPos(_pos);
+			return
+		}
 		template <typename T>
 		T* AddComponent()
 		{

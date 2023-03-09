@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "Input.h"
+#include "Camera.h"
 namespace yeram_client
 {
 	Animation::Animation()
@@ -48,7 +49,10 @@ namespace yeram_client
 	void Animation::Render(HDC _hdc)
 	{
 		Transform* tf = mAnimator->GetOwner()->GetComponent<Transform>();
-		
+		Vector2 pos = tf->GetPos();
+		//camera 더하기
+		// operator 구현해야함.
+		pos = Camera::CaluatePos(pos);
 		TransparentBlt(_hdc, tf->GetPos().x + mSpriteSheet[mSpriteIndex].offset.x,
 			tf->GetPos().y + mSpriteSheet[mSpriteIndex].offset.y,
 			mSpriteSheet[mSpriteIndex].size.x * tf->GetScale().x,
