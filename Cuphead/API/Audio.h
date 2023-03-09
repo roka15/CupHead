@@ -5,6 +5,8 @@ namespace yeram_client
 	class Audio :
 		public Component
 	{
+	public:
+		virtual void Render(HDC hdc)override;
 	};
 }
 

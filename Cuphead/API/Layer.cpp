@@ -3,6 +3,7 @@ namespace yeram_client
 {
 	Layer::Layer()
 	{
+		mbActive = true;
 	}
 	Layer::~Layer()
 	{

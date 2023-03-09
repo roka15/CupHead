@@ -9,6 +9,7 @@ namespace yeram_client
 		, mSpriteSheet(nullptr)
 		, mbLoop(false)
 	{
+		SetName(L"Animator");
 	}
 
 
@@ -41,6 +42,8 @@ namespace yeram_client
 
 	void Animator::Render(HDC hdc)
 	{
+		if (mbActive == false)
+			return;
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Render(hdc);

@@ -5,6 +5,7 @@ yeram_client::Transform::Transform() :Component(EComponentType::Transform)
 , mScale(Vector2::One)
 , mSize(Vector2::Zero)
 {
+	SetName(L"Transform");
 }
 
 yeram_client::Transform::~Transform()
@@ -22,6 +23,8 @@ void yeram_client::Transform::Update()
 
 void yeram_client::Transform::Render(HDC hdc)
 {
+	if (mbActive == false)
+		return;
 }
 
 void yeram_client::Transform::Release()

@@ -5,6 +5,7 @@ namespace yeram_client
         :mType(_type)
         , mOwner(nullptr)
 	{
+        mbActive = true;
 	}
     Component::~Component()
     {

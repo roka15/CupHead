@@ -11,6 +11,7 @@ namespace yeram_client
 		static void Render(HDC hdc);
 		static void Release();
 		static void LoadScene(ESceneType _type);
+		static Scene* GetActiveScene();
 	private:
 		SceneManager()=delete;
 		~SceneManager();

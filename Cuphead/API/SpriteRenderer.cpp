@@ -12,6 +12,7 @@ namespace yeram_client
 		,mRenderType(ERenderType::StretchBlt)
 		,mImage(nullptr)
 	{
+		SetName(L"SpriteRenderer");
 	}
 	
 	SpriteRenderer::~SpriteRenderer()
@@ -29,6 +30,8 @@ namespace yeram_client
 
 	void SpriteRenderer::Render(HDC hdc)
 	{
+		if (mbActive == false)
+			return;
 		Transform* transform = mOwner->GetComponent<Transform>();
 		Vector2 pos = transform->GetPos();
 		Vector2 size = transform->GetSize();

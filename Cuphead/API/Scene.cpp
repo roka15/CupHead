@@ -1,5 +1,7 @@
 #include "Scene.h"
 #include "Application.h"
+#include "Layer.h"
+
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -28,6 +30,8 @@ namespace yeram_client
 		for (Layer* layer : mLayers)
 		{
 			if (layer == nullptr)
+				continue;
+			if (layer->GetActive() == false)
 				continue;
 			layer->Render(hdc);
 		}

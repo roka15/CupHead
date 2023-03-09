@@ -13,8 +13,11 @@ namespace yeram_client
 		virtual void Render(HDC hdc);
 		virtual void Release();
 		void AddGameObject(GameObject* obj);
-	private:
+		void SetActive(const bool _flag) { mbActive = _flag; }
+		const bool& GetActive() { return mbActive; }
+ 	private:
 		std::vector<GameObject*> mObjs;
+		bool mbActive;
 	};
 }
 

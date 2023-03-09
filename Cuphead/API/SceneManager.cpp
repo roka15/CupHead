@@ -13,16 +13,31 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene();
 		mScenes[(UINT)ESceneType::PlayMap] = new PlayMapScene();
 		
-
-		mActiveScene = mScenes[(UINT)ESceneType::Title];
-
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
 				continue;
+			switch (scene->GetSceneType())
+			{
+			case ESceneType::Title:
+				mActiveScene = mScenes[(UINT)ESceneType::Title];
+				break;
+			case ESceneType::MainMenu:
+				mActiveScene = mScenes[(UINT)ESceneType::MainMenu];
+				break;
+			case ESceneType::PlayMap:
+				mActiveScene = mScenes[(UINT)ESceneType::PlayMap];
+				break;
+			case ESceneType::PlayStage:
+				mActiveScene = mScenes[(UINT)ESceneType::PlayStage];
+				break;
+			case ESceneType::Ending:
+				mActiveScene = mScenes[(UINT)ESceneType::Ending];
+				break;
+			}
 			scene->Initialize();
 		}
-
+		mActiveScene = mScenes[(UINT)ESceneType::Title];
 	}
 
 	void SceneManager::Update()
@@ -49,8 +64,14 @@ namespace yeram_client
 
 	void SceneManager::LoadScene(ESceneType _type)
 	{
+		mActiveScene->OnExit();
 		mActiveScene = mScenes[(UINT)_type];
-		mActiveScene->Initialize();
+		mActiveScene->OnEnter();
+	}
+
+	Scene* SceneManager::GetActiveScene()
+	{
+		return mActiveScene;
 	}
 
 	SceneManager::~SceneManager()

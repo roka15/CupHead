@@ -5,28 +5,12 @@
 #include "Input.h"
 #include "SpriteRenderer.h"
 #include "Transform.h"
-
+#include "Layer.h"
+#include "UI.h"
 extern yeram_client::Application application;
 yeram_client::MainMenuScene::MainMenuScene()
 {
-	mLayers.resize((UINT)ELayerType::MAX);
-	mLayers[(UINT)ELayerType::BackObject] = new Layer();
-
-	Vector2 size = application.GetWindowSize();
-
-	Rectangle* rectangle = new Rectangle();
-
-	Transform* tf = rectangle->GetComponent<Transform>();
-	tf->SetPos(Vector2{ 0,0 });
-	tf->SetSize(Vector2{ (long)size.x,(long)size.y });
-
-	SpriteRenderer* render = rectangle->AddComponent<SpriteRenderer>();
-	render->SetImage(L"MenuBackGround"
-		, L"..\\Resources\\mainscreen.bmp");
-	render->SetRenderType(ERenderType::StretchBlt);
-	render->SetOwner(rectangle);
-
-	AddGameObject(rectangle, ELayerType::BackObject);
+	mCurType = ESceneType::MainMenu;
 }
 
 yeram_client::MainMenuScene::~MainMenuScene()
@@ -35,42 +19,48 @@ yeram_client::MainMenuScene::~MainMenuScene()
 
 void yeram_client::MainMenuScene::Initialize()
 {
+	mLayers.resize((UINT)ELayerType::MAX);
+	mLayers[(UINT)ELayerType::BackObject] = new Layer();
+	
+	Vector2 size = application.GetWindowSize();
+
+	Rectangle* rectangle = GameObject::Instantiate<Rectangle>(L"MenuBackGround",Vector2{ 0,0 }, ELayerType::BackObject);
+	{
+		Transform* tf = rectangle->GetComponent<Transform>();
+		tf->SetSize(Vector2{ (long)size.x,(long)size.y });
+
+		SpriteRenderer* render = rectangle->AddComponent<SpriteRenderer>();
+		render->SetImage(rectangle->GetName().c_str()
+			, L"..\\Resources\\mainscreen.bmp");
+		render->SetRenderType(ERenderType::StretchBlt);
+		render->SetOwner(rectangle);
+	}
+
+	UI* start_btn = GameObject::Instantiate<UI>(L"StartBTN", Vector2{ 100,100 }, ELayerType::BackObject);
+	{
+		Transform* tf = start_btn->GetComponent<Transform>();
+		tf->SetSize(Vector2{400,400});
+		start_btn->SetImage(start_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Start\\Start.bmp");
+		SpriteRenderer* render = start_btn->GetComponent<SpriteRenderer>();
+		render->SetRenderType(ERenderType::TransParentBlt);
+	}
 	//layer 추가
 	//layer init 돌리기.
-	for (UINT i = (UINT)ELayerType::NONE + 1; i < (UINT)ELayerType::MAX; i++)
-	{
-		if (mLayers[i] == nullptr)
-			continue;
-		mLayers[i]->Initialize();
-	}
+	Scene::Initialize();
 }
 
 void yeram_client::MainMenuScene::Update()
 {
 	if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 	{
-		OnExit();
 		SceneManager::LoadScene(ESceneType::PlayMap);
 	}
 	Scene::Update();
-
-	for (UINT i = (UINT)ELayerType::NONE + 1; i < (UINT)ELayerType::MAX; i++)
-	{
-		if (mLayers[i] == nullptr)
-			continue;
-		mLayers[i]->Update();
-	}
 }
 
 void yeram_client::MainMenuScene::Render(HDC hdc)
 {
-	
-	for (UINT i = (UINT)ELayerType::NONE + 1; i < (UINT)ELayerType::MAX; i++)
-	{
-		if (mLayers[i] == nullptr)
-			continue;
-		mLayers[i]->Render(hdc);
-	}
+	Scene::Render(hdc);
 }
 
 void yeram_client::MainMenuScene::Release()

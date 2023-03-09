@@ -5,6 +5,9 @@ namespace yeram_client
 	class Collider :
 		public Component
 	{
+	public:
+		virtual void Render(HDC hdc)override;
+
 	};
 }
 
