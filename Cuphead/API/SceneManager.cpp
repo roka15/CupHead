@@ -74,8 +74,14 @@ namespace yeram_client
 		return mActiveScene;
 	}
 
+	GameObject* SceneManager::FindObject(std::wstring _name)
+	{
+		return mActiveScene->FindObject(_name);
+	}
+
 	SceneManager::~SceneManager()
 	{
+		
 	}
 
 }

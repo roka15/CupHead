@@ -47,6 +47,15 @@ namespace yeram_client
 			obj = nullptr;
 		}
 	}
+	GameObject* Layer::FindObject(std::wstring _name)
+	{
+		for (auto obj : mObjs)
+		{
+			if (obj->GetName() == _name)
+				return obj;
+		}
+		return nullptr;
+	}
 	void Layer::AddGameObject(GameObject* obj )
 	{
 		mObjs.push_back(obj);

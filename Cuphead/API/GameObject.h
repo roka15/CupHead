@@ -18,34 +18,64 @@ namespace yeram_client
 		virtual void Release();
 
 		template<typename T>
-		static inline T* Instantiate(ELayerType _type)
+		static inline T* Instantiate(GameObject* _parent = nullptr,ELayerType _type=ELayerType::NONE)
 		{
 			T* obj = new T();
-			//object 생성.
-			Scene* cur =SceneManager::GetActiveScene();
-			cur->AddGameObject(obj, _type);
+			obj->SetParent(_parent);
+			GameObject* obj_parent = obj->GetParent();
+			if (obj_parent != nullptr)
+			{
+				obj_parent->AddChild(obj);
+			}
+			else // 부모가 없으면 레이어가 관리해줘야 하는 객체이므로 layer에 등록.
+			{
+				Scene* cur = SceneManager::GetActiveScene();
+				cur->AddGameObject(obj, _type);
+			}
 			return obj;
 		}
 		template<typename T>
-		static inline T* Instantiate(Vector2 _pos,ELayerType _type)
+		static inline T* Instantiate(Vector2 _pos, GameObject* _parent = nullptr, ELayerType _type = ELayerType::NONE)
 		{
 			T* obj = new T();
-			//object 생성.
-			Scene* cur=SceneManager::GetActiveScene();
-			cur->AddGameObject(obj, _type);
+			obj->SetParent(_parent);
+			GameObject* obj_parent = obj->GetParent();
+			if (obj_parent != nullptr)
+			{
+				obj_parent->AddChild(obj);
+			}
+			else
+			{
+				Scene* cur = SceneManager::GetActiveScene();
+				cur->AddGameObject(obj, _type);
+			}
 			obj->GameObject::GetComponent<Transform>()->SetPos(_pos);
 			return obj;
 		}
 		template<typename T>
-		static inline T* Instantiate(const std::wstring _name, Vector2 _pos, ELayerType _type)
+		static inline T* Instantiate(const std::wstring _name, Vector2 _pos,GameObject* _parent = nullptr, ELayerType _type = ELayerType::NONE)
 		{
 			T* obj = new T();
 			obj->SetName(_name);
-			//object 생성.
-			Scene* cur = SceneManager::GetActiveScene();
-			cur->AddGameObject(obj, _type);
+			obj->SetParent(_parent);
+			GameObject* obj_parent = obj->GetParent();
+			if (obj_parent != nullptr)
+			{
+				obj_parent->AddChild(obj);
+			}
+			else
+			{
+				Scene* cur = SceneManager::GetActiveScene();
+				cur->AddGameObject(obj, _type);
+			}
 			obj->GameObject::GetComponent<Transform>()->SetPos(_pos);
 			return obj;
+		}
+		static inline GameObject* Find(std::wstring _name)
+		{
+			Scene* cur = SceneManager::GetActiveScene();
+			
+			return cur->FindObject(_name);
 		}
 		static void Destroy(GameObject* _obj)
 		{
@@ -93,6 +123,25 @@ namespace yeram_client
 
 			return com->GetActive();
 		}
+		void SetActive(bool _flag)
+		{
+			mbActive = _flag;
+			for (GameObject* child : mChilds)
+			{
+				if (child == nullptr)
+					continue;
+				child->SetActive(_flag);
+			}
+		}
+		const bool& GetActive()
+		{
+			return mbActive;
+		}
+		void SetParent(GameObject* _obj) { mParent = _obj; }
+		GameObject* GetParent() { return mParent; }
+		GameObject* FindChild(std::wstring _name);
+		void AddChild(GameObject* _child);
+		void RemoveChild(GameObject* _child);
 
 	protected:
 		HBRUSH brush;
@@ -102,6 +151,9 @@ namespace yeram_client
 		
 	private:
 		std::vector<Component*> mComponents;
+		std::vector<GameObject*> mChilds;
+		GameObject* mParent;
+		bool mbActive;
 	};
 }
 

@@ -29,7 +29,7 @@ void yeram_client::TitleScene::Initialize()
 	mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 	Vector2 size = application.GetWindowSize();
 
-	Rectangle* title = GameObject::Instantiate<Rectangle>(L"TitleBackGround",Vector2{ 0,0 }, ELayerType::BackObject);
+	Rectangle* title = GameObject::Instantiate<Rectangle>(L"TitleBackGround",Vector2{ 0,0 },nullptr, ELayerType::BackObject);
 	{
 		Transform* tf = title->GetComponent<Transform>();
 		tf->SetSize(Vector2{ (long)size.x, (long)size.y });
@@ -39,7 +39,7 @@ void yeram_client::TitleScene::Initialize()
 			, L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp");
 		render->SetRenderType(ERenderType::StretchBlt);
 	}
-	Rectangle* ground = GameObject::Instantiate<Rectangle>(L"TitleGround",Vector2{ 0,0 }, ELayerType::FrontObject);
+	Rectangle* ground = GameObject::Instantiate<Rectangle>(L"TitleGround",Vector2{ 0,0 }, nullptr, ELayerType::FrontObject);
 	{
 		Transform* tf = ground->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 0l,(long)size.y - 280 });
@@ -49,7 +49,7 @@ void yeram_client::TitleScene::Initialize()
 			, L"..\\Resources\\title_screen\\DLC\\title_chips_left_0001.bmp");
 		render->SetRenderType(ERenderType::TransParentBlt);
 	}
-	Rectangle* playobj1 = GameObject::Instantiate<Rectangle>(Vector2{ 190,100 }, ELayerType::Player);
+	Rectangle* playobj1 = GameObject::Instantiate<Rectangle>(Vector2{ 190,100 }, nullptr, ELayerType::Player);
 	{
 		Transform* tf = playobj1->GetComponent<Transform>();
 		tf->SetSize(Vector2{ 400l, 500l });
@@ -61,7 +61,7 @@ void yeram_client::TitleScene::Initialize()
 
 		playobj1->SetName(key);
 	}
-	Rectangle* playobj2 = GameObject::Instantiate<Rectangle>(L"MainMSChalice",Vector2{ 630,210 }, ELayerType::Player);
+	Rectangle* playobj2 = GameObject::Instantiate<Rectangle>(L"MainMSChalice",Vector2{ 630,210 }, nullptr, ELayerType::Player);
 	{
 		Transform* tf = playobj2->GetComponent<Transform>();
 		tf->SetSize(Vector2{ 400l, 500l });
@@ -72,7 +72,7 @@ void yeram_client::TitleScene::Initialize()
 		ani->Play(key, true);
 		playobj2->SetName(key);
 	}
-	Rectangle* playobj3 = GameObject::Instantiate<Rectangle>(L"MainMugMan",Vector2{ 970,100 }, ELayerType::Player);
+	Rectangle* playobj3 = GameObject::Instantiate<Rectangle>(L"MainMugMan",Vector2{ 970,100 }, nullptr, ELayerType::Player);
 	{
 		Transform* tf = playobj3->GetComponent<Transform>();
 		tf->SetSize(Vector2{ 400l, 500l });
@@ -82,7 +82,7 @@ void yeram_client::TitleScene::Initialize()
 		ani->Play(key, true);
 		playobj3->SetName(key);
 	}
-	Rectangle* text = GameObject::Instantiate<Rectangle>(L"MainPressText",Vector2{ 450,550 }, ELayerType::FrontObject);
+	Rectangle* text = GameObject::Instantiate<Rectangle>(L"MainPressText",Vector2{ 450,550 }, nullptr, ELayerType::FrontObject);
 	{
 		Transform* tf = text->GetComponent<Transform>();
 		tf->SetScale(Vector2{ 2.0f,2.0f });

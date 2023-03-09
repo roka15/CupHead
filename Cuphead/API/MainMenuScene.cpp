@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "Layer.h"
 #include "UI.h"
+#include "UIManager.h"
 extern yeram_client::Application application;
 yeram_client::MainMenuScene::MainMenuScene()
 {
@@ -21,10 +22,10 @@ void yeram_client::MainMenuScene::Initialize()
 {
 	mLayers.resize((UINT)ELayerType::MAX);
 	mLayers[(UINT)ELayerType::BackObject] = new Layer();
-	
+	mLayers[(UINT)ELayerType::UI] = new Layer();
 	Vector2 size = application.GetWindowSize();
 
-	Rectangle* rectangle = GameObject::Instantiate<Rectangle>(L"MenuBackGround",Vector2{ 0,0 }, ELayerType::BackObject);
+	Rectangle* rectangle = GameObject::Instantiate<Rectangle>(L"MenuBackGround",Vector2{ 0,0 },nullptr, ELayerType::UI);
 	{
 		Transform* tf = rectangle->GetComponent<Transform>();
 		tf->SetSize(Vector2{ (long)size.x,(long)size.y });
@@ -36,7 +37,7 @@ void yeram_client::MainMenuScene::Initialize()
 		render->SetOwner(rectangle);
 	}
 
-	UI* start_btn = GameObject::Instantiate<UI>(L"StartBTN", Vector2{ 100,100 }, ELayerType::BackObject);
+	UI* start_btn = GameObject::Instantiate<UI>(L"MenuStartBTNT", Vector2{ 100,100 }, rectangle);
 	{
 		Transform* tf = start_btn->GetComponent<Transform>();
 		tf->SetSize(Vector2{400,400});
@@ -44,6 +45,26 @@ void yeram_client::MainMenuScene::Initialize()
 		SpriteRenderer* render = start_btn->GetComponent<SpriteRenderer>();
 		render->SetRenderType(ERenderType::TransParentBlt);
 	}
+
+	UI* end_btn = GameObject::Instantiate<UI>(L"MenuEndBTNT", Vector2{ 100,100 }, rectangle);
+	{
+		Transform* tf = start_btn->GetComponent<Transform>();
+		tf->SetSize(Vector2{ 400,700 });
+		start_btn->SetImage(start_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Exit\\Exit.bmp");
+		SpriteRenderer* render = start_btn->GetComponent<SpriteRenderer>();
+		render->SetRenderType(ERenderType::TransParentBlt);
+	}
+
+	UI* options_btn = GameObject::Instantiate<UI>(L"MenuEndBTNT", Vector2{ 100,100 }, rectangle);
+	{
+		Transform* tf = options_btn->GetComponent<Transform>();
+		tf->SetSize(Vector2{ 400,900 });
+		options_btn->SetImage(options_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Options\\Options.bmp");
+		SpriteRenderer* render = options_btn->GetComponent<SpriteRenderer>();
+		render->SetRenderType(ERenderType::TransParentBlt);
+	}
+	UIManager::Add(rectangle->GetName().c_str(), rectangle);
+
 	//layer 추가
 	//layer init 돌리기.
 	Scene::Initialize();

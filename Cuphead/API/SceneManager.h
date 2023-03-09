@@ -12,6 +12,7 @@ namespace yeram_client
 		static void Release();
 		static void LoadScene(ESceneType _type);
 		static Scene* GetActiveScene();
+		static GameObject* FindObject(std::wstring _name);
 	private:
 		SceneManager()=delete;
 		~SceneManager();

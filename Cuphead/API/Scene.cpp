@@ -59,6 +59,17 @@ namespace yeram_client
 
 	}
 
+	GameObject* Scene::FindObject(std::wstring _name)
+	{
+		for (auto layer : mLayers)
+		{
+			GameObject* obj=layer->FindObject(_name);
+			if (obj != nullptr)
+				return obj;
+		}
+		return nullptr;
+	}
+
 	void Scene::AddGameObject(GameObject* obj, ELayerType layer)
 	{
 		mLayers[(UINT)layer]->AddGameObject(obj);

@@ -18,6 +18,7 @@ namespace yeram_client
 
 	   virtual void OnEnter();
 	   virtual void OnExit();
+	   GameObject* FindObject(std::wstring _name);
 	   void AddGameObject(GameObject* obj, ELayerType layer);
 	   const ESceneType& GetSceneType() { return mCurType; }
 	protected:

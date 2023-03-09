@@ -3,6 +3,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <stack>
 
 #include <Windows.h>
 #include <stdlib.h>

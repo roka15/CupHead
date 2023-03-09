@@ -21,14 +21,14 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::Player] = new Layer();
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 
-		Player* player = GameObject::Instantiate<Player>(L"Player", Vector2{ 0,0 }, ELayerType::Player);
+		Player* player = GameObject::Instantiate<Player>(L"Player", Vector2{ 0,0 }, nullptr, ELayerType::Player);
 		{
 			player->CreateCharacter(ESceneType::PlayMap, EPlayerType::Cuphead);
 			Camera::SetTarger(player);
 		}
 		Vector2 size = application.GetWindowSize();
 		//temp map
-		Rectangle* map = GameObject::Instantiate<Rectangle>(L"Map", Vector2{ 0l,0l }, ELayerType::BackObject);
+		Rectangle* map = GameObject::Instantiate<Rectangle>(L"Map", Vector2{ 0l,0l }, nullptr, ELayerType::BackObject);
 		{
 			Transform* tf = map->GetComponent<Transform>();
 			tf->SetSize(Vector2{ (long)size.x,(long)size.y + 200l });
