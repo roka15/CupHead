@@ -5,13 +5,14 @@
 #include "Resources.h"
 #include "Input.h"
 #include "Time.h"
+#include "Camera.h"
 namespace yeram_client
 {
 	void Character::move()
 	{
 		Transform* transform = mOwner->GetComponent<Transform>();
 		Vector2& pos = transform->GetPos();
-
+		Vector2 offset;
 		Animator* ani = mOwner->GetComponent<Animator>();
 	
 
@@ -27,24 +28,25 @@ namespace yeram_client
 				mState = ECharacterState::Idle;
 				ani->Play(L"MapIdle", true);
 			}
+
 			if (core::Input::GetKey(core::EKeyCode::A))
 			{
-				pos.x -= 100.0f * Time::DeltaTime();
+				offset.x -= 100.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::D))
 			{
-				pos.x += 100.0f * Time::DeltaTime();
+				offset.x += 100.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::W))
 			{
-				pos.y -= 100.0f * Time::DeltaTime();
+				offset.y -= 100.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::S))
 			{
-				pos.y += 100.0f * Time::DeltaTime();
+				offset.y += 100.0f * Time::DeltaTime();
 			}
-			transform->SetPos(pos);
-			
+			transform->SetPos(pos+offset);
+			SceneManager::MoveGameObject(offset);
 			break;
 		}
 	 //case 게임중일때

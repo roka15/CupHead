@@ -40,10 +40,10 @@ void yeram_client::MainMenuScene::Initialize()
 		render->SetOwner(rectangle);
 	}
 	
-	UI* start_btn = GameObject::Instantiate<UI>(L"MenuStartBTNT", Vector2{ 100,300 }, rectangle);
+	UI* start_btn = GameObject::Instantiate<UI>(L"MenuStartBTNT", Vector2{ 400,90 }, rectangle);
 	{
 		Transform* tf = start_btn->GetComponent<Transform>();
-		tf->SetSize(Vector2{ 400,400 });
+		tf->SetSize(Vector2{ 700,500 });
 		start_btn->SetImage(start_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Start\\Start.bmp");
 		SpriteRenderer* render = start_btn->GetComponent<SpriteRenderer>();
 		render->SetRenderType(ERenderType::TransParentBlt);
@@ -51,19 +51,19 @@ void yeram_client::MainMenuScene::Initialize()
 		//start_btn->SetClickEvent(std::bind(&SceneManager::LoadScene, (UINT)ESceneType::PlayMap));
 	}
 
-	UI* end_btn = GameObject::Instantiate<UI>(L"MenuEndBTNT", Vector2{ 100,100 }, rectangle);
+	UI* end_btn = GameObject::Instantiate<UI>(L"MenuEndBTNT", Vector2{ 400,210 }, rectangle);
 	{
-		Transform* tf = start_btn->GetComponent<Transform>();
-		tf->SetSize(Vector2{ 400,400 });
-		start_btn->SetImage(start_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Exit\\Exit.bmp");
-		SpriteRenderer* render = start_btn->GetComponent<SpriteRenderer>();
+		Transform* tf = end_btn->GetComponent<Transform>();
+		tf->SetSize(Vector2{ 700,500 });
+		end_btn->SetImage(end_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Exit\\Exit.bmp");
+		SpriteRenderer* render = end_btn->GetComponent<SpriteRenderer>();
 		render->SetRenderType(ERenderType::TransParentBlt);
 	}
 
-	UI* options_btn = GameObject::Instantiate<UI>(L"MenuOptionsBTNT", Vector2{ 100,500 }, rectangle);
+	UI* options_btn = GameObject::Instantiate<UI>(L"MenuOptionsBTNT", Vector2{ 400,150 }, rectangle);
 	{
 		Transform* tf = options_btn->GetComponent<Transform>();
-		tf->SetSize(Vector2{ 400,400 });
+		tf->SetSize(Vector2{ 700,500 });
 		options_btn->SetImage(options_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Options\\Options.bmp");
 		SpriteRenderer* render = options_btn->GetComponent<SpriteRenderer>();
 		render->SetRenderType(ERenderType::TransParentBlt);

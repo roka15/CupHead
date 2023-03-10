@@ -81,6 +81,11 @@ namespace yeram_client
 		return mActiveScene->FindObject(_name);
 	}
 
+	void SceneManager::MoveGameObject(const Vector2& _offset)
+	{
+		mActiveScene->AllMoveGameObject(_offset);
+	}
+
 	SceneManager::~SceneManager()
 	{
 		

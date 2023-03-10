@@ -8,10 +8,16 @@ namespace yeram_client
 	public:
 		static void Initialize();
 		static void Update();
-		static void SetTarger(GameObject* _target) { mTarget = _target; }
+		static void SetTarget(GameObject* _target) { mTarget = _target; }
 		//operator ±¸Çö.
-		static Vector2& CaluatePos(Vector2 _pos) { return _pos - mDistance; }
+		static Vector2 CaluatePos(Vector2 _pos) 
+		{ 
+			return _pos - mDistance; 
+		}
+		
 		static void Clear();
+	private:
+		static bool CheckActive();
 	private:
 		static Vector2 mResolution;
 		static Vector2 mLookPosition;

@@ -49,18 +49,23 @@ namespace yeram_client
 	void Animation::Render(HDC _hdc)
 	{
 		Transform* tf = mAnimator->GetOwner()->GetComponent<Transform>();
+		Vector2 scale = tf->GetScale();
+
+		// 이미지가 그려질 좌표는 오브젝트 좌표의 위쪽 중간에 그려진다.
+	   // 캐릭터의 발을 기준으로 포지션을 계산
 		Vector2 pos = tf->GetPos();
+		pos = Camera::CaluatePos(pos);
+		pos += mSpriteSheet[mSpriteIndex].offset;
+		pos.x -= mSpriteSheet[mSpriteIndex].size.x / 2.0f;
+		pos.y -= mSpriteSheet[mSpriteIndex].size.y;
 		//camera 더하기
 		// operator 구현해야함.
-		pos = Camera::CaluatePos(pos);
-		TransparentBlt(_hdc, tf->GetPos().x + mSpriteSheet[mSpriteIndex].offset.x,
-			tf->GetPos().y + mSpriteSheet[mSpriteIndex].offset.y,
-			mSpriteSheet[mSpriteIndex].size.x * tf->GetScale().x,
-			mSpriteSheet[mSpriteIndex].size.y * tf->GetScale().y,
+		TransparentBlt(_hdc, pos.x, pos.y,
+			mSpriteSheet[mSpriteIndex].size.x * scale.x,
+			mSpriteSheet[mSpriteIndex].size.y * scale.y,
 			mSheet->GetHDC(), mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y
 			, mSpriteSheet[mSpriteIndex].size.x, mSpriteSheet[mSpriteIndex].size.y,
 			(RGB(255, 0, 255)));
-
 	}
 
 	void Animation::Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration)

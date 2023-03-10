@@ -7,10 +7,10 @@ namespace yeram_client
 	}
 	Layer::~Layer()
 	{
-	
+
 	}
 	void Layer::Initialize()
-	{   
+	{
 		for (GameObject* obj : mObjs)
 		{
 			if (obj == nullptr)
@@ -60,7 +60,22 @@ namespace yeram_client
 		}
 		return nullptr;
 	}
-	void Layer::AddGameObject(GameObject* obj )
+	void Layer::MoveObject(const Vector2& _offset)
+	{
+		for (auto obj : mObjs)
+		{
+			if (obj == nullptr)
+				continue;
+			size_t str_pos = obj->GetName().find(L"BackGround");
+			if (str_pos == std::wstring::npos)
+			{
+				Transform* tf = obj->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				tf->CaluatePos(_offset);
+			}
+		}
+	}
+	void Layer::AddGameObject(GameObject* obj)
 	{
 		mObjs.push_back(obj);
 	}

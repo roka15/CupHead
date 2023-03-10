@@ -59,6 +59,16 @@ namespace yeram_client
 
 	}
 
+	void Scene::AllMoveGameObject(const Vector2& _offset)
+	{
+		for (auto layer : mLayers)
+		{
+			if (layer == nullptr)
+				continue;
+			layer->MoveObject(_offset);
+		}
+	}
+
 	GameObject* Scene::FindObject(std::wstring _name)
 	{
 		for (auto layer : mLayers)

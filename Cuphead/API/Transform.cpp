@@ -1,5 +1,5 @@
 #include "Transform.h"
-
+#include "GameObject.h"
 yeram_client::Transform::Transform() :Component(EComponentType::Transform)
 , mPos(Vector2::Zero)
 , mScale(Vector2::One)
@@ -29,4 +29,14 @@ void yeram_client::Transform::Render(HDC hdc)
 
 void yeram_client::Transform::Release()
 {
+}
+
+void yeram_client::Transform::CaluatePos(const Vector2& _offset)
+{
+	int size = mOwner->GetChildCount();
+	for (int i = 0; i < size; i++)
+	{
+		mOwner->FindChild(i)->GetComponent<Transform>()->CaluatePos(_offset);
+	}
+	mPos -= _offset;
 }

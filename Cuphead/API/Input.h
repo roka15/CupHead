@@ -5,6 +5,10 @@ namespace core
 	enum class EKeyCode
 	{
 		A,S,D,W,K,
+		Left,
+		Right,
+		Up,
+		Down,
 		MouseLeft,
 		MouseRight,
 		MAX

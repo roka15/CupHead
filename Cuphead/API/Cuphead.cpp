@@ -63,7 +63,7 @@ namespace yeram_client
 		mSceneType = _type;
 
 		Transform* tf = mOwner->GetComponent<Transform>();
-		tf->SetPos(Vector2(400.0f, 400.0f));
+	
 		mState = ECharacterState::Idle;
 
 

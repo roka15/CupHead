@@ -142,10 +142,13 @@ namespace yeram_client
 		GameObject* GetParent() { return mParent; }
 		GameObject* FindChild(std::wstring _name);
 		GameObject* FindChild(UINT _index);
+		
 		void AddChild(GameObject* _child);
 		UINT GetChildCount() { return mChilds.size(); }
 		void RemoveChild(GameObject* _child);
-
+		
+		//자식도 같이 move
+		//void MoveChild(const Vector2& _offset);
 	protected:
 		HBRUSH brush;
 		HPEN pen;

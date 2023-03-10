@@ -18,6 +18,7 @@ namespace yeram_client
 		Vector2& GetPos() { return mPos; }
 		Vector2& GetScale() { return mScale; }
 		Vector2& GetSize() { return mSize; }
+		void CaluatePos(const Vector2& _offset);
 	private:
 		Vector2 mPos;
 		Vector2 mScale;

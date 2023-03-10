@@ -1,5 +1,6 @@
 #include "Rectangle.h"
-
+#include "Input.h"
+#include "Camera.h"
 namespace yeram_client
 {
 	Rectangle::Rectangle()
