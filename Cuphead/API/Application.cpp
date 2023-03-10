@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Resources.h"
 #include "Camera.h"
+//#include "WindowManager.h"
 namespace yeram_client
 {
 	Application::Application() :mHwnd(NULL), mhdc(NULL)
@@ -36,6 +37,7 @@ namespace yeram_client
 
 
 		core::Input::Initialize();
+		//WindowManager::Initialize();
 		SceneManager::Initalize();
 		Time::Initailize();
 		Camera::Initialize();
@@ -68,6 +70,7 @@ namespace yeram_client
 		SceneManager::Release();
 		Time::Release();
 		Resources::Release();
+		//WindowManager::Release();
 	}
 	HWND Application::GetHandle()
 	{

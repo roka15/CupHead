@@ -7,7 +7,8 @@
 #include "Transform.h"
 #include "Layer.h"
 #include "UI.h"
-#include "UIManager.h"
+//#include "WindowManager.h"
+
 extern yeram_client::Application application;
 yeram_client::MainMenuScene::MainMenuScene()
 {
@@ -23,9 +24,11 @@ void yeram_client::MainMenuScene::Initialize()
 	mLayers.resize((UINT)ELayerType::MAX);
 	mLayers[(UINT)ELayerType::BackObject] = new Layer();
 	mLayers[(UINT)ELayerType::UI] = new Layer();
+	
+	//WindowManager::ActiveWindow((UINT)EWindowType::MainMenu);
 	Vector2 size = application.GetWindowSize();
-
-	Rectangle* rectangle = GameObject::Instantiate<Rectangle>(L"MenuBackGround",Vector2{ 0,0 },nullptr, ELayerType::UI);
+#pragma region main menu window
+	Rectangle* rectangle = GameObject::Instantiate<Rectangle>(L"MenuBackGround", Vector2{ 0,0 }, nullptr, ELayerType::UI);
 	{
 		Transform* tf = rectangle->GetComponent<Transform>();
 		tf->SetSize(Vector2{ (long)size.x,(long)size.y });
@@ -36,34 +39,37 @@ void yeram_client::MainMenuScene::Initialize()
 		render->SetRenderType(ERenderType::StretchBlt);
 		render->SetOwner(rectangle);
 	}
-
-	UI* start_btn = GameObject::Instantiate<UI>(L"MenuStartBTNT", Vector2{ 100,100 }, rectangle);
+	
+	UI* start_btn = GameObject::Instantiate<UI>(L"MenuStartBTNT", Vector2{ 100,300 }, rectangle);
 	{
 		Transform* tf = start_btn->GetComponent<Transform>();
-		tf->SetSize(Vector2{400,400});
+		tf->SetSize(Vector2{ 400,400 });
 		start_btn->SetImage(start_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Start\\Start.bmp");
 		SpriteRenderer* render = start_btn->GetComponent<SpriteRenderer>();
 		render->SetRenderType(ERenderType::TransParentBlt);
+
+		//start_btn->SetClickEvent(std::bind(&SceneManager::LoadScene, (UINT)ESceneType::PlayMap));
 	}
 
 	UI* end_btn = GameObject::Instantiate<UI>(L"MenuEndBTNT", Vector2{ 100,100 }, rectangle);
 	{
 		Transform* tf = start_btn->GetComponent<Transform>();
-		tf->SetSize(Vector2{ 400,700 });
+		tf->SetSize(Vector2{ 400,400 });
 		start_btn->SetImage(start_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Exit\\Exit.bmp");
 		SpriteRenderer* render = start_btn->GetComponent<SpriteRenderer>();
 		render->SetRenderType(ERenderType::TransParentBlt);
 	}
 
-	UI* options_btn = GameObject::Instantiate<UI>(L"MenuEndBTNT", Vector2{ 100,100 }, rectangle);
+	UI* options_btn = GameObject::Instantiate<UI>(L"MenuOptionsBTNT", Vector2{ 100,500 }, rectangle);
 	{
 		Transform* tf = options_btn->GetComponent<Transform>();
-		tf->SetSize(Vector2{ 400,900 });
+		tf->SetSize(Vector2{ 400,400 });
 		options_btn->SetImage(options_btn->GetName().c_str(), L"..\\Resources\\Menu_Screen\\Options\\Options.bmp");
 		SpriteRenderer* render = options_btn->GetComponent<SpriteRenderer>();
 		render->SetRenderType(ERenderType::TransParentBlt);
+		//start_btn->SetClickEvent(std::bind(&WindowManager::ActiveWindow, (UINT)EWindowType::Options));
 	}
-	UIManager::Add(rectangle->GetName().c_str(), rectangle);
+#pragma endregion
 
 	//layer 추가
 	//layer init 돌리기.
@@ -76,6 +82,7 @@ void yeram_client::MainMenuScene::Update()
 	{
 		SceneManager::LoadScene(ESceneType::PlayMap);
 	}
+
 	Scene::Update();
 }
 

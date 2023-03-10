@@ -102,6 +102,14 @@ namespace yeram_client
 		return nullptr;
 	}
 
+	GameObject* GameObject::FindChild(UINT _index)
+	{
+		UINT max = GetChildCount();
+		if (max <= _index || 0 > _index)
+			return nullptr;
+		return mChilds[_index];
+	}
+
 	void GameObject::AddChild(GameObject* _child)
 	{
 		mChilds.push_back(_child);

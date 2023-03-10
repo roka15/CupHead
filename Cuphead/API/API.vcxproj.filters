@@ -170,7 +170,7 @@
       <Filter>Engine\Component</Filter>
     </ClInclude>
     <ClInclude Include="UI.h" />
-    <ClInclude Include="UIManager.h" />
+    <ClInclude Include="WindowManager.h" />
     <ClInclude Include="Camera.h">
       <Filter>Contents\Core</Filter>
     </ClInclude>
@@ -275,7 +275,7 @@
       <Filter>Engine\Component</Filter>
     </ClCompile>
     <ClCompile Include="UI.cpp" />
-    <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="WindowManager.cpp" />
     <ClCompile Include="Camera.cpp">
       <Filter>Contents\Core</Filter>
     </ClCompile>

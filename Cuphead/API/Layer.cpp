@@ -24,6 +24,8 @@ namespace yeram_client
 		{
 			if (obj == nullptr)
 				continue;
+			if (obj->GetActive() == false)
+				continue;
 			obj->Update();
 		}
 	}
@@ -32,6 +34,8 @@ namespace yeram_client
 		for (GameObject* obj : mObjs)
 		{
 			if (obj == nullptr)
+				continue;
+			if (obj->GetActive() == false)
 				continue;
 			obj->Render(hdc);
 		}

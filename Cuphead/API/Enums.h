@@ -50,3 +50,10 @@ enum class EPlayerType
 	MsChalice,
 	MAX
 };
+enum class EWindowType
+{
+	MainMenu,
+	Options,
+	MAX
+
+};

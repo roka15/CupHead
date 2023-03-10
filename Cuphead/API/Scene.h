@@ -23,6 +23,7 @@ namespace yeram_client
 	   const ESceneType& GetSceneType() { return mCurType; }
 	protected:
 		std::vector<Layer*> mLayers;
+		std::vector<EWindowType> mUseWindows;
 		ESceneType mCurType;
 	};
 

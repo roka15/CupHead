@@ -126,6 +126,7 @@ namespace yeram_client
 		void SetActive(bool _flag)
 		{
 			mbActive = _flag;
+
 			for (GameObject* child : mChilds)
 			{
 				if (child == nullptr)
@@ -140,7 +141,9 @@ namespace yeram_client
 		void SetParent(GameObject* _obj) { mParent = _obj; }
 		GameObject* GetParent() { return mParent; }
 		GameObject* FindChild(std::wstring _name);
+		GameObject* FindChild(UINT _index);
 		void AddChild(GameObject* _child);
+		UINT GetChildCount() { return mChilds.size(); }
 		void RemoveChild(GameObject* _child);
 
 	protected:

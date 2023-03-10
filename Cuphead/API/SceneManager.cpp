@@ -2,6 +2,7 @@
 #include "PlayMapScene.h"
 #include "TitleScene.h"
 #include "MainMenuScene.h"
+#include "Camera.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -64,6 +65,7 @@ namespace yeram_client
 
 	void SceneManager::LoadScene(ESceneType _type)
 	{
+		Camera::Clear();
 		mActiveScene->OnExit();
 		mActiveScene = mScenes[(UINT)_type];
 		mActiveScene->OnEnter();

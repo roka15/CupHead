@@ -44,5 +44,8 @@ namespace yeram_client
 		}
 		//mDistance = 
 	}
+	void Camera::Clear()
+	{
+	}
 }
 

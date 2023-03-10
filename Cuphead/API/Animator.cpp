@@ -28,8 +28,8 @@ namespace yeram_client
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Update();
-			if (mbLoop == true
-				&& mActiveAnimation->IsComplete() == true)
+			
+			if (mActiveAnimation->IsComplete() == true)
 			{
 				mActiveAnimation->Reset();
 				std::wstring str = mActiveAnimation->GetName();
@@ -37,6 +37,9 @@ namespace yeram_client
 				if (event != nullptr)
 					event->mCompleteEvent();
 			}
+			if (mbLoop == true
+				&& mActiveAnimation->IsComplete() == true)
+				mActiveAnimation->Reset();
 		}
 	}
 
