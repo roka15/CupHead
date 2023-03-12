@@ -25,7 +25,7 @@ namespace yeram_client
 		case ESceneType::MainMenu:
 			break;
 		case ESceneType::PlayMap:
-		case ESceneType::PlayStage:
+		case ESceneType::BossMedusa:
 		{
 			switch (mState)
 			{
@@ -97,7 +97,7 @@ namespace yeram_client
 			ani->GetCompleteEvent(L"MapFowardLeft") = std::bind(&Cuphead::moveCompleteEvent, this);
 			ani->Play(L"MapIdle", true);
 			break;
-		case ESceneType::PlayStage:
+		case ESceneType::BossMedusa:
 			break;
 		//stage ¡ﬂ¿œ∂ß
 		}

@@ -31,22 +31,23 @@ namespace yeram_client
 
 			if (core::Input::GetKey(core::EKeyCode::A))
 			{
-				offset.x -= 100.0f * Time::DeltaTime();
+				offset.x -= 200.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::D))
 			{
-				offset.x += 100.0f * Time::DeltaTime();
+				offset.x += 200.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::W))
 			{
-				offset.y -= 100.0f * Time::DeltaTime();
+				offset.y -= 200.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::S))
 			{
-				offset.y += 100.0f * Time::DeltaTime();
+				offset.y += 200.0f * Time::DeltaTime();
 			}
+			
 			transform->SetPos(pos+offset);
-			SceneManager::MoveGameObject(offset);
+			SceneManager::ChagePosGameObjects(offset);
 			break;
 		}
 	 //case 게임중일때

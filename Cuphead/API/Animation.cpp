@@ -58,6 +58,7 @@ namespace yeram_client
 		pos += mSpriteSheet[mSpriteIndex].offset;
 		pos.x -= mSpriteSheet[mSpriteIndex].size.x / 2.0f;
 		pos.y -= mSpriteSheet[mSpriteIndex].size.y;
+
 		//camera 더하기
 		// operator 구현해야함.
 		TransparentBlt(_hdc, pos.x, pos.y,

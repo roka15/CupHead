@@ -17,6 +17,7 @@ namespace yeram_client
 		virtual void Render(HDC hdc);
 		virtual void Release();
 
+
 		template<typename T>
 		static inline T* Instantiate(GameObject* _parent = nullptr,ELayerType _type=ELayerType::NONE)
 		{

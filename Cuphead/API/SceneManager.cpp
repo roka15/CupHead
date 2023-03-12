@@ -2,6 +2,7 @@
 #include "PlayMapScene.h"
 #include "TitleScene.h"
 #include "MainMenuScene.h"
+#include "MedusaScene.h"
 #include "Camera.h"
 namespace yeram_client
 {
@@ -13,7 +14,7 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::Title] = new TitleScene();
 		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene();
 		mScenes[(UINT)ESceneType::PlayMap] = new PlayMapScene();
-		
+		mScenes[(UINT)ESceneType::BossMedusa] = new MedusaScene();
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -29,8 +30,8 @@ namespace yeram_client
 			case ESceneType::PlayMap:
 				mActiveScene = mScenes[(UINT)ESceneType::PlayMap];
 				break;
-			case ESceneType::PlayStage:
-				mActiveScene = mScenes[(UINT)ESceneType::PlayStage];
+			case ESceneType::BossMedusa:
+				mActiveScene = mScenes[(UINT)ESceneType::BossMedusa];
 				break;
 			case ESceneType::Ending:
 				mActiveScene = mScenes[(UINT)ESceneType::Ending];
@@ -81,9 +82,14 @@ namespace yeram_client
 		return mActiveScene->FindObject(_name);
 	}
 
-	void SceneManager::MoveGameObject(const Vector2& _offset)
+	void SceneManager::ChagePosGameObjects(const Vector2& _offset)
 	{
-		mActiveScene->AllMoveGameObject(_offset);
+		mActiveScene->ChagePosGameObjects(_offset);
+	}
+
+	void SceneManager::ChangeScaleGameObjects(const Vector2& _scale)
+	{
+		mActiveScene->ChageScaleGameObjects(_scale);
 	}
 
 	SceneManager::~SceneManager()

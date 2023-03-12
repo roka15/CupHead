@@ -6,7 +6,7 @@ enum class ESceneType
 	Title,
 	MainMenu,
 	PlayMap,
-	PlayStage,
+	BossMedusa,
 	Ending,
 	MAX,
 };

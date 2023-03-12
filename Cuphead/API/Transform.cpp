@@ -40,3 +40,26 @@ void yeram_client::Transform::CaluatePos(const Vector2& _offset)
 	}
 	mPos -= _offset;
 }
+
+void yeram_client::Transform::CaluateSclae(const Vector2& _value)
+{
+	int size = mOwner->GetChildCount();
+	for (int i = 0; i < size; i++)
+	{
+		mOwner->FindChild(i)->GetComponent<Transform>()->CaluateSclae(_value);
+	}
+	GameObject* parent = mOwner->GetParent();
+	if (parent != nullptr)
+	{
+		Transform* tf = parent->GetComponent<Transform>();
+		Vector2 point = tf->GetPos();
+		
+		Vector2 offset= (point - mPos);
+		offset.x = -offset.x;
+		offset.y = -offset.y;
+		mPos = point + (offset*_value);
+	}
+	mScale *= _value;
+}
+
+

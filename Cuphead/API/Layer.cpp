@@ -60,7 +60,7 @@ namespace yeram_client
 		}
 		return nullptr;
 	}
-	void Layer::MoveObject(const Vector2& _offset)
+	void Layer::ChagePosGameObjects(const Vector2& _offset)
 	{
 		for (auto obj : mObjs)
 		{
@@ -72,6 +72,22 @@ namespace yeram_client
 				Transform* tf = obj->GetComponent<Transform>();
 				Vector2 pos = tf->GetPos();
 				tf->CaluatePos(_offset);
+			}
+		}
+	}
+	void Layer::ChageScaleGameObjects(const Vector2& _scale)
+	{
+		for (auto obj : mObjs)
+		{
+			if (obj == nullptr)
+				continue;
+			size_t str_pos = obj->GetName().find(L"BackGround");
+			if (str_pos == std::wstring::npos)
+			{
+				Transform* tf = obj->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				//tf->SetScale(_scale);
+				tf->CaluateSclae(_scale);
 			}
 		}
 	}

@@ -17,6 +17,8 @@ namespace yeram_client
 		{
 			mRenderType = _type;
 		}
+		const float& GetWidth(); 
+		const float& GetHeight();
 	private:
 		Image* mImage;
 		ERenderType mRenderType;

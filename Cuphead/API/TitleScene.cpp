@@ -29,17 +29,17 @@ void yeram_client::TitleScene::Initialize()
 	mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 	Vector2 size = application.GetWindowSize();
 
-	Rectangle* title = GameObject::Instantiate<Rectangle>(L"TitleBackGround",Vector2{ 0,0 },nullptr, ELayerType::BackObject);
+	Rectangle* title = GameObject::Instantiate<Rectangle>(L"TitleBackGround", Vector2{ 0,0 }, nullptr, ELayerType::BackObject);
 	{
 		Transform* tf = title->GetComponent<Transform>();
 		tf->SetSize(Vector2{ (long)size.x, (long)size.y });
-		
+
 		SpriteRenderer* render = title->AddComponent<SpriteRenderer>();
 		render->SetImage(title->GetName().c_str()
 			, L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp");
 		render->SetRenderType(ERenderType::StretchBlt);
 	}
-	Rectangle* ground = GameObject::Instantiate<Rectangle>(L"TitleGround",Vector2{ 0,0 }, nullptr, ELayerType::FrontObject);
+	Rectangle* ground = GameObject::Instantiate<Rectangle>(L"TitleGround", Vector2{ 0,0 }, nullptr, ELayerType::FrontObject);
 	{
 		Transform* tf = ground->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 0l,(long)size.y - 280 });
@@ -55,46 +55,46 @@ void yeram_client::TitleScene::Initialize()
 		tf->SetSize(Vector2{ 400l, 500l });
 
 		Animator* ani = playobj1->AddComponent<Animator>();
-		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Cuphead", Vector2::Zero, 0.05f);
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Cuphead", Vector2::Zero, 0.07f);
 		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, playobj1);
 		ani->Play(key, true);
 
 		playobj1->SetName(key);
 	}
-	Rectangle* playobj2 = GameObject::Instantiate<Rectangle>(L"MainMSChalice",Vector2{ 750,720 }, nullptr, ELayerType::Player);
+	Rectangle* playobj2 = GameObject::Instantiate<Rectangle>(L"MainMSChalice", Vector2{ 775,750 }, nullptr, ELayerType::Player);
 	{
 		Transform* tf = playobj2->GetComponent<Transform>();
 		tf->SetSize(Vector2{ 400l, 500l });
 
 		Animator* ani = playobj2->AddComponent<Animator>();
-		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Ms Chalice", Vector2::Zero, 0.05f);
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Ms Chalice", Vector2::Zero, 0.07f);
 		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, playobj2);
 		ani->Play(key, true);
 		playobj2->SetName(key);
 	}
-	Rectangle* playobj3 = GameObject::Instantiate<Rectangle>(L"MainMugMan",Vector2{ 1150,680 }, nullptr, ELayerType::Player);
+	Rectangle* playobj3 = GameObject::Instantiate<Rectangle>(L"MainMugMan", Vector2{ 1150,700 }, nullptr, ELayerType::Player);
 	{
 		Transform* tf = playobj3->GetComponent<Transform>();
 		tf->SetSize(Vector2{ 400l, 500l });
 		Animator* ani = playobj3->AddComponent<Animator>();
-		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Mugman", Vector2::Zero, 0.05f);
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Mugman", Vector2::Zero, 0.07f);
 		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, playobj3);
 		ani->Play(key, true);
 		playobj3->SetName(key);
 	}
-	Rectangle* text = GameObject::Instantiate<Rectangle>(L"MainPressText",Vector2{ 650,750 }, nullptr, ELayerType::FrontObject);
+	Rectangle* text = GameObject::Instantiate<Rectangle>(L"MainPressText", Vector2{ 650,750 }, nullptr, ELayerType::FrontObject);
 	{
 		Transform* tf = text->GetComponent<Transform>();
 		tf->SetScale(Vector2{ 2.0f,2.0f });
 		tf->SetSize(Vector2{ 400l, 500l });
 		Animator* ani = text->AddComponent<Animator>();
 		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Text", Vector2::Zero, 0.5f);
-		
+
 		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, text);
 		ani->Play(key, true);
 		text->SetName(key);
 	}
-	
+
 	Scene::Initialize();
 }
 

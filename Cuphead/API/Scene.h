@@ -18,7 +18,8 @@ namespace yeram_client
 
 	   virtual void OnEnter();
 	   virtual void OnExit();
-	   void AllMoveGameObject(const Vector2& _offset);
+	   void ChagePosGameObjects(const Vector2& _offset);
+	   void ChageScaleGameObjects(const Vector2& _scale);
 	   GameObject* FindObject(std::wstring _name);
 	   void AddGameObject(GameObject* obj, ELayerType layer);
 	   const ESceneType& GetSceneType() { return mCurType; }

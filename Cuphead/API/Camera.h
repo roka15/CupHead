@@ -9,6 +9,7 @@ namespace yeram_client
 		static void Initialize();
 		static void Update();
 		static void SetTarget(GameObject* _target) { mTarget = _target; }
+		static void SetCameraDistance(float _distance);
 		//operator ±¸Çö.
 		static Vector2 CaluatePos(Vector2 _pos) 
 		{ 

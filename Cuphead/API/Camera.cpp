@@ -12,6 +12,7 @@ namespace yeram_client
 	Vector2  Camera::mLookPosition;
 	Vector2  Camera::mDistance;
 	GameObject* Camera::mTarget = nullptr;
+
 	void Camera::Initialize()
 	{
 		mDistance = Vector2::Zero;
@@ -49,6 +50,14 @@ namespace yeram_client
 		}
 		
 		mDistance = mLookPosition - (mResolution / 2.0f);
+	}
+
+	void Camera::SetCameraDistance(float _distance)
+	{
+		Transform* tf = mTarget->GetComponent<Transform>();
+		Vector2 pos = tf->GetScale();
+		SceneManager::ChangeScaleGameObjects(pos*_distance);
+		//mDistance = mDistance * _distance;
 	}
 
 	

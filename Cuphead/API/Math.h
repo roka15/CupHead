@@ -50,6 +50,13 @@ struct Vector2
 
 		return temp;
 	}
+	Vector2 operator*(float _value)
+	{
+		Vector2 temp;
+		temp.x = x * _value;
+		temp.y = y * _value;
+		return temp;
+	}
 	Vector2 operator/(float _value)
 	{
 		Vector2 temp;
@@ -66,6 +73,11 @@ struct Vector2
 	{
 		x -= _value.x;
 		y -= _value.y;
+	}
+	void operator*=(const Vector2& _value)
+	{
+		x *= _value.x;
+		y *= _value.y;
 	}
 	Vector2 operator-(const Vector2& _value)
 	{

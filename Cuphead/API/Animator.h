@@ -42,6 +42,7 @@ namespace yeram_client
 		Animation* FindAnimation(const std::wstring& _name);
 		void Play(const std::wstring& _name, bool _loop);
 		const std::wstring& GetCurAniName();
+		const Vector2& GetSpriteSize();
 
 		Events* FindEvents(const std::wstring& _name);
 		std::function<void()>& GetStartEvent(const std::wstring& _name);

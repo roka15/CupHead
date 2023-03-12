@@ -91,6 +91,7 @@ namespace yeram_client
 		UINT width = 0;
 		UINT height = 0;
 		UINT fileCount = 0;
+	
 		std::filesystem::path fs(_path);
 		std::vector<Image*> images = {};
 		for (auto& itr : std::filesystem::recursive_directory_iterator(_path))
@@ -113,6 +114,7 @@ namespace yeram_client
 			}
 			fileCount++;
 		}
+
 
 		std::wstring key = fs.parent_path().filename();
 		key += fs.filename();
@@ -174,6 +176,12 @@ namespace yeram_client
 		return mActiveAnimation->GetName();
 	}
 
+	const Vector2& Animator::GetSpriteSize()
+	{
+		return mActiveAnimation->GetSpriteSize();
+	}
+
+	
 	Animator::Events* Animator::FindEvents(const std::wstring& _name)
 	{
 		std::map<std::wstring, Events*>::iterator iter

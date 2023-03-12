@@ -13,7 +13,8 @@ namespace yeram_client
 		static void LoadScene(ESceneType _type);
 		static Scene* GetActiveScene();
 		static GameObject* FindObject(std::wstring _name);
-		static void MoveGameObject(const Vector2& _offset);
+		static void ChagePosGameObjects(const Vector2& _offset);
+		static void ChangeScaleGameObjects(const Vector2& _scale);
 	private:
 		SceneManager()=delete;
 		~SceneManager();

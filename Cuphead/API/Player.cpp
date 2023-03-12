@@ -8,6 +8,7 @@
 #include "Cuphead.h"
 #include "MugMan.h"
 #include "Chalice.h"
+#include "Camera.h"
 namespace yeram_client
 {
 	Player::Player() :GameObject()
@@ -30,7 +31,6 @@ namespace yeram_client
 	void Player::Update()
 	{
 		GameObject::Update();
-
 		mCharacter->Update();
 	}
 	void Player::Render(HDC hdc)

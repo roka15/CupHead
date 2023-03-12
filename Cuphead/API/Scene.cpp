@@ -59,13 +59,23 @@ namespace yeram_client
 
 	}
 
-	void Scene::AllMoveGameObject(const Vector2& _offset)
+	void Scene::ChagePosGameObjects(const Vector2& _offset)
 	{
 		for (auto layer : mLayers)
 		{
 			if (layer == nullptr)
 				continue;
-			layer->MoveObject(_offset);
+			layer->ChagePosGameObjects(_offset);
+		}
+	}
+
+	void Scene::ChageScaleGameObjects(const Vector2& _scale)
+	{
+		for (auto layer : mLayers)
+		{
+			if (layer == nullptr)
+				continue;
+			layer->ChageScaleGameObjects(_scale);
 		}
 	}
 
