@@ -150,7 +150,9 @@
     <ClInclude Include="Layer.h" />
     <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="MedusaScene.h" />
     <ClInclude Include="MemoryPool.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="MugMan.h" />
     <ClInclude Include="My_Resource.h" />
     <ClInclude Include="Player.h" />
@@ -188,7 +190,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="MedusaScene.cpp" />
     <ClCompile Include="MemoryPool.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MugMan.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="My_Resource.cpp" />

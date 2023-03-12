@@ -56,6 +56,9 @@
     <Filter Include="Contents\Scene\MainMenuScene">
       <UniqueIdentifier>{dced2d1d-47b8-4070-9589-a1bc19e788ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\Scene\StageScene">
+      <UniqueIdentifier>{38633368-af90-48c8-b588-f3549fa19f35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -174,6 +177,8 @@
     <ClInclude Include="Camera.h">
       <Filter>Contents\Core</Filter>
     </ClInclude>
+    <ClInclude Include="MedusaScene.h" />
+    <ClInclude Include="Monster.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -279,6 +284,8 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Contents\Core</Filter>
     </ClCompile>
+    <ClCompile Include="MedusaScene.cpp" />
+    <ClCompile Include="Monster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">
