@@ -8,6 +8,8 @@
 #include "Layer.h"
 #include "Animator.h"
 #include "Input.h"
+#include "Time.h"
+
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -29,16 +31,18 @@ namespace yeram_client
 			player->CreateCharacter(ESceneType::PlayMap, EPlayerType::Cuphead);
 		}
 
+		
 		CreateWorldMap(pos);
+
 
 		Scene::Initialize();
 	}
 	void PlayMapScene::Update()
 	{
-		//test
+
 		if (core::Input::GetKeyDown(core::EKeyCode::MouseRight))
 		{
-			SceneManager::LoadScene(ESceneType::BossMedusa);
+			SceneManager::OpenLodingScreen();
 		}
 		//화면 확대 축소
 		/*if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
@@ -49,6 +53,7 @@ namespace yeram_client
 		{
 			Camera::SetCameraDistance(2.0f);
 		}*/
+
 		Scene::Update();
 	}
 	void PlayMapScene::Render(HDC hdc)
@@ -63,10 +68,14 @@ namespace yeram_client
 	{
 		GameObject* player = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player");
 		Camera::SetTarget(player);
+		//Camera::PlayLoad();
 		Scene::OnEnter();
 	}
 	void PlayMapScene::OnExit()
 	{
+		//switch 로 로드할 맵 타입에 따라 load 달리하기
+		SceneManager::LoadScene(ESceneType::BossMedusa);
+
 		Camera::SetTarget(nullptr);
 		Scene::OnExit();
 	}
@@ -85,10 +94,10 @@ namespace yeram_client
 			render->SetRenderType(ERenderType::StretchBlt);
 		}
 		const Vector2& map_bl = CreateWroldGround(L"MapBL", _startpos, nullptr, ELayerType::BackObject,
-												  L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03.bmp");
-		const Vector2& map_br = CreateWroldGround(L"MapBR", Vector2{ _startpos.x+1874.0f ,_startpos.y}, nullptr, ELayerType::BackObject,
-			                                      L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Right\\world3_mainland_04.bmp");
-		const Vector2& map_tl = CreateWroldGround(L"MapTL", Vector2{ _startpos.x-154.0f,_startpos.y-1477.0f }, nullptr, ELayerType::BackObject,
+			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03.bmp");
+		const Vector2& map_br = CreateWroldGround(L"MapBR", Vector2{ _startpos.x + 1874.0f ,_startpos.y }, nullptr, ELayerType::BackObject,
+			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Right\\world3_mainland_04.bmp");
+		const Vector2& map_tl = CreateWroldGround(L"MapTL", Vector2{ _startpos.x - 154.0f,_startpos.y - 1477.0f }, nullptr, ELayerType::BackObject,
 			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Left\\world3_mainland_01.bmp");
 		const Vector2& map_tr = CreateWroldGround(L"MapTR", Vector2{ map_br.x,map_br.y - 1439.0f }, nullptr, ELayerType::BackObject,
 			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Right\\world3_mainland_02.bmp");
@@ -107,7 +116,7 @@ namespace yeram_client
 				, _image_path);
 			render->SetRenderType(ERenderType::TransParentBlt);
 		}
-		
+
 		return map->GetComponent<Transform>()->GetPos();
 	}
 	void  PlayMapScene::CreateMapBL(const Vector2& _original_pos)
@@ -147,18 +156,19 @@ namespace yeram_client
 			ani->Play(key, true);
 			mapbl_buliding->SetName(key);
 		}
-		
+
 	}
 	void  PlayMapScene::CreateMapBR(const Vector2& _original_pos)
 	{
-		
+
 	}
 	void PlayMapScene::CreateMapTL(const Vector2& _original_pos)
 	{
-		
+
 	}
 	void PlayMapScene::CreateMapTR(const Vector2& _original_pos)
 	{
-		
+
 	}
+
 }

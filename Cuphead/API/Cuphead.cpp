@@ -3,6 +3,7 @@
 #include "Animator.h"
 #include "GameObject.h"
 #include "Resources.h"
+#include "Rigidbody.h"
 namespace yeram_client
 {
 	Cuphead::Cuphead()

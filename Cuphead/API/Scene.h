@@ -18,6 +18,7 @@ namespace yeram_client
 
 	   virtual void OnEnter();
 	   virtual void OnExit();
+
 	   void ChagePosGameObjects(const Vector2& _offset);
 	   void ChageScaleGameObjects(const Vector2& _scale);
 	   GameObject* FindObject(std::wstring _name);

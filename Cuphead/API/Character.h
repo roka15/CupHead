@@ -3,6 +3,7 @@
 #include "Enums.h"
 namespace yeram_client
 {
+	class Rigidbody;
 	class GameObject;
 	class Character
 	{
@@ -35,6 +36,7 @@ namespace yeram_client
 		GameObject* mOwner;
 		ECharacterState mState;
 		ESceneType mSceneType;
+		//Rigidbody* mRigidBody;
 	};
 }
 

@@ -179,6 +179,10 @@
     </ClInclude>
     <ClInclude Include="MedusaScene.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="MoveObject.h" />
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -286,6 +290,10 @@
     </ClCompile>
     <ClCompile Include="MedusaScene.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="MoveObject.cpp" />
+    <ClCompile Include="Rigidbody.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

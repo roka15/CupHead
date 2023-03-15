@@ -31,7 +31,6 @@ namespace yeram_client
 			
 			if (mActiveAnimation->IsComplete() == true)
 			{
-				mActiveAnimation->Reset();
 				std::wstring str = mActiveAnimation->GetName();
 				Events* event = FindEvents(str);
 				if (event != nullptr)
@@ -69,7 +68,7 @@ namespace yeram_client
 		mEvents.clear();
 	}
 
-	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration)
+	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration,bool _alpha)
 	{
 		Animation* ani = FindAnimation(_name);
 		if (ani != nullptr)
@@ -78,7 +77,7 @@ namespace yeram_client
 		}
 		ani = new Animation();
 		mSpriteSheet = _sheet;
-		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration);
+		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration,_alpha);
 		ani->SetName(_name);
 		ani->SetAnimator(this);
 		Events* event = new Events();
@@ -86,7 +85,7 @@ namespace yeram_client
 		mEvents.insert(std::make_pair(_name, event));
 	}
 
-	std::wstring Animator::CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration)
+	std::wstring Animator::CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration,bool _alpha)
 	{
 		UINT width = 0;
 		UINT height = 0;
@@ -137,7 +136,7 @@ namespace yeram_client
 
 		}
 
-		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration);
+		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration,_alpha);
 		return key;
 	}
 

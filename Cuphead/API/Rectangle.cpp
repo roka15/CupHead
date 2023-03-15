@@ -3,7 +3,7 @@
 #include "Camera.h"
 namespace yeram_client
 {
-	Rectangle::Rectangle()
+	Rectangle::Rectangle():GameObject()
 	{
 	}
 	Rectangle::~Rectangle()

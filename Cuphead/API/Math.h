@@ -42,6 +42,10 @@ struct Vector2
 		x = _other.x;
 		y = _other.y;
 	}*/
+	Vector2 operator-()
+	{
+		return Vector2(-x, -y);
+	}
 	Vector2 operator*(const Vector2& _value)
 	{
 		Vector2 temp;
@@ -59,10 +63,17 @@ struct Vector2
 	}
 	Vector2 operator/(float _value)
 	{
+		if (_value == 0)
+			return *this;
 		Vector2 temp;
 		temp.x = x / _value;
 		temp.y = y / _value;
 		return temp;
+	}
+	void operator*=(float _value)
+	{
+		x *= _value;
+		y *= _value;
 	}
 	void operator+=(const Vector2& _value)
 	{
@@ -94,14 +105,26 @@ struct Vector2
 
 		return temp;
 	}
-
+	bool operator!=(const Vector2& _other)
+	{
+		return this->x != _other.x || this->y != _other.y;
+	}
+	bool operator==(const Vector2& _other)
+	{
+		return (x == _other.x && y == _other.y);
+	}
+	
 
 	Vector2(const Vector2&) = default;
 	Vector2(Vector2&&) = default;
 	Vector2& operator=(const Vector2&) = default;
 	Vector2& operator=(Vector2&&) = default;
 
-
+	void Clear()
+	{
+		x = 0.0f;
+		y = 0.0f;
+	}
 	float Length()
 	{
 		return sqrtf(x * x + y * y);
@@ -127,5 +150,15 @@ namespace yeram_client::math
 		float y = _vector.x * sinf(radian) + _vector.y * cosf(radian);
 
 		return Vector2(x, y);
+	}
+	
+	inline static float Dot(Vector2& v1,Vector2& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y;
+	}
+	
+	inline static float Cross(Vector2& v1, Vector2& v2)
+	{
+		return v1.x * v2.y - v1.y * v2.x;
 	}
 }

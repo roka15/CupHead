@@ -7,6 +7,8 @@
 #include "Resources.h"
 #include "Image.h"
 #include "Time.h"
+#include "MoveObject.h"
+#include "Camera.h"
 
 extern yeram_client::Application application;
 namespace yeram_client
@@ -26,6 +28,14 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 
 		CreateGround();
+		//temp
+		Rectangle* medusa = GameObject::Instantiate<Rectangle>();
+		Transform* tf = medusa->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 1100, 800 });
+		Animator* ani = medusa->AddComponent<Animator>();
+		std::wstring key = ani->CreateAnimations(L"..\\Resources\\MM\\Intro\\MerMaid", Vector2::Zero, 0.1f, false);
+		ani->Play(key, true);
+
 	}
 
 	void MedusaScene::Update()
@@ -43,6 +53,13 @@ namespace yeram_client
 	{
 		Scene::Release();
 	}
+	void MedusaScene::OnEnter()
+	{
+		//Camera::PlayLoad(Camera::ECameraEffectType::FADE_OUT);
+	}
+	void MedusaScene::OnExit()
+	{
+	}
 	void MedusaScene::CreateGround()
 	{
 		Vector2 center = application.GetWindowSize() / 2.0f;
@@ -56,6 +73,9 @@ namespace yeram_client
 			key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f);
 			ani->Play(key, true);
 			water_1->SetName(key);
+			/*Script* script = water_1->AddComponent<Script>();
+
+			script->RegisterScript(typeid(MoveObject).name(), new MoveObject);*/
 		}
 		Rectangle* water_1_2 = GameObject::Instantiate<Rectangle>(Vector2{ 650.0f,900.0f }, nullptr, ELayerType::FrontObject);
 		{

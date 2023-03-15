@@ -50,8 +50,8 @@ namespace yeram_client
 	void Application::Update()
 	{
 		core::Input::Update();
-		Camera::Update();
 		SceneManager::Update();
+		Camera::Update();
 		Time::Update();
 	}
 	void Application::Render()
@@ -60,7 +60,7 @@ namespace yeram_client
 		core::Input::Render(mBackHdc);
 		SceneManager::Render(mBackHdc);
 		Time::Render(mBackHdc);
-
+		Camera::Render(mBackHdc);
 		//백버퍼를 원본 dc에 넘겨주기. SRCCOPY : 원본을 그대로 복사.
 		BitBlt(mhdc, 0, 0, mWidth, mHeight, mBackHdc, 0, 0, SRCCOPY);
 	}
@@ -69,6 +69,7 @@ namespace yeram_client
 		core::Input::Release();
 		SceneManager::Release();
 		Time::Release();
+		Camera::Release();
 		Resources::Release();
 		//WindowManager::Release();
 	}
@@ -88,7 +89,7 @@ namespace yeram_client
 	{
 		HBRUSH grayBrush = CreateSolidBrush(RGB(121, 121, 121));
 		HBRUSH OldBrush = (HBRUSH)SelectObject(mBackHdc, grayBrush);
-		Rectangle(mBackHdc, -1, -1, 1602, 902);
+		::Rectangle(mBackHdc, -1, -1, 1602, 902);
 		SelectObject(mBackHdc, OldBrush);
 		DeleteObject(grayBrush);
 	}

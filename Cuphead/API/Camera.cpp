@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Time.h"
 #include "Input.h"
+#include "Animator.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -12,6 +13,8 @@ namespace yeram_client
 	Vector2  Camera::mLookPosition;
 	Vector2  Camera::mDistance;
 	GameObject* Camera::mTarget = nullptr;
+	
+	
 
 	void Camera::Initialize()
 	{
@@ -19,6 +22,8 @@ namespace yeram_client
 		mResolution = application.GetWindowSize();
 		//operator ±¸Çö
 		mLookPosition = (mResolution / 2.0f);
+
+		
 	}
 
 	void Camera::Update()
@@ -48,8 +53,21 @@ namespace yeram_client
 				mLookPosition.y += 100.0f * Time::DeltaTime();
 			}
 		}
+
+		
 		
 		mDistance = mLookPosition - (mResolution / 2.0f);
+
+	}
+
+	void Camera::Render(HDC _hdc)
+	{
+		
+	}
+
+	void Camera::Release()
+	{
+		
 	}
 
 	void Camera::SetCameraDistance(float _distance)
@@ -69,6 +87,8 @@ namespace yeram_client
 		mDistance = Vector2::Zero;
 	}
 
+	
+	
 	bool Camera::CheckActive()
 	{
 		ESceneType cur_scene = SceneManager::GetActiveScene()->GetSceneType();

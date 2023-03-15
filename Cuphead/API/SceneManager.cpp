@@ -4,10 +4,16 @@
 #include "MainMenuScene.h"
 #include "MedusaScene.h"
 #include "Camera.h"
+#include "Rectangle.h"
+#include "Animator.h"
+#include "Time.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
 	Scene* SceneManager::mActiveScene = nullptr;
+	GameObject* SceneManager::mLoadingScreen = nullptr;
+	bool SceneManager::mbLoadScreenFlag;
+
 	void SceneManager::Initalize()
 	{
 		mScenes.resize((UINT)ESceneType::MAX);
@@ -40,16 +46,55 @@ namespace yeram_client
 			scene->Initialize();
 		}
 		mActiveScene = mScenes[(UINT)ESceneType::Title];
+
+
+
+		mLoadingScreen = new GameObject();
+		mLoadingScreen->GetComponent<Transform>()->SetPos(Vector2{ 800,900 });
+		mLoadingScreen->SetName(L"LoadScreen");
+		Animator* ani = mLoadingScreen->AddComponent<Animator>();
+		std::wstring key
+			= ani->CreateAnimations(L"..\\Resources\\Menu_Screen\\Loading\\Open", Vector2::Zero, 0.1f, true);
+		
+		ani->GetCompleteEvent(key) = std::bind
+		(
+			[]()->void
+		{
+			Scene* scene = SceneManager::GetActiveScene();
+			scene->OnExit();
+			CloseLodingScreen();
+		});
+
+		key = ani->CreateAnimations(L"..\\Resources\\Menu_Screen\\Loading\\Close", Vector2::Zero, 0.1f, true);
+		ani->Play(key, false);
+		ani->GetCompleteEvent(key) = std::bind
+		(
+			[]()->void
+		{
+			Scene* scene = SceneManager::GetActiveScene();
+			scene->OnEnter();
+			mLoadingScreen->SetActive(false);
+		});
+
+		mbLoadScreenFlag = false;
 	}
 
 	void SceneManager::Update()
 	{
 		mActiveScene->Update();
+		if (mbLoadScreenFlag == true)
+		{
+			mLoadingScreen->Update();
+		}
 	}
 
 	void SceneManager::Render(HDC hdc)
 	{
 		mActiveScene->Render(hdc);
+		if (mbLoadScreenFlag == true)
+		{
+			mLoadingScreen->Render(hdc);
+		}
 	}
 
 	void SceneManager::Release()
@@ -62,14 +107,17 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
+		mLoadingScreen->Release();
+		delete mLoadingScreen;
 	}
 
 	void SceneManager::LoadScene(ESceneType _type)
 	{
 		Camera::Clear();
-		mActiveScene->OnExit();
+	
+		//mActiveScene->OnExit();
 		mActiveScene = mScenes[(UINT)_type];
-		mActiveScene->OnEnter();
+		//mActiveScene->OnEnter();
 	}
 
 	Scene* SceneManager::GetActiveScene()
@@ -92,9 +140,22 @@ namespace yeram_client
 		mActiveScene->ChageScaleGameObjects(_scale);
 	}
 
+	void SceneManager::OpenLodingScreen()
+	{
+		mLoadingScreen->SetActive(true);
+		mbLoadScreenFlag = true;
+		Animator* ani = mLoadingScreen->GetComponent<Animator>();
+		ani->Play(L"LoadingOpen", false);
+	}
+
+	void SceneManager::CloseLodingScreen()
+	{
+		Animator* ani = mLoadingScreen->GetComponent<Animator>();
+		ani->Play(L"LoadingClose", false);
+	}
+
 	SceneManager::~SceneManager()
 	{
-		
 	}
 
 }

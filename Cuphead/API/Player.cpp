@@ -9,6 +9,7 @@
 #include "MugMan.h"
 #include "Chalice.h"
 #include "Camera.h"
+#include "Rigidbody.h"
 namespace yeram_client
 {
 	Player::Player() :GameObject()
@@ -21,12 +22,15 @@ namespace yeram_client
 	}
 	void Player::Initialize()
 	{
+		Rigidbody* rig = AddComponent<Rigidbody>();
+
 		for (auto c : mCharacters)
 		{
 			if (c.second == nullptr)
 				continue;
 			c.second->Initialize();
 		}
+		GameObject::Initialize();
 	}
 	void Player::Update()
 	{

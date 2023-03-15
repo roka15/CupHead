@@ -139,7 +139,7 @@ namespace yeram_client
 	GameObject::GameObject()
 	{
 		mbActive = true;
-		mComponents.resize((UINT)EComponentType::MAX - 1);
+		mComponents.resize((UINT)EComponentType::MAX);
 		AddComponent<Transform>();
 	}
 	

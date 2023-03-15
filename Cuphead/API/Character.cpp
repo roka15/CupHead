@@ -6,10 +6,14 @@
 #include "Input.h"
 #include "Time.h"
 #include "Camera.h"
+#include "Rigidbody.h"
+
 namespace yeram_client
 {
 	void Character::move()
 	{
+		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
+
 		Transform* transform = mOwner->GetComponent<Transform>();
 		Vector2& pos = transform->GetPos();
 		Vector2 offset;
@@ -29,20 +33,26 @@ namespace yeram_client
 				ani->Play(L"MapIdle", true);
 			}
 
+			//rigid 이동
+			//trans 이동
 			if (core::Input::GetKey(core::EKeyCode::A))
 			{
+				//rig->AddForce(Vector2(-200.0f, 0.0f));
 				offset.x -= 200.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::D))
 			{
+				//rig->AddForce(Vector2(+200.0f, 0.0f));
 				offset.x += 200.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::W))
 			{
+				//rig->AddForce(Vector2(0.0f, -200.0f));
 				offset.y -= 200.0f * Time::DeltaTime();
 			}
 			if (core::Input::GetKey(core::EKeyCode::S))
 			{
+				//rig->AddForce(Vector2(0.0f, +200.0f));
 				offset.y += 200.0f * Time::DeltaTime();
 			}
 			

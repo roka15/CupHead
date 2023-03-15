@@ -19,7 +19,7 @@ namespace yeram_client
 
 
 		template<typename T>
-		static inline T* Instantiate(GameObject* _parent = nullptr,ELayerType _type=ELayerType::NONE)
+		static inline T* Instantiate(GameObject* _parent = nullptr,ELayerType _type=ELayerType::BackObject)
 		{
 			T* obj = new T();
 			obj->SetParent(_parent);
