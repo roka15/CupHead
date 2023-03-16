@@ -18,11 +18,11 @@ namespace yeram_client
 		Vector2& pos = transform->GetPos();
 		Vector2 offset;
 		Animator* ani = mOwner->GetComponent<Animator>();
-	
+
 
 		switch (mSceneType)
 		{
-		//case 맵 일때.
+			//case 맵 일때.
 		case ESceneType::PlayMap:
 			if (core::Input::GetKeyUp(core::EKeyCode::A)
 				|| core::Input::GetKeyUp(core::EKeyCode::D)
@@ -55,18 +55,18 @@ namespace yeram_client
 				//rig->AddForce(Vector2(0.0f, +200.0f));
 				offset.y += 200.0f * Time::DeltaTime();
 			}
-			
-			transform->SetPos(pos+offset);
+
+			transform->SetPos(pos + offset);
 			SceneManager::ChagePosGameObjects(offset);
 			break;
 		}
-	 //case 게임중일때
+		//case 게임중일때
 	}
 	void Character::idle()
 	{
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
-		
+
 		if (core::Input::GetKeyDown(core::EKeyCode::A)
 			|| core::Input::GetKeyDown(core::EKeyCode::D)
 			|| core::Input::GetKeyDown(core::EKeyCode::W)
@@ -111,10 +111,50 @@ namespace yeram_client
 	}
 	void Character::shoot()
 	{
-		
+
 	}
 	void Character::death()
 	{
+	}
+
+	bool Character::jump_check(ECharacterState _befor_state)
+	{
+		return false;
+	}
+
+	void Character::PositionUpdate()
+	{
+
+	}
+
+	void Character::SetEndJumpInfo()
+	{
+		mbJump = 0;
+		Animator* ani = mOwner->GetComponent<Animator>();
+		switch (mState)
+		{
+		case ECharacterState::Move:
+			if (core::Input::GetKey(core::EKeyCode::A))
+			{
+				ani->Play(L"RegularLeft", true);
+				return;
+			}
+			else if (core::Input::GetKey(core::EKeyCode::D))
+			{
+				ani->Play(L"RegularRight", true);
+				return;
+			}
+			mState = ECharacterState::Idle;
+		case ECharacterState::Idle:
+			if (mDirType == EDirType::LEFT)
+				ani->Play(L"IdleLeft", true);
+			else
+				ani->Play(L"IdleRight", true);
+			break;
+		}
+	
+		
+		
 	}
 
 }

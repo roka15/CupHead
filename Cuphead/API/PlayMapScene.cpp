@@ -28,12 +28,12 @@ namespace yeram_client
 		Vector2 pos = application.GetWindowSize() / 2.0f;
 		Player* player = GameObject::Instantiate<Player>(L"Player", Vector2{ pos.x,pos.y }, nullptr, ELayerType::Player);
 		{
+			player->CreateCharacter(ESceneType::BossMedusa, EPlayerType::MsChalice);
 			player->CreateCharacter(ESceneType::PlayMap, EPlayerType::Cuphead);
+			player->ChangeCharacter(EPlayerType::Cuphead);
 		}
-
 		
 		CreateWorldMap(pos);
-
 
 		Scene::Initialize();
 	}
@@ -65,9 +65,16 @@ namespace yeram_client
 		Scene::Release();
 	}
 	void PlayMapScene::OnEnter()
-	{
-		GameObject* player = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player");
-		Camera::SetTarget(player);
+	{   
+		Vector2 pos = application.GetWindowSize() / 2.0f;
+		Player* player = dynamic_cast<Player*>(mLayers[(UINT)ELayerType::Player]->FindObject(L"Player"));
+		if (player != nullptr)
+		{
+			Camera::SetTarget(player);
+			player->ChangeCharacter(EPlayerType::Cuphead);
+			Transform* tf = player->GetComponent<Transform>();
+			tf->SetPos(Vector2{ pos.x,pos.y });
+		}
 		//Camera::PlayLoad();
 		Scene::OnEnter();
 	}
@@ -77,6 +84,15 @@ namespace yeram_client
 		SceneManager::LoadScene(ESceneType::BossMedusa);
 
 		Camera::SetTarget(nullptr);
+
+		Player* player = dynamic_cast<Player*>(mLayers[(UINT)ELayerType::Player]->FindObject(L"Player"));
+		if (player != nullptr)
+		{
+			player->ChangeCharacter(EPlayerType::MsChalice);
+			player->SetSceneType_Ch(ESceneType::BossMedusa);
+			Transform* tf = player->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 200.0f,300.0f });
+		}
 		Scene::OnExit();
 	}
 	void PlayMapScene::CreateWorldMap(const Vector2& _startpos)

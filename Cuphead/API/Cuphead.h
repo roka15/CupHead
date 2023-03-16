@@ -20,6 +20,7 @@ namespace yeram_client
 		void idle()override;
 		void shoot()override;
 		void death()override;
+		bool jump_check(ECharacterState _befor_state)override;
 
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;

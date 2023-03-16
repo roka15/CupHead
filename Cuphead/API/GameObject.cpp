@@ -28,6 +28,8 @@ namespace yeram_client
 	}
 	void GameObject::Update()
 	{
+		if (mbActive == false)
+			return;
 		for (Component* com : mComponents)
 		{
 			if (com == nullptr)
@@ -48,6 +50,8 @@ namespace yeram_client
 	}
 	void GameObject::Render(HDC hdc)
 	{ 
+		if (mbActive == false)
+			return;
 		for (Component* com : mComponents)
 		{
 			if (com == nullptr)

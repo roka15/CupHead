@@ -1,12 +1,14 @@
 #include "Input.h"
+#include "Time.h"
 namespace core
 {
 
 	std::vector<Input::Key> Input::mKeys;
-
+	Input::PushInfo Input::mBeforPush;
+	float Input::mTime;
 	int ASCII[(UINT)EKeyCode::MAX] =
 	{
-		'A','S','D','W','K',VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_LBUTTON,VK_RBUTTON,
+		'A','S','D','W','K',VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_LBUTTON,VK_RBUTTON,VK_SPACE
 	};
 	
 	void Input::Initialize()
@@ -23,6 +25,8 @@ namespace core
 	}
 	void Input::Update()
 	{
+		mTime += yeram_client::Time::DeltaTime();
+
 		for (UINT i = 0; i < (UINT)EKeyCode::MAX; i++)
 		{
 			

@@ -56,7 +56,22 @@ namespace yeram_client
 
 	void Scene::OnExit()
 	{
-
+		Layer* cur_layer = mLayers[(UINT)ELayerType::Player];
+		if (cur_layer != nullptr)
+		{
+			Scene* active = SceneManager::GetActiveScene();
+			Layer* active_layer = active->mLayers[(UINT)ELayerType::Player];
+			std::vector<GameObject*>& recv_obj = active_layer->GetGameObjectList();
+			if (recv_obj.size() == 0)
+			{
+				std::vector<GameObject*>& send_obj = cur_layer->GetGameObjectList();
+				for (auto player_obj : send_obj)
+				{
+					recv_obj.push_back(player_obj);
+				}
+				send_obj.clear();
+			}
+		}
 	}
 
 	void Scene::ChagePosGameObjects(const Vector2& _offset)

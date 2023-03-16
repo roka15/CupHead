@@ -74,6 +74,7 @@ namespace yeram_client
 			Scene* scene = SceneManager::GetActiveScene();
 			scene->OnEnter();
 			mLoadingScreen->SetActive(false);
+			mbLoadScreenFlag = false;
 		});
 
 		mbLoadScreenFlag = false;
@@ -114,7 +115,8 @@ namespace yeram_client
 	void SceneManager::LoadScene(ESceneType _type)
 	{
 		Camera::Clear();
-	
+		std::queue<GameObject*> temp_queue;
+
 		//mActiveScene->OnExit();
 		mActiveScene = mScenes[(UINT)_type];
 		//mActiveScene->OnEnter();

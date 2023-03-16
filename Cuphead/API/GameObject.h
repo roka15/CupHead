@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "SceneManager.h"
 #include "Transform.h"
+#include "Rigidbody.h"
 namespace yeram_client
 {
 	class GameObject:public Entity

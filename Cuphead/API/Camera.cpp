@@ -70,6 +70,12 @@ namespace yeram_client
 		
 	}
 
+	void Camera::SetTarget(GameObject* _target)
+	{
+		mLookPosition = (mResolution / 2.0f);
+		mTarget = _target;
+	}
+
 	void Camera::SetCameraDistance(float _distance)
 	{
 		Transform* tf = mTarget->GetComponent<Transform>();

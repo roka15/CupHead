@@ -17,11 +17,6 @@ namespace yeram_client
 		virtual void OnExit()override;
 
 	private:
-		enum class ELoadType
-		{
-			OPEN,
-			CLOSE,
-		};
 		void CreateWorldMap(const Vector2& _startpos);
 
 		const Vector2& CreateWroldGround(const std::wstring _name, const Vector2& _pos, GameObject* _parent, ELayerType _type, const std::wstring _image_path);

@@ -23,13 +23,6 @@ namespace yeram_client
 	void Player::Initialize()
 	{
 		Rigidbody* rig = AddComponent<Rigidbody>();
-
-		for (auto c : mCharacters)
-		{
-			if (c.second == nullptr)
-				continue;
-			c.second->Initialize();
-		}
 		GameObject::Initialize();
 	}
 	void Player::Update()
@@ -56,6 +49,8 @@ namespace yeram_client
 	void Player::CreateCharacter(ESceneType _scenetype,EPlayerType _type)
 	{
 		Character* c = nullptr;
+		if (mCharacters.find(_type) != mCharacters.end())
+			return;
 		switch (_type)
 		{
 		case EPlayerType::Cuphead:
@@ -63,6 +58,7 @@ namespace yeram_client
 			mCharacters.insert(std::make_pair(EPlayerType::Cuphead, c));
 			break;
 		case EPlayerType::MsChalice:
+			
 			c = new Chalice();
 			mCharacters.insert(std::make_pair(EPlayerType::MsChalice, c));
 			break;
@@ -83,5 +79,9 @@ namespace yeram_client
 			mCharacter = itr->second;
 		}
 		mCharacter->Initialize();
+	}
+	void Player::SetSceneType_Ch(ESceneType _scenetype)
+	{
+		mCharacter->SetSceneType(_scenetype);
 	}
 }

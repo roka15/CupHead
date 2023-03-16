@@ -16,6 +16,8 @@ namespace yeram_client
 	void Cuphead::Initialize()
 	{
 		mState = ECharacterState::Idle;
+		Animator* ani = mOwner->GetComponent<Animator>();
+		ani->Play(L"MapIdle", true);
 	}
 
 	void Cuphead::Update()
@@ -78,30 +80,24 @@ namespace yeram_client
 
 		//mAnimator->GetStartEvent(L"MapIdle")=std::bind(&Player::idleCompleteEvent,this);
 		
-		switch (_type)
-		{
-		case ESceneType::PlayMap://map일때
-			mImage = Resources::Load<Image>(L"MapMoveBase", L"..\\Resources\\Cuphead_Stage_base.bmp");//받아오기 시트
-			mLImage = Resources::Load<Image>(L"MapMoveLeft", L"..\\Resources\\Cuphead_Stage_left.bmp");
+		//map 
+		mImage = Resources::Load<Image>(L"MapMoveBase", L"..\\Resources\\Cuphead_Stage_base.bmp");//받아오기 시트
+		mLImage = Resources::Load<Image>(L"MapMoveLeft", L"..\\Resources\\Cuphead_Stage_left.bmp");
 
-			ani->CreateAnimation(L"MapFowardUp", mImage, Vector2::Zero, 16, 8, 16, Vector2::Zero, 0.1f);
-			ani->CreateAnimation(L"MapFowardRight", mImage, Vector2(0.0f, 113.0f*3), 16, 8, 14, Vector2::Zero, 0.1f);
-			ani->CreateAnimation(L"MapFowardDown", mImage, Vector2(0.0f, 113.0f * 6), 16, 8, 13, Vector2::Zero, 0.1f);
-			ani->CreateAnimation(L"MapIdle", mImage, Vector2(0.0f, 113.0f * 5), 16, 8, 16, Vector2::Zero, 0.1f);
-	
-			ani->GetStartEvent(L"MapFowardRight") = std::bind(&Cuphead::moveStartEvent, this);
-			ani->GetCompleteEvent(L"MapFowardRight") = std::bind(&Cuphead::moveCompleteEvent, this);
+		ani->CreateAnimation(L"MapFowardUp", mImage, Vector2::Zero, 16, 8, 16, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardRight", mImage, Vector2(0.0f, 113.0f * 3), 16, 8, 14, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardDown", mImage, Vector2(0.0f, 113.0f * 6), 16, 8, 13, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapIdle", mImage, Vector2(0.0f, 113.0f * 5), 16, 8, 16, Vector2::Zero, 0.1f);
 
-			ani->GetCompleteEvent(L"MapFowardUp") = std::bind(&Cuphead::moveCompleteEvent, this);
+		ani->GetStartEvent(L"MapFowardRight") = std::bind(&Cuphead::moveStartEvent, this);
+		ani->GetCompleteEvent(L"MapFowardRight") = std::bind(&Cuphead::moveCompleteEvent, this);
 
-			ani->CreateAnimation(L"MapFowardLeft", mLImage, Vector2(0.0f, 113.0f * 3), 16, 8, 14, Vector2::Zero, 0.1f);
-			ani->GetCompleteEvent(L"MapFowardLeft") = std::bind(&Cuphead::moveCompleteEvent, this);
-			ani->Play(L"MapIdle", true);
-			break;
-		case ESceneType::BossMedusa:
-			break;
-		//stage 중일때
-		}
+		ani->GetCompleteEvent(L"MapFowardUp") = std::bind(&Cuphead::moveCompleteEvent, this);
+
+		ani->CreateAnimation(L"MapFowardLeft", mLImage, Vector2(0.0f, 113.0f * 3), 16, 8, 14, Vector2::Zero, 0.1f);
+		ani->GetCompleteEvent(L"MapFowardLeft") = std::bind(&Cuphead::moveCompleteEvent, this);
+		//stage
+
 	}
 
 	void Cuphead::idleCompleteEvent()
@@ -139,5 +135,9 @@ namespace yeram_client
 	void Cuphead::death()
 	{
 		Character::death();
+	}
+	bool Cuphead::jump_check(ECharacterState _befor_state)
+	{
+		return false;
 	}
 }

@@ -13,6 +13,7 @@ namespace yeram_client
 		virtual void Render(HDC hdc);
 		virtual void Release();
 		GameObject* FindObject(std::wstring _name);
+		std::vector<GameObject*>& GetGameObjectList();
 		void ChagePosGameObjects(const Vector2& _offset);
 		void ChageScaleGameObjects(const Vector2& _scale);
 		void AddGameObject(GameObject* obj);

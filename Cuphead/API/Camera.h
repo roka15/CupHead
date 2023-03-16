@@ -18,10 +18,13 @@ namespace yeram_client
 		static void Update();
 		static void Render(HDC _hdc);
 		static void Release();
-		static void SetTarget(GameObject* _target) { mTarget = _target; }
+		static void SetTarget(GameObject* _target);
 		static void SetCameraDistance(float _distance);
 		//operator ±¸Çö.
-		static Vector2 CaluatePos(Vector2 _pos) { return _pos - mDistance; }
+		static Vector2 CaluatePos(Vector2 _pos) 
+		{ 
+			return _pos - mDistance; 
+		}
 		
 		static void Clear();
 	

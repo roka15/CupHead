@@ -9,6 +9,7 @@
 #include "Time.h"
 #include "MoveObject.h"
 #include "Camera.h"
+#include "Player.h"
 
 extern yeram_client::Application application;
 namespace yeram_client
@@ -31,7 +32,7 @@ namespace yeram_client
 		//temp
 		Rectangle* medusa = GameObject::Instantiate<Rectangle>();
 		Transform* tf = medusa->GetComponent<Transform>();
-		tf->SetPos(Vector2{ 1100, 800 });
+		tf->SetPos(Vector2{ 1200, 800 });
 		Animator* ani = medusa->AddComponent<Animator>();
 		std::wstring key = ani->CreateAnimations(L"..\\Resources\\MM\\Intro\\MerMaid", Vector2::Zero, 0.1f, false);
 		ani->Play(key, true);
@@ -55,7 +56,7 @@ namespace yeram_client
 	}
 	void MedusaScene::OnEnter()
 	{
-		//Camera::PlayLoad(Camera::ECameraEffectType::FADE_OUT);
+
 	}
 	void MedusaScene::OnExit()
 	{

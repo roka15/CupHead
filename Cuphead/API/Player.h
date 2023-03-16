@@ -17,7 +17,7 @@ namespace yeram_client
 		virtual void Release()override;
 		void CreateCharacter(ESceneType _scenetype,EPlayerType _type);
 		void ChangeCharacter(EPlayerType _type);
-
+		void SetSceneType_Ch(ESceneType _scenetype);
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;

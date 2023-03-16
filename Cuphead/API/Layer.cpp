@@ -60,6 +60,10 @@ namespace yeram_client
 		}
 		return nullptr;
 	}
+	std::vector<GameObject*>& Layer::GetGameObjectList()
+	{
+		return mObjs;
+	}
 	void Layer::ChagePosGameObjects(const Vector2& _offset)
 	{
 		for (auto obj : mObjs)
