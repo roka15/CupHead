@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "Rigidbody.h"
+#include "Collider.h"
 namespace yeram_client
 {
 	class GameObject:public Entity
@@ -149,6 +150,9 @@ namespace yeram_client
 		UINT GetChildCount() { return mChilds.size(); }
 		void RemoveChild(GameObject* _child);
 		
+		virtual void OnCollisionEnter(class Collider* other);
+		virtual void OnCollisionStay(class Collider* other);
+		virtual void OnCollisionExit(class Collider* other);
 		//자식도 같이 move
 		//void MoveChild(const Vector2& _offset);
 	protected:

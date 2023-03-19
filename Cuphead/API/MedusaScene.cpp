@@ -10,7 +10,9 @@
 #include "MoveObject.h"
 #include "Camera.h"
 #include "Player.h"
-
+#include "ColliderManager.h"
+#include "Ground.h"
+#include "SpriteRenderer.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -28,11 +30,12 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 
+		CreateBackGround();
 		CreateGround();
 		//temp
 		Rectangle* medusa = GameObject::Instantiate<Rectangle>();
 		Transform* tf = medusa->GetComponent<Transform>();
-		tf->SetPos(Vector2{ 1200, 800 });
+		tf->SetPos(Vector2{ 1300, 800 });
 		Animator* ani = medusa->AddComponent<Animator>();
 		std::wstring key = ani->CreateAnimations(L"..\\Resources\\MM\\Intro\\MerMaid", Vector2::Zero, 0.1f, false);
 		ani->Play(key, true);
@@ -56,7 +59,17 @@ namespace yeram_client
 	}
 	void MedusaScene::OnEnter()
 	{
-
+		for (auto player : GetGameObjects(ELayerType::Player))
+		{
+			Rigidbody* rid = player->GetComponent<Rigidbody>();
+			if (rid == nullptr)
+				continue;
+			rid->SetGround(false);
+			rid->SetMass(1.0f);
+			
+		}
+		ColliderManager::SetLayer(ELayerType::Player, ELayerType::FrontObject, true);
+		
 	}
 	void MedusaScene::OnExit()
 	{
@@ -277,12 +290,36 @@ namespace yeram_client
 			ani->Play(key, true);
 			water_5_4->SetName(key);
 		}
+
+		Ground* ground_col = GameObject::Instantiate<Ground>(Vector2{ 0.0f,100.0f }, nullptr, ELayerType::FrontObject);
+		{
+			Collider* col = ground_col->GetComponent<Collider>();
+			col->SetSize(Vector2(center.x * 2.0f, 100.0f));
+			col->SetCenter(Vector2(0.0f, 500.0f));
+		}
+
+		
+
 		mGroundsInfo.insert(std::make_pair(key, std::queue<GameObject*>()));
 		mGroundsInfo[key].push(water_5);
 		mGroundsInfo[key].push(water_5_2);
 		mGroundsInfo[key].push(water_5_3);
 		mGroundsInfo[key].push(water_5_4);
 		mGroundInfos.insert(std::make_pair(key, GroundInfo{ Vector2{865.0f,0.0f},Vector2{10.0f,0.4} }));
+	}
+
+	void MedusaScene::CreateBackGround()
+	{
+		std::wstring key;
+		Rectangle* background = GameObject::Instantiate<Rectangle>(Vector2::Zero, nullptr, ELayerType::BackObject);
+		{
+			Transform* tf = background->GetComponent<Transform>();
+			tf->SetScale(Vector2{ 1.0f,1.0f });
+			SpriteRenderer* render = background->AddComponent<SpriteRenderer>();
+			render->SetImage(L"MedusaMainBackImage", L"..\\Resources\\MM\\BackGround\\MainBackImage\\mermaid_bg_sky_0001.bmp");
+			render->SetRenderType(ERenderType::StretchBlt);
+			background->SetName(L"MedusaMainBackImage");
+		}
 	}
 
 	void MedusaScene::GroundUpdate()

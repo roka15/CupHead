@@ -30,9 +30,9 @@ enum class EComponentType
 {
 	NONE,
 	Transform,
-	Collider,
 	SpriteRenderer,
 	Animator,
+	Collider,
 	Audio,
 	Script,
 	Rigidbody,

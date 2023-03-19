@@ -18,6 +18,11 @@ namespace yeram_client
 		void CreateCharacter(ESceneType _scenetype,EPlayerType _type);
 		void ChangeCharacter(EPlayerType _type);
 		void SetSceneType_Ch(ESceneType _scenetype);
+		Character* GetActiveCharacter() { return mCharacter; }
+
+		virtual void OnCollisionEnter(class Collider* other)override;
+		virtual void OnCollisionStay(class Collider* other)override;
+		virtual void OnCollisionExit(class Collider* other)override;
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;

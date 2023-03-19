@@ -30,12 +30,11 @@ namespace yeram_client
 		{
 			player->CreateCharacter(ESceneType::BossMedusa, EPlayerType::MsChalice);
 			player->CreateCharacter(ESceneType::PlayMap, EPlayerType::Cuphead);
-			player->ChangeCharacter(EPlayerType::Cuphead);
 		}
-		
 		CreateWorldMap(pos);
-
 		Scene::Initialize();
+
+		player->ChangeCharacter(EPlayerType::Cuphead);
 	}
 	void PlayMapScene::Update()
 	{

@@ -28,4 +28,13 @@ namespace yeram_client
 	void Rectangle::aniCompleteEvent()
 	{
 	}
+	void Rectangle::OnCollisionEnter(Collider* other)
+	{
+	}
+	void Rectangle::OnCollisionStay(Collider* other)
+	{
+	}
+	void Rectangle::OnCollisionExit(Collider* other)
+	{
+	}
 }

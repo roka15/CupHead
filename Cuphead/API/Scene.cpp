@@ -110,6 +110,18 @@ namespace yeram_client
 		mLayers[(UINT)layer]->AddGameObject(obj);
 	}
 
+	std::vector<GameObject*>& Scene::GetGameObjects(ELayerType _layer_type)
+	{
+		return mLayers[(UINT)_layer_type]->GetGameObjectList();
+	}
+
+	bool Scene::UseingLayer(ELayerType _layer_type)
+	{
+		if (mLayers[(UINT)_layer_type] == nullptr) 
+			return false; 
+		return true;
+	}
+
 	Scene::Scene()
 	{
 		mLayers.resize((UINT)ELayerType::MAX);

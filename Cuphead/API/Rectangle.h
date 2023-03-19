@@ -20,6 +20,10 @@ namespace yeram_client
 			offset.y = std::abs(_start.y - _end.y);
 		}*/
 		void aniCompleteEvent();
+
+		virtual void OnCollisionEnter(class Collider* other)override;
+		virtual void OnCollisionStay(class Collider* other)override;
+		virtual void OnCollisionExit(class Collider* other)override;
 	private:
 		/*Vector2 mStartPos;
 		Vector2 mEndPos;

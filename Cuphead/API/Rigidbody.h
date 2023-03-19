@@ -16,6 +16,9 @@ namespace yeram_client
 		void SetMass(float _mass) { mMass = _mass; }
 		void AddForce(Vector2 _force);
 		void SetGround(bool _ground) { mbGround = _ground; }
+		void SetVelocity(Vector2 _velocity) { mVelocity =_velocity; }
+		
+		Vector2 GetVelocity() { return mVelocity; }
 	private:
 		float mMass;
 		Vector2 mForce;
@@ -24,6 +27,7 @@ namespace yeram_client
 		Vector2 mLimitedVelocity;
 
 		Vector2 mGravity;
+		
 		float mFriction;
 		bool mbGround;
 

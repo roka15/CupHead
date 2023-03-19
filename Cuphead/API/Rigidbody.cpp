@@ -8,10 +8,10 @@ namespace yeram_client
 		, mMass(0.0f), mAccelation(Vector2::Zero), mVelocity(Vector2::Zero), mForce(Vector2::Zero)
 	{
 		mLimitedVelocity.x = 200.0f;
-		mLimitedVelocity.y = 1000.0f;
+		mLimitedVelocity.y = 2000.0f;
 
 		mbGround = true;
-		mGravity = Vector2(0.0f, 800.0f);
+		mGravity = Vector2(0.0f, 2000.0f);
 		mFriction = 100.0f;
 	}
 	Rigidbody::~Rigidbody()
@@ -39,7 +39,7 @@ namespace yeram_client
 		}
 		else
 		{
-			mVelocity += mGravity * Time::DeltaTime();
+			mVelocity += mGravity* Time::DeltaTime();
 		}
 		//중력 가속도 최대속도 제한
 

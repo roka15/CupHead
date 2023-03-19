@@ -9,7 +9,6 @@
 #include "MugMan.h"
 #include "Chalice.h"
 #include "Camera.h"
-#include "Rigidbody.h"
 namespace yeram_client
 {
 	Player::Player() :GameObject()
@@ -18,12 +17,23 @@ namespace yeram_client
 	}
 
 	Player::~Player()
-	{
+	{ 
 	}
 	void Player::Initialize()
 	{
+		Collider* col = AddComponent<Collider>();
+		
+
 		Rigidbody* rig = AddComponent<Rigidbody>();
+		rig->SetMass(1.0f);
+
 		GameObject::Initialize();
+		for (auto c : mCharacters)
+		{
+			if (c.second == nullptr)
+				continue;
+			c.second->Initialize();
+		}
 	}
 	void Player::Update()
 	{
@@ -83,5 +93,14 @@ namespace yeram_client
 	void Player::SetSceneType_Ch(ESceneType _scenetype)
 	{
 		mCharacter->SetSceneType(_scenetype);
+	}
+	void Player::OnCollisionEnter(Collider* other)
+	{
+	}
+	void Player::OnCollisionStay(Collider* other)
+	{
+	}
+	void Player::OnCollisionExit(Collider* other)
+	{
 	}
 }

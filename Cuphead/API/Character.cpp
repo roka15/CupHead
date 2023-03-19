@@ -113,6 +113,9 @@ namespace yeram_client
 	{
 
 	}
+	void Character::duck()
+	{
+	}
 	void Character::death()
 	{
 	}
@@ -129,7 +132,7 @@ namespace yeram_client
 
 	void Character::SetEndJumpInfo()
 	{
-		mbJump = 0;
+ 		mbJump = 0;
 		Animator* ani = mOwner->GetComponent<Animator>();
 		switch (mState)
 		{

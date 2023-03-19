@@ -21,7 +21,7 @@ namespace yeram_client
 			Vector2 mSpeed;
 		};
 		void CreateGround();
-
+		void CreateBackGround();
 	private:
 
 		void GroundUpdate();

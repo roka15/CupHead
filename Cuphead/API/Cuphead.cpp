@@ -18,6 +18,9 @@ namespace yeram_client
 		mState = ECharacterState::Idle;
 		Animator* ani = mOwner->GetComponent<Animator>();
 		ani->Play(L"MapIdle", true);
+		Collider* col = mOwner->GetComponent<Collider>();
+		col->SetCenter(Vector2(-30.0f, -100.0f));
+		col->SetSize(Vector2(60.0f, 90.0f));
 	}
 
 	void Cuphead::Update()
@@ -135,6 +138,9 @@ namespace yeram_client
 	void Cuphead::death()
 	{
 		Character::death();
+	}
+	void Cuphead::duck()
+	{
 	}
 	bool Cuphead::jump_check(ECharacterState _befor_state)
 	{
