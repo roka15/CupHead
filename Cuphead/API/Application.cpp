@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Resources.h"
 #include "Camera.h"
+#include "ColliderManager.h"
 //#include "WindowManager.h"
 namespace yeram_client
 {
@@ -53,6 +54,7 @@ namespace yeram_client
 		SceneManager::Update();
 		Camera::Update();
 		Time::Update();
+		ColliderManager::Update();
 	}
 	void Application::Render()
 	{

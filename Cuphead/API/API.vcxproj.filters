@@ -183,6 +183,10 @@
     <ClInclude Include="Rigidbody.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
+    <ClInclude Include="ColliderManager.h">
+      <Filter>Engine\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -294,6 +298,10 @@
     <ClCompile Include="Rigidbody.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
+    <ClCompile Include="ColliderManager.cpp">
+      <Filter>Engine\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">
