@@ -223,4 +223,19 @@ namespace yeram_client
 			return events->mEndEvent.mEvent;
 		// TODO: 여기에 return 문을 삽입합니다.
 	}
+	std::wstring Animator::GetDirAniKey(const std::wstring& _name, EDirType _type)
+	{
+		std::wstring temp(_name);
+		switch (_type)
+		{
+		case EDirType::LEFT:
+			temp += L"Left";
+			break;
+		case EDirType::RIGHT:
+			temp += L"Right";
+			break;
+		}
+
+		return temp;
+	}
 }

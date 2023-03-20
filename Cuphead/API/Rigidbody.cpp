@@ -8,10 +8,10 @@ namespace yeram_client
 		, mMass(0.0f), mAccelation(Vector2::Zero), mVelocity(Vector2::Zero), mForce(Vector2::Zero)
 	{
 		mLimitedVelocity.x = 200.0f;
-		mLimitedVelocity.y = 2000.0f;
+		mLimitedVelocity.y = 3600.0f;
 
 		mbGround = true;
-		mGravity = Vector2(0.0f, 2000.0f);
+		mGravity = Vector2(0.0f, 3600.0f);
 		mFriction = 100.0f;
 	}
 	Rigidbody::~Rigidbody()
@@ -58,7 +58,7 @@ namespace yeram_client
 		if (mLimitedVelocity.x < sideVelocity.Length())
 		{
 			sideVelocity.Normalize();
-			sideVelocity *= mLimitedVelocity.y;
+			sideVelocity *= mLimitedVelocity.x;
 		}
 		//마찰력 조건 ( 적용된 힘이 없고 , 속도가 0이 아님)
 		if (!(mVelocity == Vector2::Zero))
@@ -88,8 +88,6 @@ namespace yeram_client
 		tf->SetPos(pos);
 
 		mForce.Clear();
-
-
 	}
 	void Rigidbody::Render(HDC hdc)
 	{

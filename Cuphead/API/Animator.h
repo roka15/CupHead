@@ -48,6 +48,8 @@ namespace yeram_client
 		std::function<void()>& GetStartEvent(const std::wstring& _name);
 		std::function<void()>& GetCompleteEvent(const std::wstring& _name);
 		std::function<void()>& GetEndEvent(const std::wstring& _name);
+
+		std::wstring GetDirAniKey(const std::wstring& _name, EDirType _type);
 	private:
 		std::map<std::wstring, Animation*> mAnimations;
 		std::map <std::wstring, Events*> mEvents;

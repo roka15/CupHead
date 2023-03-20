@@ -21,9 +21,10 @@ namespace yeram_client
 		void death()override;
 		void duck()override;
 		bool jump_check(ECharacterState _befor_state)override;
+		bool duck_check();
+		bool dash_check();
 		void PositionUpdate()override;
 		
-		void MoveDown();
 
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;

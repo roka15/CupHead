@@ -149,10 +149,8 @@ namespace yeram_client
 			}
 			mState = ECharacterState::Idle;
 		case ECharacterState::Idle:
-			if (mDirType == EDirType::LEFT)
-				ani->Play(L"IdleLeft", true);
-			else
-				ani->Play(L"IdleRight", true);
+			std::wstring anikey = ani->GetDirAniKey(L"Idle", mDirType);
+			ani->Play(anikey, true);
 			break;
 		}
 	

@@ -19,6 +19,7 @@ namespace yeram_client
 		void SetVelocity(Vector2 _velocity) { mVelocity =_velocity; }
 		
 		Vector2 GetVelocity() { return mVelocity; }
+		bool GetGround() { return mbGround; }
 	private:
 		float mMass;
 		Vector2 mForce;

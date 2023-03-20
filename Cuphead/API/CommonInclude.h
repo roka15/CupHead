@@ -15,6 +15,8 @@
 #include <functional>
 #include <filesystem>
 #include <time.h>
+#include <string>
+
 
 
 #pragma comment(lib,"msimg32.lib")

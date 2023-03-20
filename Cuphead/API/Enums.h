@@ -58,3 +58,11 @@ enum class EWindowType
 	MAX
 
 };
+enum class EDirType
+{
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+	MAX
+};

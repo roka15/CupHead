@@ -5,7 +5,7 @@ namespace core
 {
 	enum class EKeyCode
 	{
-		A, S, D, W, K,
+		A, S, D, W, K,Z,
 		Left,
 		Right,
 		Up,
@@ -13,6 +13,7 @@ namespace core
 		MouseLeft,
 		MouseRight,
 		SPACE,
+		SHIFT,
 		MAX
 	};
 

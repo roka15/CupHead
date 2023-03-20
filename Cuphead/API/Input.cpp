@@ -8,7 +8,7 @@ namespace core
 	float Input::mTime;
 	int ASCII[(UINT)EKeyCode::MAX] =
 	{
-		'A','S','D','W','K',VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_LBUTTON,VK_RBUTTON,VK_SPACE
+		'A','S','D','W','K','Z', VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_LBUTTON,VK_RBUTTON,VK_SPACE,VK_SHIFT
 	};
 	
 	void Input::Initialize()
