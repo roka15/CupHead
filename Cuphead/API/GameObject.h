@@ -35,10 +35,11 @@ namespace yeram_client
 				Scene* cur = SceneManager::GetActiveScene();
 				cur->AddGameObject(obj, _type);
 			}
+			obj->SetLayerType(_type);
 			return obj;
 		}
 		template<typename T>
-		static inline T* Instantiate(Vector2 _pos, GameObject* _parent = nullptr, ELayerType _type = ELayerType::NONE)
+		static inline T* Instantiate(Vector2 _pos, GameObject* _parent = nullptr, ELayerType _type = ELayerType::BackObject)
 		{
 			T* obj = new T();
 			obj->SetParent(_parent);
@@ -53,14 +54,14 @@ namespace yeram_client
 				cur->AddGameObject(obj, _type);
 			}
 			obj->GameObject::GetComponent<Transform>()->SetPos(_pos);
+			obj->SetLayerType(_type);
 			return obj;
 		}
 		template<typename T>
-		static inline T* Instantiate(const std::wstring _name, Vector2 _pos,GameObject* _parent = nullptr, ELayerType _type = ELayerType::NONE)
+		static inline T* Instantiate(const std::wstring _name, Vector2 _pos,GameObject* _parent = nullptr, ELayerType _type = ELayerType::BackObject)
 		{
 			T* obj = new T();
 			obj->SetName(_name);
-			obj->SetParent(_parent);
 			GameObject* obj_parent = obj->GetParent();
 			if (obj_parent != nullptr)
 			{
@@ -72,6 +73,8 @@ namespace yeram_client
 				cur->AddGameObject(obj, _type);
 			}
 			obj->GameObject::GetComponent<Transform>()->SetPos(_pos);
+			obj->SetSpawnPos(_pos);
+			obj->SetLayerType(_type);
 			return obj;
 		}
 		static inline GameObject* Find(std::wstring _name)
@@ -82,11 +85,22 @@ namespace yeram_client
 		}
 		static void Destroy(GameObject* _obj)
 		{
+			if (_obj == nullptr)
+				return;
+			Scene* scene = SceneManager::GetActiveScene();
+			std::vector<GameObject*>& objs = scene->GetGameObjects(_obj->GetLayerType());
+			for (std::vector<GameObject*>::iterator itr = objs.begin(); itr !=objs.end();itr++)
+			{
+				if (*itr == _obj)
+					objs.erase(itr);
+			}
 
+			delete _obj;
+			//object pool 완성시 pool에 반납.
 		}
 		static void Destroy(GameObject* _obj, float _time)
 		{
-
+			
 		}
 
 		template <typename T>
@@ -145,6 +159,8 @@ namespace yeram_client
 		GameObject* GetParent() { return mParent; }
 		GameObject* FindChild(std::wstring _name);
 		GameObject* FindChild(UINT _index);
+		void SetLayerType(ELayerType _type) { mLayerType = _type; }
+		ELayerType GetLayerType() { return mLayerType; }
 		
 		void AddChild(GameObject* _child);
 		UINT GetChildCount() { return mChilds.size(); }
@@ -153,6 +169,8 @@ namespace yeram_client
 		virtual void OnCollisionEnter(class Collider* other);
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
+
+		virtual void MoveObjectSetting(float _speed,EDirType _dir_type=EDirType::LEFT);
 		//자식도 같이 move
 		//void MoveChild(const Vector2& _offset);
 	protected:
@@ -166,6 +184,8 @@ namespace yeram_client
 		std::vector<GameObject*> mChilds;
 		GameObject* mParent;
 		bool mbActive;
+
+		ELayerType mLayerType;
 	};
 }
 

@@ -153,6 +153,10 @@ namespace yeram_client
 
 	}
 
+	void GameObject::MoveObjectSetting(float _speed, EDirType _dir_type)
+	{
+	}
+
 
 
 	GameObject::GameObject()
