@@ -54,12 +54,14 @@ namespace yeram_client
 			gravity.Normalize();
 			gravity *= mLimitedVelocity.y;
 		}
+		mVelocity.y = gravity.y;
 		//가로 속도 제한
 		if (mLimitedVelocity.x < sideVelocity.Length())
 		{
 			sideVelocity.Normalize();
 			sideVelocity *= mLimitedVelocity.x;
 		}
+		mVelocity.x = sideVelocity.x;
 		//마찰력 조건 ( 적용된 힘이 없고 , 속도가 0이 아님)
 		if (!(mVelocity == Vector2::Zero))
 		{

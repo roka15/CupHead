@@ -22,12 +22,16 @@ namespace yeram_client
 		void duck()override;
 		bool jump_check(ECharacterState _befor_state)override;
 		bool duck_check();
-		bool dash_check();
+		EStateType dash_check();
+
+		bool execute_dash(EStateType _type);
 		void PositionUpdate()override;
+		void DashPositionUpdate(EStateType _type)override;
 		
 
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;
 		void moveCompleteEvent()override;
+	
 	};
 }

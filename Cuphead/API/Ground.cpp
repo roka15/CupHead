@@ -37,7 +37,9 @@ void yeram_client::Ground::OnCollisionEnter(Collider* other)
 		return;
 
 	Character* ch =  player->GetActiveCharacter();
-	ch->SetEndJumpInfo();
+	ch->ResetJump();
+	ch->ResetDash();
+	ch->SetNextAniInfo();
 
 	Rigidbody* rigid = player->GetComponent<Rigidbody>();
 	rigid->SetGround(true);

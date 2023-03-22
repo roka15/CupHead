@@ -66,3 +66,9 @@ enum class EDirType
 	DOWN,
 	MAX
 };
+enum class EStateType
+{
+	START,
+	ING,
+	NOTHING,
+};

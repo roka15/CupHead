@@ -130,10 +130,15 @@ namespace yeram_client
 
 	}
 
-	void Character::SetEndJumpInfo()
+	void Character::DashPositionUpdate(EStateType _type)
 	{
- 		mbJump = 0;
+	}
+
+	void Character::SetNextAniInfo()
+	{
+ 		//mJump = 0;
 		Animator* ani = mOwner->GetComponent<Animator>();
+	
 		switch (mState)
 		{
 		case ECharacterState::Move:

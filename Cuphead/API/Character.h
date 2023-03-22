@@ -29,7 +29,9 @@ namespace yeram_client
 		std::wstring GetName() { return mName; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
 		void SetSceneType(ESceneType _scenetype) { mSceneType = _scenetype; }
-		void SetEndJumpInfo();
+		void SetNextAniInfo();
+		void ResetJump() { mJump = 0; }
+		void ResetDash() { mbDash = false; }
 	protected:
 		virtual void move();
 		virtual void idle();
@@ -39,6 +41,7 @@ namespace yeram_client
 		virtual bool jump_check(ECharacterState _befor_state);
 
 		virtual void PositionUpdate();
+		virtual void DashPositionUpdate(EStateType _type);
 
 		
 	protected:
@@ -47,10 +50,11 @@ namespace yeram_client
 		ECharacterState mState;
 		ESceneType mSceneType;
 		EDirType mDirType;
-		int mbJump;
-		bool mbFlyMode;
+		int mJump;
+		bool mbAir;
 		bool mbSit;
-	
+		bool mbDash;
+		float mDashVelocity;
 		//Rigidbody* mRigidBody;
 	};
 }
