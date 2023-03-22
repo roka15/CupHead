@@ -73,7 +73,6 @@ namespace yeram_client
 				cur->AddGameObject(obj, _type);
 			}
 			obj->GameObject::GetComponent<Transform>()->SetPos(_pos);
-			obj->SetSpawnPos(_pos);
 			obj->SetLayerType(_type);
 			return obj;
 		}

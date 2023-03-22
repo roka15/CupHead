@@ -1,7 +1,10 @@
 #pragma once
 #include "CommonInclude.h"
+#include "GameObject.h"
 namespace core
 {
+	class yeram_client::Transform;
+	typedef yeram_client::Transform Transform;
 	template <typename T>
 	class ObjectPool
 	{
@@ -9,7 +12,7 @@ namespace core
 		static void Initialize(size_t _capacity=100);
 		static void Release();
 		static T* Spawn();
-		static void DeSpawn(T* _obj);
+		static void DeSpawn(yeram_client::GameObject* _obj);
 	private:
 		static void UpgradePoolSize();
 		ObjectPool() = delete;
@@ -30,7 +33,8 @@ namespace core
 	inline void ObjectPool<T>::Initialize(size_t _capacity)
 	{
 		mcapacity = _capacity;
-		for (int i = 0; i < std::min(mcapacity,mlimit_capacity); i++)
+		int temp_min = mcapacity<mlimit_capacity ? mcapacity : mlimit_capacity;
+		for (int i = 0; i < temp_min; i++)
 			mpools.push(new T());
 	}
 	template<typename T>
@@ -57,14 +61,17 @@ namespace core
 		return obj;
 	}
 	template<typename T>
-	inline void ObjectPool<T>::DeSpawn(T* _obj)
+	inline void ObjectPool<T>::DeSpawn(yeram_client::GameObject* _obj)
 	{
 		if (_obj == nullptr)
 			return;
+		T* obj = dynamic_cast<T*>(_obj);
+		if (obj == nullptr)
+			return;
 
-		_obj->SetActive(false);
-		_obj->GetComponent<Transform>()->SetPos(Vector2::Zero());
-		mpools.push(_obj);
+		obj->SetActive(false);
+		obj->GetComponent<Transform>()->SetPos(Vector2::Zero());
+		mpools.push(obj);
 		return obj;
 	}
 	template<typename T>
