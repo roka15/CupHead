@@ -18,7 +18,7 @@ namespace yeram_client
 
 		void SetImage(const std::wstring& _filename,const std::wstring& _path);
 		void SetClickEvent(UIFunc _func);
-	
+		virtual void InitComponent()override;
 	private:
 		UIFunc mClickEvents;
 	};

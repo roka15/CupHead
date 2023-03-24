@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include <string>
 namespace yeram_client
 {
 	class MainMenuScene:public Scene
@@ -7,6 +8,7 @@ namespace yeram_client
 	public:
 		MainMenuScene();
 		~MainMenuScene();
+		MainMenuScene(std::wstring _name);
 		virtual void Initialize()override;
 		virtual void Update()override;
 		virtual void Render(HDC hdc)override;

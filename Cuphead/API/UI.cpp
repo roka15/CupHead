@@ -37,5 +37,22 @@ namespace yeram_client
 	{
 		mClickEvents = std::move(_func);
 	}
+	void UI::InitComponent()
+	{
+		std::vector<Component*> comps = GetComponents();
+
+		for (int i = 0; i < comps.size(); i++)
+		{
+			if (comps[i] == nullptr)
+				continue;
+			if (dynamic_cast<Transform*>(comps[i]) != nullptr)
+				continue;
+			if (dynamic_cast<SpriteRenderer*>(comps[i]) != nullptr)
+				continue;
+			comps[i]->Release();
+			delete comps[i];
+			comps[i] = nullptr;
+		}
+	}
 }
 

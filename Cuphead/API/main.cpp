@@ -28,7 +28,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	srand(time(NULL));
 
-	//_CrtSetBreakAlloc(12947);
+	//_CrtSetBreakAlloc(227);
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	UNREFERENCED_PARAMETER(hPrevInstance);

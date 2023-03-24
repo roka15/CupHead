@@ -73,3 +73,23 @@ void yeram_client::Ground::OnCollisionStay(Collider* other)
 void yeram_client::Ground::OnCollisionExit(Collider* other)
 {
 }
+
+void yeram_client::Ground::InitComponent()
+{
+	std::vector<Component*> comps = GetComponents();
+
+	for (int i = 0; i < comps.size(); i++)
+	{
+		if (comps[i] == nullptr)
+			continue;
+		if (dynamic_cast<Transform*>(comps[i]) != nullptr)
+			continue;
+		if (dynamic_cast<Collider*>(comps[i]) != nullptr)
+			continue;
+		comps[i]->Release();
+		delete comps[i];
+		comps[i] = nullptr;
+	}
+}
+
+

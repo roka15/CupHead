@@ -7,6 +7,7 @@ namespace yeram_client
 	{
 	public:
 		PlayMapScene();
+		PlayMapScene(std::wstring _name);
 		~PlayMapScene();
 		virtual void Initialize()override;
 		virtual void Update()override;

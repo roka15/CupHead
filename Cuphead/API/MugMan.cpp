@@ -40,7 +40,7 @@ void yeram_client::MugMan::death()
 {
 }
 
-void yeram_client::MugMan::Create(ESceneType _type)
+void yeram_client::MugMan::Create()
 {
 }
 

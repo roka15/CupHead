@@ -1,6 +1,5 @@
 #pragma once
 #include "Entity.h"
-
 namespace yeram_client
 {
 	class Layer;
@@ -21,10 +20,10 @@ namespace yeram_client
 
 	   void ChagePosGameObjects(const Vector2& _offset);
 	   void ChageScaleGameObjects(const Vector2& _scale);
-	   GameObject* FindObject(std::wstring _name);
-	   void AddGameObject(GameObject* obj, ELayerType layer);
+	   std::shared_ptr<GameObject> FindObject(std::wstring _name);
+	   void AddGameObject(std::shared_ptr<GameObject> obj, ELayerType layer);
 	   const ESceneType& GetSceneType() { return mCurType; }
-	   std::vector<GameObject*>& GetGameObjects(ELayerType _layer_type);
+	   std::vector<std::shared_ptr<GameObject>>& GetGameObjects(ELayerType _layer_type);
 	   bool UseingLayer(ELayerType _layer_type);
 	protected:
 		std::vector<Layer*> mLayers;

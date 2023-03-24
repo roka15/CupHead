@@ -15,6 +15,8 @@ namespace yeram_client
 		virtual void OnCollisionEnter(class Collider* other);
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
+
+		virtual void InitComponent()override;
 	private:
 		class Collider* mCollider;
 	};

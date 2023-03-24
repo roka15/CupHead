@@ -14,6 +14,10 @@ yeram_client::Transform::~Transform()
 
 void yeram_client::Transform::Initialize()
 {
+	mbActive = false;
+	mPos=Vector2::Zero;
+	mScale=Vector2::One;
+	mSize=Vector2::Zero;
 }
 
 void yeram_client::Transform::Update()

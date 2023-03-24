@@ -9,13 +9,17 @@
 #include "Animator.h"
 #include "Input.h"
 #include "Time.h"
-
+#include "ObjectPool.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
 	PlayMapScene::PlayMapScene()
 	{
 		mCurType = ESceneType::PlayMap;
+	}
+	PlayMapScene::PlayMapScene(std::wstring _name)
+	{
+		SetName(_name);
 	}
 	PlayMapScene::~PlayMapScene()
 	{
@@ -25,22 +29,15 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::Player] = new Layer();
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
-		Vector2 pos = application.GetWindowSize() / 2.0f;
-		Player* player = GameObject::Instantiate<Player>(L"Player", Vector2{ pos.x,pos.y }, nullptr, ELayerType::Player);
-		{
-			player->CreateCharacter(ESceneType::BossMedusa, EPlayerType::MsChalice);
-			player->CreateCharacter(ESceneType::PlayMap, EPlayerType::Cuphead);
-		}
-		CreateWorldMap(pos);
-		Scene::Initialize();
+		//OnEnter();
 
-		player->ChangeCharacter(EPlayerType::Cuphead);
 	}
 	void PlayMapScene::Update()
 	{
 
 		if (core::Input::GetKeyDown(core::EKeyCode::MouseRight))
 		{
+			SceneManager::LoadScene(ESceneType::BossMedusa);
 			SceneManager::OpenLodingScreen();
 		}
 		//화면 확대 축소
@@ -64,42 +61,37 @@ namespace yeram_client
 		Scene::Release();
 	}
 	void PlayMapScene::OnEnter()
-	{   
+	{
 		Vector2 pos = application.GetWindowSize() / 2.0f;
-		Player* player = dynamic_cast<Player*>(mLayers[(UINT)ELayerType::Player]->FindObject(L"Player"));
+		Player* player = dynamic_cast<Player*>(mLayers[(UINT)ELayerType::Player]->FindObject(L"Player").get());
 		if (player != nullptr)
 		{
+			player->SetActive(true);
 			Camera::SetTarget(player);
 			player->ChangeCharacter(EPlayerType::Cuphead);
 			Transform* tf = player->GetComponent<Transform>();
 			tf->SetPos(Vector2{ pos.x,pos.y });
 		}
+
+		CreateWorldMap(pos);
 		//Camera::PlayLoad();
 		Scene::OnEnter();
 	}
 	void PlayMapScene::OnExit()
 	{
 		//switch 로 로드할 맵 타입에 따라 load 달리하기
-		SceneManager::LoadScene(ESceneType::BossMedusa);
-
 		Camera::SetTarget(nullptr);
-
-		Player* player = dynamic_cast<Player*>(mLayers[(UINT)ELayerType::Player]->FindObject(L"Player"));
-		if (player != nullptr)
-		{
-			player->ChangeCharacter(EPlayerType::MsChalice);
-			player->SetSceneType_Ch(ESceneType::BossMedusa);
-			Transform* tf = player->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 200.0f,300.0f });
-		}
 		Scene::OnExit();
 	}
 	void PlayMapScene::CreateWorldMap(const Vector2& _startpos)
 	{
 		Vector2 size = application.GetWindowSize();
 		//temp map
-		Rectangle* ocean = GameObject::Instantiate<Rectangle>(L"MapBackGround", Vector2{ 0l,0l }, nullptr, ELayerType::BackObject);
+		std::shared_ptr<Rectangle> ocean = core::ObjectPool<Rectangle>::Spawn();
 		{
+			ocean->SetName(L"MapBackGround");
+			AddGameObject(ocean, ELayerType::BackObject);
+
 			Transform* tf = ocean->GetComponent<Transform>();
 			tf->SetSize(Vector2{ (long)size.x,(long)size.y + 200l });
 
@@ -124,8 +116,13 @@ namespace yeram_client
 	}
 	const Vector2& PlayMapScene::CreateWroldGround(const std::wstring _name, const Vector2& _pos, GameObject* _parent, ELayerType _type, const std::wstring _image_path)
 	{
-		Rectangle* map = GameObject::Instantiate<Rectangle>(_name, _pos, _parent, _type);
+		std::shared_ptr<Rectangle> map = core::ObjectPool<Rectangle>::Spawn();
 		{
+			map->SetName(_name);
+			map->SetParent(_parent);
+			AddGameObject(map, _type);
+			Transform* tf = map->GetComponent<Transform>();
+			tf->SetPos(_pos);
 			SpriteRenderer* render = map->AddComponent<SpriteRenderer>();
 			render->SetImage(map->GetName().c_str()
 				, _image_path);
@@ -136,36 +133,56 @@ namespace yeram_client
 	}
 	void  PlayMapScene::CreateMapBL(const Vector2& _original_pos)
 	{
-		Rectangle* mapbl_obj_doorl = GameObject::Instantiate<Rectangle>(L"MapBL_Door1_L", Vector2{ _original_pos.x + 377l,_original_pos.y + 79l }, nullptr, ELayerType::BackObject);
+		std::shared_ptr<Rectangle> mapbl_obj_doorl = core::ObjectPool<Rectangle>::Spawn();
 		{
+			mapbl_obj_doorl->SetName(L"MapBL_Door1_L");
+			AddGameObject(mapbl_obj_doorl, ELayerType::BackObject);
+			Transform* tf = mapbl_obj_doorl->GetComponent<Transform>();
+			tf->SetPos(Vector2{ _original_pos.x + 377l,_original_pos.y + 79l });
 			SpriteRenderer* render = mapbl_obj_doorl->AddComponent<SpriteRenderer>();
 			render->SetImage(mapbl_obj_doorl->GetName().c_str()
 				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03_obj1_bl.bmp");
 			render->SetRenderType(ERenderType::TransParentBlt);
 		}
-		Rectangle* mapbl_obj_doorr = GameObject::Instantiate<Rectangle>(L"MapBL_Door1_R", Vector2{ _original_pos.x + 377l,_original_pos.y + 79l }, nullptr, ELayerType::FrontObject);
+		std::shared_ptr<Rectangle> mapbl_obj_doorr = core::ObjectPool<Rectangle>::Spawn();
 		{
+			mapbl_obj_doorr->SetName(L"MapBL_Door1_R");
+			AddGameObject(mapbl_obj_doorr, ELayerType::FrontObject);
+			Transform* tf = mapbl_obj_doorr->GetComponent<Transform>();
+			tf->SetPos(Vector2{ _original_pos.x + 377l,_original_pos.y + 79l });
 			SpriteRenderer* render = mapbl_obj_doorr->AddComponent<SpriteRenderer>();
 			render->SetImage(mapbl_obj_doorr->GetName().c_str()
 				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03_obj1_br.bmp");
 			render->SetRenderType(ERenderType::TransParentBlt);
 		}
-		Rectangle* mapbl_obj_dooru = GameObject::Instantiate<Rectangle>(L"MapBL_Door1_U", Vector2{ _original_pos.x + 377l,_original_pos.y + 79l }, nullptr, ELayerType::FrontObject);
+		std::shared_ptr<Rectangle> mapbl_obj_dooru = core::ObjectPool<Rectangle>::Spawn();
 		{
+			mapbl_obj_dooru->SetName(L"MapBL_Door1_U");
+			AddGameObject(mapbl_obj_dooru, ELayerType::FrontObject);
+			Transform* tf = mapbl_obj_dooru->GetComponent<Transform>();
+			tf->SetPos(Vector2{ _original_pos.x + 377l,_original_pos.y + 79l });
 			SpriteRenderer* render = mapbl_obj_dooru->AddComponent<SpriteRenderer>();
 			render->SetImage(mapbl_obj_dooru->GetName().c_str()
 				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03_obj1_u.bmp");
 			render->SetRenderType(ERenderType::TransParentBlt);
 		}
-		Rectangle* mapbl_redbuildr = GameObject::Instantiate<Rectangle>(L"MapBL_RedBulid_R", Vector2{ _original_pos.x + 910l,_original_pos.y + 400l }, nullptr, ELayerType::FrontObject);
+		std::shared_ptr<Rectangle> mapbl_redbuildr = core::ObjectPool<Rectangle>::Spawn();
 		{
+			mapbl_redbuildr->SetName(L"MapBL_RedBulid_R");
+			AddGameObject(mapbl_redbuildr, ELayerType::FrontObject);
+			Transform* tf = mapbl_redbuildr->GetComponent<Transform>();
+			tf->SetPos(Vector2{ _original_pos.x + 910l,_original_pos.y + 400l });
 			SpriteRenderer* render = mapbl_redbuildr->AddComponent<SpriteRenderer>();
 			render->SetImage(mapbl_redbuildr->GetName().c_str()
 				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_top_cornerBuilding01.bmp");
 			render->SetRenderType(ERenderType::TransParentBlt);
 		}
-		Rectangle* mapbl_buliding = GameObject::Instantiate<Rectangle>(L"MapBL_Bulidings", Vector2{ _original_pos.x + 1020l,_original_pos.y + 800l }, nullptr, ELayerType::BackObject);
+		std::shared_ptr<Rectangle> mapbl_buliding = core::ObjectPool<Rectangle>::Spawn();
 		{
+			mapbl_buliding->SetName(L"MapBL_Bulidings");
+			AddGameObject(mapbl_buliding, ELayerType::BackObject);
+			Transform* tf = mapbl_buliding->GetComponent<Transform>();
+			tf->SetPos(Vector2{ _original_pos.x + 1020l,_original_pos.y + 800l });
 			Animator* ani = mapbl_buliding->AddComponent<Animator>();
 			std::wstring key = ani->CreateAnimations(L"..\\Resources\\MapObject\\World3\\Bottom\\Left\\YBuliding", Vector2::Zero, 0.5f);
 			ani->Play(key, true);

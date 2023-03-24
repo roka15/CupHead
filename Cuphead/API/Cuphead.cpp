@@ -25,14 +25,6 @@ namespace yeram_client
 
 	void Cuphead::Update()
 	{
-		
-		switch (mSceneType)
-		{
-		case ESceneType::MainMenu:
-			break;
-		case ESceneType::PlayMap:
-		case ESceneType::BossMedusa:
-		{
 			switch (mState)
 			{
 			case ECharacterState::Idle:
@@ -48,10 +40,6 @@ namespace yeram_client
 				shoot();
 				break;
 			}
-		}
-		break;
-		}
-
 	}
 
 	void Cuphead::Render(HDC hdc)
@@ -64,10 +52,8 @@ namespace yeram_client
 
 	
 
-	void Cuphead::Create(ESceneType _type)
+	void Cuphead::Create()
 	{
-		mSceneType = _type;
-
 		Transform* tf = mOwner->GetComponent<Transform>();
 	
 		mState = ECharacterState::Idle;

@@ -28,13 +28,6 @@ namespace yeram_client
 
 	void Chalice::Update()
 	{
-		switch (mSceneType)
-		{
-		case ESceneType::MainMenu:
-			break;
-			//case ESceneType::PlayMap:
-		case ESceneType::BossMedusa:
-		{
 			switch (mState)
 			{
 			case ECharacterState::Idle:
@@ -53,10 +46,6 @@ namespace yeram_client
 				duck();
 				break;
 			}
-		}
-		break;
-		}
-
 	}
 
 	void Chalice::Render(HDC hdc)
@@ -396,10 +385,8 @@ namespace yeram_client
 		transform->SetPos(pos + offset);
 	}
 
-	void Chalice::Create(ESceneType _type)
+	void Chalice::Create()
 	{
-		mSceneType = _type;
-
 		Transform* tf = mOwner->GetComponent<Transform>();
 
 		mState = ECharacterState::Idle;

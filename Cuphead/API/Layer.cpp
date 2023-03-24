@@ -11,7 +11,7 @@ namespace yeram_client
 	}
 	void Layer::Initialize()
 	{
-		for (GameObject* obj : mObjs)
+		for (std::shared_ptr<GameObject> obj : mObjs)
 		{
 			if (obj == nullptr)
 				continue;
@@ -20,7 +20,7 @@ namespace yeram_client
 	}
 	void Layer::Update()
 	{
-		for (GameObject* obj : mObjs)
+		for (std::shared_ptr<GameObject> obj : mObjs)
 		{
 			if (obj == nullptr)
 				continue;
@@ -31,7 +31,7 @@ namespace yeram_client
 	}
 	void Layer::Render(HDC hdc)
 	{
-		for (GameObject* obj : mObjs)
+		for (std::shared_ptr<GameObject> obj : mObjs)
 		{
 			if (obj == nullptr)
 				continue;
@@ -42,16 +42,16 @@ namespace yeram_client
 	}
 	void Layer::Release()
 	{
-		for (GameObject* obj : mObjs)
+		for (std::shared_ptr<GameObject>& obj : mObjs)
 		{
 			if (obj == nullptr)
 				continue;
-			obj->Release();
-			delete obj;
-			obj = nullptr;
+			obj.reset();
 		}
+		mObjs.clear();
+		mObjs.~vector();
 	}
-	GameObject* Layer::FindObject(std::wstring _name)
+	std::shared_ptr<GameObject> Layer::FindObject(std::wstring _name)
 	{
 		for (auto obj : mObjs)
 		{
@@ -60,7 +60,7 @@ namespace yeram_client
 		}
 		return nullptr;
 	}
-	std::vector<GameObject*>& Layer::GetGameObjectList()
+	std::vector<std::shared_ptr<GameObject>>& Layer::GetGameObjectList()
 	{
 		return mObjs;
 	}
@@ -95,7 +95,7 @@ namespace yeram_client
 			}
 		}
 	}
-	void Layer::AddGameObject(GameObject* obj)
+	void Layer::AddGameObject(std::shared_ptr<GameObject> obj)
 	{
 		mObjs.push_back(obj);
 	}

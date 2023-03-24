@@ -90,9 +90,15 @@ namespace yeram_client
 		UINT width = 0;
 		UINT height = 0;
 		UINT fileCount = 0;
-
+	
 		std::filesystem::path fs(_path);
 		std::vector<Image*> images = {};
+
+		std::wstring key = fs.parent_path().filename();
+		key += fs.filename();
+		if (FindAnimation(key) != nullptr)
+			return key;
+
 		for (auto& itr : std::filesystem::recursive_directory_iterator(_path))
 		{
 			const std::wstring ext = itr.path().extension();
@@ -114,9 +120,6 @@ namespace yeram_client
 			fileCount++;
 		}
 
-
-		std::wstring key = fs.parent_path().filename();
-		key += fs.filename();
 		mSpriteSheet = Image::Create(key, width * fileCount, height);
 
 		int index = 0;

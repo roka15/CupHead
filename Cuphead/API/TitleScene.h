@@ -6,6 +6,7 @@ namespace yeram_client
 	{
 	public:
 		TitleScene();
+		TitleScene(std::wstring _name);
 		~TitleScene();
 		virtual void Initialize()override;
 		virtual void Update()override;

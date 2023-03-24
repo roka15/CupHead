@@ -5,8 +5,12 @@
 #include "MedusaScene.h"
 #include "Camera.h"
 #include "Rectangle.h"
+#include "UI.h"
+#include "Player.h"
+#include "Ground.h"
 #include "Animator.h"
 #include "Time.h"
+#include "ObjectPool.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -17,10 +21,18 @@ namespace yeram_client
 	void SceneManager::Initalize()
 	{
 		mScenes.resize((UINT)ESceneType::MAX);
-		mScenes[(UINT)ESceneType::Title] = new TitleScene();
-		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene();
-		mScenes[(UINT)ESceneType::PlayMap] = new PlayMapScene();
-		mScenes[(UINT)ESceneType::BossMedusa] = new MedusaScene();
+		mScenes[(UINT)ESceneType::Title] = new TitleScene(L"Title");
+		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene(L"Main");
+		mScenes[(UINT)ESceneType::PlayMap] = new PlayMapScene(L"Play");
+		mScenes[(UINT)ESceneType::BossMedusa] = new MedusaScene(L"Medusa");
+		
+		
+
+		core::ObjectPool<Rectangle>::Initialize(300);
+		core::ObjectPool<UI>::Initialize(200);
+		core::ObjectPool<Player>::Initialize(1, 1);
+		core::ObjectPool<Ground>::Initialize(100, 100);
+
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -46,7 +58,7 @@ namespace yeram_client
 			scene->Initialize();
 		}
 		mActiveScene = mScenes[(UINT)ESceneType::Title];
-
+		mActiveScene->OnEnter();
 
 
 		mLoadingScreen = new GameObject();
@@ -60,19 +72,16 @@ namespace yeram_client
 		(
 			[]()->void
 		{
-			Scene* scene = SceneManager::GetActiveScene();
-			scene->OnExit();
 			CloseLodingScreen();
 		});
 
 		key = ani->CreateAnimations(L"..\\Resources\\Menu_Screen\\Loading\\Close", Vector2::Zero, 0.1f, true);
-		ani->Play(key, false);
+		//ani->Play(key, false);
+
 		ani->GetCompleteEvent(key) = std::bind
 		(
 			[]()->void
 		{
-			Scene* scene = SceneManager::GetActiveScene();
-			scene->OnEnter();
 			mLoadingScreen->SetActive(false);
 			mbLoadScreenFlag = false;
 		});
@@ -108,6 +117,12 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
+
+		core::ObjectPool<Rectangle>::Release();
+		core::ObjectPool<UI>::Release();
+		core::ObjectPool<Player>::Release();
+		core::ObjectPool<Ground>::Release();
+
 		mLoadingScreen->Release();
 		delete mLoadingScreen;
 	}
@@ -116,10 +131,10 @@ namespace yeram_client
 	{
 		Camera::Clear();
 		std::queue<GameObject*> temp_queue;
-
-		//mActiveScene->OnExit();
+		Scene* cur = mActiveScene;
 		mActiveScene = mScenes[(UINT)_type];
-		//mActiveScene->OnEnter();
+		cur->OnExit();
+		mActiveScene->OnEnter();
 	}
 
 	Scene* SceneManager::GetActiveScene()
@@ -127,7 +142,7 @@ namespace yeram_client
 		return mActiveScene;
 	}
 
-	GameObject* SceneManager::FindObject(std::wstring _name)
+	std::shared_ptr<GameObject> SceneManager::FindObject(std::wstring _name)
 	{
 		return mActiveScene->FindObject(_name);
 	}

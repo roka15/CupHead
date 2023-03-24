@@ -22,13 +22,12 @@ namespace yeram_client
 		virtual void Render(HDC hdc)=0;
 		virtual void Release()=0;
 	public:
-		virtual void Create(ESceneType _type) = 0;
+		virtual void Create() = 0;
 		virtual void idleCompleteEvent() = 0;
 		virtual void moveStartEvent() = 0;
 		virtual void moveCompleteEvent() = 0;
 		std::wstring GetName() { return mName; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
-		void SetSceneType(ESceneType _scenetype) { mSceneType = _scenetype; }
 		void SetNextAniInfo();
 		void ResetJump() { mJump = 0; }
 		void ResetDash() { mbDash = false; }
@@ -48,7 +47,6 @@ namespace yeram_client
 		std::wstring mName;
 		GameObject* mOwner;
 		ECharacterState mState;
-		ESceneType mSceneType;
 		EDirType mDirType;
 		int mJump;
 		bool mbAir;

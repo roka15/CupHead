@@ -61,16 +61,24 @@ namespace yeram_client
 		{
 			Scene* active = SceneManager::GetActiveScene();
 			Layer* active_layer = active->mLayers[(UINT)ELayerType::Player];
-			std::vector<GameObject*>& recv_obj = active_layer->GetGameObjectList();
+			//player 정보는 다른씬에 옮겨준다.
+			std::vector<std::shared_ptr<GameObject>>& recv_obj = active_layer->GetGameObjectList();
 			if (recv_obj.size() == 0)
 			{
-				std::vector<GameObject*>& send_obj = cur_layer->GetGameObjectList();
+				std::vector<std::shared_ptr<GameObject>>& send_obj = cur_layer->GetGameObjectList();
 				for (auto player_obj : send_obj)
 				{
 					recv_obj.push_back(player_obj);
 				}
 				send_obj.clear();
 			}
+		}
+		//해당 씬에서 사용한 오브젝트들 반납.
+		for (auto layer : mLayers)
+		{
+			if (layer == nullptr)
+				continue;
+			layer->Release();
 		}
 	}
 
@@ -94,23 +102,24 @@ namespace yeram_client
 		}
 	}
 
-	GameObject* Scene::FindObject(std::wstring _name)
+	std::shared_ptr<GameObject> Scene::FindObject(std::wstring _name)
 	{
 		for (auto layer : mLayers)
 		{
-			GameObject* obj=layer->FindObject(_name);
+			std::shared_ptr<GameObject> obj=layer->FindObject(_name);
 			if (obj != nullptr)
 				return obj;
 		}
 		return nullptr;
 	}
 
-	void Scene::AddGameObject(GameObject* obj, ELayerType layer)
+	void Scene::AddGameObject(std::shared_ptr<GameObject> obj, ELayerType layer)
 	{
 		mLayers[(UINT)layer]->AddGameObject(obj);
+		obj->SetLayerType(layer);
 	}
 
-	std::vector<GameObject*>& Scene::GetGameObjects(ELayerType _layer_type)
+	std::vector<std::shared_ptr<GameObject>>& Scene::GetGameObjects(ELayerType _layer_type)
 	{
 		return mLayers[(UINT)_layer_type]->GetGameObjectList();
 	}

@@ -20,47 +20,40 @@ namespace yeram_client
 		Animator* ani = mOwner->GetComponent<Animator>();
 
 
-		switch (mSceneType)
+		if (core::Input::GetKeyUp(core::EKeyCode::A)
+			|| core::Input::GetKeyUp(core::EKeyCode::D)
+			|| core::Input::GetKeyUp(core::EKeyCode::W)
+			|| core::Input::GetKeyUp(core::EKeyCode::S))
 		{
-			//case 맵 일때.
-		case ESceneType::PlayMap:
-			if (core::Input::GetKeyUp(core::EKeyCode::A)
-				|| core::Input::GetKeyUp(core::EKeyCode::D)
-				|| core::Input::GetKeyUp(core::EKeyCode::W)
-				|| core::Input::GetKeyUp(core::EKeyCode::S))
-			{
-				mState = ECharacterState::Idle;
-				ani->Play(L"MapIdle", true);
-			}
-
-			//rigid 이동
-			//trans 이동
-			if (core::Input::GetKey(core::EKeyCode::A))
-			{
-				//rig->AddForce(Vector2(-200.0f, 0.0f));
-				offset.x -= 200.0f * Time::DeltaTime();
-			}
-			if (core::Input::GetKey(core::EKeyCode::D))
-			{
-				//rig->AddForce(Vector2(+200.0f, 0.0f));
-				offset.x += 200.0f * Time::DeltaTime();
-			}
-			if (core::Input::GetKey(core::EKeyCode::W))
-			{
-				//rig->AddForce(Vector2(0.0f, -200.0f));
-				offset.y -= 200.0f * Time::DeltaTime();
-			}
-			if (core::Input::GetKey(core::EKeyCode::S))
-			{
-				//rig->AddForce(Vector2(0.0f, +200.0f));
-				offset.y += 200.0f * Time::DeltaTime();
-			}
-
-			transform->SetPos(pos + offset);
-			SceneManager::ChagePosGameObjects(offset);
-			break;
+			mState = ECharacterState::Idle;
+			ani->Play(L"MapIdle", true);
 		}
-		//case 게임중일때
+
+		//rigid 이동
+		//trans 이동
+		if (core::Input::GetKey(core::EKeyCode::A))
+		{
+			//rig->AddForce(Vector2(-200.0f, 0.0f));
+			offset.x -= 200.0f * Time::DeltaTime();
+		}
+		if (core::Input::GetKey(core::EKeyCode::D))
+		{
+			//rig->AddForce(Vector2(+200.0f, 0.0f));
+			offset.x += 200.0f * Time::DeltaTime();
+		}
+		if (core::Input::GetKey(core::EKeyCode::W))
+		{
+			//rig->AddForce(Vector2(0.0f, -200.0f));
+			offset.y -= 200.0f * Time::DeltaTime();
+		}
+		if (core::Input::GetKey(core::EKeyCode::S))
+		{
+			//rig->AddForce(Vector2(0.0f, +200.0f));
+			offset.y += 200.0f * Time::DeltaTime();
+		}
+
+		transform->SetPos(pos + offset);
+		SceneManager::ChagePosGameObjects(offset);
 	}
 	void Character::idle()
 	{
@@ -72,27 +65,25 @@ namespace yeram_client
 			|| core::Input::GetKeyDown(core::EKeyCode::W)
 			|| core::Input::GetKeyDown(core::EKeyCode::S))
 		{
-			switch (mSceneType)
+
+
+			if (core::Input::GetKeyDown(core::EKeyCode::A))
 			{
-				//case 맵 일때.
-			case ESceneType::PlayMap:
-				if (core::Input::GetKeyDown(core::EKeyCode::A))
-				{
-					ani_name = L"MapFowardLeft";
-				}
-				if (core::Input::GetKeyDown(core::EKeyCode::D))
-				{
-					ani_name = L"MapFowardRight";
-				}
-				if (core::Input::GetKeyDown(core::EKeyCode::W))
-				{
-					ani_name = L"MapFowardUp";
-				}
-				if (core::Input::GetKeyDown(core::EKeyCode::S))
-				{
-					ani_name = L"MapFowardDown";
-				}
+				ani_name = L"MapFowardLeft";
 			}
+			if (core::Input::GetKeyDown(core::EKeyCode::D))
+			{
+				ani_name = L"MapFowardRight";
+			}
+			if (core::Input::GetKeyDown(core::EKeyCode::W))
+			{
+				ani_name = L"MapFowardUp";
+			}
+			if (core::Input::GetKeyDown(core::EKeyCode::S))
+			{
+				ani_name = L"MapFowardDown";
+			}
+
 			if (ani_name.size() > 0)
 			{
 				ani->Play(ani_name, true);
@@ -136,9 +127,9 @@ namespace yeram_client
 
 	void Character::SetNextAniInfo()
 	{
- 		//mJump = 0;
+		//mJump = 0;
 		Animator* ani = mOwner->GetComponent<Animator>();
-	
+
 		switch (mState)
 		{
 		case ECharacterState::Move:
@@ -158,9 +149,9 @@ namespace yeram_client
 			ani->Play(anikey, true);
 			break;
 		}
-	
-		
-		
+
+
+
 	}
 
 }

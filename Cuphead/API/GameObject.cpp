@@ -17,7 +17,7 @@ namespace yeram_client
 			com->Initialize();
 		}
 
-		for (GameObject* child : mChilds)
+		for (std::shared_ptr<GameObject> child : mChilds)
 		{
 			if (child == nullptr)
 				continue;
@@ -39,7 +39,7 @@ namespace yeram_client
 			com->Update();
 		}
 
-		for (GameObject* child : mChilds)
+		for (std::shared_ptr<GameObject> child : mChilds)
 		{
 			if (child == nullptr)
 				continue;
@@ -61,7 +61,7 @@ namespace yeram_client
 			com->Render(hdc);
 		}
 		
-		for (GameObject* child : mChilds)
+		for (std::shared_ptr<GameObject> child : mChilds)
 		{
 			if (child == nullptr)
 				continue;
@@ -72,6 +72,7 @@ namespace yeram_client
 	}
 	void GameObject::Release()
 	{
+		int i = 0;
 		for (Component* com : mComponents)
 		{
 			if (com == nullptr)
@@ -80,19 +81,35 @@ namespace yeram_client
 			delete com;
 			com = nullptr;
 		}
+		mComponents.clear();
+		mComponents.~vector();
 
-		for (GameObject* child : mChilds)
+		for (std::shared_ptr<GameObject> child : mChilds)
 		{
 			if (child == nullptr)
 				continue;
-			child->Release();
-			delete child;
-			child = nullptr;
+			child.reset();
 		}
-
+		mChilds.clear();
+		mChilds.~vector();
 	}
 
-	GameObject* GameObject::FindChild(std::wstring _name)
+	void GameObject::InitComponent()
+	{
+		for (int i = 0; i < mComponents.size(); i++)
+		{
+			if (mComponents[i] == nullptr)
+				continue;
+			if (dynamic_cast<Transform*>(mComponents[i]) != nullptr)
+				continue;
+			mComponents[i]->Release();
+			delete mComponents[i];
+			mComponents[i] = nullptr;
+		}
+	}
+
+
+	std::shared_ptr<GameObject> GameObject::FindChild(std::wstring _name)
 	{
 		for (auto child : mChilds)
 		{
@@ -106,7 +123,7 @@ namespace yeram_client
 		return nullptr;
 	}
 
-	GameObject* GameObject::FindChild(UINT _index)
+	std::shared_ptr<GameObject> GameObject::FindChild(UINT _index)
 	{
 		UINT max = GetChildCount();
 		if (max <= _index || 0 > _index)
@@ -114,23 +131,21 @@ namespace yeram_client
 		return mChilds[_index];
 	}
 
-	void GameObject::AddChild(GameObject* _child)
+	void GameObject::AddChild(std::shared_ptr<GameObject> _child)
 	{
 		mChilds.push_back(_child);
 	}
 
-	void GameObject::RemoveChild(GameObject* _child)
+	void GameObject::RemoveChild(std::shared_ptr<GameObject> _child)
 	{
 		int i = 0;
-		for (std::vector<GameObject*>::iterator i = mChilds.begin();
+		for (std::vector<std::shared_ptr<GameObject>>::iterator i = mChilds.begin();
 			i!=mChilds.end();)
 		{
-			GameObject* obj = (*i);
+			std::shared_ptr<GameObject> obj = (*i);
 			if (obj->GetName() == _child->GetName())
 			{
-				obj->Release();
-				delete obj;
-				obj = nullptr;
+				obj.reset();
 				mChilds.erase(i);
 				return;
 			}

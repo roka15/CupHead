@@ -13,7 +13,7 @@ namespace yeram_client
 		void Render(HDC hdc)override;
 		void Release()override;
 
-		void Create(ESceneType _type)override;
+		void Create()override;
 
 	private:
 		void move()override;

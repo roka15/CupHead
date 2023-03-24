@@ -6,6 +6,7 @@ namespace yeram_client
 	{
 	public:
 		MedusaScene();
+		MedusaScene(std::wstring _name);
 		~MedusaScene();
 		virtual void Initialize()override;
 		virtual void Update()override;
@@ -26,9 +27,10 @@ namespace yeram_client
 
 		void GroundUpdate();
 		bool CheckOutMap(GameObject* _obj);
+		void GroundInfoRelease();
 
 	private:
-		std::map<std::wstring, std::queue<GameObject*>> mGroundsInfo;
+		std::map<std::wstring, std::queue<std::shared_ptr<GameObject>>> mGroundsInfo;
 		std::map<std::wstring, GroundInfo> mGroundInfos;
 		bool mYFlag;
 		float mTime;

@@ -1,14 +1,14 @@
 #pragma once
-#include "Engine.h"
 #include "Component.h"
 #include "Image.h"
 #include "SceneManager.h"
 #include "Transform.h"
 #include "Rigidbody.h"
 #include "Collider.h"
+
 namespace yeram_client
 {
-	class GameObject:public Entity
+	class GameObject :public Entity
 	{
 	public:
 		GameObject();
@@ -21,65 +21,47 @@ namespace yeram_client
 
 
 		template<typename T>
-		static inline T* Instantiate(GameObject* _parent = nullptr,ELayerType _type=ELayerType::BackObject)
+		static inline T* Instantiate(GameObject* _parent = nullptr)
 		{
 			T* obj = new T();
 			obj->SetParent(_parent);
 			GameObject* obj_parent = obj->GetParent();
 			if (obj_parent != nullptr)
 			{
-				obj_parent->AddChild(obj);
+				obj_parent->AddChild(std::shared_ptr<T>(obj));
 			}
-			else // 부모가 없으면 레이어가 관리해줘야 하는 객체이므로 layer에 등록.
-			{
-				Scene* cur = SceneManager::GetActiveScene();
-				cur->AddGameObject(obj, _type);
-			}
-			obj->SetLayerType(_type);
 			return obj;
 		}
 		template<typename T>
-		static inline T* Instantiate(Vector2 _pos, GameObject* _parent = nullptr, ELayerType _type = ELayerType::BackObject)
+		static inline T* Instantiate(Vector2 _pos, GameObject* _parent = nullptr)
 		{
 			T* obj = new T();
 			obj->SetParent(_parent);
 			GameObject* obj_parent = obj->GetParent();
 			if (obj_parent != nullptr)
 			{
-				obj_parent->AddChild(obj);
-			}
-			else
-			{
-				Scene* cur = SceneManager::GetActiveScene();
-				cur->AddGameObject(obj, _type);
+				obj_parent->AddChild(std::shared_ptr<T>(obj));
 			}
 			obj->GameObject::GetComponent<Transform>()->SetPos(_pos);
-			obj->SetLayerType(_type);
 			return obj;
 		}
 		template<typename T>
-		static inline T* Instantiate(const std::wstring _name, Vector2 _pos,GameObject* _parent = nullptr, ELayerType _type = ELayerType::BackObject)
+		static inline T* Instantiate(const std::wstring _name, Vector2 _pos, GameObject* _parent = nullptr)
 		{
 			T* obj = new T();
 			obj->SetName(_name);
 			GameObject* obj_parent = obj->GetParent();
 			if (obj_parent != nullptr)
 			{
-				obj_parent->AddChild(obj);
-			}
-			else
-			{
-				Scene* cur = SceneManager::GetActiveScene();
-				cur->AddGameObject(obj, _type);
+				obj_parent->AddChild(std::shared_ptr<T>(obj));
 			}
 			obj->GameObject::GetComponent<Transform>()->SetPos(_pos);
-			obj->SetLayerType(_type);
 			return obj;
 		}
-		static inline GameObject* Find(std::wstring _name)
+		static inline std::shared_ptr<GameObject> Find(std::wstring _name)
 		{
 			Scene* cur = SceneManager::GetActiveScene();
-			
+
 			return cur->FindObject(_name);
 		}
 		static void Destroy(GameObject* _obj)
@@ -87,10 +69,10 @@ namespace yeram_client
 			if (_obj == nullptr)
 				return;
 			Scene* scene = SceneManager::GetActiveScene();
-			std::vector<GameObject*>& objs = scene->GetGameObjects(_obj->GetLayerType());
-			for (std::vector<GameObject*>::iterator itr = objs.begin(); itr !=objs.end();itr++)
+			std::vector<std::shared_ptr<GameObject>>& objs = scene->GetGameObjects(_obj->GetLayerType());
+			for (std::vector<std::shared_ptr<GameObject>>::iterator itr = objs.begin(); itr != objs.end(); itr++)
 			{
-				if (*itr == _obj)
+				if ((*itr).get() == _obj)
 					objs.erase(itr);
 			}
 
@@ -99,7 +81,7 @@ namespace yeram_client
 		}
 		static void Destroy(GameObject* _obj, float _time)
 		{
-			
+
 		}
 
 		template <typename T>
@@ -123,6 +105,9 @@ namespace yeram_client
 			}
 			return nullptr;
 		}
+
+		virtual void InitComponent();
+
 		template<typename T>
 		void SetActive(bool _flag)
 		{
@@ -143,7 +128,7 @@ namespace yeram_client
 		{
 			mbActive = _flag;
 
-			for (GameObject* child : mChilds)
+			for (std::shared_ptr<GameObject> child : mChilds)
 			{
 				if (child == nullptr)
 					continue;
@@ -156,31 +141,34 @@ namespace yeram_client
 		}
 		void SetParent(GameObject* _obj) { mParent = _obj; }
 		GameObject* GetParent() { return mParent; }
-		GameObject* FindChild(std::wstring _name);
-		GameObject* FindChild(UINT _index);
+		std::shared_ptr<GameObject> FindChild(std::wstring _name);
+		std::shared_ptr<GameObject> FindChild(UINT _index);
 		void SetLayerType(ELayerType _type) { mLayerType = _type; }
 		ELayerType GetLayerType() { return mLayerType; }
-		
-		void AddChild(GameObject* _child);
+
+		void AddChild(std::shared_ptr<GameObject> _child);
 		UINT GetChildCount() { return mChilds.size(); }
-		void RemoveChild(GameObject* _child);
-		
+		void RemoveChild(std::shared_ptr<GameObject> _child);
+
 		virtual void OnCollisionEnter(class Collider* other);
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
 
-		virtual void MoveObjectSetting(float _speed,EDirType _dir_type=EDirType::LEFT);
+		virtual void MoveObjectSetting(float _speed, EDirType _dir_type = EDirType::LEFT);
 		//자식도 같이 move
 		//void MoveChild(const Vector2& _offset);
+	protected:
+		std::vector<Component*>& GetComponents() { return mComponents; }
+
 	protected:
 		HBRUSH brush;
 		HPEN pen;
 		bool flag;
 		//Image* mImage;
-		
+
 	private:
 		std::vector<Component*> mComponents;
-		std::vector<GameObject*> mChilds;
+		std::vector<std::shared_ptr<GameObject>> mChilds;
 		GameObject* mParent;
 		bool mbActive;
 

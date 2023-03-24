@@ -26,8 +26,8 @@ namespace yeram_client
 	{
 		if (scene->UseingLayer(left) == false || scene->UseingLayer(right) == false)
 			return;
-		std::vector<GameObject*>& lefts = scene->GetGameObjects(left);
-		std::vector<GameObject*>& rights = scene->GetGameObjects(right);
+		std::vector<std::shared_ptr<GameObject>>& lefts = scene->GetGameObjects(left);
+		std::vector<std::shared_ptr<GameObject>>& rights = scene->GetGameObjects(right);
 
 		for (auto leftObject : lefts)
 		{

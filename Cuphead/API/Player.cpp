@@ -14,6 +14,9 @@ namespace yeram_client
 	Player::Player() :GameObject()
 	{
 		mAnimator = AddComponent<Animator>();
+		Collider* col = AddComponent<Collider>();
+		Rigidbody* rig = AddComponent<Rigidbody>();
+		rig->SetMass(1.0f);
 	}
 
 	Player::~Player()
@@ -21,12 +24,6 @@ namespace yeram_client
 	}
 	void Player::Initialize()
 	{
-		Collider* col = AddComponent<Collider>();
-		
-
-		Rigidbody* rig = AddComponent<Rigidbody>();
-		rig->SetMass(1.0f);
-
 		GameObject::Initialize();
 		for (auto c : mCharacters)
 		{
@@ -46,7 +43,7 @@ namespace yeram_client
 	}
 	void Player::Release()
 	{
-		for (auto c : mCharacters)
+		for (auto& c : mCharacters)
 		{
 			if (c.second == nullptr)
 				continue;
@@ -56,7 +53,7 @@ namespace yeram_client
 		}
 		GameObject::Release();
 	}
-	void Player::CreateCharacter(ESceneType _scenetype,EPlayerType _type)
+	void Player::CreateCharacter(EPlayerType _type)
 	{
 		Character* c = nullptr;
 		if (mCharacters.find(_type) != mCharacters.end())
@@ -78,7 +75,7 @@ namespace yeram_client
 			break;
 		}
 		c->SetOwner(this);
-		c->Create(_scenetype);
+		c->Create();
 		mCharacter = c;
 	}
 	void Player::ChangeCharacter(EPlayerType _type)
@@ -90,10 +87,6 @@ namespace yeram_client
 		}
 		mCharacter->Initialize();
 	}
-	void Player::SetSceneType_Ch(ESceneType _scenetype)
-	{
-		mCharacter->SetSceneType(_scenetype);
-	}
 	void Player::OnCollisionEnter(Collider* other)
 	{
 	}
@@ -102,5 +95,26 @@ namespace yeram_client
 	}
 	void Player::OnCollisionExit(Collider* other)
 	{
+	}
+	void Player::InitComponent()
+	{
+		std::vector<Component*> comps = GetComponents();
+
+		for (int i = 0; i < comps.size(); i++)
+		{
+			if (comps[i] == nullptr)
+				continue;
+			if (dynamic_cast<Transform*>(comps[i]) != nullptr)
+				continue;
+			if (dynamic_cast<Animator*>(comps[i]) != nullptr)
+				continue;
+			if(dynamic_cast<Rigidbody*>(comps[i]) != nullptr)
+				continue;
+			if (dynamic_cast<Collider*>(comps[i]) != nullptr)
+				continue;
+			comps[i]->Release();
+			delete comps[i];
+			comps[i] = nullptr;
+		}
 	}
 }
