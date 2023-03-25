@@ -1,5 +1,10 @@
 #include "UI.h"
 #include "SpriteRenderer.h"
+#include "Script.h"
+#include "Rigidbody.h"
+#include "Audio.h"
+#include "Animator.h"
+
 //#include "WindowManager.h"
 
 namespace yeram_client
@@ -39,20 +44,11 @@ namespace yeram_client
 	}
 	void UI::InitComponent()
 	{
-		std::vector<Component*> comps = GetComponents();
-
-		for (int i = 0; i < comps.size(); i++)
-		{
-			if (comps[i] == nullptr)
-				continue;
-			if (dynamic_cast<Transform*>(comps[i]) != nullptr)
-				continue;
-			if (dynamic_cast<SpriteRenderer*>(comps[i]) != nullptr)
-				continue;
-			comps[i]->Release();
-			delete comps[i];
-			comps[i] = nullptr;
-		}
+	    this->RemoveComponent<Animator>();
+		this->RemoveComponent<Collider>();
+		this->RemoveComponent<Script>();
+		this->RemoveComponent<Rigidbody>();
+		this->RemoveComponent<Audio>();
 	}
 }
 

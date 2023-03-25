@@ -5,6 +5,10 @@
 #include "Transform.h"
 #include "Rigidbody.h"
 #include "Collider.h"
+#include "Script.h"
+#include "Audio.h"
+#include "Animator.h"
+#include "SpriteRenderer.h"
 
 namespace yeram_client
 {
@@ -88,25 +92,98 @@ namespace yeram_client
 		T* AddComponent()
 		{
 			T* comp = new T();
-			UINT compType = (UINT)comp->GetType();
+			EComponentType type = comp->GetType();
+			if (type != EComponentType::Script)
+			{
+				if (mComponents[type].size() != 0)
+				{
+					delete comp;
+					return nullptr;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < mComponents[type].size(); i++)
+				{
+					T* data = dynamic_cast<T*>(mComponents[type][i]);
+					if (data != nullptr)
+					{
+						delete comp;
+						return data;
+					}
+				}
+			}
+			mComponents[type].push_back(comp);
 			comp->SetOwner(this);
-			mComponents[compType] = comp;
-			return comp;
+	     	return comp;
 		}
 		template <typename T>
 		T* GetComponent()
 		{
-			for (Component* comp : mComponents)
+			if (std::is_base_of<Script, T>())
 			{
-				if (dynamic_cast<T*>(comp))
+				return GetComponentScript<T>();
+			}
+			else
+			{
+				return GetComponentNomal<T>();
+			}
+		}
+		template <typename T>
+		void RemoveComponent()
+		{
+			EComponentType type = EComponentType::Script;
+			if (std::is_same<Script, T>())
+			{
+				for (int i = 0; i < mComponents[type].size(); i++)
 				{
-					return dynamic_cast<T*>(comp);
+					//script->Release();
+					mComponents[type][i]->Release();
+					delete mComponents[type][i];
+					mComponents[type][i] = nullptr;
+				}
+				mComponents[type].resize(0);
+				return;
+			}
+			else if (std::is_base_of<Script, T>())
+			{
+				for (auto i = mComponents[type].begin(); i < mComponents[type].end(); i++)
+				{
+					if (dynamic_cast<T*>(*i) != nullptr)
+					{
+						//script->Release();
+						(*i)->Release();
+						delete (*i);
+						(*i) = nullptr;
+						mComponents[type].erase(i);
+						return;
+					}
+				}
+
+			}
+
+			for (int i = 0; i < mComponents.size(); i++)
+			{
+				type = (EComponentType)i;
+				if (type == EComponentType::Script||type == EComponentType::NONE)
+					continue;
+				if (mComponents[type].size() != 0)
+				{
+					T* data = dynamic_cast<T*>(mComponents[type][0]);
+					if (data != nullptr)
+					{
+						//mcomp[i][0]->Release();
+						mComponents[type][0]->Release();
+						delete mComponents[type][0];
+						mComponents[type][0] = nullptr;
+						mComponents[type].resize(0);
+						return;
+					}
 				}
 			}
-			return nullptr;
 		}
-
-		virtual void InitComponent();
+	    
+		virtual void InitComponent() {};
 
 		template<typename T>
 		void SetActive(bool _flag)
@@ -158,16 +235,41 @@ namespace yeram_client
 		//자식도 같이 move
 		//void MoveChild(const Vector2& _offset);
 	protected:
-		std::vector<Component*>& GetComponents() { return mComponents; }
-
-	protected:
 		HBRUSH brush;
 		HPEN pen;
 		bool flag;
 		//Image* mImage;
 
 	private:
-		std::vector<Component*> mComponents;
+		template <typename T>
+		T* GetComponentScript()
+		{
+			for (Component* script : mComponents[EComponentType::Script])
+			{
+				T* data = dynamic_cast<T*>(script);
+				if (data != nullptr)
+				{
+					return data;
+				}
+			}
+			return nullptr;
+		}
+		template <typename T>
+		T* GetComponentNomal()
+		{
+			for (auto comp : mComponents)
+			{
+				if (comp.second.empty() == true)
+					continue;
+				if (dynamic_cast<T*>(comp.second[0]))
+				{
+					return dynamic_cast<T*>(comp.second[0]);
+				}
+			}
+			return nullptr;
+		}
+	private:
+		std::map<EComponentType,std::vector<Component*>> mComponents;
 		std::vector<std::shared_ptr<GameObject>> mChilds;
 		GameObject* mParent;
 		bool mbActive;

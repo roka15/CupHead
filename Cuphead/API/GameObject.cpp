@@ -8,15 +8,19 @@ namespace yeram_client
 	void GameObject::Initialize()
 	{
 		//mComponents.resize((UINT)EComponentType::MAX);
-		for (Component* com : mComponents)
+		
+		for (int i = (int)EComponentType::NONE + 1; i < (int)EComponentType::MAX; i++)
 		{
-			if (com == nullptr)
-				continue;
-			if (com->GetActive() == false)
-				continue;
-			com->Initialize();
+			EComponentType type = (EComponentType)i;
+			for (Component* com : mComponents[type])
+			{
+				if (com == nullptr)
+					continue;
+				if (com->GetActive() == false)
+					continue;
+				com->Initialize();
+			}
 		}
-
 		for (std::shared_ptr<GameObject> child : mChilds)
 		{
 			if (child == nullptr)
@@ -30,14 +34,19 @@ namespace yeram_client
 	{
 		if (mbActive == false)
 			return;
-		for (Component* com : mComponents)
+		for (int i = (int)EComponentType::NONE + 1; i < (int)EComponentType::MAX; i++)
 		{
-			if (com == nullptr)
-				continue;
-			if (com->GetActive() == false)
-				continue;
-			com->Update();
+			EComponentType type = (EComponentType)i;
+			for (Component* com : mComponents[type])
+			{
+				if (com == nullptr)
+					continue;
+				if (com->GetActive() == false)
+					continue;
+				com->Update();
+			}
 		}
+		
 
 		for (std::shared_ptr<GameObject> child : mChilds)
 		{
@@ -52,15 +61,18 @@ namespace yeram_client
 	{ 
 		if (mbActive == false)
 			return;
-		for (Component* com : mComponents)
+		for (int i = (int)EComponentType::NONE + 1; i < (int)EComponentType::MAX; i++)
 		{
-			if (com == nullptr)
-				continue;
-			if (com->GetActive() == false)
-				continue;
-			com->Render(hdc);
+			EComponentType type = (EComponentType)i;
+			for (Component* com : mComponents[type])
+			{
+				if (com == nullptr)
+					continue;
+				if (com->GetActive() == false)
+					continue;
+				com->Render(hdc);
+			}
 		}
-		
 		for (std::shared_ptr<GameObject> child : mChilds)
 		{
 			if (child == nullptr)
@@ -73,16 +85,26 @@ namespace yeram_client
 	void GameObject::Release()
 	{
 		int i = 0;
-		for (Component* com : mComponents)
+		for (int i = (int)EComponentType::NONE + 1; i < (int)EComponentType::MAX; i++)
 		{
-			if (com == nullptr)
-				continue;
-			com->Release();
-			delete com;
-			com = nullptr;
+			EComponentType type = (EComponentType)i;
+			if (mComponents.find(type) != mComponents.end())
+			{
+				for (Component* com : mComponents[type])
+				{
+					if (com == nullptr)
+						continue;
+					com->Release();
+					delete com;
+					com = nullptr;
+				}
+				mComponents[type].clear();
+				mComponents[type].~vector();
+			}
 		}
+		
 		mComponents.clear();
-		mComponents.~vector();
+	
 
 		for (std::shared_ptr<GameObject> child : mChilds)
 		{
@@ -93,21 +115,6 @@ namespace yeram_client
 		mChilds.clear();
 		mChilds.~vector();
 	}
-
-	void GameObject::InitComponent()
-	{
-		for (int i = 0; i < mComponents.size(); i++)
-		{
-			if (mComponents[i] == nullptr)
-				continue;
-			if (dynamic_cast<Transform*>(mComponents[i]) != nullptr)
-				continue;
-			mComponents[i]->Release();
-			delete mComponents[i];
-			mComponents[i] = nullptr;
-		}
-	}
-
 
 	std::shared_ptr<GameObject> GameObject::FindChild(std::wstring _name)
 	{
@@ -177,7 +184,6 @@ namespace yeram_client
 	GameObject::GameObject()
 	{
 		mbActive = true;
-		mComponents.resize((UINT)EComponentType::MAX);
 		AddComponent<Transform>();
 	}
 	

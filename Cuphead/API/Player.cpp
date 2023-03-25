@@ -98,23 +98,6 @@ namespace yeram_client
 	}
 	void Player::InitComponent()
 	{
-		std::vector<Component*> comps = GetComponents();
-
-		for (int i = 0; i < comps.size(); i++)
-		{
-			if (comps[i] == nullptr)
-				continue;
-			if (dynamic_cast<Transform*>(comps[i]) != nullptr)
-				continue;
-			if (dynamic_cast<Animator*>(comps[i]) != nullptr)
-				continue;
-			if(dynamic_cast<Rigidbody*>(comps[i]) != nullptr)
-				continue;
-			if (dynamic_cast<Collider*>(comps[i]) != nullptr)
-				continue;
-			comps[i]->Release();
-			delete comps[i];
-			comps[i] = nullptr;
-		}
+		
 	}
 }
