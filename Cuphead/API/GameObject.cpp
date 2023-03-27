@@ -162,17 +162,35 @@ namespace yeram_client
 
 	void GameObject::OnCollisionEnter(Collider* other)
 	{
-
+		for (auto script_comp : mComponents[EComponentType::Script])
+		{
+			Script* script = dynamic_cast<Script*>(script_comp);
+			if (script == nullptr)
+				continue;
+			script->OnCollisionEnter(other);
+		}
 	}
 
 	void GameObject::OnCollisionStay(Collider* other)
 	{
-
+		for (auto script_comp : mComponents[EComponentType::Script])
+		{
+			Script* script = dynamic_cast<Script*>(script_comp);
+			if (script == nullptr)
+				continue;
+			script->OnCollisionStay(other);
+		}
 	}
 
 	void GameObject::OnCollisionExit(Collider* other)
 	{
-
+		for (auto script_comp : mComponents[EComponentType::Script])
+		{
+			Script* script = dynamic_cast<Script*>(script_comp);
+			if (script == nullptr)
+				continue;
+			script->OnCollisionExit(other);
+		}
 	}
 
 	void GameObject::MoveObjectSetting(float _speed, EDirType _dir_type)
