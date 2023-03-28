@@ -1,17 +1,20 @@
 #pragma once
-#include "GameObject.h"
+#include "Rectangle.h"
+
 namespace core
 {
 	typedef yeram_client::Transform Transform;
-	typedef yeram_client::GameObject GameObject;
+
 	template <typename T>
 	class ObjectPool
 	{
 	public:
 		static void Initialize(size_t _capacity=100,size_t _max_capacity = 500);
+		static void Initialize(yeram_client::GameObject* _origin,size_t _capacity = 100, size_t _max_capacity = 500);
 		static void Release();
-		static std::shared_ptr<T> Spawn();
-		static void DeSpawn(GameObject* _obj);
+		static std::shared_ptr<yeram_client::GameObject> Spawn();
+		static std::shared_ptr<yeram_client::GameObject> Spawn2();
+		static void DeSpawn(yeram_client::GameObject* _obj);
 	private:
 		static void UpgradePoolSize();
 		ObjectPool() = delete;
@@ -19,15 +22,17 @@ namespace core
 	private:
 		static size_t mcapacity;
 		static size_t mlimit_capacity;
-		static std::queue<T*> mpools;
+		static std::queue<yeram_client::GameObject*> mpools;
+		static yeram_client::GameObject* mOrigin;
 	};
 	template <typename T>
 	size_t ObjectPool<T>::mcapacity = 0;
 	template <typename T>
-	std::queue<T*> ObjectPool<T>::mpools;
+	std::queue<yeram_client::GameObject*> ObjectPool<T>::mpools;
 	template <typename T>
 	size_t ObjectPool<T>::mlimit_capacity = 0;
-
+	template <typename T>
+	yeram_client::GameObject* ObjectPool<T>::mOrigin = nullptr;
 	template<typename T>
 	inline void ObjectPool<T>::Initialize(size_t _capacity, size_t _max_capacity)
 	{
@@ -35,46 +40,86 @@ namespace core
 		mlimit_capacity = _max_capacity;
 		int temp_min = mcapacity<mlimit_capacity ? mcapacity : mlimit_capacity;
 		for (int i = 0; i < temp_min; i++)
-			mpools.push(GameObject::Instantiate<T>());
+			mpools.push(yeram_client::GameObject::Instantiate<T>());
+	}
+	template<typename T>
+	inline void ObjectPool<T>::Initialize(yeram_client::GameObject* _origin,size_t _capacity, size_t _max_capacity)
+	{
+		mcapacity = _capacity;
+		mlimit_capacity = _max_capacity;
+		int temp_min = mcapacity < mlimit_capacity ? mcapacity : mlimit_capacity;
+		for (int i = 0; i < temp_min; i++)
+		{
+			yeram_client::GameObject* obj = nullptr;
+			if (dynamic_cast<yeram_client::Rectangle*>(_origin) != nullptr)
+			{
+				obj = yeram_client::GameObject::Instantiate<yeram_client::Rectangle> ();
+			}
+			else
+			{
+				obj = yeram_client::GameObject::Instantiate<yeram_client::GameObject> ();
+			}
+			mOrigin = _origin;
+			obj->AddComponent<T>();
+			mpools.push(obj);
+		}
 	}
 	template<typename T>
 	inline void ObjectPool<T>::Release()
 	{
 		while (mpools.empty() == false)
 		{
-			T* obj = mpools.front();
+			yeram_client::GameObject* obj = mpools.front();
 			mpools.pop();
 			obj->Release();
 			delete obj;
 		}
 		mpools.~queue();
+		mOrigin->Release();
+		delete mOrigin;
+		mOrigin = nullptr;
 	}
 	template<typename T>
-	inline std::shared_ptr<T> ObjectPool<T>::Spawn()
+	inline std::shared_ptr<yeram_client::GameObject> ObjectPool<T>::Spawn()
 	{
 		if (mpools.size() <= 0)
 		{
 			UpgradePoolSize();
 		}
 
-		std::shared_ptr<T> obj(mpools.front(), DeSpawn);
+		std::shared_ptr<yeram_client::GameObject> obj(mpools.front(), DeSpawn);
 		mpools.pop();
 		obj->Initialize();
 		obj->SetActive(true);
 		return obj;
 	}
 	template<typename T>
-	inline void ObjectPool<T>::DeSpawn(GameObject* _obj)
+	inline std::shared_ptr<yeram_client::GameObject> ObjectPool<T>::Spawn2()
+	{
+		if (mpools.size() <= 0)
+		{
+			UpgradePoolSize();
+		}
+
+		std::shared_ptr<yeram_client::GameObject> obj(mpools.front(), DeSpawn);
+		mpools.pop();
+		obj->Initialize();
+		obj->SetActive(true);
+		return obj;
+	}
+	template<typename T>
+	inline void ObjectPool<T>::DeSpawn(yeram_client::GameObject* _obj)
 	{
 		if (_obj == nullptr)
 			return;
-		T* obj = dynamic_cast<T*>(_obj);
+		
+		/*T* obj = dynamic_cast<T*>(_obj);
 		if (obj == nullptr)
-			return;
-		obj->InitComponent();
-		obj->SetActive(false);
-		obj->GetComponent<Transform>()->SetPos(Vector2::Zero);
-		mpools.push(obj);
+			return;*/
+		_obj->InitComponent();
+		_obj->SetActive(false);
+		_obj->GetComponent<Transform>()->SetPos(Vector2::Zero);
+		mpools.push(_obj);
 	}
 	template<typename T>
 	inline void ObjectPool<T>::UpgradePoolSize()
@@ -85,9 +130,21 @@ namespace core
 
 			if (add_cnt > mlimit_capacity)
 				return;
-
-			for(int i=mcapacity;i<add_cnt;i++)
-				mpools.push(GameObject::Instantiate<T>());
+			yeram_client::GameObject* obj = nullptr;
+			for (int i = mcapacity; i < add_cnt; i++)
+			{
+				if (dynamic_cast<yeram_client::Rectangle*>(mOrigin) != nullptr)
+				{
+					obj = yeram_client::GameObject::Instantiate<yeram_client::Rectangle>();
+				}
+				else
+				{
+					obj = yeram_client::GameObject::Instantiate<yeram_client::GameObject>();
+				}
+				obj->AddComponent<T>();
+				mpools.push(obj);
+			}
+				
 
 			mcapacity = add_cnt;
 		}

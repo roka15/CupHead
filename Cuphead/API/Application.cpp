@@ -5,6 +5,7 @@
 #include "Resources.h"
 #include "Camera.h"
 #include "ColliderManager.h"
+#include "MoveObjectManager.h"
 //#include "WindowManager.h"
 namespace yeram_client
 {
@@ -36,7 +37,7 @@ namespace yeram_client
 		HBITMAP default_Bitmap=(HBITMAP)SelectObject(mBackHdc, mBackBuffer);
 		DeleteObject(default_Bitmap);
 
-
+		MoveObjectManager::Initialize();
 		core::Input::Initialize();
 		//WindowManager::Initialize();
 		SceneManager::Initalize();
@@ -55,6 +56,7 @@ namespace yeram_client
 		Camera::Update();
 		Time::Update();
 		ColliderManager::Update();
+		MoveObjectManager::Update();
 	}
 	void Application::Render()
 	{
@@ -73,6 +75,7 @@ namespace yeram_client
 		Time::Release();
 		Camera::Release();
 		Resources::Release();
+		MoveObjectManager::Release();
 		//WindowManager::Release();
 	}
 	HWND Application::GetHandle()

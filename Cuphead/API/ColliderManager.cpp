@@ -26,6 +26,7 @@ namespace yeram_client
 	{
 		if (scene->UseingLayer(left) == false || scene->UseingLayer(right) == false)
 			return;
+		
 		std::vector<std::shared_ptr<GameObject>>& lefts = scene->GetGameObjects(left);
 		std::vector<std::shared_ptr<GameObject>>& rights = scene->GetGameObjects(right);
 
@@ -47,6 +48,7 @@ namespace yeram_client
 				ColliderCollision(leftCollider, rightCollider, left, right);
 			}
 		}
+		
 	}
 
 	void ColliderManager::ColliderCollision(Collider* leftCol, Collider* rightCol, ELayerType left, ELayerType right)

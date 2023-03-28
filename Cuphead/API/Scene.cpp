@@ -117,6 +117,7 @@ namespace yeram_client
 	{
 		mLayers[(UINT)layer]->AddGameObject(obj);
 		obj->SetLayerType(layer);
+		obj.reset();
 	}
 
 	std::vector<std::shared_ptr<GameObject>>& Scene::GetGameObjects(ELayerType _layer_type)

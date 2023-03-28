@@ -2,7 +2,7 @@
 
 namespace yeram_client
 {
-	Script::Script():Component(EComponentType::Animator)
+	Script::Script():Component(EComponentType::Script)
 	{
 	}
 	Script::~Script()
@@ -26,19 +26,15 @@ namespace yeram_client
 	{
 
 	}
-	void Script::RegisterScript(std::string _key, Script* _script)
+	
+
+	void Script::OnCollisionEnter(Collider* other)
 	{
-		/*static std::locale loc("");
-		auto& facet = std::use_facet<std::codecvt<wchar_t, char, std::mbstate_t>>(loc);
-		std::wstring key =  std::wstring_convert<std::remove_reference<decltype(facet)>::type, wchar_t>(&facet).from_bytes(_key);
-		mScripts.insert(std::make_pair(key, _script));*/
 	}
-	Script* Script::FindScript(std::wstring _key)
+	void Script::OnCollisionStay(Collider* other)
 	{
-		std::map<std::wstring, Script*>::iterator itr = mScripts.find(_key);
-		if (itr == mScripts.end())
-			return nullptr;
-		else
-			return itr->second;
+	}
+	void Script::OnCollisionExit(Collider* other)
+	{
 	}
 }

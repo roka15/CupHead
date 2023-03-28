@@ -85,38 +85,38 @@ namespace yeram_client
 	}
 	void PlayMapScene::CreateWorldMap(const Vector2& _startpos)
 	{
-		Vector2 size = application.GetWindowSize();
-		//temp map
-		std::shared_ptr<Rectangle> ocean = core::ObjectPool<Rectangle>::Spawn();
-		{
-			ocean->SetName(L"MapBackGround");
-			AddGameObject(ocean, ELayerType::BackObject);
+		//Vector2 size = application.GetWindowSize();
+		////temp map
+		//std::shared_ptr<Rectangle> ocean = core::ObjectPool<Rectangle>::Spawn();
+		//{
+		//	ocean->SetName(L"MapBackGround");
+		//	AddGameObject(ocean, ELayerType::BackObject);
 
-			Transform* tf = ocean->GetComponent<Transform>();
-			tf->SetSize(Vector2{ (long)size.x,(long)size.y + 200l });
+		//	Transform* tf = ocean->GetComponent<Transform>();
+		//	tf->SetSize(Vector2{ (long)size.x,(long)size.y + 200l });
 
-			SpriteRenderer* render = ocean->AddComponent<SpriteRenderer>();
-			render->SetImage(ocean->GetName().c_str()
-				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Ocean\\Bottom\\Left\\world3_water_04.bmp");
-			render->SetRenderType(ERenderType::StretchBlt);
-		}
-		const Vector2& map_bl = CreateWroldGround(L"MapBL", _startpos, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03.bmp");
-		const Vector2& map_br = CreateWroldGround(L"MapBR", Vector2{ _startpos.x + 1874.0f ,_startpos.y }, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Right\\world3_mainland_04.bmp");
-		const Vector2& map_tl = CreateWroldGround(L"MapTL", Vector2{ _startpos.x - 154.0f,_startpos.y - 1477.0f }, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Left\\world3_mainland_01.bmp");
-		const Vector2& map_tr = CreateWroldGround(L"MapTR", Vector2{ map_br.x,map_br.y - 1439.0f }, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Right\\world3_mainland_02.bmp");
+		//	SpriteRenderer* render = ocean->AddComponent<SpriteRenderer>();
+		//	render->SetImage(ocean->GetName().c_str()
+		//		, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Ocean\\Bottom\\Left\\world3_water_04.bmp");
+		//	render->SetRenderType(ERenderType::StretchBlt);
+		//}
+		//const Vector2& map_bl = CreateWroldGround(L"MapBL", _startpos, nullptr, ELayerType::BackObject,
+		//	L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03.bmp");
+		//const Vector2& map_br = CreateWroldGround(L"MapBR", Vector2{ _startpos.x + 1874.0f ,_startpos.y }, nullptr, ELayerType::BackObject,
+		//	L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Right\\world3_mainland_04.bmp");
+		//const Vector2& map_tl = CreateWroldGround(L"MapTL", Vector2{ _startpos.x - 154.0f,_startpos.y - 1477.0f }, nullptr, ELayerType::BackObject,
+		//	L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Left\\world3_mainland_01.bmp");
+		//const Vector2& map_tr = CreateWroldGround(L"MapTR", Vector2{ map_br.x,map_br.y - 1439.0f }, nullptr, ELayerType::BackObject,
+		//	L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Right\\world3_mainland_02.bmp");
 
-		CreateMapBL(map_bl);
-		CreateMapBR(map_br);
-		CreateMapTL(map_tl);
-		CreateMapTR(map_tr);
+		//CreateMapBL(map_bl);
+		//CreateMapBR(map_br);
+		//CreateMapTL(map_tl);
+		//CreateMapTR(map_tr);
 	}
 	const Vector2& PlayMapScene::CreateWroldGround(const std::wstring _name, const Vector2& _pos, GameObject* _parent, ELayerType _type, const std::wstring _image_path)
 	{
-		std::shared_ptr<Rectangle> map = core::ObjectPool<Rectangle>::Spawn();
+		/*std::shared_ptr<Rectangle> map = core::ObjectPool<Rectangle>::Spawn();
 		{
 			map->SetName(_name);
 			map->SetParent(_parent);
@@ -129,11 +129,12 @@ namespace yeram_client
 			render->SetRenderType(ERenderType::TransParentBlt);
 		}
 
-		return map->GetComponent<Transform>()->GetPos();
+		return map->GetComponent<Transform>()->GetPos();*/
+		return Vector2{};
 	}
 	void  PlayMapScene::CreateMapBL(const Vector2& _original_pos)
 	{
-		std::shared_ptr<Rectangle> mapbl_obj_doorl = core::ObjectPool<Rectangle>::Spawn();
+		/*std::shared_ptr<Rectangle> mapbl_obj_doorl = core::ObjectPool<Rectangle>::Spawn();
 		{
 			mapbl_obj_doorl->SetName(L"MapBL_Door1_L");
 			AddGameObject(mapbl_obj_doorl, ELayerType::BackObject);
@@ -187,7 +188,7 @@ namespace yeram_client
 			std::wstring key = ani->CreateAnimations(L"..\\Resources\\MapObject\\World3\\Bottom\\Left\\YBuliding", Vector2::Zero, 0.5f);
 			ani->Play(key, true);
 			mapbl_buliding->SetName(key);
-		}
+		}*/
 
 	}
 	void  PlayMapScene::CreateMapBR(const Vector2& _original_pos)

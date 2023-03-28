@@ -35,17 +35,17 @@ void yeram_client::TitleScene::Initialize()
 	mLayers[(UINT)ELayerType::Player] = new Layer();
 	mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 	Vector2 pos = application.GetWindowSize() / 2.0f;
-	std::shared_ptr<Player> player = core::ObjectPool<Player>::Spawn();
-	{
-		player->SetName(L"Player");
-		Transform* tf = player->GetComponent<Transform>();
-		tf->SetPos(Vector2{ pos.x,pos.y });
-		AddGameObject(player, ELayerType::Player);
+	//std::shared_ptr<Player> player = core::ObjectPool<Player>::Spawn();
+	//{
+	//	player->SetName(L"Player");
+	//	Transform* tf = player->GetComponent<Transform>();
+	//	tf->SetPos(Vector2{ pos.x,pos.y });
+	//	AddGameObject(player, ELayerType::Player);
 
-		player->CreateCharacter(EPlayerType::MsChalice);
-		player->CreateCharacter(EPlayerType::Cuphead);
-		player->SetActive(false);
-	}
+	//	player->CreateCharacter(EPlayerType::MsChalice);
+	//	player->CreateCharacter(EPlayerType::Cuphead);
+	//	player->SetActive(false);
+	//}
 }
 
 void yeram_client::TitleScene::Update()
@@ -71,7 +71,7 @@ void yeram_client::TitleScene::OnEnter()
 {
 	Vector2 size = application.GetWindowSize();
 
-	std::shared_ptr<Rectangle> title = core::ObjectPool<Rectangle>::Spawn();
+	/*std::shared_ptr<Rectangle> title = core::ObjectPool<Rectangle>::Spawn();
 	{
 		title->SetName(L"TitleBackGround");
 		AddGameObject(title, ELayerType::BackObject);
@@ -150,7 +150,7 @@ void yeram_client::TitleScene::OnEnter()
 		ani->GetStartEvent(key) = std::bind(&Rectangle::aniCompleteEvent, text.get());
 		ani->Play(key, true);
 		text->SetName(key);
-	}
+	}*/
 
 	Scene::OnEnter();
 }
