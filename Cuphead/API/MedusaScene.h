@@ -30,11 +30,7 @@ namespace yeram_client
 		void GroundInfoRelease();
 
 	private:
-		//std::map<std::wstring, std::queue<std::shared_ptr<GameObject>>> mGroundsInfo;
-		std::map<std::wstring, GroundInfo> mGroundInfos;
-		bool mYFlag;
-		float mTime;
-
+		
 	};
 }
 

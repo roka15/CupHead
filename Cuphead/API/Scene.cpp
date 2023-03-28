@@ -120,6 +120,11 @@ namespace yeram_client
 		obj.reset();
 	}
 
+	void Scene::RemoveGameObject(GameObject* _obj)
+	{
+		mLayers[(UINT)_obj->GetLayerType()]->RemoveGameObject(_obj);
+	}
+
 	std::vector<std::shared_ptr<GameObject>>& Scene::GetGameObjects(ELayerType _layer_type)
 	{
 		return mLayers[(UINT)_layer_type]->GetGameObjectList();

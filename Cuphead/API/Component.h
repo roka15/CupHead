@@ -18,10 +18,12 @@ namespace yeram_client
 		GameObject* GetOwner() { return mOwner; }
 		const bool& GetActive() { return mbActive; }
 		void SetActive(const bool _flag) { mbActive = _flag; }
+	
 	protected:
 		bool mbActive;
 		const EComponentType mType;
 		GameObject* mOwner;
+	
 	};
 }
 

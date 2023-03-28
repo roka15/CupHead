@@ -57,7 +57,7 @@ namespace yeram_client
 			}
 			scene->Initialize();
 		}
-		mActiveScene = mScenes[(UINT)ESceneType::Title];
+		mActiveScene = mScenes[(UINT)ESceneType::BossMedusa];
 		mActiveScene->OnEnter();
 
 
@@ -145,6 +145,11 @@ namespace yeram_client
 	std::shared_ptr<GameObject> SceneManager::FindObject(std::wstring _name)
 	{
 		return mActiveScene->FindObject(_name);
+	}
+
+	void SceneManager::RemoveObject(GameObject* _obj)
+	{
+		mActiveScene->RemoveGameObject(_obj);
 	}
 
 	void SceneManager::ChagePosGameObjects(const Vector2& _offset)

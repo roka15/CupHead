@@ -232,6 +232,7 @@ namespace yeram_client
 		virtual void OnCollisionExit(class Collider* other);
 
 		virtual void MoveObjectSetting(float _speed, EDirType _dir_type = EDirType::LEFT);
+
 		//자식도 같이 move
 		//void MoveChild(const Vector2& _offset);
 	protected:

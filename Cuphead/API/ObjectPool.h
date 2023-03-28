@@ -38,9 +38,14 @@ namespace core
 	{
 		mcapacity = _capacity;
 		mlimit_capacity = _max_capacity;
-		int temp_min = mcapacity<mlimit_capacity ? mcapacity : mlimit_capacity;
+		int temp_min = mcapacity < mlimit_capacity ? mcapacity : mlimit_capacity;
 		for (int i = 0; i < temp_min; i++)
-			mpools.push(yeram_client::GameObject::Instantiate<T>());
+		{
+			yeram_client::GameObject* obj = yeram_client::GameObject::Instantiate<yeram_client::GameObject>();
+			obj->AddComponent<T>();
+			obj->Initialize();
+			mpools.push(obj);
+		}
 	}
 	template<typename T>
 	inline void ObjectPool<T>::Initialize(yeram_client::GameObject* _origin,size_t _capacity, size_t _max_capacity)
@@ -61,6 +66,7 @@ namespace core
 			}
 			mOrigin = _origin;
 			obj->AddComponent<T>();
+			obj->Initialize();
 			mpools.push(obj);
 		}
 	}
@@ -89,7 +95,6 @@ namespace core
 
 		std::shared_ptr<yeram_client::GameObject> obj(mpools.front(), DeSpawn);
 		mpools.pop();
-		obj->Initialize();
 		obj->SetActive(true);
 		return obj;
 	}
@@ -103,7 +108,6 @@ namespace core
 
 		std::shared_ptr<yeram_client::GameObject> obj(mpools.front(), DeSpawn);
 		mpools.pop();
-		obj->Initialize();
 		obj->SetActive(true);
 		return obj;
 	}
@@ -116,9 +120,8 @@ namespace core
 		/*T* obj = dynamic_cast<T*>(_obj);
 		if (obj == nullptr)
 			return;*/
-		_obj->InitComponent();
+		_obj->Initialize();
 		_obj->SetActive(false);
-		_obj->GetComponent<Transform>()->SetPos(Vector2::Zero);
 		mpools.push(_obj);
 	}
 	template<typename T>

@@ -3,7 +3,6 @@
 
 namespace yeram_client
 {
-	class Rectangle;
 	class SceneManager
 	{
 	public:
@@ -14,6 +13,7 @@ namespace yeram_client
 		static void LoadScene(ESceneType _type);
 		static Scene* GetActiveScene();
 		static std::shared_ptr<GameObject> FindObject(std::wstring _name);
+		static void RemoveObject(GameObject* _obj);
 		static void ChagePosGameObjects(const Vector2& _offset);
 		static void ChangeScaleGameObjects(const Vector2& _scale);
 

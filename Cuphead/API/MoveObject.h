@@ -8,25 +8,42 @@ namespace yeram_client
 	public:
 		MoveObject();
 		~MoveObject();
-		void Create(std::wstring _ani_path,
-					Vector2 _ani_offset, 
-					float _ani_duration,
-					bool _ani_alpha,
-					const Vector2& _speed, 
-					float _dspawn_time, 
-					const Vector2& _diff);
 
-		void Move(const Vector2& _other);
+		virtual void Initialize()override;
+		virtual void Update();
+		virtual void Render(HDC hdc)override;
+		virtual void Release()override;
+
+		void CreateInfo(
+			const Vector2& _speed,
+			float _dspawn_time,
+			const Vector2& _diff,
+			const byte _outdir,
+			const Vector2& _dir,
+			const bool& _regular);
+
+		void Move();
+		const Vector2& GetDiff() { return mDiff; }
+		const bool& GetRegular() { return mbRegular; }
+		const Vector2& GetStartPos() { return mStartPos; }
+		const byte GetOutCheckDir() { return mOutDirbit; }
+		const UINT& GetID() { return mID; }
 	private:
-		bool CheckMapOut();
+
 		virtual void OnCollisionEnter(class Collider* other)override;
 		virtual void OnCollisionStay(class Collider* other)override;
 		virtual void OnCollisionExit(class Collider* other)override;
 	private:
+		static UINT create_numbers;
+		Vector2 mStartPos;
 		Vector2 mDiff;
 		Vector2 mSpeed;
-		Vector2 mDspawnTime;
+		Vector2 mDir;
+		float mDspawnTime;
 		float mTime;
+		byte mOutDirbit;
+		bool mbRegular;
+		UINT mID;
 	};
 }
 

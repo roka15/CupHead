@@ -100,4 +100,14 @@ namespace yeram_client
 		int cnt = obj.use_count();
 		mObjs.push_back(obj);
 	}
+	void Layer::RemoveGameObject(GameObject* _obj)
+	{
+		for (auto obj : mObjs)
+		{
+			if (obj.get() == _obj)
+			{
+				obj.reset();
+			}
+		}
+	}
 }

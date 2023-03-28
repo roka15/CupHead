@@ -56,7 +56,7 @@ namespace yeram_client
 		Camera::Update();
 		Time::Update();
 		ColliderManager::Update();
-		MoveObjectManager::Update();
+		//MoveObjectManager::Update();
 	}
 	void Application::Render()
 	{

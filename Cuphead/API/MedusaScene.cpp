@@ -19,7 +19,7 @@
 extern yeram_client::Application application;
 namespace yeram_client
 {
-	MedusaScene::MedusaScene() : mTime(0.0f), mYFlag(false)
+	MedusaScene::MedusaScene() 
 	{
 		mCurType = ESceneType::BossMedusa;
 	}
@@ -94,286 +94,151 @@ namespace yeram_client
 		Vector2 center = application.GetWindowSize() / 2.0f;
 
 		std::wstring key;
+		typedef MoveObjectManager::DirByte dirbyte;
 		
-		std::shared_ptr<GameObject> test = MoveObjectManager::Create(
-			Vector2{ 4.0f,4.0f }, 0.0f, Vector2{ 590.0f,0.0f }, true,
+		std::shared_ptr<GameObject> water_1 = MoveObjectManager::Create(
+			Vector2{ 4.0f,4.0f }, 0.0f, Vector2{ 590.0f,0.0f },dirbyte::left, Vector2{ -1.0f,0.0f }, true,
 			Vector2{ 50.0f,900.0f }, Vector2{ 1.2f,1.0f },
 			L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f
 		);
-		AddGameObject(test, ELayerType::FrontObject);
-		test.reset();
-		//std::shared_ptr<GameObject> water_1 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_1->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 50.0f,900.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_1, ELayerType::FrontObject);
-		//	
-		//	Animator* ani = water_1->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_1->SetName(key);
-		//	/*Script* script = water_1->AddComponent<Script>();
+		AddGameObject(water_1, ELayerType::FrontObject);
 
-		//	script->RegisterScript(typeid(MoveObject).name(), new MoveObject);*/
-		//}
-		//std::shared_ptr<Rectangle> water_1_2 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_1_2->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 650.f,900.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_1_2, ELayerType::FrontObject);
-		//	Animator* ani = water_1_2->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_1_2->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_1_3 =  core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_1_3->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 1250.0f,900.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_1_3, ELayerType::FrontObject);
-		//	Animator* ani = water_1_3->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_1_3->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_1_4 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_1_4->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 1850.0f,900.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_1_4, ELayerType::FrontObject);
-		//	Animator* ani = water_1_4->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_1_4->SetName(key);
-		//}
-		//mGroundsInfo.insert(std::make_pair(key, std::queue<std::shared_ptr<GameObject>>()));
-		//mGroundsInfo[key].push(water_1);
-		//mGroundsInfo[key].push(water_1_2);
-		//mGroundsInfo[key].push(water_1_3);
-		//mGroundsInfo[key].push(water_1_4);
-		//mGroundInfos.insert(std::make_pair(key, GroundInfo{ Vector2{590.0f,0.0f},Vector2{4.0f,0.4}}));
+		std::shared_ptr<GameObject> water_1_2 = MoveObjectManager::Create(
+			Vector2{ 4.0f,4.0f }, 0.0f, Vector2{ 590.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 650.f,900.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_1_2, ELayerType::FrontObject);
 
-		//std::shared_ptr<Rectangle> water_2 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_2->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 200.0f,950.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_2, ELayerType::FrontObject);
-		//	Animator* ani = water_2->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_2->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_2_2 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_2_2->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 880.0f,950.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_2_2, ELayerType::FrontObject);
-		//	Animator* ani = water_2_2->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_2_2->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_2_3 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_2_3->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 1560.0f,950.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_2_3, ELayerType::FrontObject);
-		//	Animator* ani = water_2_3->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_2_3->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_2_4 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_2_4->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 2240.0f,950.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_2_4, ELayerType::FrontObject);
-		//	Animator* ani = water_2_4->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_2_4->SetName(key);
-		//}
-		//mGroundsInfo.insert(std::make_pair(key, std::queue<std::shared_ptr<GameObject>>()));
-		//mGroundsInfo[key].push(water_2);
-		//mGroundsInfo[key].push(water_2_2);
-		//mGroundsInfo[key].push(water_2_3);
-		//mGroundsInfo[key].push(water_2_4);
-		//mGroundInfos.insert(std::make_pair(key, GroundInfo{ Vector2{680.0f,0.0f}, Vector2{5.0f,0.4} }));
+		std::shared_ptr<GameObject> water_1_3 = MoveObjectManager::Create(
+			Vector2{ 4.0f,4.0f }, 0.0f, Vector2{ 590.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 1250.0f,900.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_1_3, ELayerType::FrontObject);
 
-		//std::shared_ptr<Rectangle> water_3 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_3->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ -50.0f,1030.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_3, ELayerType::FrontObject);
-		//	Animator* ani = water_3->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_3->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_3_2 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_3_2->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 750.0f,1030.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_3_2, ELayerType::FrontObject);
-		//	Animator* ani = water_3_2->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_3_2->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_3_3 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_3_3->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 1550.0f,1030.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_3_3, ELayerType::FrontObject);
-		//	Animator* ani = water_3_3->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_3_3->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_3_4 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_3_4->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 2350.0f,1030.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_3_4, ELayerType::FrontObject);
-		//	Animator* ani = water_3_4->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_3_4->SetName(key);
-		//}
-		//mGroundsInfo.insert(std::make_pair(key, std::queue<std::shared_ptr<GameObject>>()));
-		//mGroundsInfo[key].push(water_3);
-		//mGroundsInfo[key].push(water_3_2);
-		//mGroundsInfo[key].push(water_3_3);
-		//mGroundsInfo[key].push(water_3_4);
-		//mGroundInfos.insert(std::make_pair(key, GroundInfo{ Vector2{800.0f,0.0f},Vector2{6.5f,0.3}}));
+		std::shared_ptr<GameObject> water_1_4 = MoveObjectManager::Create(
+			Vector2{ 4.0f,4.0f }, 0.0f, Vector2{ 590.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 1850.0f,900.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back1", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_1_4, ELayerType::FrontObject);
 
-		//std::shared_ptr<Rectangle> water_4 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_4->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 200.0f,1090.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_4, ELayerType::FrontObject);
-		//	Animator* ani = water_4->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_4->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_4_2 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_4_2->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 1070.0f,1090.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_4_2, ELayerType::FrontObject);
-		//	Animator* ani = water_4_2->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_4_2->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_4_3 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_4_3->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 1940.0f,1090.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_4_3, ELayerType::FrontObject);
-		//	Animator* ani = water_4_3->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_4_3->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_4_4 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_4_4->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 2810.0f,1090.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_4_4, ELayerType::FrontObject);
-		//	Animator* ani = water_4_4->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_4_4->SetName(key);
-		//}
-		//mGroundsInfo.insert(std::make_pair(key, std::queue<std::shared_ptr<GameObject>>()));
-		//mGroundsInfo[key].push(water_4);
-		//mGroundsInfo[key].push(water_4_2);
-		//mGroundsInfo[key].push(water_4_3);
-		//mGroundsInfo[key].push(water_4_4);
-		//mGroundInfos.insert(std::make_pair(key, GroundInfo{ Vector2{860.0f,0.0f},Vector2{8.0f,0.5} }));
-		//
-		//std::shared_ptr<Rectangle> water_5 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_5->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 362.0f,920.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_5, ELayerType::FrontObject);
-		//	Animator* ani = water_5->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_5->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_5_2 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_5_2->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 1230.0f,920.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_5_2, ELayerType::FrontObject);
-		//	Animator* ani = water_5_2->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_5_2->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_5_3 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_5_3->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 2098.0f,920.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_5_3, ELayerType::FrontObject);
-		//	Animator* ani = water_5_3->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_5_3->SetName(key);
-		//}
-		//std::shared_ptr<Rectangle> water_5_4 = core::ObjectPool<Rectangle>::Spawn();
-		//{
-		//	Transform* tf = water_5_4->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 2966.0f,920.0f });
-		//	tf->SetScale(Vector2{ 1.2f,1.0f });
-		//	AddGameObject(water_5_4, ELayerType::FrontObject);
-		//	Animator* ani = water_5_4->AddComponent<Animator>();
-		//	key = ani->CreateAnimations(L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f);
-		//	ani->Play(key, true);
-		//	water_5_4->SetName(key);
-		//}
 
-		//std::shared_ptr<Ground> ground_col = core::ObjectPool<Ground>::Spawn();
-		//{
-		//	Transform* tf = ground_col->GetComponent<Transform>();
-		//	tf->SetPos(Vector2{ 0.0f,100.0f });
-		//	AddGameObject(ground_col, ELayerType::FrontObject);
+		std::shared_ptr<GameObject> water_2 = MoveObjectManager::Create(
+			Vector2{ 5.0f,0.4 }, 0.0f, Vector2{ 680.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 200.0f,950.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_2, ELayerType::FrontObject);
 
-		//	Collider* col = ground_col->GetComponent<Collider>();
-		//	col->SetSize(Vector2(center.x * 2.0f, 100.0f));
-		//	col->SetCenter(Vector2(0.0f, 500.0f));
-		//}
+		std::shared_ptr<GameObject> water_2_2 = MoveObjectManager::Create(
+			Vector2{ 5.0f,0.4 }, 0.0f, Vector2{ 680.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 880.0f,950.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_2_2, ELayerType::FrontObject);
 
-		//
 
-		//mGroundsInfo.insert(std::make_pair(key, std::queue<std::shared_ptr<GameObject>>()));
-		//mGroundsInfo[key].push(water_5);
-		//mGroundsInfo[key].push(water_5_2);
-		//mGroundsInfo[key].push(water_5_3);
-		//mGroundsInfo[key].push(water_5_4);
-		//mGroundInfos.insert(std::make_pair(key, GroundInfo{ Vector2{865.0f,0.0f},Vector2{10.0f,0.4} }));
+		std::shared_ptr<GameObject> water_2_3 = MoveObjectManager::Create(
+			Vector2{ 5.0f,0.4 }, 0.0f, Vector2{ 680.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 1560.0f,950.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_2_3, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_2_4 = MoveObjectManager::Create(
+			Vector2{ 5.0f,0.4 }, 0.0f, Vector2{ 680.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 2240.0f,950.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back3", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_2_4, ELayerType::FrontObject);
+
+
+		std::shared_ptr<GameObject> water_3 = MoveObjectManager::Create(
+			Vector2{ 6.5f,0.3 }, 0.0f, Vector2{ 800.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ -50.0f,1030.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_3, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_3_2 = MoveObjectManager::Create(
+			Vector2{ 6.5f,0.3 }, 0.0f, Vector2{ 800.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 750.0f,1030.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_3_2, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_3_3 = MoveObjectManager::Create(
+			Vector2{ 6.5f,0.3 }, 0.0f, Vector2{ 800.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 1550.0f,1030.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_3_3, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_3_4 = MoveObjectManager::Create(
+			Vector2{ 6.5f,0.3 }, 0.0f, Vector2{ 800.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 2350.0f,1030.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back4", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_3_4, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_4 = MoveObjectManager::Create(
+			Vector2{ 8.0f,0.5 }, 0.0f, Vector2{ 860.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 200.0f,1090.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_4, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_4_2 = MoveObjectManager::Create(
+			Vector2{ 8.0f,0.5 }, 0.0f, Vector2{ 860.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 1070.0f,1090.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_4_2, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_4_3 = MoveObjectManager::Create(
+			Vector2{ 8.0f,0.5 }, 0.0f, Vector2{ 860.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 1940.0f,1090.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_4_3, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_4_4 = MoveObjectManager::Create(
+			Vector2{ 8.0f,0.5 }, 0.0f, Vector2{ 860.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 2810.0f,1090.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back5", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_4_4, ELayerType::FrontObject);
+
+
+		std::shared_ptr<GameObject> water_5 = MoveObjectManager::Create(
+			Vector2{ 10.0f,0.4 }, 0.0f, Vector2{ 865.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 362.0f,920.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_5, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_5_2 = MoveObjectManager::Create(
+			Vector2{ 10.0f,0.4 }, 0.0f, Vector2{ 865.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 1230.0f,920.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_5_2, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_5_3 = MoveObjectManager::Create(
+			Vector2{ 10.0f,0.4 }, 0.0f, Vector2{ 865.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 2098.0f,920.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_5_3, ELayerType::FrontObject);
+
+		std::shared_ptr<GameObject> water_5_4 = MoveObjectManager::Create(
+			Vector2{ 10.0f,0.4 }, 0.0f, Vector2{ 865.0f,0.0f }, dirbyte::left, Vector2{ -1.0f,0.0f }, true,
+			Vector2{ 2966.0f,920.0f }, Vector2{ 1.2f,1.0f },
+			L"..\\Resources\\MM\\Ground\\Back6", Vector2::Zero, 0.1f
+		);
+		AddGameObject(water_5_4, ELayerType::FrontObject);
 	}
 
 	void MedusaScene::CreateBackGround()
