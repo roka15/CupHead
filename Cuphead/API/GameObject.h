@@ -23,7 +23,7 @@ namespace yeram_client
 		virtual void Render(HDC hdc);
 		virtual void Release();
 
-		
+
 		template<typename T>
 		static inline T* Instantiate(GameObject* _parent = nullptr)
 		{
@@ -115,7 +115,7 @@ namespace yeram_client
 			}
 			mComponents[type].push_back(comp);
 			comp->SetOwner(this);
-			return comp;
+	     	return comp;
 		}
 		template <typename T>
 		T* GetComponent()
@@ -165,7 +165,7 @@ namespace yeram_client
 			for (int i = 0; i < mComponents.size(); i++)
 			{
 				type = (EComponentType)i;
-				if (type == EComponentType::Script || type == EComponentType::NONE)
+				if (type == EComponentType::Script||type == EComponentType::NONE)
 					continue;
 				if (mComponents[type].size() != 0)
 				{
@@ -182,7 +182,7 @@ namespace yeram_client
 				}
 			}
 		}
-
+	    
 		virtual void InitComponent() {};
 
 		template<typename T>
@@ -269,7 +269,7 @@ namespace yeram_client
 			return nullptr;
 		}
 	private:
-		std::map<EComponentType, std::vector<Component*>> mComponents;
+		std::map<EComponentType,std::vector<Component*>> mComponents;
 		std::vector<std::shared_ptr<GameObject>> mChilds;
 		GameObject* mParent;
 		bool mbActive;

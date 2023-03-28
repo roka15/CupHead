@@ -6,17 +6,15 @@ namespace yeram_client
 	{
 	public:
 		Script();
-		virtual ~Script();
+		~Script();
 		virtual void Initialize()override;
 		virtual void Update();
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
-		
-		virtual void OnCollisionEnter(class Collider* other);
-		virtual void OnCollisionStay(class Collider* other);
-		virtual void OnCollisionExit(class Collider* other);
+		void RegisterScript(std::string _key, Script* _script);
+		Script* FindScript(std::wstring _key);
 	private:
-	
+		std::map<std::wstring, Script*> mScripts;
 	};
 }
 

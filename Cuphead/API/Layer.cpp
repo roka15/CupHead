@@ -97,7 +97,6 @@ namespace yeram_client
 	}
 	void Layer::AddGameObject(std::shared_ptr<GameObject> obj)
 	{
-		int cnt = obj.use_count();
 		mObjs.push_back(obj);
 	}
 }

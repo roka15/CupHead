@@ -28,10 +28,10 @@ namespace yeram_client
 		
 		
 
-		/*core::ObjectPool<Rectangle>::Initialize(300);
+		core::ObjectPool<Rectangle>::Initialize(300);
 		core::ObjectPool<UI>::Initialize(200);
 		core::ObjectPool<Player>::Initialize(1, 1);
-		core::ObjectPool<Ground>::Initialize(100, 100);*/
+		core::ObjectPool<Ground>::Initialize(100, 100);
 
 		for (Scene* scene : mScenes)
 		{
@@ -118,10 +118,10 @@ namespace yeram_client
 			scene = nullptr;
 		}
 
-		/*core::ObjectPool<Rectangle>::Release();
+		core::ObjectPool<Rectangle>::Release();
 		core::ObjectPool<UI>::Release();
 		core::ObjectPool<Player>::Release();
-		core::ObjectPool<Ground>::Release();*/
+		core::ObjectPool<Ground>::Release();
 
 		mLoadingScreen->Release();
 		delete mLoadingScreen;
