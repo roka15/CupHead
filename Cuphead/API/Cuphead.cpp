@@ -132,4 +132,16 @@ namespace yeram_client
 	{
 		return false;
 	}
+	void Cuphead::air_move()
+	{
+	}
+	void Cuphead::air_idle()
+	{
+	}
+	void Cuphead::air_shoot()
+	{
+	}
+	void Cuphead::air_death()
+	{
+	}
 }

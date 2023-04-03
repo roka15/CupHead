@@ -2,7 +2,7 @@
 #include "Character.h"
 namespace yeram_client
 {
-	class MugMan :public Character
+	/*class MugMan :public Character
 	{
 	public:
 		MugMan();
@@ -22,7 +22,7 @@ namespace yeram_client
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;
 		void moveCompleteEvent()override;
-	};
+	};*/
 }
 
 

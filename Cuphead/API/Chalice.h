@@ -24,10 +24,18 @@ namespace yeram_client
 		bool duck_check();
 		EStateType dash_check();
 
+		virtual void air_move()override;
+		virtual void air_idle()override;
+		virtual void air_shoot()override;
+		virtual void air_death()override;
+
 		bool execute_dash(EStateType _type);
 		void PositionUpdate()override;
 		void DashPositionUpdate(EStateType _type)override;
 		
+
+		void AirMove();
+		void AirShoot();
 
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;

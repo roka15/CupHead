@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Time.h"
 #include "Input.h"
+#include "GameObject.h"
 #include "Resources.h"
 #include "Image.h"
 #include "Transform.h"
@@ -9,14 +10,12 @@
 #include "MugMan.h"
 #include "Chalice.h"
 #include "Camera.h"
+
 namespace yeram_client
 {
-	Player::Player() :GameObject()
-	{
-		mAnimator = AddComponent<Animator>();
-		Collider* col = AddComponent<Collider>();
-		Rigidbody* rig = AddComponent<Rigidbody>();
-		rig->SetMass(1.0f);
+	Player::Player():Script()
+	{	
+		SetName(L"Player");
 	}
 
 	Player::~Player()
@@ -24,7 +23,10 @@ namespace yeram_client
 	}
 	void Player::Initialize()
 	{
-		GameObject::Initialize();
+		mAnimator = GetOwner()->AddComponent<Animator>();
+		Collider* col = GetOwner()->AddComponent<Collider>();
+		Rigidbody* rig = GetOwner()->AddComponent<Rigidbody>();
+		rig->SetMass(1.0f);
 		for (auto c : mCharacters)
 		{
 			if (c.second == nullptr)
@@ -34,12 +36,10 @@ namespace yeram_client
 	}
 	void Player::Update()
 	{
-		GameObject::Update();
 		mCharacter->Update();
 	}
 	void Player::Render(HDC hdc)
 	{
-		GameObject::Render(hdc);
 	}
 	void Player::Release()
 	{
@@ -51,7 +51,6 @@ namespace yeram_client
 			delete c.second;
 			c.second = nullptr;
 		}
-		GameObject::Release();
 	}
 	void Player::CreateCharacter(EPlayerType _type)
 	{
@@ -70,11 +69,11 @@ namespace yeram_client
 			mCharacters.insert(std::make_pair(EPlayerType::MsChalice, c));
 			break;
 		case EPlayerType::MugMan:
-			c = new MugMan();
-			mCharacters.insert(std::make_pair(EPlayerType::MugMan, c));
+			/*c = new MugMan();
+			mCharacters.insert(std::make_pair(EPlayerType::MugMan, c));*/
 			break;
 		}
-		c->SetOwner(this);
+		c->SetOwner(GetOwner());
 		c->Create();
 		mCharacter = c;
 	}
@@ -95,9 +94,5 @@ namespace yeram_client
 	}
 	void Player::OnCollisionExit(Collider* other)
 	{
-	}
-	void Player::InitComponent()
-	{
-		
 	}
 }

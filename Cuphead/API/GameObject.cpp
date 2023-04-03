@@ -116,6 +116,13 @@ namespace yeram_client
 		mChilds.~vector();
 	}
 
+	void GameObject::SetParent(GameObject* _obj)
+	{
+		if (_obj == nullptr)
+			return;
+		mParent = _obj;
+	}
+
 	std::shared_ptr<GameObject> GameObject::FindChild(std::wstring _name)
 	{
 		for (auto child : mChilds)
@@ -141,6 +148,9 @@ namespace yeram_client
 	void GameObject::AddChild(std::shared_ptr<GameObject> _child)
 	{
 		mChilds.push_back(_child);
+		Transform* tf = GetComponent<Transform>();
+		_child->SetParent(this);
+		_child->GetComponent<Transform>()->SetPos(tf->GetPos());
 	}
 
 	void GameObject::RemoveChild(std::shared_ptr<GameObject> _child)
@@ -158,6 +168,17 @@ namespace yeram_client
 			}
 			i++;
 		}
+	}
+
+	void GameObject::RemoveChilds()
+	{
+		for (std::shared_ptr<GameObject> child : mChilds)
+		{
+			if (child == nullptr)
+				continue;
+			child.reset();
+		}
+		mChilds.clear();
 	}
 
 	void GameObject::OnCollisionEnter(Collider* other)
@@ -199,7 +220,7 @@ namespace yeram_client
 
 
 
-	GameObject::GameObject()
+	GameObject::GameObject():mParent(nullptr)
 	{
 		mbActive = true;
 		AddComponent<Transform>();

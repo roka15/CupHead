@@ -28,19 +28,22 @@ namespace yeram_client
 		mAccelation = mForce /mMass;
 
 		mVelocity += mAccelation * Time::DeltaTime();
-
-		if (mbGround)
+		if (mbGravity == true)
 		{
-			Vector2 gravity = mGravity;
-			gravity.Normalize();
+			if (mbGround)
+			{
+				Vector2 gravity = mGravity;
+				gravity.Normalize();
 
-			float dot = math::Dot(mVelocity, gravity);
-			mVelocity -= gravity * dot;
+				float dot = math::Dot(mVelocity, gravity);
+				mVelocity -= gravity * dot;
+			}
+			else
+			{
+				mVelocity += mGravity * Time::DeltaTime();
+			}
 		}
-		else
-		{
-			mVelocity += mGravity* Time::DeltaTime();
-		}
+		
 		//중력 가속도 최대속도 제한
 
 		Vector2 gravity = mGravity;

@@ -1,14 +1,12 @@
 #pragma once
-#include "GameObject.h"
+#include "Script.h"
 namespace yeram_client
 {
 	class Animator;
 	class Character;
-	class Player :public GameObject
+	class Player :public Script
 	{
 	public:
-		
-
 		Player();
 		virtual ~Player();
 		virtual void Initialize()override;
@@ -24,7 +22,7 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other)override;
 		virtual void OnCollisionExit(class Collider* other)override;
 
-		virtual void InitComponent()override;
+	
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;

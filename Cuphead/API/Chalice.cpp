@@ -19,7 +19,15 @@ namespace yeram_client
 		mState = ECharacterState::Idle;
 		mDirType = EDirType::RIGHT;
 		Animator* ani = mOwner->GetComponent<Animator>();
-		ani->Play(L"IdleRight", true);
+		if (mbAir == true)
+		{
+			ani->Play(L"AirIdleStraight", true);
+		}
+		else
+		{
+			ani->Play(L"IdleRight", true);
+		}
+
 		Collider* col = mOwner->GetComponent<Collider>();
 		col->SetCenter(Vector2(-75.0f, -155.0f));
 		col->SetSize(Vector2(150.0f, 160.0f));
@@ -28,6 +36,26 @@ namespace yeram_client
 
 	void Chalice::Update()
 	{
+		if (mbAir == true)
+		{
+			switch (mState)
+			{
+			case ECharacterState::Idle:
+				air_idle();
+				break;
+			case ECharacterState::Move:
+				air_move();
+				break;
+			case ECharacterState::Death:
+				air_death();
+				break;
+			case ECharacterState::Shoot:
+ 				air_shoot();
+				break;
+			}
+		}
+		else
+		{
 			switch (mState)
 			{
 			case ECharacterState::Idle:
@@ -46,6 +74,7 @@ namespace yeram_client
 				duck();
 				break;
 			}
+		}
 	}
 
 	void Chalice::Render(HDC hdc)
@@ -300,7 +329,7 @@ namespace yeram_client
 			}
 			else if (rigid->GetGround() == false)
 			{
-				aniname = ani->GetDirAniKey(L"AirDash", mDirType);
+				aniname = ani->GetDirAniKey(L"JumpDash", mDirType);
 			}
 			mbDash = true;
 			if (aniname.size() > 0)
@@ -311,6 +340,69 @@ namespace yeram_client
 
 		}
 		return EStateType::NOTHING;
+	}
+
+	void Chalice::air_move()
+	{
+		std::wstring ani_name;
+		Animator* ani = mOwner->GetComponent<Animator>();
+
+		AirMove();
+		AirShoot();
+		PositionUpdate();
+	}
+
+	void Chalice::air_idle()
+	{
+		std::wstring aniname;
+		Animator* ani = mOwner->GetComponent<Animator>();
+
+		if (core::Input::GetKeyDown(core::EKeyCode::A)
+			|| core::Input::GetKeyDown(core::EKeyCode::D)
+			|| core::Input::GetKeyDown(core::EKeyCode::W)
+			|| core::Input::GetKeyDown(core::EKeyCode::S)
+			|| core::Input::GetKey(core::EKeyCode::A)
+			|| core::Input::GetKey(core::EKeyCode::D)
+			|| core::Input::GetKey(core::EKeyCode::W)
+			|| core::Input::GetKey(core::EKeyCode::S)
+			)
+		{
+			mState = ECharacterState::Move;
+			if (core::Input::GetKeyDown(core::EKeyCode::W))
+			{
+				aniname = L"AirTransitionsUp";
+			}
+			else if (core::Input::GetKeyDown(core::EKeyCode::S))
+			{
+				aniname = L"AirTransitionsDown";
+			}
+			if (aniname.size() > 0)
+				ani->Play(aniname, false);
+		}
+
+		AirShoot();
+	}  
+
+	void Chalice::air_shoot()
+	{
+		AirMove();
+		if (core::Input::GetKeyUp(core::EKeyCode::SPACE))
+		{
+			Animator* ani = mOwner->FindChild(L"Shooter")->GetComponent<Animator>();
+			ani->SetActive(false);
+		}
+		else if (core::Input::GetKey(core::EKeyCode::SPACE)|| core::Input::GetKeyDown(core::EKeyCode::SPACE))
+		{
+			mState = ECharacterState::Shoot;
+		}
+		else
+		{
+			mState = ECharacterState::Idle;
+		}
+	}
+
+	void Chalice::air_death()
+	{
 	}
 
 	bool Chalice::execute_dash(EStateType _type)
@@ -356,6 +448,17 @@ namespace yeram_client
 			offset.x += 400.0f * Time::DeltaTime();
 			mDirType = EDirType::RIGHT;
 		}
+		if (mbAir == true)
+		{
+			if (core::Input::GetKey(core::EKeyCode::W))
+			{
+				offset.y -= 400.0f * Time::DeltaTime();
+			}
+			if (core::Input::GetKey(core::EKeyCode::S))
+			{
+				offset.y += 400.0f * Time::DeltaTime();
+			}
+		}
 		transform->SetPos(pos + offset);
 	}
 
@@ -367,7 +470,7 @@ namespace yeram_client
 		Vector2& pos = transform->GetPos();
 		Vector2 offset;
 		float dash_valocity = 2.5f;
-		
+
 		if (_type == EStateType::START)
 		{
 			mDashVelocity = 0.0f;
@@ -393,6 +496,7 @@ namespace yeram_client
 
 
 		Animator* ani = mOwner->GetComponent<Animator>();
+#pragma region nomal ani
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Idle\\Right", Vector2::Zero, 0.1f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Idle\\Left", Vector2::Zero, 0.1f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Run\\Regular\\Right", Vector2::Zero, 0.1f, true);
@@ -415,9 +519,26 @@ namespace yeram_client
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Duck\\Stand Up\\Right", Vector2::Zero, 0.03f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Right", Vector2::Zero, 0.02f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Left", Vector2::Zero, 0.02f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\AirDash\\Right", Vector2::Zero, 0.04f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\AirDash\\Left", Vector2::Zero, 0.04f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Right", Vector2::Zero, 0.04f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Left", Vector2::Zero, 0.04f, true);
+#pragma endregion
 
+#pragma region air ani 
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\Straight", Vector2::Zero, 0.04f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\AirTransitions\\Up", Vector2::Zero, 0.04f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\AirTransitions\\Down", Vector2::Zero, 0.04f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\Up", Vector2::Zero, 0.04f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\Down", Vector2::Zero, 0.04f, true);
+		
+		Vector2 size = ani->FindAnimation(L"AirIdleStraight")->GetSpriteSize();
+		GameObject* shooter = mOwner->FindChild(L"Shooter").get();
+		Transform* s_pos = shooter->GetComponent<Transform>();
+		s_pos->SetSize(Vector2{ size.x/1.5f,-(size.y / 5.0f) });
+		Animator* s_ani = shooter->GetComponent<Animator>();
+		s_ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\Shoot Sparks", Vector2::Zero, 0.05f, false);
+		s_ani->Play(L"Ms.Chalice_AirShoot Sparks", true);
+		s_ani->SetActive(false);
+#pragma endregion
 
 		ani->GetCompleteEvent(L"DuckLeft") = std::bind([this, ani]()->void
 		{
@@ -444,20 +565,104 @@ namespace yeram_client
 			SetNextAniInfo();
 			ResetDash();
 		});
-		ani->GetCompleteEvent(L"AirDashRight") = std::bind([this, ani]()->
+		ani->GetCompleteEvent(L"JumpDashRight") = std::bind([this, ani]()->
 			void
 		{
 			ResetDash();
 			ani->Play(L"Double JumpRight", false);
 		});
-		ani->GetCompleteEvent(L"AirDashLeft") = std::bind([this, ani]()->
+		ani->GetCompleteEvent(L"JumpDashLeft") = std::bind([this, ani]()->
 			void
 		{
 			ResetDash();
 			ani->Play(L"Double JumpLeft", false);
 		});
+
+		ani->GetCompleteEvent(L"AirTransitionsUp") = std::bind([this, ani]()->
+			void
+		{
+			ani->Play(L"AirIdleUp", true);
+		});
+
+		ani->GetCompleteEvent(L"AirTransitionsDown") = std::bind([this, ani]()->
+			void
+		{
+			ani->Play(L"AirIdleDown", true);
+		});
 	}
 
+
+	void Chalice::AirMove()
+	{
+		std::wstring ani_name;
+		Animator* ani = mOwner->GetComponent<Animator>();
+
+		if (core::Input::GetKeyUp(core::EKeyCode::A)
+			|| core::Input::GetKeyUp(core::EKeyCode::D)
+			|| core::Input::GetKeyUp(core::EKeyCode::W)
+			|| core::Input::GetKeyUp(core::EKeyCode::S)
+			)
+		{
+			if (core::Input::GetKeyUp(core::EKeyCode::W)
+				|| core::Input::GetKeyUp(core::EKeyCode::S))
+			{
+				mbAirStartFlag = false;
+			}
+			ani->Play(L"AirIdleStraight", true);
+			mState = ECharacterState::Idle;
+		}
+
+		if (core::Input::GetKeyDown(core::EKeyCode::A)
+			|| core::Input::GetKeyDown(core::EKeyCode::D)
+			|| core::Input::GetKeyDown(core::EKeyCode::W)
+			|| core::Input::GetKeyDown(core::EKeyCode::S)
+			|| core::Input::GetKey(core::EKeyCode::A)
+			|| core::Input::GetKey(core::EKeyCode::D)
+			|| core::Input::GetKey(core::EKeyCode::W)
+			|| core::Input::GetKey(core::EKeyCode::S)
+			)
+		{
+			mState = ECharacterState::Move;
+			bool flag = false;
+			std::wstring cur_ani = ani->GetCurAniName();
+			if (core::Input::GetKeyDown(core::EKeyCode::W))
+			{
+				ani_name = L"AirTransitionsUp";
+			}
+			else if (core::Input::GetKeyDown(core::EKeyCode::S))
+			{
+				ani_name = L"AirTransitionsDown";
+			}
+			else if (core::Input::GetKey(core::EKeyCode::W))
+			{
+				if (mbAirStartFlag == false)
+				{
+					ani_name = L"AirTransitionsUp";
+				}
+			}
+			else if (core::Input::GetKey(core::EKeyCode::S))
+			{
+				if (mbAirStartFlag == false)
+				{
+					ani_name = L"AirTransitionsDown";
+				} 
+			}
+			mbAirStartFlag = true;
+			if (ani_name.size() > 0)
+				ani->Play(ani_name, false);
+		}
+	}
+
+	void Chalice::AirShoot()
+	{
+		Animator* ani = mOwner->FindChild(L"Shooter")->GetComponent<Animator>();
+		if (core::Input::GetKeyDown(core::EKeyCode::SPACE)|| core::Input::GetKey(core::EKeyCode::SPACE))
+		{
+			mState = ECharacterState::Shoot;
+
+			ani->SetActive(true);
+		}
+	}
 
 	void Chalice::idleCompleteEvent()
 	{

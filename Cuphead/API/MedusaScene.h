@@ -24,12 +24,6 @@ namespace yeram_client
 		void CreateGround();
 		void CreateBackGround();
 	private:
-
-		void GroundUpdate();
-		bool CheckOutMap(GameObject* _obj);
-		void GroundInfoRelease();
-
-	private:
 		
 	};
 }

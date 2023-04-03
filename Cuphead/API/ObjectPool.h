@@ -9,8 +9,8 @@ namespace core
 	class ObjectPool
 	{
 	public:
-		static void Initialize(size_t _capacity=100,size_t _max_capacity = 500);
-		static void Initialize(yeram_client::GameObject* _origin,size_t _capacity = 100, size_t _max_capacity = 500);
+		static void Initialize(size_t _capacity = 100, size_t _max_capacity = 500);
+		static void Initialize(yeram_client::GameObject* _origin, size_t _capacity = 100, size_t _max_capacity = 500);
 		static void Release();
 		static std::shared_ptr<yeram_client::GameObject> Spawn();
 		static std::shared_ptr<yeram_client::GameObject> Spawn2();
@@ -48,7 +48,7 @@ namespace core
 		}
 	}
 	template<typename T>
-	inline void ObjectPool<T>::Initialize(yeram_client::GameObject* _origin,size_t _capacity, size_t _max_capacity)
+	inline void ObjectPool<T>::Initialize(yeram_client::GameObject* _origin, size_t _capacity, size_t _max_capacity)
 	{
 		mcapacity = _capacity;
 		mlimit_capacity = _max_capacity;
@@ -58,11 +58,11 @@ namespace core
 			yeram_client::GameObject* obj = nullptr;
 			if (dynamic_cast<yeram_client::Rectangle*>(_origin) != nullptr)
 			{
-				obj = yeram_client::GameObject::Instantiate<yeram_client::Rectangle> ();
+				obj = yeram_client::GameObject::Instantiate<yeram_client::Rectangle>();
 			}
 			else
 			{
-				obj = yeram_client::GameObject::Instantiate<yeram_client::GameObject> ();
+				obj = yeram_client::GameObject::Instantiate<yeram_client::GameObject>();
 			}
 			mOrigin = _origin;
 			obj->AddComponent<T>();
@@ -81,9 +81,12 @@ namespace core
 			delete obj;
 		}
 		mpools.~queue();
-		mOrigin->Release();
-		delete mOrigin;
-		mOrigin = nullptr;
+		if (mOrigin != nullptr)
+		{
+			mOrigin->Release();
+			delete mOrigin;
+			mOrigin = nullptr;
+		}
 	}
 	template<typename T>
 	inline std::shared_ptr<yeram_client::GameObject> ObjectPool<T>::Spawn()
@@ -116,12 +119,13 @@ namespace core
 	{
 		if (_obj == nullptr)
 			return;
-		
+
 		/*T* obj = dynamic_cast<T*>(_obj);
 		if (obj == nullptr)
 			return;*/
 		_obj->Initialize();
 		_obj->SetActive(false);
+		_obj->RemoveChilds();
 		mpools.push(_obj);
 	}
 	template<typename T>
@@ -147,7 +151,7 @@ namespace core
 				obj->AddComponent<T>();
 				mpools.push(obj);
 			}
-				
+
 
 			mcapacity = add_cnt;
 		}

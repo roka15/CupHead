@@ -29,6 +29,7 @@ namespace yeram_client
 		std::wstring GetName() { return mName; }
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
 		void SetNextAniInfo();
+		void SetAirMode(bool _flag);
 		void ResetJump() { mJump = 0; }
 		void ResetDash() { mbDash = false; }
 	protected:
@@ -38,6 +39,11 @@ namespace yeram_client
 		virtual void duck();
 		virtual void death();
 		virtual bool jump_check(ECharacterState _befor_state);
+
+		virtual void air_move();
+		virtual void air_idle();
+		virtual void air_shoot();
+		virtual void air_death();
 
 		virtual void PositionUpdate();
 		virtual void DashPositionUpdate(EStateType _type);
@@ -50,6 +56,7 @@ namespace yeram_client
 		EDirType mDirType;
 		int mJump;
 		bool mbAir;
+		bool mbAirStartFlag;
 		bool mbSit;
 		bool mbDash;
 		float mDashVelocity;

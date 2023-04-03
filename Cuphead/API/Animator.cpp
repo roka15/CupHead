@@ -153,9 +153,14 @@ namespace yeram_client
 
 	void Animator::Play(const std::wstring& _name, bool _loop)
 	{
+		
+
 		Animator::Events* prev_events = nullptr;
 		if (mActiveAnimation != nullptr)
 		{
+			if (mActiveAnimation->GetName().compare(_name) == 0)
+				return;
+
 			prev_events
 				= FindEvents(mActiveAnimation->GetName());
 		}

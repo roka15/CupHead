@@ -21,7 +21,13 @@ namespace yeram_client
 		void shoot()override;
 		void death()override;
 		void duck()override;
+
 		bool jump_check(ECharacterState _befor_state)override;
+
+		virtual void air_move()override;
+		virtual void air_idle()override;
+		virtual void air_shoot()override;
+		virtual void air_death()override;
 
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;

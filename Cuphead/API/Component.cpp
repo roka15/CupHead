@@ -3,7 +3,7 @@ namespace yeram_client
 {
 	Component::Component(EComponentType _type)
         :mType(_type)
-        , mOwner(nullptr)
+        ,mOwner(nullptr)
 	{
         mbActive = true;
 	}

@@ -32,7 +32,8 @@ void yeram_client::Ground::Release()
 
 void yeram_client::Ground::OnCollisionEnter(Collider* other)
 {
-	Player* player = dynamic_cast<Player*>(other->GetOwner());
+	GameObject* other_obj = other->GetOwner();
+	Player* player = other_obj->GetComponent<Player>();
 	if (player == nullptr)
 		return;
 
@@ -41,10 +42,10 @@ void yeram_client::Ground::OnCollisionEnter(Collider* other)
 	ch->ResetDash();
 	ch->SetNextAniInfo();
 
-	Rigidbody* rigid = player->GetComponent<Rigidbody>();
+	Rigidbody* rigid = other_obj->GetComponent<Rigidbody>();
 	rigid->SetGround(true);
 
-	Collider* cupheadCol = player->GetComponent<Collider>();
+	Collider* cupheadCol = other_obj->GetComponent<Collider>();
 	Vector2 cupheadPos = cupheadCol->GetPos();
 
 	Collider* groundCol = this->GetComponent<Collider>();
@@ -55,7 +56,7 @@ void yeram_client::Ground::OnCollisionEnter(Collider* other)
 
 	if (fLen < fSize)
 	{
-		Transform* cupTr = player->GetComponent<Transform>();
+		Transform* cupTr = other_obj->GetComponent<Transform>();
 		Transform* grTr = this->GetComponent<Transform>();
 
 		Vector2 cupPos = cupTr->GetPos();

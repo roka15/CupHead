@@ -23,16 +23,15 @@ namespace yeram_client
 		virtual void Render(HDC hdc);
 		virtual void Release();
 
-		
+
 		template<typename T>
 		static inline T* Instantiate(GameObject* _parent = nullptr)
 		{
 			T* obj = new T();
-			obj->SetParent(_parent);
-			GameObject* obj_parent = obj->GetParent();
-			if (obj_parent != nullptr)
+			if (_parent != nullptr)
 			{
-				obj_parent->AddChild(std::shared_ptr<T>(obj));
+				obj->SetParent(_parent);
+				_parent->AddChild(std::shared_ptr<T>(obj));
 			}
 			return obj;
 		}
@@ -98,7 +97,7 @@ namespace yeram_client
 				if (mComponents[type].size() != 0)
 				{
 					delete comp;
-					return nullptr;
+					return dynamic_cast<T*>(mComponents[type][0]);
 				}
 			}
 			else
@@ -205,18 +204,26 @@ namespace yeram_client
 		{
 			mbActive = _flag;
 
-			for (std::shared_ptr<GameObject> child : mChilds)
+		   /*for (std::shared_ptr<GameObject> child : mChilds)
 			{
 				if (child == nullptr)
 					continue;
 				child->SetActive(_flag);
+			}*/
+
+			for (auto map : mComponents)
+			{
+				for (auto comp : map.second)
+				{
+					comp->SetActive(_flag);
+				}
 			}
 		}
 		const bool& GetActive()
 		{
 			return mbActive;
 		}
-		void SetParent(GameObject* _obj) { mParent = _obj; }
+		void SetParent(GameObject* _obj);
 		GameObject* GetParent() { return mParent; }
 		std::shared_ptr<GameObject> FindChild(std::wstring _name);
 		std::shared_ptr<GameObject> FindChild(UINT _index);
@@ -226,6 +233,7 @@ namespace yeram_client
 		void AddChild(std::shared_ptr<GameObject> _child);
 		UINT GetChildCount() { return mChilds.size(); }
 		void RemoveChild(std::shared_ptr<GameObject> _child);
+		void RemoveChilds();
 
 		virtual void OnCollisionEnter(class Collider* other);
 		virtual void OnCollisionStay(class Collider* other);

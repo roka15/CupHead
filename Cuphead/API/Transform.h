@@ -12,7 +12,7 @@ namespace yeram_client
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
 
-		void SetPos(Vector2 _pos) { mPos = _pos; }
+		void SetPos(Vector2 _pos);
 		void SetScale(Vector2 _scale) { mScale = _scale; }
 		void SetSize(Vector2 _size) { mSize = _size; }
 		Vector2& GetPos() { return mPos; }

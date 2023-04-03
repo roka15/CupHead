@@ -22,7 +22,12 @@ void yeram_client::Transform::Initialize()
 
 void yeram_client::Transform::Update()
 {
-
+	GameObject* parent = GetOwner()->GetParent();
+	if (parent != nullptr)
+	{
+		mPos = parent->GetComponent<Transform>()->GetPos();
+		mPos += mSize;
+	}
 }
 
 void yeram_client::Transform::Render(HDC hdc)
@@ -35,12 +40,27 @@ void yeram_client::Transform::Release()
 {
 }
 
+void yeram_client::Transform::SetPos(Vector2 _pos)
+{
+	GameObject* parent = GetOwner()->GetParent();
+	if (parent != nullptr)
+	{
+		mPos = parent->GetComponent<Transform>()->GetPos();
+		mPos += _pos;
+	}
+	else
+	{
+		mPos = _pos;
+	}
+}
+
 void yeram_client::Transform::CaluatePos(const Vector2& _offset)
 {
 	int size = mOwner->GetChildCount();
 	for (int i = 0; i < size; i++)
 	{
-		mOwner->FindChild(i)->GetComponent<Transform>()->CaluatePos(_offset);
+		Vector2& pos = mOwner->FindChild(i)->GetComponent<Transform>()->GetPos(); 
+		pos-=_offset;
 	}
 	mPos -= _offset;
 }

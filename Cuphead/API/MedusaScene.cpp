@@ -16,6 +16,7 @@
 #include "ObjectPool.h"
 #include "MoveObject.h"
 #include "MoveObjectManager.h"
+#include "Character.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -40,7 +41,6 @@ namespace yeram_client
 
 	void MedusaScene::Update()
 	{
-		GroundUpdate();
 		Scene::Update();
 	}
 
@@ -51,37 +51,37 @@ namespace yeram_client
 
 	void MedusaScene::Release()
 	{
-		GroundInfoRelease();
 		Scene::Release();
 	}
 	void MedusaScene::OnEnter()
 	{
 		for (auto obj : GetGameObjects(ELayerType::Player))
 		{
-			Player* player = dynamic_cast<Player*>(obj.get());
+			GameObject* owner = obj.get();
+			Player* player = owner->GetComponent<Player>();
 			player->ChangeCharacter(EPlayerType::MsChalice);
 			player->SetActive(true);
-			Transform* tf = player->GetComponent<Transform>();
+			Transform* tf = owner->GetComponent<Transform>();
 			tf->SetPos(Vector2{ 200.0f,300.0f });
-
-			Rigidbody* rid = player->GetComponent<Rigidbody>();
-			if (rid == nullptr)
-				continue;
-			rid->SetGround(false);
-			rid->SetMass(1.0f);
+			
+			Character* active_ch = player->GetActiveCharacter();
+			active_ch->SetAirMode(true);
+			active_ch->Initialize();
+			//rid->SetGround(false);
+			//rid->SetMass(1.0f);
 		}
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::FrontObject, true);
 
 		CreateBackGround();
 		CreateGround();
 		//temp
-		/*std::shared_ptr<Rectangle> medusa = core::ObjectPool<Rectangle>::Spawn(); 
+		std::shared_ptr<GameObject> medusa = core::ObjectPool<Animator>::Spawn(); 
 		AddGameObject(medusa, ELayerType::Monster);
 		Transform* tf = medusa->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 1300, 800 });
 		Animator* ani = medusa->AddComponent<Animator>();
 		std::wstring key = ani->CreateAnimations(L"..\\Resources\\MM\\Intro\\MerMaid", Vector2::Zero, 0.1f, false);
-		ani->Play(key, true);*/
+		ani->Play(key, true);
 
 		Scene::OnEnter();
 	}
@@ -243,89 +243,15 @@ namespace yeram_client
 
 	void MedusaScene::CreateBackGround()
 	{
-		/*std::wstring key;
-		std::shared_ptr <Rectangle> background = core::ObjectPool<Rectangle>::Spawn(); 
+		std::wstring key;
+		std::shared_ptr <GameObject> background = core::ObjectPool<SpriteRenderer>::Spawn(); 
 		{
 			AddGameObject(background, ELayerType::BackObject);
 			SpriteRenderer* render = background->AddComponent<SpriteRenderer>();
 			render->SetImage(L"MedusaMainBackImage", L"..\\Resources\\MM\\BackGround\\MainBackImage\\mermaid_bg_sky_0001.bmp");
 			render->SetRenderType(ERenderType::StretchBlt);
 			background->SetName(L"MedusaMainBackImage");
-		}*/
-	}
-
-	void MedusaScene::GroundUpdate()
-	{
-		//float y = 0;
-		//mTime += Time::DeltaTime();
-
-		//
-		//if (mTime >= 0.6f)
-		//{
-		//	mYFlag = !mYFlag;
-		//	mTime = 0.0f;
-		//}
-		//
-
-		//for (auto ground_queue : mGroundsInfo)
-		//{
-		//	std::queue<std::shared_ptr<GameObject>>& q = ground_queue.second;
-		//	int i = q.size();
-		//	while (i > 0)
-		//	{
-		//		std::shared_ptr<GameObject> ground = q.front();
-		//		q.pop();
-		//		std::wstring name = ground->GetName();
-		//		Transform* tf = ground->GetComponent<Transform>();
-		//		Vector2 curpos = tf->GetPos();
-		//		curpos.x -= mGroundInfos[name].mSpeed.x;
-
-		//		if (mYFlag == true)
-		//			curpos.y += mGroundInfos[name].mSpeed.y;
-		//		else
-		//			curpos.y -= mGroundInfos[name].mSpeed.y;
-
-		//		tf->SetPos(curpos);
-		//		if (CheckOutMap(ground.get()) == true)
-		//		{
-		//			float x = mGroundInfos[name].mDiff.x-1;
-		//			Transform* spawn_tf = q.back()->GetComponent<Transform>();
-		//			x += spawn_tf->GetPos().x;
-		//			//x += ani->GetSpriteSize().x;
-		//			tf->SetPos(Vector2{ x,curpos.y });
-		//		}
-		//		q.push(ground);
-		//		i--;
-		//	}
-
-		//}
-	}
-
-	bool MedusaScene::CheckOutMap(GameObject* _obj)
-	{
-		/*Transform* tf = _obj->GetComponent<Transform>();
-		Vector2 pos = tf->GetPos();
-		Animator* ani = _obj->GetComponent<Animator>();
-		Vector2 size(ani->GetSpriteSize());
-		if (pos.x + size.x <= 0)
-		{
-			return true;
-		}*/
-		return false;
-	}
-
-	void MedusaScene::GroundInfoRelease()
-	{
-		/*for (auto map : mGroundsInfo)
-		{
-			std::queue<std::shared_ptr<GameObject>>& queue = map.second;
-			while (queue.empty() == false)
-			{
-				std::shared_ptr<GameObject>& sp = queue.front();
-				queue.pop();
-				sp.reset();
-			}
-		}*/
+		}
 	}
 
 }

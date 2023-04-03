@@ -116,6 +116,22 @@ namespace yeram_client
 		return false;
 	}
 
+	void Character::air_move()
+	{
+	}
+
+	void Character::air_idle()
+	{
+	}
+
+	void Character::air_shoot()
+	{
+	}
+
+	void Character::air_death()
+	{
+	}
+
 	void Character::PositionUpdate()
 	{
 
@@ -152,6 +168,13 @@ namespace yeram_client
 
 
 
+	}
+
+	void Character::SetAirMode(bool _flag)
+	{
+		mbAir = _flag;
+		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
+		rig->Use_Gravity(_flag);
 	}
 
 }
