@@ -15,15 +15,18 @@ namespace yeram_client
 		void SetPos(Vector2 _pos);
 		void SetScale(Vector2 _scale) { mScale = _scale; }
 		void SetSize(Vector2 _size) { mSize = _size; }
+		void SetOffset(Vector2 _offset) { mOffset = _offset; }
 		Vector2& GetPos() { return mPos; }
 		Vector2& GetScale() { return mScale; }
 		Vector2& GetSize() { return mSize; }
+		const Vector2& GetOffset() { return mOffset; }
 		void CaluatePos(const Vector2& _offset);
 		void CaluateSclae(const Vector2& _value);
 	private:
 		Vector2 mPos;
 		Vector2 mScale;
 		Vector2 mSize;
+		Vector2 mOffset;
 	};
 }
 

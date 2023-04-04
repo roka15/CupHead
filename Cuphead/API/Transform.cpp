@@ -35,7 +35,7 @@ void yeram_client::Transform::Update()
 		std::shared_ptr<GameObject> child = owner->FindChild(i);
 		Transform* c_tf = child->GetComponent<Transform>();
 		Vector2& c_pos = c_tf->GetPos();
-		c_pos = mPos + c_tf->GetSize();
+		c_pos = mPos + c_tf->GetOffset();
 	}
 	
 }
@@ -52,26 +52,26 @@ void yeram_client::Transform::Release()
 
 void yeram_client::Transform::SetPos(Vector2 _pos)
 {
-	GameObject* parent = GetOwner()->GetParent();
+	/*GameObject* parent = GetOwner()->GetParent();
 	if (parent != nullptr)
 	{
 		mPos = parent->GetComponent<Transform>()->GetPos();
 		mPos += _pos;
 	}
 	else
-	{
+	{*/
 		mPos = _pos;
-	}
+	//}
 }
 
 void yeram_client::Transform::CaluatePos(const Vector2& _offset)
 {
 	int size = mOwner->GetChildCount();
-	for (int i = 0; i < size; i++)
+	/*for (int i = 0; i < size; i++)
 	{
 		Vector2& pos = mOwner->FindChild(i)->GetComponent<Transform>()->GetPos(); 
 		pos-=_offset;
-	}
+	}*/
 	mPos -= _offset;
 }
 

@@ -150,7 +150,6 @@ namespace yeram_client
 		mChilds.push_back(_child);
 		Transform* tf = GetComponent<Transform>();
 		_child->SetParent(this);
-		_child->GetComponent<Transform>()->SetPos(tf->GetPos());
 	}
 
 	void GameObject::RemoveChild(std::shared_ptr<GameObject> _child)

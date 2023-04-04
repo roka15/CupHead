@@ -533,7 +533,7 @@ namespace yeram_client
 		Vector2 size = ani->FindAnimation(L"AirIdleStraight")->GetSpriteSize();
 		GameObject* shooter = mOwner->FindChild(L"Shooter").get();
 		Transform* s_pos = shooter->GetComponent<Transform>();
-		s_pos->SetSize(Vector2{ size.x/1.5f,-(size.y / 5.0f) });
+		s_pos->SetOffset(Vector2{ size.x/1.5f,-(size.y / 5.0f) });
 		Animator* s_ani = shooter->GetComponent<Animator>();
 		s_ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\Shoot Sparks", Vector2::Zero, 0.05f, false);
 		s_ani->Play(L"Ms.Chalice_AirShoot Sparks", true);
