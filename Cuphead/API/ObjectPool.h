@@ -16,7 +16,7 @@ namespace core
 		static std::shared_ptr<yeram_client::GameObject> Spawn2();
 		static void DeSpawn(yeram_client::GameObject* _obj);
 	private:
-		static void UpgradePoolSize();
+		static bool UpgradePoolSize();
 		ObjectPool() = delete;
 		~ObjectPool() = delete;
 	private:
@@ -93,8 +93,10 @@ namespace core
 	{
 		if (mpools.size() <= 0)
 		{
-			UpgradePoolSize();
+			if (UpgradePoolSize() == false)
+				return nullptr;
 		}
+		
 
 		std::shared_ptr<yeram_client::GameObject> obj(mpools.front(), DeSpawn);
 		mpools.pop();
@@ -129,14 +131,14 @@ namespace core
 		mpools.push(_obj);
 	}
 	template<typename T>
-	inline void ObjectPool<T>::UpgradePoolSize()
+	inline bool ObjectPool<T>::UpgradePoolSize()
 	{
 		if (mpools.size() == 0)
 		{
 			int add_cnt = mcapacity == 1 ? mcapacity + 1 : mcapacity + (mcapacity / 2);
 
 			if (add_cnt > mlimit_capacity)
-				return;
+				return false;
 			yeram_client::GameObject* obj = nullptr;
 			for (int i = mcapacity; i < add_cnt; i++)
 			{
@@ -154,6 +156,7 @@ namespace core
 
 
 			mcapacity = add_cnt;
+			return true;
 		}
 	}
 }

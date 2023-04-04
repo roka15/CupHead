@@ -2,8 +2,9 @@
 
 namespace yeram_client
 {
-	Script::Script():Component(EComponentType::Script)
+	Script::Script(EScriptType _type) :Component(EComponentType::Script)
 	{
+		mScriptType = _type;
 	}
 	Script::~Script()
 	{

@@ -4,7 +4,7 @@
 
 namespace yeram_client
 {
-	MoveObject::MoveObject() :Script()
+	MoveObject::MoveObject() :Script(EScriptType::Object)
 	{
 		SetName(L"MoveObject");
 	}
@@ -14,6 +14,14 @@ namespace yeram_client
 
 	void MoveObject::Initialize()
 	{
+		Script::Initialize();
+		mStartPos = Vector2::Zero;
+		mSpeed = Vector2::Zero;
+		mDspawnTime = 0.0f;
+		mDiff = Vector2::Zero;
+		mOutDirbit = 0;
+		//mDir = EDirType::
+		mbRegular = false;
 	}
 
 	void MoveObject::Update()

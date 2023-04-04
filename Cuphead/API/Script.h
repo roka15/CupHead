@@ -5,7 +5,16 @@ namespace yeram_client
 	class Script :public Component
 	{
 	public:
-		Script();
+		enum class EScriptType
+		{
+			Player,
+			Bullet,
+			Monster,
+			Object,
+			MAX
+		};
+		Script() = delete;
+		Script(EScriptType _type);
 		virtual ~Script();
 		virtual void Initialize()override;
 		virtual void Update();
@@ -16,8 +25,9 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
 		
+		EScriptType GetScriptType() { return mScriptType; }
 	private:
-		
+		EScriptType mScriptType;
 	};
 }
 
