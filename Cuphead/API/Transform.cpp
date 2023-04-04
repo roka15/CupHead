@@ -22,12 +22,22 @@ void yeram_client::Transform::Initialize()
 
 void yeram_client::Transform::Update()
 {
-	GameObject* parent = GetOwner()->GetParent();
+	/*GameObject* parent = GetOwner()->GetParent();
 	if (parent != nullptr)
 	{
 		mPos = parent->GetComponent<Transform>()->GetPos();
 		mPos += mSize;
+	}*/
+	GameObject* owner = GetOwner();
+	int size = owner->GetChildCount();
+	for (int i = 0; i < size; i++)
+	{
+		std::shared_ptr<GameObject> child = owner->FindChild(i);
+		Transform* c_tf = child->GetComponent<Transform>();
+		Vector2& c_pos = c_tf->GetPos();
+		c_pos = mPos + c_tf->GetSize();
 	}
+	
 }
 
 void yeram_client::Transform::Render(HDC hdc)
