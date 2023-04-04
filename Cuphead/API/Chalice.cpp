@@ -19,6 +19,8 @@ namespace yeram_client
 		mState = ECharacterState::Idle;
 		mDirType = EDirType::RIGHT;
 		Animator* ani = mOwner->GetComponent<Animator>();
+		Collider* col = mOwner->GetComponent<Collider>();
+		Transform* tf = mOwner->GetComponent<Transform>();
 		if (mbAir == true)
 		{
 			ani->Play(L"AirIdleStraight", true);
@@ -27,10 +29,10 @@ namespace yeram_client
 		{
 			ani->Play(L"IdleRight", true);
 		}
-
-		Collider* col = mOwner->GetComponent<Collider>();
-		col->SetCenter(Vector2(-75.0f, -155.0f));
-		col->SetSize(Vector2(150.0f, 160.0f));
+		const Vector2& pos = tf->GetPos();
+		const Vector2& size = ani->GetSpriteSize();
+		col->SetCenter(Vector2{ -(size.x / 2),-size.y });
+		col->SetSize(size);
 
 	}
 
