@@ -4,7 +4,7 @@
 
 namespace yeram_client
 {
-	MoveObject::MoveObject() :Script(EScriptType::Object)
+	MoveObject::MoveObject() :Script()
 	{
 		SetName(L"MoveObject");
 	}

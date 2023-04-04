@@ -4,6 +4,8 @@
 #include "GameObject.h"
 #include "Input.h"
 #include "Time.h"
+#include "ObjectPool.h"
+#include "Bullet.h"
 namespace yeram_client
 {
 	Chalice::Chalice()
@@ -658,12 +660,21 @@ namespace yeram_client
 
 	void Chalice::AirShoot()
 	{
-		Animator* ani = mOwner->FindChild(L"Shooter")->GetComponent<Animator>();
+		GameObject* shooter = mOwner->FindChild(L"Shooter").get();
+		Animator* ani = shooter->GetComponent<Animator>();
+		Transform* tf = shooter->GetComponent<Transform>();
 		if (core::Input::GetKeyDown(core::EKeyCode::SPACE)|| core::Input::GetKey(core::EKeyCode::SPACE))
 		{
 			mState = ECharacterState::Shoot;
 
 			ani->SetActive(true);
+
+			//총알 세개 스폰해서 정보 셋팅하고 날라가게하기.
+			std::shared_ptr<GameObject> obj = core::ObjectPool<Bullet>::Spawn();
+			Bullet* bullet = obj->GetComponent<Bullet>();
+			bullet->SetPos(tf->GetPos());
+			//bullet->SetEndPos(Vector2{ 1000.0f,tf->GetPos().y });
+			SceneManager::GetActiveScene()->AddGameObject(obj, ELayerType::Bullet);
 		}
 	}
 

@@ -13,7 +13,7 @@
 
 namespace yeram_client
 {
-	Player::Player():Script(EScriptType::Player)
+	Player::Player():Script()
 	{	
 		SetName(L"Player");
 	}

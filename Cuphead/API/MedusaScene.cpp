@@ -37,6 +37,8 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::Monster] = new Layer();
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
+		mLayers[(UINT)ELayerType::BackObject] = new Layer();
+		mLayers[(UINT)ELayerType::Bullet] = new Layer();
 	}
 
 	void MedusaScene::Update()

@@ -1,6 +1,6 @@
 #pragma once
 #include "Script.h"
-#include "BulletManager.h"
+
 namespace yeram_client
 {
 	class Transform;
@@ -8,9 +8,17 @@ namespace yeram_client
 	class Collider;
 	class Bullet : public Script
 	{
-	private:
-		typedef BulletManager::EShotBulletType ShotType;
+	
 	public:
+		enum class EShotBulletType
+		{
+			NONE,
+			Direct,
+			Guided_Missile,
+			ZigZag,
+			Scatter,
+			MAX
+		};
 		Bullet();
 		virtual ~Bullet();
 		virtual void Initialize()override;
@@ -29,19 +37,22 @@ namespace yeram_client
 		void SetScale(const Vector2& _scale);
 		void SetPos(const Vector2& _pos); 
 		void SetAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha = false);
-		void SetShotType(ShotType _type) { mShotType = _type; }
+		void SetColCenter();
+		void SetShotType(EShotBulletType _type) { mShotType = _type; }
+		void SetDamage(const UINT& _damage) { mDamage = _damage; }
 		
-		
+		bool MapOutCheck();
 		const UINT& GetID() { return mID; }
 		const bool& GetParry() { return mbParry; }
 	private:
 		UINT mID;
+		UINT mDamage;
 		float mDeSpawnDistance;
 		Vector2 mStartPos; //spawn À§Ä¡. 
 		Vector2 mEndPos;
 		Vector2 mSpeed;
 		EDirType mDirType;
-		ShotType mShotType;
+		EShotBulletType mShotType;
 		bool mbParry;
 		Collider* mColider;
 		Transform* mTransform;

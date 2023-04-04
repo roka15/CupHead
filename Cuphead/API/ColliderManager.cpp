@@ -148,10 +148,11 @@ namespace yeram_client
 			mMatrix[row] &= ~(1 << col);
 	}
 
+	
 	void ColliderManager::Clear()
 	{
 		memset(mMatrix, 0, sizeof(WORD) * (UINT)ELayerType::MAX);
-		mCollisionMap.clear();
+		mCollisionMap.clear();	
 	}
 
 }

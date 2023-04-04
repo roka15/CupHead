@@ -11,7 +11,7 @@
 #include "Animator.h"
 #include "Time.h"
 #include "ObjectPool.h"
-#include "BulletManager.h"
+#include "Bullet.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -36,7 +36,7 @@ namespace yeram_client
 		core::ObjectPool<Player>::Initialize(1, 1);
 		//core::ObjectPool<Ground>::Initialize(100, 100);
 		
-		BulletManager::Initialize();
+		core::ObjectPool<Bullet>::Initialize(new GameObject(),300);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -96,7 +96,7 @@ namespace yeram_client
 	void SceneManager::Update()
 	{
 		mActiveScene->Update();
-		BulletManager::Update();
+	
 		if (mbLoadScreenFlag == true)
 		{
 			mLoadingScreen->Update();
@@ -106,7 +106,7 @@ namespace yeram_client
 	void SceneManager::Render(HDC hdc)
 	{
 		mActiveScene->Render(hdc);
-		BulletManager::Render(hdc);
+	
 		if (mbLoadScreenFlag == true)
 		{
 			mLoadingScreen->Render(hdc);
@@ -124,7 +124,7 @@ namespace yeram_client
 			scene = nullptr;
 		}
 
-		BulletManager::Release();
+		core::ObjectPool<Bullet>::Release();
 		core::ObjectPool<Animator>::Release();
 		core::ObjectPool<SpriteRenderer>::Release();
 		//core::ObjectPool<UI>::Release();

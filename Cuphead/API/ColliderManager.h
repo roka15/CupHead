@@ -2,6 +2,7 @@
 #include "CommonInclude.h"
 #include "Enums.h"
 #include "Collider.h"
+#include "Script.h"
 namespace yeram_client
 {
 	union ColliderID
@@ -19,6 +20,7 @@ namespace yeram_client
 	public:
 		static void Update();
 		static void LayerCollision(Scene* scene, ELayerType left, ELayerType right);
+		
 		static void ColliderCollision(Collider* leftCol, Collider* rightCol, ELayerType left, ELayerType right);
 		static bool Intersect(Collider* left, Collider* right);
 

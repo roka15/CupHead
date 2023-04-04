@@ -1,10 +1,10 @@
 #include "Bullet.h"
-#include "BulletManager.h"
+
 #include "GameObject.h"
 
 namespace yeram_client
 {
-	Bullet::Bullet() :Script(EScriptType::Bullet)
+	Bullet::Bullet() :Script()
 	{
 		SetName(L"Bullet");
 	}
@@ -26,10 +26,12 @@ namespace yeram_client
 		//목표 지점까지 이동.
 
 		//update 후 check list 
+		
 	    //1.목표지점 도달
-		// = BulletManager::NextPos or Wait
+		
+		
 		//2.맵 밖으로 나감.
-		// = BulletManager::Wait(EShotBulletType,UINT ID)
+		
 		
 	}
 
@@ -47,13 +49,16 @@ namespace yeram_client
 		mEndPos = Vector2::Zero;
 		mSpeed = Vector2::Zero;
 		mID = 0;
-		mbParry = false;
+		if (GetOwner()->GetName()!=L"Player")
+		{
+			mbParry = rand() % 2;
+		}
 	}
 
 	void Bullet::OnCollisionEnter(Collider* other)
 	{
 		//3.충돌
-		//  Wait
+	
 	}
 
 	void Bullet::OnCollisionStay(Collider* other)
@@ -76,6 +81,15 @@ namespace yeram_client
 
 	void Bullet::SetAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha)
 	{
+	}
+
+	void Bullet::SetColCenter()
+	{
+	}
+
+	bool Bullet::MapOutCheck()
+	{
+		return false;
 	}
 
 }
