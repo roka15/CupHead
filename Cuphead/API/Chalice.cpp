@@ -349,7 +349,7 @@ namespace yeram_client
 
 		AirMove();
 		AirShoot();
-		PositionUpdate();
+		//PositionUpdate();
 	}
 
 	void Chalice::air_idle()
@@ -651,6 +651,7 @@ namespace yeram_client
 			if (ani_name.size() > 0)
 				ani->Play(ani_name, false);
 		}
+		PositionUpdate();
 	}
 
 	void Chalice::AirShoot()
