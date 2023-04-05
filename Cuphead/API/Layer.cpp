@@ -102,7 +102,7 @@ namespace yeram_client
 	}
 	void Layer::RemoveGameObject(GameObject* _obj)
 	{
-		for (auto obj : mObjs)
+		for (auto& obj : mObjs)
 		{
 			if (obj.get() == _obj)
 			{

@@ -37,10 +37,10 @@ namespace yeram_client
 		void SetScale(const Vector2& _scale);
 		void SetPos(const Vector2& _pos); 
 		void SetAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha = false);
-		void SetColCenter();
+		void SetColInfo();
 		void SetShotType(EShotBulletType _type) { mShotType = _type; }
-		void SetDamage(const UINT& _damage) { mDamage = _damage; }
 		
+		void CreateInfo(const Vector2& _startpos, const Vector2& _endpos);
 		bool MapOutCheck();
 		const UINT& GetID() { return mID; }
 		const bool& GetParry() { return mbParry; }
@@ -50,7 +50,8 @@ namespace yeram_client
 		float mDeSpawnDistance;
 		Vector2 mStartPos; //spawn À§Ä¡. 
 		Vector2 mEndPos;
-		Vector2 mSpeed;
+		float mSpeed;
+		Vector2 mDirVector;
 		EDirType mDirType;
 		EShotBulletType mShotType;
 		bool mbParry;

@@ -669,12 +669,28 @@ namespace yeram_client
 
 			ani->SetActive(true);
 
+			const Vector2 pos = tf->GetPos();
+			Bullet* bullet = nullptr;
 			//총알 세개 스폰해서 정보 셋팅하고 날라가게하기.
-			std::shared_ptr<GameObject> obj = core::ObjectPool<Bullet>::Spawn();
-			Bullet* bullet = obj->GetComponent<Bullet>();
-			bullet->SetPos(tf->GetPos());
+			std::shared_ptr<GameObject> obj1 = core::ObjectPool<Bullet>::Spawn();
+			bullet = obj1->GetComponent<Bullet>();
+			bullet->SetAnimation(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\Shoot\\AirBullet\\A", Vector2::Zero, 0.04f);
+			bullet->CreateInfo(pos, Vector2{ 2000.0f,-100.0f });
+			
+			std::shared_ptr<GameObject> obj2 = core::ObjectPool<Bullet>::Spawn();
+			bullet = obj2->GetComponent<Bullet>();
+			bullet->SetAnimation(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\Shoot\\AirBullet\\B", Vector2::Zero, 0.04f);
+			bullet->CreateInfo(pos, Vector2{ 2000.0f,pos.y });
+
+			std::shared_ptr<GameObject> obj3 = core::ObjectPool<Bullet>::Spawn();
+			bullet = obj3->GetComponent<Bullet>();
+			bullet->SetAnimation(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\Shoot\\AirBullet\\B", Vector2::Zero, 0.04f);
+			bullet->CreateInfo(pos, Vector2{ 2000.0f,1000.0f });
+
 			//bullet->SetEndPos(Vector2{ 1000.0f,tf->GetPos().y });
-			SceneManager::GetActiveScene()->AddGameObject(obj, ELayerType::Bullet);
+			SceneManager::GetActiveScene()->AddGameObject(obj1, ELayerType::Bullet);
+			SceneManager::GetActiveScene()->AddGameObject(obj2, ELayerType::Bullet);
+			SceneManager::GetActiveScene()->AddGameObject(obj3, ELayerType::Bullet);
 		}
 	}
 
