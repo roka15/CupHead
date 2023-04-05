@@ -71,9 +71,9 @@ namespace yeram_client
 		col->SetCenter(Vector2{ -800.0f, -100.0f });
 		col->SetSize(Vector2{ 1600.0f,100.0f });
 		AddGameObject(obj, ELayerType::FrontObject);
-    /*
-		obj = core::ObjectPool<SpriteRenderer>::Spawn();
-		tf = obj->GetComponent<Transform>();
+   
+		/*std::shared_ptr<GameObject> obj = core::ObjectPool<SpriteRenderer>::Spawn();
+		Transform* tf = obj->GetComponent<Transform>();
 		tf->SetSize(Vector2{ (long)size.x,(long)size.y });
 		SpriteRenderer* sprite = obj->GetComponent<SpriteRenderer>();
 		sprite->SetImage(L"DevilBackground1", L"..\\Resources\\Devil\\devil_bg_volcanos.bmp");

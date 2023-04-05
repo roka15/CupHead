@@ -38,15 +38,6 @@
     <Filter Include="Engine\Time">
       <UniqueIdentifier>{2374a183-ac12-4310-b7c6-ea151811be66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents\Core">
-      <UniqueIdentifier>{d80250dd-aafb-4360-91f6-e6c405720c0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\Core\Input">
-      <UniqueIdentifier>{808d35b4-e1c7-4d07-a592-30778114f416}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents\Core\MemoryPool">
-      <UniqueIdentifier>{cba3d83b-1109-40f9-a3eb-16528d9679ae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Resource">
       <UniqueIdentifier>{419f4f71-f7e3-4d2a-abac-655a2771f723}</UniqueIdentifier>
     </Filter>
@@ -58,6 +49,51 @@
     </Filter>
     <Filter Include="Contents\Scene\StageScene">
       <UniqueIdentifier>{38633368-af90-48c8-b588-f3549fa19f35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Component\Script">
+      <UniqueIdentifier>{01dff456-5301-47b5-81d4-3939a4873ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{d80250dd-aafb-4360-91f6-e6c405720c0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Input">
+      <UniqueIdentifier>{808d35b4-e1c7-4d07-a592-30778114f416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\MemoryPool">
+      <UniqueIdentifier>{cba3d83b-1109-40f9-a3eb-16528d9679ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\STL">
+      <UniqueIdentifier>{28f63978-3bb6-4619-8e9d-bafa231f67b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ObjectPool">
+      <UniqueIdentifier>{1eefe37e-635a-4670-a4c0-e794c678bbb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Script">
+      <UniqueIdentifier>{932a7fbf-1097-4d7b-b0ff-2c3224c5e397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Script\Player">
+      <UniqueIdentifier>{ac97cb4a-832d-41db-8e37-030de31d48be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Scene\MedusaScene">
+      <UniqueIdentifier>{37e94635-4e0b-4698-b600-0e267e962309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Manager">
+      <UniqueIdentifier>{28bca61f-61ba-4e58-be11-2867fa88e2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Manager\SceneManager">
+      <UniqueIdentifier>{98bbea22-5826-454f-867b-c4c0d00b6360}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Manager\MoveObjectManager">
+      <UniqueIdentifier>{964b3f56-05bc-4c08-8ec1-75afe7bf11ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Manager\MonsterManager">
+      <UniqueIdentifier>{7ef055ce-4247-4050-a30e-b60675c579e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Script\Monster">
+      <UniqueIdentifier>{3a382b3c-fd43-4b5c-bab6-3c30fb4ca02d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Script\Bullet">
+      <UniqueIdentifier>{59f8ade2-9128-4569-b77b-4d62f2d760bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +118,6 @@
     <ClInclude Include="Component.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Contents\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="CommonInclude.h">
       <Filter>Engine\Common</Filter>
     </ClInclude>
@@ -100,20 +133,14 @@
     <ClInclude Include="Entity.h">
       <Filter>Engine\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Contents\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Engine\Layer</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Engine\Time</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPool.h">
-      <Filter>Contents\Core\MemoryPool</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>Contents\Core\Input</Filter>
+      <Filter>Core\Input</Filter>
     </ClInclude>
     <ClInclude Include="Resources.h">
       <Filter>Engine\Resource</Filter>
@@ -136,18 +163,6 @@
     <ClInclude Include="PlayMapScene.h">
       <Filter>Contents\Scene\PlayScene</Filter>
     </ClInclude>
-    <ClInclude Include="Chalice.h">
-      <Filter>Contents\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Contents\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Cuphead.h">
-      <Filter>Contents\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="MugMan.h">
-      <Filter>Contents\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Rectangle.h">
       <Filter>Contents\GameObject</Filter>
     </ClInclude>
@@ -163,30 +178,74 @@
     <ClInclude Include="Collider.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Script.h">
-      <Filter>Engine\Component</Filter>
-    </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h" />
     <ClInclude Include="WindowManager.h" />
     <ClInclude Include="Camera.h">
-      <Filter>Contents\Core</Filter>
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="MedusaScene.h" />
-    <ClInclude Include="Monster.h" />
-    <ClInclude Include="MoveObject.h" />
     <ClInclude Include="Rigidbody.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
     <ClInclude Include="ColliderManager.h">
       <Filter>Engine\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Ground.h" />
+    <ClInclude Include="UI.h">
+      <Filter>Contents\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPool.h">
+      <Filter>Core\MemoryPool</Filter>
+    </ClInclude>
+    <ClInclude Include="RBT.h">
+      <Filter>Core\STL</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Engine\Component\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectPool.h">
+      <Filter>Core\ObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObject.h">
+      <Filter>Contents\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="MugMan.h">
+      <Filter>Contents\Script\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Contents\Script\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Chalice.h">
+      <Filter>Contents\Script\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Contents\Script\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Cuphead.h">
+      <Filter>Contents\Script\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="MedusaScene.h">
+      <Filter>Contents\Scene\MedusaScene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Contents\Manager\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObjectManager.h">
+      <Filter>Contents\Manager\MoveObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Contents\Script\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="DevilScene.h" />
+    <ClInclude Include="Ground.h">
+      <Filter>Contents\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -209,17 +268,11 @@
     <ClCompile Include="Component.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Contents\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Math.cpp">
       <Filter>Engine\Common</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Engine\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Contents\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Layer.cpp">
       <Filter>Engine\Layer</Filter>
@@ -227,11 +280,8 @@
     <ClCompile Include="Time.cpp">
       <Filter>Engine\Time</Filter>
     </ClCompile>
-    <ClCompile Include="MemoryPool.cpp">
-      <Filter>Contents\Core\MemoryPool</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>Contents\Core\Input</Filter>
+      <Filter>Core\Input</Filter>
     </ClCompile>
     <ClCompile Include="My_Resource.cpp">
       <Filter>Engine\Resource</Filter>
@@ -251,18 +301,6 @@
     <ClCompile Include="PlayMapScene.cpp">
       <Filter>Contents\Scene\PlayScene</Filter>
     </ClCompile>
-    <ClCompile Include="Chalice.cpp">
-      <Filter>Contents\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Contents\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Cuphead.cpp">
-      <Filter>Contents\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="MugMan.cpp">
-      <Filter>Contents\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Rectangle.cpp">
       <Filter>Contents\GameObject</Filter>
     </ClCompile>
@@ -278,30 +316,74 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Script.cpp">
-      <Filter>Engine\Component</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp" />
     <ClCompile Include="WindowManager.cpp" />
     <ClCompile Include="Camera.cpp">
-      <Filter>Contents\Core</Filter>
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="MedusaScene.cpp" />
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="MoveObject.cpp" />
     <ClCompile Include="Rigidbody.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
     <ClCompile Include="ColliderManager.cpp">
       <Filter>Engine\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="UI.cpp">
+      <Filter>Contents\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryPool.cpp">
+      <Filter>Core\MemoryPool</Filter>
+    </ClCompile>
+    <ClCompile Include="RBT.cpp">
+      <Filter>Core\STL</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Engine\Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectPool.cpp">
+      <Filter>Core\ObjectPool</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObject.cpp">
+      <Filter>Contents\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="MugMan.cpp">
+      <Filter>Contents\Script\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Contents\Script\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Chalice.cpp">
+      <Filter>Contents\Script\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Contents\Script\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Cuphead.cpp">
+      <Filter>Contents\Script\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="MedusaScene.cpp">
+      <Filter>Contents\Scene\MedusaScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Contents\Manager\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObjectManager.cpp">
+      <Filter>Contents\Manager\MoveObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Contents\Script\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="DevilScene.cpp" />
+    <ClCompile Include="Ground.cpp">
+      <Filter>Contents\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">
