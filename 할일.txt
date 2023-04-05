@@ -27,7 +27,12 @@
 씬에서 벗어나면 manager에 등록된 moveobject 들 pool에 반납해야함.
 
 
-내일 할 일 
-direct bullet 기능 구현.
+할 일 
 scatter
 guided  구현
+
+image 회전 넣기.
+
+바닥 맞추는 작업이 1단점프 2단 점프 할때가 다름 = 프레임 때문
+
+프레임 안떨어지게 해야함.

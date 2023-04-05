@@ -23,6 +23,7 @@ yeram_client::MainMenuScene::~MainMenuScene()
 
 yeram_client::MainMenuScene::MainMenuScene(std::wstring _name)
 {
+	mCurType = ESceneType::MainMenu;
 	SetName(_name);
 }
 

@@ -1,9 +1,11 @@
 #include "Ground.h"
 #include "Player.h"
+#include "GameObject.h"
 #include "Character.h"
-yeram_client::Ground::Ground()
+
+yeram_client::Ground::Ground():Script()
 {
-	mCollider = AddComponent<Collider>();
+	SetName(L"Ground");
 }
 
 yeram_client::Ground::~Ground()
@@ -12,22 +14,23 @@ yeram_client::Ground::~Ground()
 
 void yeram_client::Ground::Initialize()
 {
-	GameObject::Initialize();
+	Script::Initialize();
+	mCollider = GetOwner()->AddComponent<Collider>();
 }
 
 void yeram_client::Ground::Update()
 {
-	GameObject::Update();
+	
 }
 
 void yeram_client::Ground::Render(HDC hdc)
 {
-	GameObject::Render(hdc);
+	
 }
 
 void yeram_client::Ground::Release()
 {
-	GameObject::Release();
+	
 }
 
 void yeram_client::Ground::OnCollisionEnter(Collider* other)
@@ -48,21 +51,21 @@ void yeram_client::Ground::OnCollisionEnter(Collider* other)
 	Collider* cupheadCol = other_obj->GetComponent<Collider>();
 	Vector2 cupheadPos = cupheadCol->GetPos();
 
-	Collider* groundCol = this->GetComponent<Collider>();
+	Collider* groundCol = mOwner->GetComponent<Collider>();
 	Vector2 groundPos = groundCol->GetPos();
 
 	float fLen = fabs(cupheadPos.y - groundPos.y);
-	float fSize = (cupheadCol->GetSize().y / 2.0f) + (groundCol->GetSize().y / 2.0f);
+	float fSize = (cupheadCol->GetSize().y/2.0f)+ (groundCol->GetSize().y/2.0f);///2.0f) + (groundCol->GetSize().y);/// 2.0f);
 
 	if (fLen < fSize)
 	{
 		Transform* cupTr = other_obj->GetComponent<Transform>();
-		Transform* grTr = this->GetComponent<Transform>();
+		Transform* grTr = mOwner->GetComponent<Transform>();
 
 		Vector2 cupPos = cupTr->GetPos();
 		Vector2 grPos = grTr->GetPos();
 
-		cupPos -= (fSize - fLen) - 1.0f;
+		cupPos.y -= (fSize - fLen) - 1.0f;
 		cupTr->SetPos(cupPos);
 	}
 }
@@ -75,9 +78,5 @@ void yeram_client::Ground::OnCollisionExit(Collider* other)
 {
 }
 
-void yeram_client::Ground::InitComponent()
-{
-	
-}
 
 

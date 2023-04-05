@@ -19,6 +19,7 @@ namespace yeram_client
 	}
 	PlayMapScene::PlayMapScene(std::wstring _name)
 	{
+		mCurType = ESceneType::PlayMap;
 		SetName(_name);
 	}
 	PlayMapScene::~PlayMapScene()

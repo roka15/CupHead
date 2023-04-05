@@ -16,11 +16,6 @@ namespace yeram_client
 		virtual void OnEnter()override;
 		virtual void OnExit()override;
 	private:
-		struct GroundInfo
-		{
-			Vector2 mDiff;
-			Vector2 mSpeed;
-		};
 		void CreateGround();
 		void CreateBackGround();
 	private:

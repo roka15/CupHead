@@ -7,6 +7,7 @@ enum class ESceneType
 	MainMenu,
 	PlayMap,
 	BossMedusa,
+	BossDevil,
 	Ending,
 	MAX,
 };
@@ -14,6 +15,7 @@ enum class  ELayerType
 {
 	NONE,
 	BackObject,
+	Ground,
 	Monster,
 	Player,
 	Bullet,

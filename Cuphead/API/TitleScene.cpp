@@ -21,6 +21,7 @@ yeram_client::TitleScene::TitleScene()
 
 yeram_client::TitleScene::TitleScene(std::wstring _name)
 {
+	mCurType = ESceneType::Title;
 	SetName(_name);
 }
 

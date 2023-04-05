@@ -17,6 +17,7 @@
 #include "MoveObject.h"
 #include "MoveObjectManager.h"
 #include "Character.h"
+#include "Input.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -26,6 +27,7 @@ namespace yeram_client
 	}
 	MedusaScene::MedusaScene(std::wstring _name)
 	{
+		mCurType = ESceneType::BossMedusa;
 		SetName(_name);
 	}
 	MedusaScene::~MedusaScene()
@@ -43,6 +45,11 @@ namespace yeram_client
 	void MedusaScene::Update()
 	{
 		Scene::Update();
+		if (core::Input::GetKeyDown(core::EKeyCode::MouseRight))
+		{
+			SceneManager::LoadScene(ESceneType::BossDevil);
+			SceneManager::OpenLodingScreen();
+		}
 	}
 
 	void MedusaScene::Render(HDC hdc)

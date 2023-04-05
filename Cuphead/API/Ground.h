@@ -1,8 +1,9 @@
 #pragma once
-#include "GameObject.h"
+
+#include "Script.h"
 namespace yeram_client
 {
-	class Ground:public GameObject
+	class Ground:public Script
 	{
 	public:
 		Ground();
@@ -16,7 +17,7 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
 
-		virtual void InitComponent()override;
+		
 	private:
 		class Collider* mCollider;
 	};
