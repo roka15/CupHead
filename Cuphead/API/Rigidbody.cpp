@@ -39,9 +39,13 @@ namespace yeram_client
 				mVelocity -= gravity * dot;
 			}
 			else
-			{
+			{ 
 				mVelocity += mGravity * Time::DeltaTime();
 			}
+		}
+		else
+		{
+			int a = 0;
 		}
 		
 		//중력 가속도 최대속도 제한

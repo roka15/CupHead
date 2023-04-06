@@ -6,6 +6,7 @@ namespace core
 	std::vector<Input::Key> Input::mKeys;
 	Input::PushInfo Input::mBeforPush;
 	float Input::mTime;
+	std::queue<Input::PushInfo> Input::mKeyMessageQueue;
 	int ASCII[(UINT)EKeyCode::MAX] =
 	{
 		'A','S','D','W','K','Z', VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_LBUTTON,VK_RBUTTON,VK_SPACE,VK_SHIFT
@@ -32,6 +33,7 @@ namespace core
 			
 			if (GetAsyncKeyState(ASCII[i]) & 0x8000)
 			{
+				
 				//이전 플게임에 눌려있었다.
 				if (mKeys[i].bPressed)
 				{
@@ -39,7 +41,13 @@ namespace core
 				}
 				else
 				{
+					PushInfo push;
+					push.keycode = (EKeyCode)i;
+					push.Time = mTime;
+					push.state = EKeyState::Down;
 					mKeys[i].state = EKeyState::Down;
+					mKeyMessageQueue.push(push);
+					mKeys[i].Time = mTime;
 				}
 				mKeys[i].bPressed = true;
 			}
@@ -51,7 +59,12 @@ namespace core
 			{
 				if (mKeys[i].bPressed)
 				{
+					PushInfo push;
+					push.keycode = (EKeyCode)i;
+					push.Time = mTime;
+					push.state = EKeyState::Up;
 					mKeys[i].state = EKeyState::Up;
+					mKeyMessageQueue.push(push);
 				}
 				else
 				{

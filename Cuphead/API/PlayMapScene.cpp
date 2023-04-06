@@ -38,7 +38,7 @@ namespace yeram_client
 
 		if (core::Input::GetKeyDown(core::EKeyCode::MouseRight))
 		{
-			SceneManager::LoadScene(ESceneType::BossMedusa);
+			SceneManager::LoadScene(ESceneType::BossDevil);
 			SceneManager::OpenLodingScreen();
 		}
 		//화면 확대 축소

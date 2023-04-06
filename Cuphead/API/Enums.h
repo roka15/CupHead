@@ -63,6 +63,7 @@ enum class EWindowType
 };
 enum class EDirType
 {
+	STAY,
 	LEFT,
 	RIGHT,
 	UP,

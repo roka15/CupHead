@@ -35,17 +35,19 @@ namespace core
 			EKeyState state;
 			//Å° »óÅÂ
 			bool bPressed;
+			float Time;
 		};
 		struct PushInfo
 		{
-			EKeyCode mkeycode;
-			float mTime;
+			EKeyCode keycode;
+			EKeyState state;
+			float Time;
 		};
 		static void Initialize();
 		static void Update();
 		static void Render(HDC _hdc);
 		static void Release();
-		static EKeyCode GetBeforKeyCode() { return mBeforPush.mkeycode; }
+		static EKeyCode GetBeforKeyCode() { return mBeforPush.keycode; }
 		
 		inline static EKeyState GetKeyState(EKeyCode _keycode)
 		{
@@ -63,13 +65,6 @@ namespace core
 		{
 			if (mKeys[(UINT)_keycode].state == EKeyState::Down)
 			{
- 				if (mBeforPush.mTime == 0.0f || mBeforPush.mkeycode !=_keycode)
-				{
-					PushInfo info;
-					info.mkeycode = _keycode;
-					info.mTime = mTime;
-					mBeforPush = info;
-				}
 				return true;
 			}
 			else return false;
@@ -84,12 +79,12 @@ namespace core
 		}
 		static __forceinline bool GetKeyDoubleDown(EKeyCode _keycode, float _second)
 		{
-			float befor_time = mBeforPush.mTime;
+			float befor_time = mBeforPush.Time;
 		
-			if (mBeforPush.mkeycode == _keycode)
+			if (mBeforPush.keycode == _keycode)
 			{
 				float diff = mTime - befor_time;
-				mBeforPush.mTime = 0.0f;
+				mBeforPush.Time = 0.0f;
 				if (mTime == befor_time)
 					return false;
 				else if (befor_time == 0.0f)
@@ -101,10 +96,32 @@ namespace core
 			}
 			return false;
 		}
+		static __forceinline bool KeyMessageQueueEmpty()
+		{
+			if (mKeyMessageQueue.empty() == true)
+				return true;
+			else return false;
+		}
+		static __forceinline PushInfo& GetQueueFront()
+		{
+			PushInfo& info = mKeyMessageQueue.front();
+			
+			return info;
+		}
+		static __forceinline void KeyMessageQueuePop()
+		{
+			mKeyMessageQueue.pop();
+		}
+		static __forceinline EKeyCode GetFirstPriorityKey(EKeyCode _code1, EKeyCode _code2)
+		{
+			EKeyCode key = mKeys[(UINT)_code1].Time > mKeys[(UINT)_code2].Time ? _code2 : _code1;
+			return key;
+		}
 	private:
 		static std::vector<Key> mKeys;
 		static PushInfo mBeforPush;
 		static float mTime;
+		static std::queue<PushInfo> mKeyMessageQueue;
 	};
 }
 

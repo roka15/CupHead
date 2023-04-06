@@ -1,10 +1,15 @@
 #pragma once
 #include "Character.h"
+#include "Input.h"
+
 namespace yeram_client
 {
+	
 	class Chalice:public Character
 	{
 	public:
+		typedef core::Input::PushInfo PushInfo;
+
 		Chalice();
 		~Chalice();
 		void Initialize()override;
@@ -40,6 +45,12 @@ namespace yeram_client
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;
 		void moveCompleteEvent()override;
+		void Input();//message queue test
+		void testidle(const PushInfo& push_info);
+		void testmove(const PushInfo& push_info);
+		void testduck(const PushInfo& push_info);
+	private:
+		float mFirstJumpTime;
 	
 	};
 }

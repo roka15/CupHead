@@ -31,8 +31,8 @@ namespace yeram_client
 		
 
 		//애니 재생으로만 쓸 pool
-		core::ObjectPool<Animator>::Initialize(new Rectangle(),300);
-		core::ObjectPool<SpriteRenderer>::Initialize(new Rectangle(), 300);
+		core::ObjectPool<Animator>::Initialize(300);
+		core::ObjectPool<SpriteRenderer>::Initialize(300);
 		//core::ObjectPool<UI>::Initialize(200);
 		core::ObjectPool<Player>::Initialize(1, 1);
 		//core::ObjectPool<Ground>::Initialize(100, 100);

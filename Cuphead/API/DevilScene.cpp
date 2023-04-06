@@ -50,6 +50,7 @@ namespace yeram_client
 		{
 			GameObject* owner = obj.get();
 			Player* player = owner->GetComponent<Player>();
+			player->ChangeCharacter(EPlayerType::MsChalice);
 			player->SetActive(true);
 			Transform* tf = owner->GetComponent<Transform>();
 			tf->SetPos(Vector2{ 200.0f,300.0f });

@@ -145,10 +145,54 @@ namespace yeram_client
 	{
 		//mJump = 0;
 		Animator* ani = mOwner->GetComponent<Animator>();
+		std::wstring ani_name;
+		//duck 일경우
+		if (core::Input::GetKey(core::EKeyCode::S) && core::Input::GetKey(core::EKeyCode::A)
+			&& core::Input::GetKey(core::EKeyCode::D))
+		{
+			core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::D, core::EKeyCode::A);
 
+			switch (code)
+			{
+			case core::EKeyCode::A:
+				mDirType = EDirType::LEFT;
+				break;
+			case core::EKeyCode::D:
+				mDirType = EDirType::RIGHT;
+				break;
+			}
+			ani_name = ani->GetDirAniKey(L"Duck", mDirType);
+			ani->Play(ani_name, true);
+			mState = ECharacterState::Idle;
+			mbSit = true;
+			return;
+		}
+		else if (core::Input::GetKey(core::EKeyCode::S))
+		{
+			ani_name = ani->GetDirAniKey(L"Duck", mDirType);
+			ani->Play(ani_name, true);
+			mState = ECharacterState::Idle;
+			mbSit = true;
+			return;
+		}
+		//duck 아닐 경우
 		switch (mState)
 		{
 		case ECharacterState::Move:
+			if (core::Input::GetKey(core::EKeyCode::A) && core::Input::GetKey(core::EKeyCode::D))
+			{
+				core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::A, core::EKeyCode::D);
+				switch (code)
+				{
+				case core::EKeyCode::A:
+					ani->Play(L"RegularLeft", true);
+					break;
+				case core::EKeyCode::D:
+					ani->Play(L"RegularRight", true);
+					break;
+				}
+				return;
+			}
 			if (core::Input::GetKey(core::EKeyCode::A))
 			{
 				ani->Play(L"RegularLeft", true);
