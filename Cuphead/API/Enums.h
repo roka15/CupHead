@@ -15,6 +15,7 @@ enum class  ELayerType
 {
 	NONE,
 	BackObject,
+	BackColObject,
 	Ground,
 	Monster,
 	Player,

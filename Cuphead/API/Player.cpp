@@ -95,4 +95,11 @@ namespace yeram_client
 	void Player::OnCollisionExit(Collider* other)
 	{
 	}
+	void Player::Parry_Check()
+	{
+		if (mCharacter->GetDash() == true)
+		{
+			mCharacter->BonusJump();
+		}
+	}
 }

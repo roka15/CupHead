@@ -49,6 +49,7 @@ namespace yeram_client
 		void testidle(const PushInfo& push_info);
 		void testmove(const PushInfo& push_info);
 		void testduck(const PushInfo& push_info);
+		void testdash(const PushInfo& push_info);
 	private:
 		float mFirstJumpTime;
 	

@@ -3,7 +3,7 @@
 #include "TitleScene.h"
 #include "MainMenuScene.h"
 #include "MedusaScene.h"
-#include "DevilScene.h"
+#include "TutorialScene.h"
 #include "Camera.h"
 #include "Rectangle.h"
 #include "UI.h"
@@ -27,7 +27,7 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene(L"Main");
 		mScenes[(UINT)ESceneType::PlayMap] = new PlayMapScene(L"Play");
 		mScenes[(UINT)ESceneType::BossMedusa] = new MedusaScene(L"Medusa");
-		mScenes[(UINT)ESceneType::BossDevil] = new DevilScene(L"Devil");
+		mScenes[(UINT)ESceneType::BossDevil] = new TutorialScene(L"Devil");
 		
 
 		//애니 재생으로만 쓸 pool

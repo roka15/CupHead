@@ -15,6 +15,7 @@ namespace yeram_client
 			Death,
 			Idle,
 			Duck,
+			Dash,
 		};
 		
 		virtual void Initialize()=0;
@@ -31,7 +32,9 @@ namespace yeram_client
 		void SetNextAniInfo();
 		void SetAirMode(bool _flag);
 		void ResetJump() { mJump = 0; }
-		void ResetDash() { mbDash = false; }
+		void BonusJump();
+		void ResetDash();
+		bool GetDash() { return mbDash; }
 	protected:
 		virtual void move();
 		virtual void idle();
@@ -60,6 +63,7 @@ namespace yeram_client
 		bool mbSit;
 		bool mbDash;
 		float mDashVelocity;
+		float mDashTime;
 		//Rigidbody* mRigidBody;
 	};
 }

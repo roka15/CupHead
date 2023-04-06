@@ -22,7 +22,7 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other)override;
 		virtual void OnCollisionExit(class Collider* other)override;
 
-	
+		void Parry_Check();
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;

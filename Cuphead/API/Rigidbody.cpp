@@ -45,7 +45,7 @@ namespace yeram_client
 		}
 		else
 		{
-			int a = 0;
+		
 		}
 		
 		//중력 가속도 최대속도 제한

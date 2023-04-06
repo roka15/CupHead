@@ -163,7 +163,7 @@ namespace yeram_client
 			}
 			ani_name = ani->GetDirAniKey(L"Duck", mDirType);
 			ani->Play(ani_name, true);
-			mState = ECharacterState::Idle;
+			mState = ECharacterState::Duck;
 			mbSit = true;
 			return;
 		}
@@ -171,13 +171,15 @@ namespace yeram_client
 		{
 			ani_name = ani->GetDirAniKey(L"Duck", mDirType);
 			ani->Play(ani_name, true);
-			mState = ECharacterState::Idle;
+			mState = ECharacterState::Duck;
 			mbSit = true;
 			return;
 		}
 		//duck 아닐 경우
 		switch (mState)
 		{
+		case ECharacterState::Dash:
+			ResetDash();
 		case ECharacterState::Move:
 			if (core::Input::GetKey(core::EKeyCode::A) && core::Input::GetKey(core::EKeyCode::D))
 			{
@@ -191,22 +193,31 @@ namespace yeram_client
 					ani->Play(L"RegularRight", true);
 					break;
 				}
+				mState = ECharacterState::Move;
 				return;
 			}
 			if (core::Input::GetKey(core::EKeyCode::A))
 			{
 				ani->Play(L"RegularLeft", true);
+				mState = ECharacterState::Move;
 				return;
 			}
 			else if (core::Input::GetKey(core::EKeyCode::D))
 			{
 				ani->Play(L"RegularRight", true);
+				mState = ECharacterState::Move;
 				return;
 			}
 			mState = ECharacterState::Idle;
 		case ECharacterState::Idle:
+		{
 			std::wstring anikey = ani->GetDirAniKey(L"Idle", mDirType);
 			ani->Play(anikey, true);
+			break;
+		}
+		case ECharacterState::Duck:
+			//duck 일경우
+
 			break;
 		}
 
@@ -219,6 +230,24 @@ namespace yeram_client
 		mbAir = _flag;
 		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
 		rig->Use_Gravity(_flag);
+	}
+
+	void Character::BonusJump()
+	{
+		if (mJump != 0)
+			mJump--;
+	}
+
+	void Character::ResetDash()
+	{
+		mbDash = false;	
+		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
+		rig->SetActive(true);
+		Vector2 vel = rig->GetVelocity();
+		vel.y = 0;
+		rig->SetVelocity(vel);
+		mDashVelocity = 1.0f; 
+		mDashTime = 0.0f;
 	}
 
 }

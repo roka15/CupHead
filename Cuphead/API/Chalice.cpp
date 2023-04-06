@@ -35,6 +35,7 @@ namespace yeram_client
 		const Vector2& size = ani->GetSpriteSize();
 		col->SetCenter(Vector2{ -(size.x / 2),-size.y });
 		col->SetSize(size);
+		mDashVelocity = 1.0f;
 
 	}
 
@@ -526,10 +527,12 @@ namespace yeram_client
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Duck\\Duck\\Right", Vector2::Zero, 0.05f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Duck\\Stand Up\\Left", Vector2::Zero, 0.05f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Duck\\Stand Up\\Right", Vector2::Zero, 0.03f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Right", Vector2::Zero, 0.08f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Left", Vector2::Zero, 0.08f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Right", Vector2::Zero, 0.08f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Left", Vector2::Zero, 0.08f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Right", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Left", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Right", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Left", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Right", Vector2::Zero, 0.03f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Left", Vector2::Zero, 0.03f, true);
 #pragma endregion
 
 #pragma region air ani 
@@ -572,19 +575,25 @@ namespace yeram_client
 			void
 		{
 			SetNextAniInfo();
-			ResetDash();
+			ResetDash(); 
 		});
 		ani->GetCompleteEvent(L"JumpDashRight") = std::bind([this, ani]()->
 			void
 		{
 			ResetDash();
-			ani->Play(L"Double JumpRight", false);
+			if (mJump == 2)
+				ani->Play(L"Double JumpRight", false);
+			else if (mJump == 1)
+				ani->Play(L"FallRight", false);
 		});
 		ani->GetCompleteEvent(L"JumpDashLeft") = std::bind([this, ani]()->
 			void
 		{
 			ResetDash();
+			if (mJump == 2)
 			ani->Play(L"Double JumpLeft", false);
+			else if (mJump == 1)
+				ani->Play(L"FallRight", false);
 		});
 
 		ani->GetCompleteEvent(L"AirTransitionsUp") = std::bind([this, ani]()->
@@ -721,111 +730,73 @@ namespace yeram_client
 			
 			core::Input::KeyMessageQueuePop();
 			
-			//duck
-			if (mJump==0&&push.keycode == core::EKeyCode::S && push.state == core::EKeyState::Down)
+			//dash 
+			if (mbDash == false && push.keycode == core::EKeyCode::SHIFT&&push.state==core::EKeyState::Down)
 			{
-				mbSit = true;
-				ani_name = ani->GetDirAniKey(L"Duck",mDirType);
-				if (ani_name.size() > 0)
-				{
-					ani->Play(ani_name, true);
-					mState = ECharacterState::Idle;
-				}	
-				return;
-			}
-			else if (push.keycode == core::EKeyCode::S && push.state == core::EKeyState::Up)
-			{
-				mbSit = false;
-				bool keydown_flag = false;
-				if (core::Input::GetKey(core::EKeyCode::D) && core::Input::GetKey(core::EKeyCode::A))
-				{
-					keydown_flag = true;
-					core::EKeyCode key = core::Input::GetFirstPriorityKey(core::EKeyCode::D, core::EKeyCode::A);
-					switch (key)
-					{
-					case core::EKeyCode::A:
-						mDirType = EDirType::LEFT;
-						break;
-					case core::EKeyCode::D:
-						mDirType = EDirType::RIGHT;
-						break;
-					}
-				}
-				else if (core::Input::GetKey(core::EKeyCode::D))
-				{
-					keydown_flag = true;
-					mDirType = EDirType::RIGHT;
-				}
-				else if (core::Input::GetKey(core::EKeyCode::A))
-				{
-					keydown_flag = true;
-					mDirType = EDirType::LEFT;
-				}
-				if (keydown_flag == false)
-				{
-					ani_name = ani->GetDirAniKey(L"Idle", mDirType);
-					mState = ECharacterState::Idle;
-				}
-				else if(mJump==0)
-				{
-					ani_name = ani->GetDirAniKey(L"Regular", mDirType);
-					mState = ECharacterState::Move;
-				}
-				if (ani_name.size() > 0)
-				{
-					ani->Play(ani_name, true);
-				}
-				return;
-			}
-			if (mbSit == true &&push.state == core::EKeyState::Down&&push.keycode!=core::EKeyCode::SPACE)
-			{
-				if (push.keycode == core::EKeyCode::A&&core::Input::GetKey(core::EKeyCode::D)==false)
-					mDirType = EDirType::LEFT;
-				else if (push.keycode == core::EKeyCode::D && core::Input::GetKey(core::EKeyCode::A) == false)
-					mDirType = EDirType::RIGHT;
-
-				ani_name = ani->GetDirAniKey(L"DuckIdle", mDirType);
-				if (ani_name.size() > 0)
-				{
-					ani->Play(ani_name, true);
-					mState = ECharacterState::Idle;
-				}
-				return;
-			}
-			//jump / double jump 
-			if (push.keycode == core::EKeyCode::SPACE && push.state == core::EKeyState::Down)
-			{
+				mbDash = true;
+				mOwner->GetComponent<Rigidbody>()->SetActive(false);
+				mState = ECharacterState::Dash;
+				mDashVelocity = 2.0f;
 				if (mJump == 0)
-				{
-					mJump++;
-					mFirstJumpTime = push.Time;
-
-					ani_name = ani->GetDirAniKey(L"Jump", mDirType);
-				}
-				else if (mJump == 1)
-				{
-					mJump++;
-					float offset = push.Time - mFirstJumpTime;
-					if (offset <= 1.0f)
-					{
-						ani_name = ani->GetDirAniKey(L"Double Jump", mDirType);
-					}
-				}
+					ani_name = ani->GetDirAniKey(L"GroundDash", mDirType);
+				else
+					ani_name = ani->GetDirAniKey(L"JumpDash", mDirType);
 
 				if (ani_name.size() > 0)
 				{
 					ani->Play(ani_name, true);
-					Rigidbody* rigid = mOwner->GetComponent<Rigidbody>();
-					Vector2 velocity = rigid->GetVelocity();
-					velocity.y -= 1050.0f;
+				}
+				mDashTime = Time::DeltaTime();
+			}
+			
+			if (mbDash == false)
+			{	
+				//duck
+				if (mJump == 0 && push.keycode == core::EKeyCode::S && push.state == core::EKeyState::Down)
+				{
+					mbSit = true;
+					ani_name = ani->GetDirAniKey(L"Duck", mDirType);
+					if (ani_name.size() > 0)
+					{
+						ani->Play(ani_name, true);
+						mState = ECharacterState::Duck;
+					}
+					return;
+				}
+				//jump / double jump 
+				if (push.keycode == core::EKeyCode::SPACE && push.state == core::EKeyState::Down)
+				{
+					if (mJump == 0)
+					{
+						mJump++;
+						mFirstJumpTime = push.Time;
 
-					rigid->SetVelocity(velocity);
-					rigid->SetGround(false);
+						ani_name = ani->GetDirAniKey(L"Jump", mDirType);
+					}
+					else if (mJump == 1)
+					{
+						mJump++;
+						float offset = push.Time - mFirstJumpTime;
+						if (offset <= 1.0f)
+						{
+							ani_name = ani->GetDirAniKey(L"Double Jump", mDirType);
+						}
+					}
 
-					mState = ECharacterState::Move;
+					if (ani_name.size() > 0)
+					{
+						ani->Play(ani_name, true);
+						Rigidbody* rigid = mOwner->GetComponent<Rigidbody>();
+						Vector2 velocity = rigid->GetVelocity();
+						velocity.y -= 1050.0f;
+
+						rigid->SetVelocity(velocity);
+						rigid->SetGround(false);
+
+						mState = ECharacterState::Move;
+					}
 				}
 			}
-
 			
 			switch (mState)
 			{
@@ -836,16 +807,11 @@ namespace yeram_client
 				testmove(push);
 				break;
 			case ECharacterState::Duck:
+				testduck(push);
 				break;
-				/*	case ECharacterState::Death:
-						death();
-						break;
-					case ECharacterState::Shoot:
-						shoot();
-						break;
-					case ECharacterState::Duck:
-						duck();
-						break;*/
+			case ECharacterState::Dash:
+				testdash(push);
+				break;
 			}
 		}
 
@@ -858,17 +824,28 @@ namespace yeram_client
 		Transform* transform = mOwner->GetComponent<Transform>();
 		Vector2& pos = transform->GetPos();
 		Vector2 offset;
-		if (core::Input::GetKey(core::EKeyCode::A) && core::Input::GetKey(core::EKeyCode::D))
+		if (mbDash == true)
+		{
+			if (mDirType == EDirType::LEFT)
+			{
+				offset.x -= 400.0f * Time::DeltaTime() * mDashVelocity;
+			}
+			else if (mDirType == EDirType::RIGHT)
+			{
+				offset.x += 400.0f * Time::DeltaTime() * mDashVelocity;
+			}
+		}
+		else if (core::Input::GetKey(core::EKeyCode::A) && core::Input::GetKey(core::EKeyCode::D))
 		{
 			core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::A, core::EKeyCode::D);
 			switch (code)
 			{
 			case core::EKeyCode::A:
-				offset.x -= 400.0f * Time::DeltaTime();
+				offset.x -= 400.0f * Time::DeltaTime()*mDashVelocity;
 				mDirType = EDirType::LEFT;
 				break;
 			case core::EKeyCode::D:
-				offset.x += 400.0f * Time::DeltaTime();
+				offset.x += 400.0f * Time::DeltaTime()*mDashVelocity;
 				mDirType = EDirType::RIGHT;
 				break;
 			}
@@ -876,15 +853,16 @@ namespace yeram_client
 		else if (core::Input::GetKey(core::EKeyCode::A))
 		{
 			//rig->AddForce(Vector2(-200.0f, 0.0f));
-			offset.x -= 400.0f * Time::DeltaTime();
+			offset.x -= 400.0f * Time::DeltaTime() * mDashVelocity;
 			mDirType = EDirType::LEFT;
 		}
 		else if (core::Input::GetKey(core::EKeyCode::D))
 		{
 			//rig->AddForce(Vector2(+200.0f, 0.0f));
-			offset.x += 400.0f * Time::DeltaTime();
+			offset.x += 400.0f * Time::DeltaTime() * mDashVelocity;
 			mDirType = EDirType::RIGHT;
 		}
+		
 		if (mbAir == true)
 		{
 			if (core::Input::GetKey(core::EKeyCode::W))
@@ -919,20 +897,19 @@ namespace yeram_client
 			{
 				ani_name = L"RegularLeft";
 				mDirType = EDirType::LEFT;
+				mState = ECharacterState::Move;
 			}
 			if (push_info.keycode == core::EKeyCode::D|| core::Input::GetKey(core::EKeyCode::D))
 			{
 				ani_name = L"RegularRight";
 				mDirType = EDirType::RIGHT;
+				mState = ECharacterState::Move;
 			}
-
-
+			
 			if (ani_name.size() > 0)
 			{
 				ani->Play(ani_name, true);
 			}
-
-			mState = ECharacterState::Move;
 		}
 		
 	}
@@ -955,7 +932,7 @@ namespace yeram_client
 				if (mJump == 0)
 				ani_name = L"RegularRight";
 			}
-			else if (state == core::EKeyState::Up)
+			else if (state == core::EKeyState::Up&&mJump==0)
 			{
 				mState = ECharacterState::Idle;
 				if (mJump == 0)
@@ -973,7 +950,7 @@ namespace yeram_client
 				if(mJump==0)
 				ani_name = L"RegularLeft";
 			}
-			else if (state == core::EKeyState::Up)
+			else if (state == core::EKeyState::Up && mJump == 0)
 			{
 				mState = ECharacterState::Idle;
 				if(mJump==0)
@@ -1002,5 +979,70 @@ namespace yeram_client
 	}
 	void Chalice::testduck(const PushInfo& push_info)
 	{
+		Animator* ani = mOwner->GetComponent<Animator>();
+		std::wstring ani_name;
+		if (push_info.keycode == core::EKeyCode::S && push_info.state == core::EKeyState::Up)
+		{
+			mbSit = false;
+			bool keydown_flag = false;
+			if (core::Input::GetKey(core::EKeyCode::D) && core::Input::GetKey(core::EKeyCode::A))
+			{
+				keydown_flag = true;
+				core::EKeyCode key = core::Input::GetFirstPriorityKey(core::EKeyCode::D, core::EKeyCode::A);
+				switch (key)
+				{
+				case core::EKeyCode::A:
+					mDirType = EDirType::LEFT;
+					break;
+				case core::EKeyCode::D:
+					mDirType = EDirType::RIGHT;
+					break;
+				}
+			}
+			else if (core::Input::GetKey(core::EKeyCode::D))
+			{
+				keydown_flag = true;
+				mDirType = EDirType::RIGHT;
+			}
+			else if (core::Input::GetKey(core::EKeyCode::A))
+			{
+				keydown_flag = true;
+				mDirType = EDirType::LEFT;
+			}
+			if (keydown_flag == false)
+			{
+				ani_name = ani->GetDirAniKey(L"Idle", mDirType);
+				mState = ECharacterState::Idle;
+			}
+			else if (mJump == 0)
+			{
+				ani_name = ani->GetDirAniKey(L"Regular", mDirType);
+				mState = ECharacterState::Move;
+			}
+			if (ani_name.size() > 0)
+			{
+				ani->Play(ani_name, true);
+			}
+			return;
+		}
+
+		if (mbSit == true && push_info.state == core::EKeyState::Down && push_info.keycode != core::EKeyCode::SPACE)
+		{
+			if (push_info.keycode == core::EKeyCode::A && core::Input::GetKey(core::EKeyCode::D) == false)
+				mDirType = EDirType::LEFT;
+			else if (push_info.keycode == core::EKeyCode::D && core::Input::GetKey(core::EKeyCode::A) == false)
+				mDirType = EDirType::RIGHT;
+
+			ani_name = ani->GetDirAniKey(L"DuckIdle", mDirType);
+			if (ani_name.size() > 0)
+			{
+				ani->Play(ani_name, true);
+			}
+			return;
+		}
+	}
+	void Chalice::testdash(const PushInfo& push_info)
+	{
+		
 	}
 }
