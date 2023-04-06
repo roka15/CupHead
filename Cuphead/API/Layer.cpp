@@ -70,6 +70,7 @@ namespace yeram_client
 		{
 			if (obj == nullptr)
 				continue;
+		
 			size_t str_pos = obj->GetName().find(L"BackGround");
 			if (str_pos == std::wstring::npos)
 			{

@@ -13,7 +13,6 @@ yeram_client::ParryingObject::~ParryingObject()
 void yeram_client::ParryingObject::Initialize()
 {
 	GameObject* owner = GetOwner();
-	owner->AddComponent<Collider>();
 }
 
 void yeram_client::ParryingObject::Update()

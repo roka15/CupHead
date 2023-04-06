@@ -23,6 +23,7 @@ namespace yeram_client
 		virtual void OnCollisionExit(class Collider* other)override;
 
 		void Parry_Check();
+		void Stop_PositionUpdate(bool _flag, EDirType _type);
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;

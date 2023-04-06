@@ -32,6 +32,7 @@ namespace yeram_client
 		void dash_start(const PushInfo& _push_info);
 		void jump(const PushInfo& _push_info);
 		
+		void Parrying()override;
 
 		void PositionUpdate()override;
 

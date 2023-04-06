@@ -33,9 +33,10 @@ namespace yeram_client
 		void SetNextAniInfo();
 		void SetAirMode(bool _flag);
 		void ResetJump() { mJump = 0; }
-		void BonusJump();
+		virtual void Parrying();
 		void ResetDash();
 		bool GetDash() { return mbDash; }
+		void StopTransUpdate(bool _flag, EDirType _type);
 	protected:
 		typedef core::Input::PushInfo PushInfo;
 
@@ -60,11 +61,13 @@ namespace yeram_client
 		GameObject* mOwner;
 		ECharacterState mState;
 		EDirType mDirType;
+		EDirType mStopDir;
 		int mJump;
 		bool mbAir;
 		bool mbAirStartFlag;
 		bool mbSit;
 		bool mbDash;
+		bool mbStopPositionUpdate;
 		float mDashVelocity;
 		float mDashTime;
 		//Rigidbody* mRigidBody;

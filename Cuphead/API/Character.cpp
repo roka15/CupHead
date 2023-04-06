@@ -232,10 +232,14 @@ namespace yeram_client
 		rig->Use_Gravity(_flag);
 	}
 
-	void Character::BonusJump()
+
+	void Character::Parrying()
 	{
-		if (mJump != 0)
+		if (mJump == 0)
+			mJump++;
+		if (mJump == 2)
 			mJump--;
+
 	}
 
 	void Character::ResetDash()
@@ -243,11 +247,17 @@ namespace yeram_client
 		mbDash = false;	
 		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
 		rig->SetActive(true);
-		Vector2 vel = rig->GetVelocity();
+		/*Vector2 vel = rig->GetVelocity();
 		vel.y = 0;
-		rig->SetVelocity(vel);
+		rig->SetVelocity(vel);*/
 		mDashVelocity = 1.0f; 
 		mDashTime = 0.0f;
+	}
+
+	void Character::StopTransUpdate(bool _flag, EDirType _type)
+	{
+		mbStopPositionUpdate = _flag;
+		mStopDir = _type;
 	}
 
 }

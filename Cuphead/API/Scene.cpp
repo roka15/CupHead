@@ -106,6 +106,8 @@ namespace yeram_client
 	{
 		for (auto layer : mLayers)
 		{
+			if (layer == nullptr)
+				continue;
 			std::shared_ptr<GameObject> obj=layer->FindObject(_name);
 			if (obj != nullptr)
 				return obj;

@@ -25,7 +25,11 @@ namespace yeram_client
 		{ 
 			return _pos - mDistance; 
 		}
-		
+		static void SetHorizontalMove(bool _flag) { mbHorizonMove = _flag; }
+		static void SetVerticalMove(bool _flag) { mbVerticalMove = _flag; }
+		static bool GetHorizontalMove() { return mbHorizonMove; }
+		static bool GetVerticalMove() { return mbVerticalMove; }
+		static bool UseTarget() { return mTarget != nullptr; }
 		static void Clear();
 	
 	private:
@@ -35,6 +39,8 @@ namespace yeram_client
 		static Vector2 mLookPosition;
 		static Vector2 mDistance;
 		static GameObject* mTarget;
+		static bool mbHorizonMove;
+		static bool mbVerticalMove;
 	};
 
 }

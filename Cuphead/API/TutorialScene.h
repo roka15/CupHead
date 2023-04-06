@@ -17,7 +17,10 @@ namespace yeram_client
 		virtual void OnEnter()override;
 		virtual void OnExit()override;
 	private:
-
+		GameObject* mPlayer;
+		Vector2 mStartPos;
+		Vector2 mMapLimit;
+		bool mFirstUpdate;
 	};
 }
 

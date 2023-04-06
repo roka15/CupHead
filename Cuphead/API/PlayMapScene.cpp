@@ -10,6 +10,7 @@
 #include "Input.h"
 #include "Time.h"
 #include "ObjectPool.h"
+#include "Camera.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -39,7 +40,8 @@ namespace yeram_client
 		if (core::Input::GetKeyDown(core::EKeyCode::MouseRight))
 		{
 			SceneManager::LoadScene(ESceneType::BossDevil);
-			SceneManager::OpenLodingScreen();
+			
+			//SceneManager::OpenLodingScreen();
 		}
 		//화면 확대 축소
 		/*if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
@@ -63,6 +65,8 @@ namespace yeram_client
 	}
 	void PlayMapScene::OnEnter()
 	{
+		Camera::SetHorizontalMove(true);
+		Camera::SetVerticalMove(true);
 		Vector2 pos = application.GetWindowSize() / 2.0f;
 		GameObject* player_obj = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player").get();
 		if (player_obj != nullptr)

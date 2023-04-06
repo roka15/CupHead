@@ -13,7 +13,8 @@ namespace yeram_client
 	Vector2  Camera::mLookPosition;
 	Vector2  Camera::mDistance;
 	GameObject* Camera::mTarget = nullptr;
-	
+	bool Camera::mbHorizonMove=false;
+	bool Camera::mbVerticalMove=false;
 	
 
 	void Camera::Initialize()
@@ -32,10 +33,19 @@ namespace yeram_client
 			return;
 		if (mTarget != nullptr)
 		{
-			mLookPosition = mTarget->GetComponent<Transform>()->GetPos();
+			const Vector2& target_pos = mTarget->GetComponent<Transform>()->GetPos();
+			if (mbHorizonMove == true)
+			{
+				mLookPosition.x = target_pos.x;
+			}
+			if (mbVerticalMove == true)
+			{
+				mLookPosition.y = target_pos.y;
+			}
 		}
 		else
 		{
+			/*
 			if (core::Input::GetKey(core::EKeyCode::Left))
 			{
 				mLookPosition.x -= 100.0f * Time::DeltaTime();
@@ -52,6 +62,7 @@ namespace yeram_client
 			{
 				mLookPosition.y += 100.0f * Time::DeltaTime();
 			}
+			*/
 		}
 
 		

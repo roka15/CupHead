@@ -99,7 +99,11 @@ namespace yeram_client
 	{
 		if (mCharacter->GetDash() == true)
 		{
-			mCharacter->BonusJump();
+			mCharacter->Parrying();
 		}
+	}
+	void Player::Stop_PositionUpdate(bool _flag, EDirType _type)
+	{
+		mCharacter->StopTransUpdate(_flag,EDirType::LEFT);
 	}
 }

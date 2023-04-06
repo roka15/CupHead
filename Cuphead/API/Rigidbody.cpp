@@ -11,7 +11,7 @@ namespace yeram_client
 		mLimitedVelocity.y = 3600.0f;
 
 		mbGround = true;
-		mGravity = Vector2(0.0f, 3600.0f);
+		mGravity = Vector2(0.0f, 3000.0f);
 		mFriction = 100.0f;
 	}
 	Rigidbody::~Rigidbody()
@@ -24,7 +24,7 @@ namespace yeram_client
 	void Rigidbody::Update()
 	{   //F = MA
 		//A = M/F
-		
+		GameObject* owner = GetOwner();
 		mAccelation = mForce /mMass;
 
 		mVelocity += mAccelation * Time::DeltaTime();

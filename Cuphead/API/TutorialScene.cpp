@@ -2,10 +2,12 @@
 #include "Layer.h"
 #include "Player.h"
 #include "Ground.h"
+#include "ParryingObject.h"
 #include "Character.h"
 #include "ObjectPool.h"
 #include "ColliderManager.h"
 #include "Application.h"
+#include "Camera.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -32,7 +34,14 @@ namespace yeram_client
 	}
 	void TutorialScene::Update()
 	{
+		
 		Scene::Update();
+		
+		Transform* tf = mPlayer->GetComponent<Transform>();
+		const Vector2& pos = tf->GetPos();
+		
+		
+		mFirstUpdate = true;
 	}
 	void TutorialScene::Render(HDC hdc)
 	{
@@ -44,18 +53,26 @@ namespace yeram_client
 	}
 	void TutorialScene::OnEnter()
 	{
+		mFirstUpdate = false;
 		Vector2 size = application.GetWindowSize();
+
+		Camera::SetHorizontalMove(false);
+		Camera::SetVerticalMove(false);
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::FrontObject, true);
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::BackColObject,true);
+
+		mStartPos = Vector2{ 200.0f,300.0f };
 		for (auto obj : GetGameObjects(ELayerType::Player))
 		{
 			GameObject* owner = obj.get();
+			mPlayer = owner;
 			Player* player = owner->GetComponent<Player>();
 			player->ChangeCharacter(EPlayerType::MsChalice);
 			player->SetActive(true);
 			Transform* tf = owner->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 200.0f,300.0f });
-
+		
+			tf->SetPos(mStartPos);
+			
 			Character* active_ch = player->GetActiveCharacter();
 			active_ch->SetAirMode(false);
 			active_ch->Initialize();
@@ -64,73 +81,50 @@ namespace yeram_client
 			rid->Use_Gravity(true);
 			rid->SetGround(false);
 			rid->SetMass(1.0f);
+			//Camera::SetTarget(owner);
 		}
 		
 		std::shared_ptr<GameObject> obj = core::ObjectPool<Ground>::Spawn();
 		Collider* col = obj->GetComponent<Collider>();
 		Transform* tf = obj->GetComponent<Transform>();
-		tf->SetPos(Vector2{800.0f,900.0f});
+		tf->SetPos(Vector2{400.0f,900.0f});
 		col->SetCenter(Vector2{ -800.0f, -100.0f });
-		col->SetSize(Vector2{ 1600.0f,100.0f });
+		col->SetSize(Vector2{ 2100.0f,100.0f });
 		AddGameObject(obj, ELayerType::FrontObject);
    
-		/*std::shared_ptr<GameObject> obj = core::ObjectPool<SpriteRenderer>::Spawn();
-		Transform* tf = obj->GetComponent<Transform>();
-		tf->SetSize(Vector2{ (long)size.x,(long)size.y });
-		SpriteRenderer* sprite = obj->GetComponent<SpriteRenderer>();
-		sprite->SetImage(L"DevilBackground1", L"..\\Resources\\Devil\\devil_bg_volcanos.bmp");
+	/*	std::shared_ptr<GameObject> background = std::make_shared<GameObject>();
+		{
+			background->SetName(L"tutorial_background");
+			Transform* tf = background->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 650.0f,size.y - 50 });
+			Vector2& scale = tf->GetScale();
+			scale.x *= 1.28f;
+			scale.y *= 1.2f;
+			Animator* ani = background->AddComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\TutorialScene\\Loop", Vector2::Zero, 0.04f);
+			ani->Play(L"TutorialSceneLoop", true);
+
+			mMapLimit = ani->GetSpriteSize();
+			mMapLimit = mMapLimit / 2.0f;
 		
-		sprite->SetRenderType(ERenderType::StretchBlt);
-		obj->SetName(L"DevilBackground1");
+			AddGameObject(background, ELayerType::BackObject);
+		}*/
+		std::shared_ptr<GameObject> parry = std::make_shared<GameObject>();
+		{
+			parry->SetName(L"ParryObject");
+			ParryingObject* po = parry->AddComponent<ParryingObject>();
+			Transform* tf = parry->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 700.0f,800.0f });
+			Animator* ani = parry->AddComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\TutorialScene\\Wheat\\C",Vector2::Zero,0.04f);
+			ani->Play(L"WheatC",true);
+			const Vector2& image_size =ani->GetSpriteSize();
+			Collider* col = parry->AddComponent<Collider>();
+			col->SetCenter(Vector2{ -(image_size.x/2.0f),-(image_size.y)});
+			col->SetSize(image_size);
+			AddGameObject(parry, ELayerType::BackColObject);
+		}
 
-		AddGameObject(obj, ELayerType::BackObject);
-
-		obj = core::ObjectPool<SpriteRenderer>::Spawn();
-		tf = obj->GetComponent<Transform>();
-		tf->SetSize(Vector2{ (long)size.x,(long)size.y+100l });
-		sprite = obj->GetComponent<SpriteRenderer>();
-		sprite->SetImage(L"DevilBackground2", L"..\\Resources\\Devil\\devil_bg_ph_1_pillars.bmp");
-
-		sprite->SetRenderType(ERenderType::TransParentBlt);
-		obj->SetName(L"DevilBackground2");
-		AddGameObject(obj, ELayerType::BackObject);
-
-		obj = core::ObjectPool<SpriteRenderer>::Spawn();
-		tf = obj->GetComponent<Transform>();
-		tf->SetPos(Vector2{ -500.0f,0.0f });
-		tf->SetSize(Vector2{ (long)size.x+1000l,(long)size.y});
-		sprite = obj->GetComponent<SpriteRenderer>();
-		sprite->SetImage(L"DevilBackground3", L"..\\Resources\\Devil\\devil_bg_ph_1_foreground.bmp");
-
-		sprite->SetRenderType(ERenderType::TransParentBlt);
-		obj->SetName(L"DevilBackground3");
-		AddGameObject(obj, ELayerType::FrontObject);
-
-		obj = core::ObjectPool<SpriteRenderer>::Spawn();
-		tf = obj->GetComponent<Transform>();
-		Vector2& pos = tf->GetPos();
-		pos.x+=560.0f;
-		pos.y += 70.0f;
-		sprite = obj->GetComponent<SpriteRenderer>();
-		sprite->SetImage(L"DevilChair", L"..\\Resources\\Devil\\devil_bg_ph_1_chair_big.bmp");
-
-		sprite->SetRenderType(ERenderType::TransParentBlt);
-		obj->SetName(L"DevilChair");
-		AddGameObject(obj, ELayerType::BackObject);
-
-
-		obj = core::ObjectPool<SpriteRenderer>::Spawn();
-		tf = obj->GetComponent<Transform>();
-		Vector2& pos2 = tf->GetPos();
-		pos2.x += 560.0f;
-		pos2.y += 70.0f;
-		sprite = obj->GetComponent<SpriteRenderer>();
-		sprite->SetImage(L"DevilBoss", L"..\\Resources\\Devil\\Idle\\devil_idle_0024.bmp");
-
-		sprite->SetRenderType(ERenderType::TransParentBlt);
-		obj->SetName(L"DevilBoss");
-		AddGameObject(obj, ELayerType::BackObject);*/
-		//Camera::PlayLoad();
 		Scene::OnEnter();
 	}
 	void TutorialScene::OnExit()

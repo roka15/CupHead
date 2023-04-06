@@ -360,7 +360,10 @@ namespace yeram_client
 				ani->Play(ani_name, true);
 				Rigidbody* rigid = mOwner->GetComponent<Rigidbody>();
 				Vector2 velocity = rigid->GetVelocity();
-				velocity.y -= 1050.0f;
+				if (mJump == 1)
+					velocity.y -= 1050.0f;
+				else
+					velocity.y -= 1050.0f*0.7f;
 
 				rigid->SetVelocity(velocity);
 				rigid->SetGround(false);
@@ -368,6 +371,19 @@ namespace yeram_client
 				mState = ECharacterState::Move;
 			}
 		}
+	}
+	void Chalice::Parrying()
+	{
+		Character::Parrying();
+		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
+		Animator* ani = mOwner->GetComponent<Animator>();
+	
+		Vector2 velocity = rig->GetVelocity();
+		
+		velocity.y -= 1050.0f * 1.2f;
+
+		rig->SetVelocity(velocity);
+		rig->SetGround(false);
 	}
 	void Chalice::PositionUpdate()
 	{

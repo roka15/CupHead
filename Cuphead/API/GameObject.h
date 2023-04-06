@@ -235,6 +235,7 @@ namespace yeram_client
 		void RemoveChild(std::shared_ptr<GameObject> _child);
 		void RemoveChilds();
 
+		
 		virtual void OnCollisionEnter(class Collider* other);
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
@@ -282,7 +283,7 @@ namespace yeram_client
 		std::vector<std::shared_ptr<GameObject>> mChilds;
 		GameObject* mParent;
 		bool mbActive;
-
+		bool mbCameraCul;
 		ELayerType mLayerType;
 	};
 }
