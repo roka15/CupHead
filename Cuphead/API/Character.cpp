@@ -10,7 +10,7 @@
 
 namespace yeram_client
 {
-	void Character::move()
+	void Character::move(const PushInfo& _push_info)
 	{
 		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
 
@@ -55,7 +55,7 @@ namespace yeram_client
 		transform->SetPos(pos + offset);
 		SceneManager::ChagePosGameObjects(offset);
 	}
-	void Character::idle()
+	void Character::idle(const PushInfo& _push_info)
 	{
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
@@ -100,14 +100,14 @@ namespace yeram_client
 		}
 		*/
 	}
-	void Character::shoot()
+	void Character::shoot(const PushInfo& _push_info)
 	{
 
 	}
-	void Character::duck()
+	void Character::duck(const PushInfo& _push_info)
 	{
 	}
-	void Character::death()
+	void Character::death(const PushInfo& _push_info)
 	{
 	}
 

@@ -25,19 +25,20 @@ namespace yeram_client
 
 	void Cuphead::Update()
 	{
+		PushInfo push;
 			switch (mState)
 			{
 			case ECharacterState::Idle:
-				idle();
+				idle(push);
 				break;
 			case ECharacterState::Move:
-				move();
+				move(push);
 				break;
 			case ECharacterState::Death:
-				death();
+				death(push);
 				break;
 			case ECharacterState::Shoot:
-				shoot();
+				shoot(push);
 				break;
 			}
 	}
@@ -106,26 +107,26 @@ namespace yeram_client
 		obj->SetSpriteIndex(3);
 	}
 
-	void Cuphead::move()
+	void Cuphead::move(const PushInfo& _push_info)
 	{
-		Character::move();
+		Character::move(_push_info);
 	}
 
-	void Cuphead::idle()
+	void Cuphead::idle(const PushInfo& _push_info)
 	{
-		Character::idle();
+		Character::idle(_push_info);
 	}
 
-	void Cuphead::shoot()
+	void Cuphead::shoot(const PushInfo& _push_info)
 	{
-		Character::shoot();
+		Character::shoot(_push_info);
 	}
 
-	void Cuphead::death()
+	void Cuphead::death(const PushInfo& _push_info)
 	{
-		Character::death();
+		Character::death(_push_info);
 	}
-	void Cuphead::duck()
+	void Cuphead::duck(const PushInfo& _push_info)
 	{
 	}
 	bool Cuphead::jump_check(ECharacterState _befor_state)

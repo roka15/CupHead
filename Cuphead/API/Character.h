@@ -1,6 +1,7 @@
 #pragma once
 #include "CommonInclude.h"
 #include "Enums.h"
+#include "Input.h"
 namespace yeram_client
 {
 	class Rigidbody;
@@ -36,11 +37,13 @@ namespace yeram_client
 		void ResetDash();
 		bool GetDash() { return mbDash; }
 	protected:
-		virtual void move();
-		virtual void idle();
-		virtual void shoot();
-		virtual void duck();
-		virtual void death();
+		typedef core::Input::PushInfo PushInfo;
+
+		virtual void move(const PushInfo& _push_info);
+		virtual void idle(const PushInfo& _push_info);
+		virtual void shoot(const PushInfo& _push_info);
+		virtual void duck(const PushInfo& _push_info);
+		virtual void death(const PushInfo& _push_info);
 		virtual bool jump_check(ECharacterState _befor_state);
 
 		virtual void air_move();

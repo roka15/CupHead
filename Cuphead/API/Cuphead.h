@@ -16,11 +16,11 @@ namespace yeram_client
 		void Create()override;
 
 	private:
-		void move()override;
-		void idle()override;
-		void shoot()override;
-		void death()override;
-		void duck()override;
+		void move(const PushInfo& _push_info)override;
+		void idle(const PushInfo& _push_info)override;
+		void shoot(const PushInfo& _push_info)override;
+		void death(const PushInfo& _push_info)override;
+		void duck(const PushInfo& _push_info)override;
 
 		bool jump_check(ECharacterState _befor_state)override;
 
