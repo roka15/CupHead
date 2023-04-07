@@ -129,10 +129,7 @@ namespace yeram_client
 	void Cuphead::duck(const PushInfo& _push_info)
 	{
 	}
-	bool Cuphead::jump_check(ECharacterState _befor_state)
-	{
-		return false;
-	}
+	
 	void Cuphead::air_move()
 	{
 	}

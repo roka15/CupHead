@@ -17,6 +17,7 @@ namespace yeram_client
 			Idle,
 			Duck,
 			Dash,
+			Fix,
 		};
 		
 		virtual void Initialize()=0;
@@ -47,7 +48,8 @@ namespace yeram_client
 		virtual void shoot(const PushInfo& _push_info);
 		virtual void duck(const PushInfo& _push_info);
 		virtual void death(const PushInfo& _push_info);
-		virtual bool jump_check(ECharacterState _befor_state);
+		virtual void fix(const PushInfo& _push_info);
+		
 
 		virtual void air_move();
 		virtual void air_idle();

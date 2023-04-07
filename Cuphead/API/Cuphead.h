@@ -22,7 +22,7 @@ namespace yeram_client
 		void death(const PushInfo& _push_info)override;
 		void duck(const PushInfo& _push_info)override;
 
-		bool jump_check(ECharacterState _befor_state)override;
+		
 
 		virtual void air_move()override;
 		virtual void air_idle()override;

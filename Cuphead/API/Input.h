@@ -5,7 +5,7 @@ namespace core
 {
 	enum class EKeyCode
 	{
-		A, S, D, W, K,Z,
+		A, S, D, W, K,Z,C,
 		Left,
 		Right,
 		Up,

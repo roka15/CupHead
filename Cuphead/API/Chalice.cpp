@@ -42,7 +42,7 @@ namespace yeram_client
 	void Chalice::Update()
 	{
 		Input();
-		
+
 	}
 
 	void Chalice::Render(HDC hdc)
@@ -64,7 +64,8 @@ namespace yeram_client
 
 			//dash 
 			dash_start(push);
-
+			//fix
+			fix_start(push);
 			/*
 			if (mbAir == true)
 			{
@@ -108,6 +109,9 @@ namespace yeram_client
 					break;
 				case ECharacterState::Dash:
 					dash(push);
+					break;
+				case ECharacterState::Fix:
+					fix(push);
 					break;
 				}
 			}
@@ -290,6 +294,8 @@ namespace yeram_client
 	{
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
+		if (mState == ECharacterState::Fix)
+			return false;
 		if (mJump == 0 && _push_info.keycode == core::EKeyCode::Down && _push_info.state == core::EKeyState::Down)
 		{
 			mbSit = true;
@@ -347,10 +353,10 @@ namespace yeram_client
 			}
 			else if (mJump == 1)
 			{
-				mJump++;
 				float offset = _push_info.Time - mFirstJumpTime;
-				if (offset <= 1.0f||mbParry==true)
+				if (offset <= 1.0f || mbParry == true)
 				{
+					mJump++;
 					ani_name = ani->GetDirAniKey(L"Double Jump", mDirType);
 				}
 			}
@@ -360,10 +366,9 @@ namespace yeram_client
 				ani->Play(ani_name, true);
 				Rigidbody* rigid = mOwner->GetComponent<Rigidbody>();
 				Vector2 velocity = rigid->GetVelocity();
-				if (mJump == 1)
-					velocity.y -= 1050.0f;
-				else
-					velocity.y -= 1050.0f*0.7f;
+				
+				velocity.y -= 1050.0f;
+				
 
 				rigid->SetVelocity(velocity);
 				rigid->SetGround(false);
@@ -372,14 +377,57 @@ namespace yeram_client
 			}
 		}
 	}
+	void Chalice::fix(const PushInfo& _push_info)
+	{
+		Animator* ani = mOwner->GetComponent<Animator>();
+		std::wstring ani_name;
+		if (_push_info.keycode == core::EKeyCode::C && _push_info.state == core::EKeyState::Up)
+		{
+			mbStopPositionUpdate = false;
+			bool keydown_flag = false;
+			if (core::Input::GetKey(core::EKeyCode::Left)|| core::Input::GetKeyDown(core::EKeyCode::Left))
+			{
+				keydown_flag = true;
+				mState = ECharacterState::Move;
+				mDirType = EDirType::LEFT;
+				ani_name = ani->GetDirAniKey(L"Regular",mDirType);
+			}
+			else if (core::Input::GetKey(core::EKeyCode::Right)|| core::Input::GetKey(core::EKeyCode::Right))
+			{
+				keydown_flag = true;
+				mState = ECharacterState::Move;
+				mDirType = EDirType::RIGHT;
+				ani_name = ani->GetDirAniKey(L"Regular", mDirType);
+			}
+
+			if (keydown_flag == false)
+			{
+				ani_name = ani->GetDirAniKey(L"Idle", mDirType);
+				mState = ECharacterState::Idle;
+			}
+
+			if (ani_name.size() > 0)
+			{
+				ani->Play(ani_name, true);
+			}
+		}
+	}
+	void Chalice::fix_start(const PushInfo& _push_info)
+	{
+		if (core::Input::GetKey(core::EKeyCode::C))
+		{
+			mbStopPositionUpdate = true;
+			mState = ECharacterState::Fix;
+		}
+	}
 	void Chalice::Parrying()
 	{
 		Character::Parrying();
 		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
 		Animator* ani = mOwner->GetComponent<Animator>();
-	
+
 		Vector2 velocity = rig->GetVelocity();
-		
+
 		velocity.y -= 1050.0f * 1.2f;
 
 		rig->SetVelocity(velocity);
@@ -406,6 +454,10 @@ namespace yeram_client
 			{
 				offset.x += 400.0f * Time::DeltaTime() * mDashVelocity;
 			}
+		}
+		else if (mbStopPositionUpdate == true)
+		{
+			return;
 		}
 		else if (core::Input::GetKey(core::EKeyCode::Left) && core::Input::GetKey(core::EKeyCode::Right))
 		{
@@ -478,10 +530,10 @@ namespace yeram_client
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Duck\\Duck\\Right", Vector2::Zero, 0.05f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Duck\\Stand Up\\Left", Vector2::Zero, 0.05f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Duck\\Stand Up\\Right", Vector2::Zero, 0.03f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Right", Vector2::Zero, 0.05f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Left", Vector2::Zero, 0.05f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Right", Vector2::Zero, 0.05f, true);
-		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Left", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Right", Vector2::Zero, 0.03f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\GroundDash\\Left", Vector2::Zero, 0.03f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Right", Vector2::Zero, 0.03f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Left", Vector2::Zero, 0.03f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Right", Vector2::Zero, 0.03f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Left", Vector2::Zero, 0.03f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Regular\\Without Streaks", Vector2::Zero, 0.05f, true);
@@ -527,27 +579,27 @@ namespace yeram_client
 			void
 		{
 			SetNextAniInfo();
-			ResetDash(); 
+			ResetDash();
 		});
 		ani->GetCompleteEvent(L"JumpDashRight") = std::bind([this, ani]()->
 			void
 		{
 			ResetDash();
 			if (mJump == 2)
-				ani->Play(L"Double JumpRight", false);
+				ani->Play(L"Double JumpRight", true);
 			else if (mJump == 1)
-				ani->Play(L"FallRight", false);
+				ani->Play(L"FallRight", true);
 		});
 		ani->GetCompleteEvent(L"JumpDashLeft") = std::bind([this, ani]()->
 			void
 		{
 			ResetDash();
 			if (mJump == 2)
-			ani->Play(L"Double JumpLeft", false);
+				ani->Play(L"Double JumpLeft", true);
 			else if (mJump == 1)
-				ani->Play(L"FallRight", false);
+				ani->Play(L"FallRight", true);
 		});
-	
+
 
 		ani->GetCompleteEvent(L"AirTransitionsUp") = std::bind([this, ani]()->
 			void
@@ -561,7 +613,7 @@ namespace yeram_client
 			ani->Play(L"AirIdleDown", true);
 		});
 
-	
+
 	}
 
 

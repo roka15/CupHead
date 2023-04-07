@@ -111,11 +111,11 @@ namespace yeram_client
 	{
 	}
 
-	bool Character::jump_check(ECharacterState _befor_state)
+	void Character::fix(const PushInfo& _push_info)
 	{
-		return false;
 	}
 
+	
 	void Character::air_move()
 	{
 	}
@@ -249,9 +249,9 @@ namespace yeram_client
 		mbDash = false;	
 		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
 		rig->SetActive(true);
-		/*Vector2 vel = rig->GetVelocity();
+		Vector2 vel = rig->GetVelocity();
 		vel.y = 0;
-		rig->SetVelocity(vel);*/
+		rig->SetVelocity(vel);
 		mDashVelocity = 1.0f; 
 		mDashTime = 0.0f;
 	}
