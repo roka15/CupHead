@@ -92,7 +92,7 @@ namespace yeram_client
 		col->SetSize(Vector2{ 2100.0f,100.0f });
 		AddGameObject(obj, ELayerType::FrontObject);
    
-	/*	std::shared_ptr<GameObject> background = std::make_shared<GameObject>();
+		std::shared_ptr<GameObject> background = std::make_shared<GameObject>();
 		{
 			background->SetName(L"tutorial_background");
 			Transform* tf = background->GetComponent<Transform>();
@@ -108,7 +108,7 @@ namespace yeram_client
 			mMapLimit = mMapLimit / 2.0f;
 		
 			AddGameObject(background, ELayerType::BackObject);
-		}*/
+		}
 		std::shared_ptr<GameObject> parry = std::make_shared<GameObject>();
 		{
 			parry->SetName(L"ParryObject");
@@ -120,8 +120,8 @@ namespace yeram_client
 			ani->Play(L"WheatC",true);
 			const Vector2& image_size =ani->GetSpriteSize();
 			Collider* col = parry->AddComponent<Collider>();
-			col->SetCenter(Vector2{ -(image_size.x/2.0f),-(image_size.y)});
-			col->SetSize(image_size);
+			col->SetCenter(Vector2{ -(image_size.x/3.0f),-(image_size.y/1.2f)});
+			col->SetSize(Vector2{ image_size.x/1.5f ,image_size.y/1.5f});
 			AddGameObject(parry, ELayerType::BackColObject);
 		}
 

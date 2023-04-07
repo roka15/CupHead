@@ -44,6 +44,10 @@ void yeram_client::Ground::OnCollisionEnter(Collider* other)
 	ch->ResetJump();
 	ch->ResetDash();
 	ch->SetNextAniInfo();
+	if (ch->GetParry() == true)
+	{
+		ch->SetParry(false);
+	}
 
 	Rigidbody* rigid = other_obj->GetComponent<Rigidbody>();
 	rigid->SetGround(true);

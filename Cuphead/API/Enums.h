@@ -38,8 +38,8 @@ enum class EComponentType
 	Animator,
 	Collider,
 	Audio,
-	Script,
 	Rigidbody,
+	Script,
 	MAX,
 };
 enum class ERenderType

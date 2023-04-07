@@ -239,7 +239,9 @@ namespace yeram_client
 			mJump++;
 		if (mJump == 2)
 			mJump--;
-
+		mbParry = true;
+		//mbDash = false;
+		ResetDash();
 	}
 
 	void Character::ResetDash()

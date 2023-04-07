@@ -349,7 +349,7 @@ namespace yeram_client
 			{
 				mJump++;
 				float offset = _push_info.Time - mFirstJumpTime;
-				if (offset <= 1.0f)
+				if (offset <= 1.0f||mbParry==true)
 				{
 					ani_name = ani->GetDirAniKey(L"Double Jump", mDirType);
 				}
@@ -384,6 +384,8 @@ namespace yeram_client
 
 		rig->SetVelocity(velocity);
 		rig->SetGround(false);
+
+		ani->Play(L"RegularWithout Streaks", true);
 	}
 	void Chalice::PositionUpdate()
 	{
@@ -482,6 +484,7 @@ namespace yeram_client
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Dash\\JumpDash\\Left", Vector2::Zero, 0.05f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Right", Vector2::Zero, 0.03f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Left", Vector2::Zero, 0.03f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Regular\\Without Streaks", Vector2::Zero, 0.05f, true);
 #pragma endregion
 
 #pragma region air ani 
@@ -544,6 +547,7 @@ namespace yeram_client
 			else if (mJump == 1)
 				ani->Play(L"FallRight", false);
 		});
+	
 
 		ani->GetCompleteEvent(L"AirTransitionsUp") = std::bind([this, ani]()->
 			void
@@ -556,6 +560,8 @@ namespace yeram_client
 		{
 			ani->Play(L"AirIdleDown", true);
 		});
+
+	
 	}
 
 

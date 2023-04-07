@@ -36,6 +36,8 @@ namespace yeram_client
 		virtual void Parrying();
 		void ResetDash();
 		bool GetDash() { return mbDash; }
+		void SetParry(bool _flag) { mbParry = _flag; }
+		bool GetParry() { return mbParry; }
 		void StopTransUpdate(bool _flag, EDirType _type);
 	protected:
 		typedef core::Input::PushInfo PushInfo;
@@ -67,6 +69,7 @@ namespace yeram_client
 		bool mbAirStartFlag;
 		bool mbSit;
 		bool mbDash;
+		bool mbParry;
 		bool mbStopPositionUpdate;
 		float mDashVelocity;
 		float mDashTime;
