@@ -122,12 +122,12 @@ namespace yeram_client
 		core::EKeyState state = _push_info.state;
 		switch (_push_info.keycode)
 		{
-		case core::EKeyCode::A:
-			if (state == core::EKeyState::Down && core::Input::GetKeyDown(core::EKeyCode::D))
+		case core::EKeyCode::Left:
+			if (state == core::EKeyState::Down && core::Input::GetKeyDown(core::EKeyCode::Right))
 			{
 				return;
 			}
-			if (state == core::EKeyState::Up && core::Input::GetKey(core::EKeyCode::D))
+			if (state == core::EKeyState::Up && core::Input::GetKey(core::EKeyCode::Right))
 			{
 				mDirType = EDirType::RIGHT;
 				if (mJump == 0)
@@ -140,12 +140,12 @@ namespace yeram_client
 					ani_name = ani->GetDirAniKey(L"Idle", mDirType);
 			}
 			break;
-		case core::EKeyCode::D:
-			if (state == core::EKeyState::Down && core::Input::GetKeyDown(core::EKeyCode::A))
+		case core::EKeyCode::Right:
+			if (state == core::EKeyState::Down && core::Input::GetKeyDown(core::EKeyCode::Left))
 			{
 				return;
 			}
-			if (state == core::EKeyState::Up && core::Input::GetKey(core::EKeyCode::A))
+			if (state == core::EKeyState::Up && core::Input::GetKey(core::EKeyCode::Left))
 			{
 				mDirType = EDirType::LEFT;
 				if (mJump == 0)
@@ -193,13 +193,13 @@ namespace yeram_client
 		if (_push_info.state == core::EKeyState::Down)
 		{
 			//duck이 아닐때, 오른쪽 or 왼쪽 이동 입력 받을 수 있음.
-			if (_push_info.keycode == core::EKeyCode::A || core::Input::GetKey(core::EKeyCode::A))
+			if (_push_info.keycode == core::EKeyCode::Left || core::Input::GetKey(core::EKeyCode::Left))
 			{
 				ani_name = L"RegularLeft";
 				mDirType = EDirType::LEFT;
 				mState = ECharacterState::Move;
 			}
-			if (_push_info.keycode == core::EKeyCode::D || core::Input::GetKey(core::EKeyCode::D))
+			if (_push_info.keycode == core::EKeyCode::Right || core::Input::GetKey(core::EKeyCode::Right))
 			{
 				ani_name = L"RegularRight";
 				mDirType = EDirType::RIGHT;
@@ -225,30 +225,30 @@ namespace yeram_client
 	{
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
-		if (_push_info.keycode == core::EKeyCode::S && _push_info.state == core::EKeyState::Up)
+		if (_push_info.keycode == core::EKeyCode::Down && _push_info.state == core::EKeyState::Up)
 		{
 			mbSit = false;
 			bool keydown_flag = false;
-			if (core::Input::GetKey(core::EKeyCode::D) && core::Input::GetKey(core::EKeyCode::A))
+			if (core::Input::GetKey(core::EKeyCode::Right) && core::Input::GetKey(core::EKeyCode::Left))
 			{
 				keydown_flag = true;
-				core::EKeyCode key = core::Input::GetFirstPriorityKey(core::EKeyCode::D, core::EKeyCode::A);
+				core::EKeyCode key = core::Input::GetFirstPriorityKey(core::EKeyCode::Right, core::EKeyCode::Left);
 				switch (key)
 				{
-				case core::EKeyCode::A:
+				case core::EKeyCode::Left:
 					mDirType = EDirType::LEFT;
 					break;
-				case core::EKeyCode::D:
+				case core::EKeyCode::Right:
 					mDirType = EDirType::RIGHT;
 					break;
 				}
 			}
-			else if (core::Input::GetKey(core::EKeyCode::D))
+			else if (core::Input::GetKey(core::EKeyCode::Right))
 			{
 				keydown_flag = true;
 				mDirType = EDirType::RIGHT;
 			}
-			else if (core::Input::GetKey(core::EKeyCode::A))
+			else if (core::Input::GetKey(core::EKeyCode::Left))
 			{
 				keydown_flag = true;
 				mDirType = EDirType::LEFT;
@@ -272,9 +272,9 @@ namespace yeram_client
 
 		if (mbSit == true && _push_info.state == core::EKeyState::Down && _push_info.keycode != core::EKeyCode::SPACE)
 		{
-			if (_push_info.keycode == core::EKeyCode::A && core::Input::GetKey(core::EKeyCode::D) == false)
+			if (_push_info.keycode == core::EKeyCode::Left && core::Input::GetKey(core::EKeyCode::Right) == false)
 				mDirType = EDirType::LEFT;
-			else if (_push_info.keycode == core::EKeyCode::D && core::Input::GetKey(core::EKeyCode::A) == false)
+			else if (_push_info.keycode == core::EKeyCode::Right && core::Input::GetKey(core::EKeyCode::Left) == false)
 				mDirType = EDirType::RIGHT;
 
 			ani_name = ani->GetDirAniKey(L"DuckIdle", mDirType);
@@ -290,7 +290,7 @@ namespace yeram_client
 	{
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
-		if (mJump == 0 && _push_info.keycode == core::EKeyCode::S && _push_info.state == core::EKeyState::Down)
+		if (mJump == 0 && _push_info.keycode == core::EKeyCode::Down && _push_info.state == core::EKeyState::Down)
 		{
 			mbSit = true;
 			ani_name = ani->GetDirAniKey(L"Duck", mDirType);
@@ -407,28 +407,28 @@ namespace yeram_client
 				offset.x += 400.0f * Time::DeltaTime() * mDashVelocity;
 			}
 		}
-		else if (core::Input::GetKey(core::EKeyCode::A) && core::Input::GetKey(core::EKeyCode::D))
+		else if (core::Input::GetKey(core::EKeyCode::Left) && core::Input::GetKey(core::EKeyCode::Right))
 		{
-			core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::A, core::EKeyCode::D);
+			core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::Left, core::EKeyCode::Right);
 			switch (code)
 			{
-			case core::EKeyCode::A:
+			case core::EKeyCode::Left:
 				offset.x -= 400.0f * Time::DeltaTime() * mDashVelocity;
 				mDirType = EDirType::LEFT;
 				break;
-			case core::EKeyCode::D:
+			case core::EKeyCode::Right:
 				offset.x += 400.0f * Time::DeltaTime() * mDashVelocity;
 				mDirType = EDirType::RIGHT;
 				break;
 			}
 		}
-		else if (core::Input::GetKey(core::EKeyCode::A))
+		else if (core::Input::GetKey(core::EKeyCode::Left))
 		{
 			//rig->AddForce(Vector2(-200.0f, 0.0f));
 			offset.x -= 400.0f * Time::DeltaTime() * mDashVelocity;
 			mDirType = EDirType::LEFT;
 		}
-		else if (core::Input::GetKey(core::EKeyCode::D))
+		else if (core::Input::GetKey(core::EKeyCode::Right))
 		{
 			//rig->AddForce(Vector2(+200.0f, 0.0f));
 			offset.x += 400.0f * Time::DeltaTime() * mDashVelocity;
@@ -437,11 +437,11 @@ namespace yeram_client
 
 		if (mbAir == true)
 		{
-			if (core::Input::GetKey(core::EKeyCode::W))
+			if (core::Input::GetKey(core::EKeyCode::Up))
 			{
 				offset.y -= 400.0f * Time::DeltaTime();
 			}
-			if (core::Input::GetKey(core::EKeyCode::S))
+			if (core::Input::GetKey(core::EKeyCode::Down))
 			{
 				offset.y += 400.0f * Time::DeltaTime();
 			}

@@ -20,10 +20,10 @@ namespace yeram_client
 		Animator* ani = mOwner->GetComponent<Animator>();
 
 
-		if (core::Input::GetKeyUp(core::EKeyCode::A)
-			|| core::Input::GetKeyUp(core::EKeyCode::D)
-			|| core::Input::GetKeyUp(core::EKeyCode::W)
-			|| core::Input::GetKeyUp(core::EKeyCode::S))
+		if (core::Input::GetKeyUp(core::EKeyCode::Left)
+			|| core::Input::GetKeyUp(core::EKeyCode::Right)
+			|| core::Input::GetKeyUp(core::EKeyCode::Up)
+			|| core::Input::GetKeyUp(core::EKeyCode::Down))
 		{
 			mState = ECharacterState::Idle;
 			ani->Play(L"MapIdle", true);
@@ -31,22 +31,22 @@ namespace yeram_client
 
 		//rigid 이동
 		//trans 이동
-		if (core::Input::GetKey(core::EKeyCode::A))
+		if (core::Input::GetKey(core::EKeyCode::Left))
 		{
 			//rig->AddForce(Vector2(-200.0f, 0.0f));
 			offset.x -= 200.0f * Time::DeltaTime();
 		}
-		if (core::Input::GetKey(core::EKeyCode::D))
+		if (core::Input::GetKey(core::EKeyCode::Right))
 		{
 			//rig->AddForce(Vector2(+200.0f, 0.0f));
 			offset.x += 200.0f * Time::DeltaTime();
 		}
-		if (core::Input::GetKey(core::EKeyCode::W))
+		if (core::Input::GetKey(core::EKeyCode::Up))
 		{
 			//rig->AddForce(Vector2(0.0f, -200.0f));
 			offset.y -= 200.0f * Time::DeltaTime();
 		}
-		if (core::Input::GetKey(core::EKeyCode::S))
+		if (core::Input::GetKey(core::EKeyCode::Down))
 		{
 			//rig->AddForce(Vector2(0.0f, +200.0f));
 			offset.y += 200.0f * Time::DeltaTime();
@@ -60,26 +60,26 @@ namespace yeram_client
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
 
-		if (core::Input::GetKeyDown(core::EKeyCode::A)
-			|| core::Input::GetKeyDown(core::EKeyCode::D)
-			|| core::Input::GetKeyDown(core::EKeyCode::W)
-			|| core::Input::GetKeyDown(core::EKeyCode::S))
+		if (core::Input::GetKeyDown(core::EKeyCode::Left)
+			|| core::Input::GetKeyDown(core::EKeyCode::Right)
+			|| core::Input::GetKeyDown(core::EKeyCode::Up)
+			|| core::Input::GetKeyDown(core::EKeyCode::Down))
 		{
 
 
-			if (core::Input::GetKeyDown(core::EKeyCode::A))
+			if (core::Input::GetKeyDown(core::EKeyCode::Left))
 			{
 				ani_name = L"MapFowardLeft";
 			}
-			if (core::Input::GetKeyDown(core::EKeyCode::D))
+			if (core::Input::GetKeyDown(core::EKeyCode::Right))
 			{
 				ani_name = L"MapFowardRight";
 			}
-			if (core::Input::GetKeyDown(core::EKeyCode::W))
+			if (core::Input::GetKeyDown(core::EKeyCode::Up))
 			{
 				ani_name = L"MapFowardUp";
 			}
-			if (core::Input::GetKeyDown(core::EKeyCode::S))
+			if (core::Input::GetKeyDown(core::EKeyCode::Down))
 			{
 				ani_name = L"MapFowardDown";
 			}
@@ -147,17 +147,17 @@ namespace yeram_client
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
 		//duck 일경우
-		if (core::Input::GetKey(core::EKeyCode::S) && core::Input::GetKey(core::EKeyCode::A)
-			&& core::Input::GetKey(core::EKeyCode::D))
+		if (core::Input::GetKey(core::EKeyCode::Down) && core::Input::GetKey(core::EKeyCode::Left)
+			&& core::Input::GetKey(core::EKeyCode::Right))
 		{
-			core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::D, core::EKeyCode::A);
+			core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::Right, core::EKeyCode::Left);
 
 			switch (code)
 			{
-			case core::EKeyCode::A:
+			case core::EKeyCode::Left:
 				mDirType = EDirType::LEFT;
 				break;
-			case core::EKeyCode::D:
+			case core::EKeyCode::Right:
 				mDirType = EDirType::RIGHT;
 				break;
 			}
@@ -167,7 +167,7 @@ namespace yeram_client
 			mbSit = true;
 			return;
 		}
-		else if (core::Input::GetKey(core::EKeyCode::S))
+		else if (core::Input::GetKey(core::EKeyCode::Down))
 		{
 			ani_name = ani->GetDirAniKey(L"Duck", mDirType);
 			ani->Play(ani_name, true);
@@ -181,28 +181,28 @@ namespace yeram_client
 		case ECharacterState::Dash:
 			ResetDash();
 		case ECharacterState::Move:
-			if (core::Input::GetKey(core::EKeyCode::A) && core::Input::GetKey(core::EKeyCode::D))
+			if (core::Input::GetKey(core::EKeyCode::Left) && core::Input::GetKey(core::EKeyCode::Right))
 			{
-				core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::A, core::EKeyCode::D);
+				core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::Left, core::EKeyCode::Right);
 				switch (code)
 				{
-				case core::EKeyCode::A:
+				case core::EKeyCode::Left:
 					ani->Play(L"RegularLeft", true);
 					break;
-				case core::EKeyCode::D:
+				case core::EKeyCode::Right:
 					ani->Play(L"RegularRight", true);
 					break;
 				}
 				mState = ECharacterState::Move;
 				return;
 			}
-			if (core::Input::GetKey(core::EKeyCode::A))
+			if (core::Input::GetKey(core::EKeyCode::Left))
 			{
 				ani->Play(L"RegularLeft", true);
 				mState = ECharacterState::Move;
 				return;
 			}
-			else if (core::Input::GetKey(core::EKeyCode::D))
+			else if (core::Input::GetKey(core::EKeyCode::Right))
 			{
 				ani->Play(L"RegularRight", true);
 				mState = ECharacterState::Move;
