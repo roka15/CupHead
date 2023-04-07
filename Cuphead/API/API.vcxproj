@@ -142,7 +142,7 @@
     <ClInclude Include="CommonInclude.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Cuphead.h" />
-    <ClInclude Include="DevilScene.h" />
+    <ClInclude Include="TutorialScene.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Enums.h" />
@@ -162,6 +162,7 @@
     <ClInclude Include="MugMan.h" />
     <ClInclude Include="My_Resource.h" />
     <ClInclude Include="ObjectPool.h" />
+    <ClInclude Include="ParryingObject.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayMapScene.h" />
     <ClInclude Include="RBT.h" />
@@ -193,7 +194,7 @@
     <ClCompile Include="ColliderManager.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Cuphead.cpp" />
-    <ClCompile Include="DevilScene.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
@@ -210,6 +211,7 @@
     <ClCompile Include="MoveObjectManager.cpp" />
     <ClCompile Include="MugMan.cpp" />
     <ClCompile Include="ObjectPool.cpp" />
+    <ClCompile Include="ParryingObject.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="My_Resource.cpp" />
     <ClCompile Include="PlayMapScene.cpp" />

@@ -50,6 +50,7 @@ namespace yeram_client
 		std::function<void()>& GetEndEvent(const std::wstring& _name);
 
 		std::wstring GetDirAniKey(const std::wstring& _name, EDirType _type);
+		std::wstring GetDirAniKey(const std::wstring& _name, EDirType _horizontal, EDirType _vertical);
 	private:
 		std::map<std::wstring, Animation*> mAnimations;
 		std::map <std::wstring, Events*> mEvents;

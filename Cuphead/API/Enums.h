@@ -64,11 +64,11 @@ enum class EWindowType
 };
 enum class EDirType
 {
-	STAY,
-	LEFT,
-	RIGHT,
-	UP,
-	DOWN,
+	STAY=1,
+	LEFT=2,
+	RIGHT=4,
+	UP=8,
+	DOWN=16,
 	MAX
 };
 enum class EStateType

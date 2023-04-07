@@ -246,4 +246,27 @@ namespace yeram_client
 
 		return temp;
 	}
+	std::wstring Animator::GetDirAniKey(const std::wstring& _name, EDirType _horizontal, EDirType _vertical)
+	{
+		std::wstring temp(_name);
+		switch (_vertical)
+		{
+		case EDirType::UP:
+			temp += L"Up";
+			break;
+		case EDirType::DOWN:
+			temp += L"Down";
+			break;
+		}
+		switch (_horizontal)
+		{
+		case EDirType::LEFT:
+			temp += L"Left";
+			break;
+		case EDirType::RIGHT:
+			temp += L"Right";
+			break;
+		}
+		return temp;
+	}
 }

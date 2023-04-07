@@ -381,34 +381,57 @@ namespace yeram_client
 	{
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
+		bool horizontal_flag = false;
+		core::EKeyCode horizontal_key;
+		core::EKeyCode vertical_key;
+		horizontal_flag = PriorityInput(core::EKeyCode::Left, core::EKeyCode::Right, horizontal_key);
+		
+		EDirType h_key = GetDirType(horizontal_key);
+	
+
 		if (_push_info.keycode == core::EKeyCode::C && _push_info.state == core::EKeyState::Up)
 		{
 			mbStopPositionUpdate = false;
-			bool keydown_flag = false;
-			if (core::Input::GetKey(core::EKeyCode::Left)|| core::Input::GetKeyDown(core::EKeyCode::Left))
-			{
-				keydown_flag = true;
-				mState = ECharacterState::Move;
-				mDirType = EDirType::LEFT;
-				ani_name = ani->GetDirAniKey(L"Regular",mDirType);
-			}
-			else if (core::Input::GetKey(core::EKeyCode::Right)|| core::Input::GetKey(core::EKeyCode::Right))
-			{
-				keydown_flag = true;
-				mState = ECharacterState::Move;
-				mDirType = EDirType::RIGHT;
-				ani_name = ani->GetDirAniKey(L"Regular", mDirType);
-			}
 
-			if (keydown_flag == false)
+			if (horizontal_flag == false)
 			{
 				ani_name = ani->GetDirAniKey(L"Idle", mDirType);
 				mState = ECharacterState::Idle;
+			}
+			else
+			{
+				ani_name = ani->GetDirAniKey(L"Regular", mDirType);
+				mState = ECharacterState::Move;
 			}
 
 			if (ani_name.size() > 0)
 			{
 				ani->Play(ani_name, true);
+			}
+		}
+		else
+		{   
+			bool vertical_flag = PriorityInput(core::EKeyCode::Up, core::EKeyCode::Down, vertical_key);
+			EDirType v_key = GetDirType(vertical_key);
+			//총알 방향 45도 회전
+			if (horizontal_flag ==true && vertical_flag == true)
+			{
+				ani_name = ani->GetDirAniKey(L"Diagonal", h_key, v_key);
+				ani->Play(ani_name, true);
+				mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(2, h_key,v_key));
+			}//horizontal straight
+			else if (horizontal_flag == true)
+			{
+				ani_name = ani->GetDirAniKey(L"AimStraight",h_key);
+				ani->Play(ani_name, true);
+				mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(1, h_key));
+				mDirType = h_key;
+			}
+			else if (vertical_flag == true)
+			{
+				ani_name = ani->GetDirAniKey(L"Aim", mDirType, v_key);
+				ani->Play(ani_name, true);
+				mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(3,EDirType::STAY,mDirType,v_key));
 			}
 		}
 	}
@@ -537,6 +560,32 @@ namespace yeram_client
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Right", Vector2::Zero, 0.03f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Fall\\Left", Vector2::Zero, 0.03f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Regular\\Without Streaks", Vector2::Zero, 0.05f, true);
+
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\AimStraight\\Right", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\AimStraight\\Left", Vector2::Zero, 0.05f, true);
+		
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\Diagonal\\DiagonalUp\\Left", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\Diagonal\\DiagonalUp\\Right", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\Diagonal\\DiagonalDown\\Left", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\Diagonal\\DiagonalDown\\Right", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\AimUp\\Left", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\AimUp\\Right", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\AimDown\\Left", Vector2::Zero, 0.05f, true);
+		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Aim\\AimDown\\Right", Vector2::Zero, 0.05f, true);
+
+		Vector2 size = ani->FindAnimation(L"AimStraightRight")->GetSpriteSize();
+		GameObject* shooter = mOwner->FindChild(L"Shooter").get();
+		mShooter = shooter;
+		
+		RegisterShooterSpawnPos();
+		
+		Transform* s_pos = mShooter->GetComponent<Transform>();
+		s_pos->SetOffset(GetShooterSpawnPos(1, EDirType::RIGHT));
+
+		Animator* s_ani = shooter->GetComponent<Animator>();
+		s_ani->CreateAnimations(L"..\\Resources\\weapon\\shooter_effect", Vector2::Zero, 0.05f, false);
+		s_ani->Play(L"weaponshooter_effect", true);
+		s_ani->SetActive(true);
 #pragma endregion
 
 #pragma region air ani 
@@ -546,14 +595,14 @@ namespace yeram_client
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\Up", Vector2::Zero, 0.04f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\Down", Vector2::Zero, 0.04f, true);
 
-		Vector2 size = ani->FindAnimation(L"AirIdleStraight")->GetSpriteSize();
+		/*Vector2 size = ani->FindAnimation(L"AirIdleStraight")->GetSpriteSize();
 		GameObject* shooter = mOwner->FindChild(L"Shooter").get();
 		Transform* s_pos = shooter->GetComponent<Transform>();
 		s_pos->SetOffset(Vector2{ size.x / 1.5f,-(size.y / 5.0f) });
 		Animator* s_ani = shooter->GetComponent<Animator>();
 		s_ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\Shoot Sparks", Vector2::Zero, 0.05f, false);
 		s_ani->Play(L"Ms.Chalice_AirShoot Sparks", true);
-		s_ani->SetActive(false);
+		s_ani->SetActive(false);*/
 #pragma endregion
 
 		ani->GetCompleteEvent(L"DuckLeft") = std::bind([this, ani]()->void
@@ -777,6 +826,42 @@ namespace yeram_client
 		}
 	}
 
+	bool Chalice::PriorityInput(core::EKeyCode _code1, core::EKeyCode _code2, core::EKeyCode& _result)
+	{
+		if ((core::Input::GetKeyDown(_code1) && core::Input::GetKeyDown(_code2)) ||(core::Input::GetKey(_code1) && core::Input::GetKey(_code2)))
+		{
+			_result = core::Input::GetFirstPriorityKey(_code1, _code2);
+			return true;
+		}
+		else if (core::Input::GetKey(_code1) || core::Input::GetKeyDown(_code1))
+		{
+			_result = _code1;
+			return true;
+		}
+		else if (core::Input::GetKey(_code2) || core::Input::GetKeyDown(_code2))
+		{
+			_result = _code2;
+			return true;
+		}
+		
+		return false;
+	}
+
+	EDirType Chalice::GetDirType(const core::EKeyCode& _code)
+	{
+		switch (_code)
+		{
+		case core::EKeyCode::Left:
+			return EDirType::LEFT;
+		case core::EKeyCode::Right:
+			return EDirType::RIGHT;
+		case core::EKeyCode::Down:
+			return EDirType::DOWN;
+		case core::EKeyCode::Up:
+			return EDirType::UP;
+		}
+	}
+
 	void Chalice::idleCompleteEvent()
 	{
 	}
@@ -789,6 +874,74 @@ namespace yeram_client
 	{
 	}
 
+	void Chalice::RegisterShooterSpawnPos()
+	{
+		Animator* ani = mOwner->GetComponent<Animator>();
+		Vector2 size = ani->FindAnimation(L"AimStraightRight")->GetSpriteSize();
+		
+		Vector2 offset = { size.x / 2.0f,-(size.y / 5.5f) };
+		//l,u 같은 중복은 bit 연산하기.
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::RIGHT, (offset)));
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::LEFT, Vector2{ -(offset.x)-10,offset.y }));
 
+		//r|u
+		Vector2 rotat = math::Rotate(offset, 45);
+		float dot = math::Dot(rotat, offset);
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::RIGHT | (UINT)EDirType::UP, Vector2{ offset.x,offset.y - dot }));
+		//r|d
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::RIGHT | (UINT)EDirType::DOWN, Vector2{ offset.x,offset.y + dot }));
 
+		//s|r|u
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::STAY | (UINT)EDirType::RIGHT | (UINT)EDirType::UP, Vector2{ offset.x - (offset.x / 2.0f),offset.y - (size.y / 2.0f) }));
+
+		//s|r|d
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::STAY | (UINT)EDirType::RIGHT | (UINT)EDirType::DOWN, Vector2{ offset.x - (offset.x / 2.0f),(offset.y * 2.0f) + (size.y / 2.0f) }));
+
+		//s|l|u
+		offset = mShooterSpawnPos[(UINT)EDirType::LEFT];
+		rotat = math::Rotate(offset, -45);
+		dot = math::Dot(offset, rotat);
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::STAY | (UINT)EDirType::LEFT | (UINT)EDirType::UP, Vector2{ offset.x+dot ,offset.y - (dot*1.7f) }));
+
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::STAY | (UINT)EDirType::LEFT | (UINT)EDirType::DOWN, Vector2{ offset.x + dot,offset.y + dot }));
+
+		//l|u
+
+		rotat = math::Rotate(offset, 45);
+		dot = math::Dot(rotat, offset);
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::LEFT | (UINT)EDirType::UP, Vector2{ offset.x,offset.y - dot }));
+
+		//l|d
+		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::LEFT | (UINT)EDirType::DOWN, Vector2{ offset.x,offset.y + dot }));
+	}
+
+	const Vector2& Chalice::GetShooterSpawnPos(int _count, EDirType ...)
+	{
+		std::queue<EDirType> queue;
+		assert(_count >= 0);
+		va_list list;
+		va_list copy;
+
+		va_start(list, _count);
+		va_copy(copy, list);
+
+		for (int i = 0; i != _count; ++i)
+		{
+			queue.push(va_arg(copy, EDirType));
+		}
+		
+		va_end(list);
+		va_end(copy);
+
+		UINT result_key = 0;
+		while (queue.empty() == false)
+		{
+			EDirType type = queue.front();
+			queue.pop();
+
+			result_key |= (UINT)type;
+		}
+
+		return mShooterSpawnPos[result_key];
+	}
 }

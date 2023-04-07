@@ -46,11 +46,16 @@ namespace yeram_client
 		void AirMove();
 		void AirShoot();
 
+		bool PriorityInput(core::EKeyCode _code1, core::EKeyCode _code2,core::EKeyCode& _result);
+		EDirType GetDirType(const  core::EKeyCode& _code);
 		void idleCompleteEvent()override;
 		void moveStartEvent() override;
 		void moveCompleteEvent()override;
+		void RegisterShooterSpawnPos();
+		const Vector2& GetShooterSpawnPos(int _count, EDirType ...);
 	private:
+		GameObject* mShooter;
 		float mFirstJumpTime;
-	
+		std::map<UINT, Vector2> mShooterSpawnPos;
 	};
 }

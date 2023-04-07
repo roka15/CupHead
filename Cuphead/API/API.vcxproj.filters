@@ -242,10 +242,11 @@
     <ClInclude Include="Monster.h">
       <Filter>Contents\Script\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="DevilScene.h" />
+    <ClInclude Include="TutorialScene.h" />
     <ClInclude Include="Ground.h">
       <Filter>Contents\Script</Filter>
     </ClInclude>
+    <ClInclude Include="ParryingObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -380,10 +381,11 @@
     <ClCompile Include="Monster.cpp">
       <Filter>Contents\Script\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="DevilScene.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
     <ClCompile Include="Ground.cpp">
       <Filter>Contents\Script</Filter>
     </ClCompile>
+    <ClCompile Include="ParryingObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">
