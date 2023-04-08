@@ -59,8 +59,9 @@ namespace yeram_client
 
 		virtual void PositionUpdate();
 		virtual void DashPositionUpdate(EStateType _type);
-
-		
+		bool PriorityInput(core::EKeyCode _code1, core::EKeyCode _code2, core::EKeyCode& _result);
+		EDirType GetDirType(const  core::EKeyCode& _code);
+		const Vector2& GetShooterSpawnPos(int _count, EDirType ...);
 	protected:
 		std::wstring mName;
 		GameObject* mOwner;
@@ -77,6 +78,11 @@ namespace yeram_client
 		float mDashVelocity;
 		float mDashTime;
 		//Rigidbody* mRigidBody;
+
+		GameObject* mHead;
+		GameObject* mReg;
+		GameObject* mShooter;
+		std::map<UINT, Vector2> mShooterSpawnPos;
 	};
 }
 

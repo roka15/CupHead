@@ -51,6 +51,10 @@ void yeram_client::TitleScene::Initialize()
 		player->CreateCharacter(EPlayerType::MsChalice);
 		player->CreateCharacter(EPlayerType::Cuphead);
 		player_obj->SetActive(false);
+
+		std::shared_ptr<GameObject> player_head = core::ObjectPool<Animator>::Spawn();
+
+		std::shared_ptr<GameObject> player_reg = core::ObjectPool<Animator>::Spawn();
 		
 	}
 	

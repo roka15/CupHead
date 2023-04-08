@@ -69,6 +69,8 @@ enum class EDirType
 	RIGHT=4,
 	UP=8,
 	DOWN=16,
+	SIT=32,
+	RUN=64,
 	MAX
 };
 enum class EStateType

@@ -141,26 +141,88 @@ namespace yeram_client
 	{
 	}
 
+	bool Character::PriorityInput(core::EKeyCode _code1, core::EKeyCode _code2, core::EKeyCode& _result)
+	{
+		if ((core::Input::GetKeyDown(_code1) || core::Input::GetKey(_code1)) &&(core::Input::GetKeyDown(_code2)|| core::Input::GetKey(_code2)))
+		{
+			_result = core::Input::GetFirstPriorityKey(_code1, _code2);
+			return true;
+		}
+		else if (core::Input::GetKey(_code1) || core::Input::GetKeyDown(_code1))
+		{
+			_result = _code1;
+			return true;
+		}
+		else if (core::Input::GetKey(_code2) || core::Input::GetKeyDown(_code2))
+		{
+			_result = _code2;
+			return true;
+		}
+
+		return false;
+	}
+
+	EDirType Character::GetDirType(const core::EKeyCode& _code)
+	{
+		switch (_code)
+		{
+		case core::EKeyCode::Left:
+			return EDirType::LEFT;
+		case core::EKeyCode::Right:
+			return EDirType::RIGHT;
+		case core::EKeyCode::Down:
+			return EDirType::DOWN;
+		case core::EKeyCode::Up:
+			return EDirType::UP;
+		}
+	}
+
+	const Vector2& Character::GetShooterSpawnPos(int _count, EDirType ...)
+	{
+		std::queue<EDirType> queue;
+		assert(_count >= 0);
+		va_list list;
+		va_list copy;
+
+		va_start(list, _count);
+		va_copy(copy, list);
+
+		for (int i = 0; i != _count; ++i)
+		{
+			queue.push(va_arg(copy, EDirType));
+		}
+
+		va_end(list);
+		va_end(copy);
+
+		UINT result_key = 0;
+		while (queue.empty() == false)
+		{
+			EDirType type = queue.front();
+			queue.pop();
+
+			result_key |= (UINT)type;
+		}
+
+		return mShooterSpawnPos[result_key];
+	}
+
 	void Character::SetNextAniInfo()
 	{
 		//mJump = 0;
 		Animator* ani = mOwner->GetComponent<Animator>();
 		std::wstring ani_name;
-		//duck 老版快
-		if (core::Input::GetKey(core::EKeyCode::Down) && core::Input::GetKey(core::EKeyCode::Left)
-			&& core::Input::GetKey(core::EKeyCode::Right))
-		{
-			core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::Right, core::EKeyCode::Left);
+		core::EKeyCode horizontal_key;
+		core::EKeyCode vertical_key;
+		bool horizontal_flag = PriorityInput(core::EKeyCode::Left, core::EKeyCode::Right, horizontal_key);
+		bool vertical_flag = PriorityInput(core::EKeyCode::Up, core::EKeyCode::Down, vertical_key);
+		EDirType h_key = GetDirType(horizontal_key);
+		EDirType v_key = GetDirType(vertical_key);
 
-			switch (code)
-			{
-			case core::EKeyCode::Left:
-				mDirType = EDirType::LEFT;
-				break;
-			case core::EKeyCode::Right:
-				mDirType = EDirType::RIGHT;
-				break;
-			}
+		//duck 老版快
+		if (core::Input::GetKey(core::EKeyCode::Down) && horizontal_flag == true)
+		{
+			mDirType = h_key;
 			ani_name = ani->GetDirAniKey(L"Duck", mDirType);
 			ani->Play(ani_name, true);
 			mState = ECharacterState::Duck;
@@ -176,48 +238,47 @@ namespace yeram_client
 			return;
 		}
 		//duck 酒匆 版快
-		switch (mState)
+	 	switch (mState)
 		{
 		case ECharacterState::Dash:
-			ResetDash();
+		{
+			if (core::Input::GetKey(core::EKeyCode::Z))
+			{
+				mState = ECharacterState::Shoot;
+				PushInfo info;
+				shoot(info);
+				return;
+			}
+		}
 		case ECharacterState::Move:
-			if (core::Input::GetKey(core::EKeyCode::Left) && core::Input::GetKey(core::EKeyCode::Right))
+			if (horizontal_flag == true)
 			{
-				core::EKeyCode code = core::Input::GetFirstPriorityKey(core::EKeyCode::Left, core::EKeyCode::Right);
-				switch (code)
-				{
-				case core::EKeyCode::Left:
-					ani->Play(L"RegularLeft", true);
-					break;
-				case core::EKeyCode::Right:
-					ani->Play(L"RegularRight", true);
-					break;
-				}
+				mDirType = h_key;
+				ani_name = ani->GetDirAniKey(L"Regular", h_key);
+				ani->Play(ani_name, true);
 				mState = ECharacterState::Move;
 				return;
 			}
-			if (core::Input::GetKey(core::EKeyCode::Left))
-			{
-				ani->Play(L"RegularLeft", true);
-				mState = ECharacterState::Move;
-				return;
-			}
-			else if (core::Input::GetKey(core::EKeyCode::Right))
-			{
-				ani->Play(L"RegularRight", true);
-				mState = ECharacterState::Move;
-				return;
-			}
-			mState = ECharacterState::Idle;
 		case ECharacterState::Idle:
 		{
-			std::wstring anikey = ani->GetDirAniKey(L"Idle", mDirType);
-			ani->Play(anikey, true);
+			if (horizontal_flag == true)
+				mDirType = h_key;
+			ani_name = ani->GetDirAniKey(L"Idle", mDirType);
+			ani->Play(ani_name, true);
 			break;
 		}
 		case ECharacterState::Duck:
 			//duck 老版快
 
+			break;
+		case ECharacterState::Fix:
+			if (core::Input::GetKey(core::EKeyCode::C))
+			{
+				if (horizontal_flag == true)
+					mDirType = h_key;
+				ani_name = ani->GetDirAniKey(L"Idle", mDirType);
+				ani->Play(ani_name, true);
+			}
 			break;
 		}
 

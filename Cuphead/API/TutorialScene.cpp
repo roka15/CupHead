@@ -92,7 +92,7 @@ namespace yeram_client
 		col->SetSize(Vector2{ 2100.0f,100.0f });
 		AddGameObject(obj, ELayerType::FrontObject);
    
-		std::shared_ptr<GameObject> background = std::make_shared<GameObject>();
+		std::shared_ptr<GameObject> background = core::ObjectPool<Animator>::Spawn();
 		{
 			background->SetName(L"tutorial_background");
 			Transform* tf = background->GetComponent<Transform>();
@@ -100,7 +100,7 @@ namespace yeram_client
 			Vector2& scale = tf->GetScale();
 			scale.x *= 1.28f;
 			scale.y *= 1.2f;
-			Animator* ani = background->AddComponent<Animator>();
+			Animator* ani = background->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\TutorialScene\\Loop", Vector2::Zero, 0.04f);
 			ani->Play(L"TutorialSceneLoop", true);
 
@@ -109,7 +109,7 @@ namespace yeram_client
 		
 			AddGameObject(background, ELayerType::BackObject);
 		}
-		std::shared_ptr<GameObject> parry = std::make_shared<GameObject>();
+		std::shared_ptr<GameObject> parry = core::ObjectPool<Animator>::Spawn();
 		{
 			parry->SetName(L"ParryObject");
 			ParryingObject* po = parry->AddComponent<ParryingObject>();
