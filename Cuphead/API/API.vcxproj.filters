@@ -247,6 +247,9 @@
       <Filter>Contents\Script</Filter>
     </ClInclude>
     <ClInclude Include="ParryingObject.h" />
+    <ClInclude Include="WorldMoveIntroScene.h" />
+    <ClInclude Include="OriginalImagePos.h" />
+    <ClInclude Include="InWorldIntroScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -342,9 +345,6 @@
     <ClCompile Include="RBT.cpp">
       <Filter>Core\STL</Filter>
     </ClCompile>
-    <ClCompile Include="Script.cpp">
-      <Filter>Engine\Component\Script</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectPool.cpp">
       <Filter>Core\ObjectPool</Filter>
     </ClCompile>
@@ -386,6 +386,12 @@
       <Filter>Contents\Script</Filter>
     </ClCompile>
     <ClCompile Include="ParryingObject.cpp" />
+    <ClCompile Include="Script.cpp">
+      <Filter>Engine\Component\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMoveIntroScene.cpp" />
+    <ClCompile Include="OriginalImagePos.cpp" />
+    <ClCompile Include="InWorldIntroScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

@@ -22,11 +22,14 @@ namespace yeram_client
 		const Vector2& GetOffset() { return mOffset; }
 		void CaluatePos(const Vector2& _offset);
 		void CaluateSclae(const Vector2& _value);
+		void SetPivot(Vector2 _pivot) { mpivot = _pivot; }
+		Vector2 GetPivot() { return mpivot; }
 	private:
 		Vector2 mPos;
 		Vector2 mScale;
 		Vector2 mSize;
-		Vector2 mOffset;
+		Vector2 mOffset;	
+		Vector2 mpivot;
 	};
 }
 

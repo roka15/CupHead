@@ -7,7 +7,9 @@ enum class ESceneType
 	MainMenu,
 	PlayMap,
 	BossMedusa,
-	BossDevil,
+	Tutorial,
+    MoveWorldIntro,
+	InWorldIntro,
 	Ending,
 	MAX,
 };

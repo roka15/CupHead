@@ -514,6 +514,7 @@ namespace yeram_client
 		std::wstring ani_name;
 		if (_push_info.keycode == core::EKeyCode::SPACE && _push_info.state == core::EKeyState::Down)
 		{
+			mbSit = false;
 			if (mJump == 0)
 			{
 				mJump++;
@@ -622,10 +623,10 @@ namespace yeram_client
 		if ((_push_info.keycode==core::EKeyCode::C && _push_info.state== core::EKeyState::Down)
 			||core::Input::GetKey(core::EKeyCode::C))
 		{
+			if (mbSit == true)
+				mbSit = false;
 			if (mbDash == false && mState != ECharacterState::Shoot&&mJump==0)
 			{
-				if (mbSit == true)
-					mbSit = false;
 				mbStopPositionUpdate = true;
 				mState = ECharacterState::Fix;
 			}

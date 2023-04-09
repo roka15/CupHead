@@ -2,8 +2,9 @@
 #include "PlayMapScene.h"
 #include "TitleScene.h"
 #include "MainMenuScene.h"
-#include "MedusaScene.h"
 #include "TutorialScene.h"
+#include "WorldMoveIntroScene.h"
+#include "InWorldIntroScene.h"
 #include "Camera.h"
 #include "Rectangle.h"
 #include "UI.h"
@@ -13,6 +14,7 @@
 #include "Time.h"
 #include "ObjectPool.h"
 #include "Bullet.h"
+#include "MoveObject.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -26,9 +28,9 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::Title] = new TitleScene(L"Title");
 		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene(L"Main");
 		mScenes[(UINT)ESceneType::PlayMap] = new PlayMapScene(L"Play");
-		mScenes[(UINT)ESceneType::BossMedusa] = new MedusaScene(L"Medusa");
-		mScenes[(UINT)ESceneType::BossDevil] = new TutorialScene(L"Devil");
-		
+		mScenes[(UINT)ESceneType::Tutorial] = new TutorialScene(L"Tutorial");
+		mScenes[(UINT)ESceneType::MoveWorldIntro] = new WorldMoveIntroScene(L"WorldMoveIntro");
+		mScenes[(UINT)ESceneType::InWorldIntro] = new InWorldIntroScene(L"InWorldIntro");
 
 		//애니 재생으로만 쓸 pool
 		core::ObjectPool<Animator>::Initialize(300);
@@ -37,13 +39,14 @@ namespace yeram_client
 		core::ObjectPool<Player>::Initialize(1, 1);
 		//core::ObjectPool<Ground>::Initialize(100, 100);
 		core::ObjectPool<Ground>::Initialize(1, 1);
+		core::ObjectPool<MoveObject>::Initialize(300);
 		
 		core::ObjectPool<Bullet>::Initialize(300);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
 				continue;
-			switch (scene->GetSceneType())
+			/*switch (scene->GetSceneType())
 			{
 			case ESceneType::Title:
 				mActiveScene = mScenes[(UINT)ESceneType::Title];
@@ -60,10 +63,16 @@ namespace yeram_client
 			case ESceneType::Ending:
 				mActiveScene = mScenes[(UINT)ESceneType::Ending];
 				break;
-			}
+			case ESceneType::Tutorial:
+				mActiveScene = mScenes[(UINT)ESceneType::Tutorial];
+				break;
+			case ESceneType::MoveWorldIntro:
+				mActiveScene = mScenes[(UINT)ESceneType::MoveWorldIntro];
+				break;
+			}*/
 			scene->Initialize();
 		}
-		mActiveScene = mScenes[(UINT)ESceneType::Title];
+		mActiveScene = mScenes[(UINT)ESceneType::InWorldIntro];
 		mActiveScene->OnEnter();
 
 
@@ -132,6 +141,7 @@ namespace yeram_client
 		//core::ObjectPool<UI>::Release();
 		core::ObjectPool<Ground>::Release();
 		core::ObjectPool<Player>::Release();
+		core::ObjectPool<MoveObject>::Release();
 		//core::ObjectPool<Ground>::Release();
 
 		mLoadingScreen->Release();

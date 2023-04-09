@@ -37,8 +37,10 @@ namespace yeram_client
 		bool IsComplete() { return mbComplete; }
 		void SetAnimator(Animator* _animator) { mAnimator = _animator; }
 		void SetSpriteIndex(UINT _index) { mSpriteIndex = _index; }
+		const UINT& GetSpriteIndex() { return mSpriteIndex; }
 		const Vector2& GetSpriteSize() { return mSpriteSheet[0].size; }
 		const Vector2& GetImageSize() { return mOriginSize[mSpriteIndex]; }
+		const Vector2& GetImageSize(int index) { return mOriginSize[index]; }
 	private:
 		Image* mSheet;
 		std::vector<Vector2> mOriginSize;

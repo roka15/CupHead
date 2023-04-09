@@ -13,11 +13,11 @@ namespace yeram_client
 {
 	TutorialScene::TutorialScene()
 	{
-		mCurType = ESceneType::BossDevil;
+		mCurType = ESceneType::Tutorial;
 	}
 	TutorialScene::TutorialScene(std::wstring _name)
 	{
-		mCurType = ESceneType::BossDevil;
+		mCurType = ESceneType::Tutorial;
 		SetName(_name);
 	}
 	TutorialScene::~TutorialScene()

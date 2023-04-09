@@ -37,7 +37,6 @@ namespace yeram_client
 		HBITMAP default_Bitmap=(HBITMAP)SelectObject(mBackHdc, mBackBuffer);
 		DeleteObject(default_Bitmap);
 
-		MoveObjectManager::Initialize();
 		core::Input::Initialize();
 		//WindowManager::Initialize();
 		SceneManager::Initalize();
@@ -75,7 +74,6 @@ namespace yeram_client
 		Time::Release();
 		Camera::Release();
 		Resources::Release();
-		MoveObjectManager::Release();
 		//WindowManager::Release();
 	}
 	HWND Application::GetHandle()

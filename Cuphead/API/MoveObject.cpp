@@ -1,7 +1,6 @@
 #include "MoveObject.h"
 #include "GameObject.h"
-#include "MoveObjectManager.h"
-
+#include "Time.h"
 namespace yeram_client
 {
 	MoveObject::MoveObject() :Script()
@@ -15,13 +14,6 @@ namespace yeram_client
 	void MoveObject::Initialize()
 	{
 		Script::Initialize();
-		mStartPos = Vector2::Zero;
-		mSpeed = Vector2::Zero;
-		mDspawnTime = 0.0f;
-		mDiff = Vector2::Zero;
-		mOutDirbit = 0;
-		//mDir = EDirType::
-		mbRegular = false;
 	}
 
 	void MoveObject::Update()
@@ -37,39 +29,33 @@ namespace yeram_client
 	{
 	}
 
-	void MoveObject::CreateInfo(const Vector2& _speed, float _dspawn_time, const Vector2& _diff, const byte _outdir, const Vector2& _dir, const bool& _regular)
+	void MoveObject::CreateInfo(const Vector2& _speed,EDirType _dir)
 	{
-		mStartPos = this->GetOwner()->GetComponent<Transform>()->GetPos();
 		mSpeed = _speed;
-		mDspawnTime = _dspawn_time;
-		mDiff = _diff;
-		mOutDirbit = _outdir;
 		mDir = _dir;
-		mbRegular = _regular;
+		mTf = GetOwner()->GetComponent<Transform>();
 	}
 
 
 	void MoveObject::Move()
 	{
 		GameObject* owner = this->GetOwner();
-		if (MoveObjectManager::MapOutCheck(owner) == true)
+		Vector2 pos = mTf->GetPos();
+		float speed = mSpeed.x;
+		switch (mDir)
 		{
-			MoveObjectManager::SetSpawnPos(owner);
+		case EDirType::LEFT:
+			speed *= -1;
+			break;
 		}
-		else
-		{
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x += mSpeed.x * mDir.x;
-			pos.y += mSpeed.y * mDir.y;
-			tf->SetPos(pos);
-		}
+
+		pos.x += speed * Time::DeltaTime();
+		mTf->SetPos(pos);
 	}
 
 	void MoveObject::OnCollisionEnter(Collider* other)
 	{
-		Collider* col = GetOwner()->GetComponent<Collider>();
-
+		
 	}
 	void MoveObject::OnCollisionStay(Collider* other)
 	{

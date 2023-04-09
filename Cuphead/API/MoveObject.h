@@ -3,6 +3,7 @@
 
 namespace yeram_client
 {
+	class Transform;
 	class MoveObject : public Script
 	{
 	public:
@@ -14,19 +15,9 @@ namespace yeram_client
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
 
-		void CreateInfo(
-			const Vector2& _speed,
-			float _dspawn_time,
-			const Vector2& _diff,
-			const byte _outdir,
-			const Vector2& _dir,
-			const bool& _regular);
+		void CreateInfo(const Vector2& _speed,EDirType _dir);
 
 		void Move();
-		const Vector2& GetDiff() { return mDiff; }
-		const bool& GetRegular() { return mbRegular; }
-		const Vector2& GetStartPos() { return mStartPos; }
-		const byte GetOutCheckDir() { return mOutDirbit; }
 		const UINT& GetID() { return mID; }
 	private:
 
@@ -35,15 +26,10 @@ namespace yeram_client
 		virtual void OnCollisionExit(class Collider* other)override;
 	private:
 		static UINT create_numbers;
-		Vector2 mStartPos;
-		Vector2 mDiff;
 		Vector2 mSpeed;
-		Vector2 mDir;
-		float mDspawnTime;
-		float mTime;
-		byte mOutDirbit;
-		bool mbRegular;
 		UINT mID;
+		Transform* mTf;
+		EDirType mDir;
 	};
 }
 

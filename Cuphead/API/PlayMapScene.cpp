@@ -39,7 +39,7 @@ namespace yeram_client
 
 		if (core::Input::GetKeyDown(core::EKeyCode::MouseRight))
 		{
-			SceneManager::LoadScene(ESceneType::BossDevil);
+			SceneManager::LoadScene(ESceneType::Tutorial);
 			
 			//SceneManager::OpenLodingScreen();
 		}

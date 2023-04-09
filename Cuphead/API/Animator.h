@@ -45,6 +45,8 @@ namespace yeram_client
 		const std::wstring& GetCurAniName();
 		const Vector2& GetSpriteSize();
 		const Vector2& GetImageSize();
+		const Vector2& GetImageSize(int _index);
+		const UINT& GetAniIndex();
 		Events* FindEvents(const std::wstring& _name);
 		std::function<void()>& GetStartEvent(const std::wstring& _name);
 		std::function<void()>& GetCompleteEvent(const std::wstring& _name);

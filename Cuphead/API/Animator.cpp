@@ -197,6 +197,16 @@ namespace yeram_client
 		return mActiveAnimation->GetImageSize();
 	}
 
+	const Vector2& Animator::GetImageSize(int _index)
+	{
+		return mActiveAnimation->GetImageSize(_index);
+	}
+
+	const UINT& Animator::GetAniIndex()
+	{
+		return mActiveAnimation->GetSpriteIndex();
+	}
+
 
 	Animator::Events* Animator::FindEvents(const std::wstring& _name)
 	{

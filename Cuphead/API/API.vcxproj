@@ -142,6 +142,8 @@
     <ClInclude Include="CommonInclude.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Cuphead.h" />
+    <ClInclude Include="InWorldIntroScene.h" />
+    <ClInclude Include="OriginalImagePos.h" />
     <ClInclude Include="TutorialScene.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
@@ -154,11 +156,21 @@
     <ClInclude Include="Layer.h" />
     <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="Math.h" />
-    <ClInclude Include="MedusaScene.h" />
+    <ClInclude Include="MedusaScene.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="MemoryPool.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MoveObject.h" />
-    <ClInclude Include="MoveObjectManager.h" />
+    <ClInclude Include="MoveObjectManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="MugMan.h" />
     <ClInclude Include="My_Resource.h" />
     <ClInclude Include="ObjectPool.h" />
@@ -180,6 +192,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="WindowManager.h" />
+    <ClInclude Include="WorldMoveIntroScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -194,6 +207,8 @@
     <ClCompile Include="ColliderManager.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Cuphead.cpp" />
+    <ClCompile Include="InWorldIntroScene.cpp" />
+    <ClCompile Include="OriginalImagePos.cpp" />
     <ClCompile Include="TutorialScene.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -204,11 +219,21 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuScene.cpp" />
     <ClCompile Include="Math.cpp" />
-    <ClCompile Include="MedusaScene.cpp" />
+    <ClCompile Include="MedusaScene.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="MemoryPool.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MoveObject.cpp" />
-    <ClCompile Include="MoveObjectManager.cpp" />
+    <ClCompile Include="MoveObjectManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="MugMan.cpp" />
     <ClCompile Include="ObjectPool.cpp" />
     <ClCompile Include="ParryingObject.cpp" />
@@ -233,6 +258,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="WorldMoveIntroScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico" />
