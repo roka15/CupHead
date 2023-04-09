@@ -41,6 +41,10 @@ namespace yeram_client
 
 	void Chalice::Update()
 	{
+		if (mAni->GetActive() == false)
+		{
+			HeadAndRegSetAniPos();
+		}
 		Input();
 
 	}
@@ -54,6 +58,9 @@ namespace yeram_client
 	}
 	void Chalice::Input()
 	{
+		
+		
+		
 		while (core::Input::KeyMessageQueueEmpty() == false)
 		{
 			core::Input::PushInfo& push = core::Input::GetQueueFront();
@@ -239,21 +246,23 @@ namespace yeram_client
 		EDirType h_key = GetDirType(horizontal_key);
 		bool vertical_flag = PriorityInput(core::EKeyCode::Up, core::EKeyCode::Down, vertical_key);
 		EDirType v_key = GetDirType(vertical_key);
-		if (mbDash == false)
-			mShooter->SetActive(true);
-		if (_push_info.keycode == core::EKeyCode::C && _push_info.state == core::EKeyState::Up)
-		{
-			mbStopPositionUpdate = false;
-		}
-		else if (_push_info.keycode == core::EKeyCode::C && _push_info.state == core::EKeyState::Down)
-		{
-			mbStopPositionUpdate = true;
-		}
+		
 		if (core::Input::GetKey(core::EKeyCode::Z) || core::Input::GetKeyDown(core::EKeyCode::Z))
 		{
-			if (core::Input::GetKey(core::EKeyCode::C)
+			if (mbDash == false)
+			{
+				mShooter->SetActive(true);
+			}
+
+			if (mJump > 0)
+			{
+				JumpShoot(horizontal_flag,vertical_flag,h_key,v_key);
+			}
+			else if (core::Input::GetKey(core::EKeyCode::C)
 				|| _push_info.keycode == core::EKeyCode::C && _push_info.state == core::EKeyState::Down)
 			{//fix mode
+				mbStopPositionUpdate = true;
+
 				if (horizontal_flag == true && vertical_flag == true)
 				{
 					mDirType = h_key;
@@ -270,6 +279,11 @@ namespace yeram_client
 				{
 					ani_name = ani->GetDirAniKey(L"Shoot", mDirType, v_key);
 					mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(3, EDirType::STAY, mDirType, v_key));
+				}
+				else
+				{
+					ani_name = ani->GetDirAniKey(L"ShootStraight", mDirType);
+					mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(1, mDirType));
 				}
 
 			}
@@ -340,7 +354,6 @@ namespace yeram_client
 					ani_name = ani->GetDirAniKey(L"Idle", mDirType);
 				}
 			}
-
 		}
 
 
@@ -436,7 +449,9 @@ namespace yeram_client
 		if (mState == ECharacterState::Fix)
 			return false;
 		if (core::Input::GetKey(core::EKeyCode::C))
+		{
 			return false;
+		}
 		if (mState == ECharacterState::Shoot)
 			return false;
 		if (mJump == 0 && _push_info.keycode == core::EKeyCode::Down && _push_info.state == core::EKeyState::Down)
@@ -468,6 +483,13 @@ namespace yeram_client
 			mOwner->GetComponent<Rigidbody>()->SetActive(false);
 			if (core::Input::GetKey(core::EKeyCode::Z))
 			{
+				if (mJump != 0)
+				{
+					mHead->SetActive(false);
+					mReg->SetActive(false);
+
+					mAni->SetActive(true);
+				}
 				mShooter->SetActive(false);
 			}
 
@@ -540,18 +562,22 @@ namespace yeram_client
 		if (_push_info.keycode == core::EKeyCode::C && _push_info.state == core::EKeyState::Up)
 		{
 			mbStopPositionUpdate = false;
-
-			if (horizontal_flag == false)
+			if (mJump == 0)
 			{
-				ani_name = ani->GetDirAniKey(L"Idle", mDirType);
-				mState = ECharacterState::Idle;
-			}
-			else
-			{
-				ani_name = ani->GetDirAniKey(L"Regular", mDirType);
-				mState = ECharacterState::Move;
-			}
+				if (horizontal_flag == false)
+				{
+					ani_name = ani->GetDirAniKey(L"Idle", mDirType);
+					mState = ECharacterState::Idle;
+				}
+				else
+				{
+					mDirType = h_key;
+					ani_name = ani->GetDirAniKey(L"Regular", mDirType);
+					mState = ECharacterState::Move;
+				}
 
+			}
+			
 			if (ani_name.size() > 0)
 			{
 				ani->Play(ani_name, true);
@@ -593,10 +619,20 @@ namespace yeram_client
 	}
 	void Chalice::fix_start(const PushInfo& _push_info)
 	{
-		if (core::Input::GetKey(core::EKeyCode::C) && mbDash == false && mState != ECharacterState::Shoot)
+		if ((_push_info.keycode==core::EKeyCode::C && _push_info.state== core::EKeyState::Down)
+			||core::Input::GetKey(core::EKeyCode::C))
 		{
-			mbStopPositionUpdate = true;
-			mState = ECharacterState::Fix;
+			if (mbDash == false && mState != ECharacterState::Shoot&&mJump==0)
+			{
+				if (mbSit == true)
+					mbSit = false;
+				mbStopPositionUpdate = true;
+				mState = ECharacterState::Fix;
+			}
+		}
+		if (core::Input::GetKeyUp(core::EKeyCode::C))
+		{
+			mbStopPositionUpdate = false;
 		}
 	}
 	void Chalice::Parrying()
@@ -685,7 +721,7 @@ namespace yeram_client
 		Transform* tf = mOwner->GetComponent<Transform>();
 
 		mState = ECharacterState::Idle;
-
+		mAni = mOwner->GetComponent<Animator>();
 
 		Animator* ani = mOwner->GetComponent<Animator>();
 #pragma region nomal ani
@@ -747,24 +783,33 @@ namespace yeram_client
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Run\\Shoot\\RunShootDiagonalUp\\Left", Vector2::Zero, 0.05f, true);
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Run\\Shoot\\RunShootDiagonalUp\\Right", Vector2::Zero, 0.05f, true);
 #pragma endregion
-#pragma region jump head / reg
 
-		std::shared_ptr<GameObject> head = core::ObjectPool<Animator>::Spawn();
-		std::shared_ptr<GameObject> reg = core::ObjectPool<Animator>::Spawn();
-		mOwner->AddChild(head);
-		mOwner->AddChild(reg);
-
-		Animator* head_ani = head->GetComponent<Animator>();
-		Animator* reg_ani = reg->GetComponent<Animator>();
-		//reg
-		reg_ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Shoot\\Legs", Vector2::Zero, 0.1f, true);
-
-		//head
-		head_ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Shoot\\Head\\JumpShootHeadStraight\\Right", Vector2::Zero, 0.1f, true);
-		head_ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Shoot\\Head\\JumpShootHeadStraight\\Left", Vector2::Zero, 0.1f, true);
-
-#pragma endregion
 		Vector2 size = ani->FindAnimation(L"AimStraightRight")->GetSpriteSize();
+#pragma region jump head / reg
+		GameObject* reg = mOwner->FindChild(L"Reg").get();
+		mReg = reg;
+		Animator* reg_ani = reg->GetComponent<Animator>();
+
+		GameObject* head = mOwner->FindChild(L"Head").get();
+		mHead = head;
+		Transform* head_tf = mHead->GetComponent<Transform>();
+		
+		Animator * head_ani = mHead->GetComponent<Animator>();
+	
+		//reg
+		reg_ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Shoot\\Legs", Vector2::Zero, 0.05f, true);
+		reg_ani->Play(L"ShootLegs", true);
+		//head
+		head_ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Shoot\\Head\\JumpShootHeadStraight\\Right", Vector2::Zero, 0.05f, true);
+		head_ani->CreateAnimations(L"..\\Resources\\Chalice\\MSChalice\\Jump\\Shoot\\Head\\JumpShootHeadStraight\\Left", Vector2::Zero, 0.05f, true);
+		head_ani->Play(L"JumpShootHeadStraightRight",true);
+
+		head_tf->SetOffset(Vector2{ 0.0f,-(reg_ani->GetImageSize().y/1.5f) });
+
+		mReg->SetActive(false);
+		mHead->SetActive(false);
+#pragma endregion
+	
 		GameObject* shooter = mOwner->FindChild(L"Shooter").get();
 		mShooter = shooter;
 		mShooter->SetActive(false);
@@ -776,6 +821,8 @@ namespace yeram_client
 		Animator* s_ani = shooter->GetComponent<Animator>();
 		s_ani->CreateAnimations(L"..\\Resources\\weapon\\shooter_effect", Vector2::Zero, 0.05f, false);
 		s_ani->Play(L"weaponshooter_effect", true);
+
+		
 
 #pragma region air ani 
 		ani->CreateAnimations(L"..\\Resources\\Chalice\\Ms.Chalice_Air\\AirIdle\\Straight", Vector2::Zero, 0.04f, true);
@@ -835,7 +882,7 @@ namespace yeram_client
 			if (mJump == 2)
 				ani->Play(L"Double JumpLeft", true);
 			else if (mJump == 1)
-				ani->Play(L"FallRight", true);
+				ani->Play(L"FallLeft", true);
 		});
 
 
@@ -1086,6 +1133,65 @@ namespace yeram_client
 
 		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::RUN | (UINT)EDirType::RIGHT, Vector2{ offset.x - 10,offset.y }));
 		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::RUN | (UINT)EDirType::LEFT, Vector2{ -(offset.x) + 10,offset.y }));
+	}
+
+	
+	void Chalice::JumpShoot(bool h_flag, bool v_flag, EDirType h_key, EDirType v_key)
+	{
+		mOwner->GetComponent<Animator>()->SetActive(false);
+		mHead->SetActive(true);
+		mReg->SetActive(true);
+
+		Animator* head_ani = mHead->GetComponent<Animator>();
+		Animator* reg_ani = mReg->GetComponent<Animator>();
+		std::wstring h_name;
+		std::wstring r_name =L"ShootLegs";
+		Transform* head_tf = mHead->GetComponent<Transform>();
+		Vector2 offset = head_tf->GetOffset();
+		if (h_flag == true)
+		{
+			h_name = head_ani->GetDirAniKey(L"JumpShootHeadStraight", h_key);
+			
+			if (h_key == EDirType::LEFT)
+			{
+				offset.x = -10.0f;
+			}
+			else
+			{
+				offset.x = 10.0f;
+			}
+			mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(1, h_key));
+		}
+		else if (h_flag == false)
+		{
+			if (mDirType == EDirType::LEFT)
+			{
+				offset.x = -10.0f;
+			}
+			else
+			{
+				offset.x = 10.0f;
+			}
+			h_name = head_ani->GetDirAniKey(L"JumpShootHeadStraight", mDirType);
+			mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(1, mDirType));
+		}
+
+	
+		head_tf->SetOffset(offset);
+
+		head_ani->Play(h_name, true);
+		reg_ani->Play(r_name, false);
+	}
+
+	void Chalice::HeadAndRegSetAniPos()
+	{
+		Animator* head_ani = mHead->GetComponent<Animator>();
+		Transform* head_tf = mHead->GetComponent<Transform>();
+		Animator* reg_ani = mReg->GetComponent<Animator>();
+
+		Vector2 pos = head_tf->GetOffset();
+		Vector2 size2 = reg_ani->GetImageSize();
+		head_tf->SetOffset(Vector2{ pos.x,-(size2.y / 1.5f) });
 	}
 
 }

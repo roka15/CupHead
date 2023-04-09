@@ -132,7 +132,9 @@ namespace yeram_client
 			if (child->GetName() == _name)
 				return child;
 
-			FindChild(_name);
+			std::shared_ptr<GameObject> obj = child->FindChild(_name);
+			if (obj != nullptr)
+				return obj;
 		}
 		return nullptr;
 	}

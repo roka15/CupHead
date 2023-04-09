@@ -218,7 +218,15 @@ namespace yeram_client
 		bool vertical_flag = PriorityInput(core::EKeyCode::Up, core::EKeyCode::Down, vertical_key);
 		EDirType h_key = GetDirType(horizontal_key);
 		EDirType v_key = GetDirType(vertical_key);
+		if (mAni->GetActive() == false)
+		{
+			mHead->GetComponent<Animator>()->ActiveReset();
+			mReg->GetComponent<Animator>()->ActiveReset();
+			mHead->SetActive(false);
+			mReg->SetActive(false);
 
+			mAni->SetActive(true);
+		}
 		//duck 일경우
 		if (core::Input::GetKey(core::EKeyCode::Down) && horizontal_flag == true)
 		{
@@ -237,6 +245,7 @@ namespace yeram_client
 			mbSit = true;
 			return;
 		}
+		PushInfo info;
 		//duck 아닐 경우
 	 	switch (mState)
 		{
@@ -246,6 +255,7 @@ namespace yeram_client
 			{
 				mState = ECharacterState::Shoot;
 				PushInfo info;
+				mShooter->SetActive(true);
 				shoot(info);
 				return;
 			}
@@ -263,8 +273,13 @@ namespace yeram_client
 		{
 			if (horizontal_flag == true)
 				mDirType = h_key;
+			else
+			{
+				mState = ECharacterState::Idle;
+			}
 			ani_name = ani->GetDirAniKey(L"Idle", mDirType);
 			ani->Play(ani_name, true);
+		
 			break;
 		}
 		case ECharacterState::Duck:
@@ -279,6 +294,23 @@ namespace yeram_client
 				ani_name = ani->GetDirAniKey(L"Idle", mDirType);
 				ani->Play(ani_name, true);
 			}
+			else if (core::Input::GetKey(core::EKeyCode::C) == false &&
+				core::Input::GetKeyDown(core::EKeyCode::C) == false)
+			{
+				info.keycode = core::EKeyCode::C;
+				info.state = core::EKeyState::Up;
+				fix(info);
+			}
+			break;
+		case ECharacterState::Shoot:
+			
+			if (core::Input::GetKey(core::EKeyCode::Z) == false &&
+				core::Input::GetKeyDown(core::EKeyCode::Z) == false)
+			{
+				info.keycode = core::EKeyCode::Z;
+				info.state = core::EKeyState::Up;
+			}
+			shoot(info);
 			break;
 		}
 

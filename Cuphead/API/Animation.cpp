@@ -105,13 +105,15 @@ namespace yeram_client
 
 	}
 
-	void Animation::Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, bool _alpha)
+	void Animation::Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha)
 	{
 		mSheet = _sheet;
 		mbAlpha = _alpha;
 		Vector2 size = Vector2::One;
 		size.x = mSheet->GetWidth() / (float)_col;
 		size.y = mSheet->GetHeight() / (float)_row;
+
+		mOriginSize = _origin_size;
 
 		for (size_t i = 0; i < _size; i++)
 		{

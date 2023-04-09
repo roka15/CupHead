@@ -68,7 +68,7 @@ namespace yeram_client
 		mEvents.clear();
 	}
 
-	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, bool _alpha)
+	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration,const std::vector<Vector2> _origin_size,bool _alpha)
 	{
 		Animation* ani = FindAnimation(_name);
 		if (ani != nullptr)
@@ -77,7 +77,7 @@ namespace yeram_client
 		}
 		ani = new Animation();
 		mSpriteSheet = _sheet;
-		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration, _alpha);
+		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration, _origin_size,_alpha);
 		ani->SetName(_name);
 		ani->SetAnimator(this);
 		Events* event = new Events();
@@ -93,7 +93,7 @@ namespace yeram_client
 	
 		std::filesystem::path fs(_path);
 		std::vector<Image*> images = {};
-
+		std::vector<Vector2> sizes = {};
 		std::wstring key = fs.parent_path().filename();
 		key += fs.filename();
 		if (FindAnimation(key) != nullptr)
@@ -109,13 +109,15 @@ namespace yeram_client
 			Image* image = Resources::Load<Image>(fileName, fullName);
 			images.push_back(image);
 
-			if (width < image->GetWidth())
+			Vector2 size = Vector2{ (float)image->GetWidth(),(float)image->GetHeight() };
+			sizes.push_back(size);
+			if (width < size.x)
 			{
-				width = image->GetWidth();
+				width =size.x;
 			}
-			if (height < image->GetHeight())
+			if (height < size.y)
 			{
-				height = image->GetHeight();
+				height = size.y;
 			}
 			fileCount++;
 		}
@@ -139,7 +141,7 @@ namespace yeram_client
 
 		}
 
-		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration, _alpha);
+		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration, sizes,_alpha);
 		return key;
 	}
 
@@ -188,6 +190,11 @@ namespace yeram_client
 	const Vector2& Animator::GetSpriteSize()
 	{
 		return mActiveAnimation->GetSpriteSize();
+	}
+
+	const Vector2& Animator::GetImageSize()
+	{
+		return mActiveAnimation->GetImageSize();
 	}
 
 

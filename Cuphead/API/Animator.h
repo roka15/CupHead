@@ -35,15 +35,16 @@ namespace yeram_client
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
 		
-		void CreateAnimation(const std::wstring& _name,Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration,bool _alpha = false);// 이미지 하나에 스프라이트들이 있는 경우
+		void CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size=std::vector<Vector2>(), bool _alpha = false);// 이미지 하나에 스프라이트들이 있는 경우
 		std::wstring CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration,bool _alpha=false);// 이미지를 별개로 불러와서 사용해야 할 경우
 
 
 		Animation* FindAnimation(const std::wstring& _name);
+		void ActiveReset() { mActiveAnimation->Reset(); }
 		void Play(const std::wstring& _name, bool _loop);
 		const std::wstring& GetCurAniName();
 		const Vector2& GetSpriteSize();
-
+		const Vector2& GetImageSize();
 		Events* FindEvents(const std::wstring& _name);
 		std::function<void()>& GetStartEvent(const std::wstring& _name);
 		std::function<void()>& GetCompleteEvent(const std::wstring& _name);

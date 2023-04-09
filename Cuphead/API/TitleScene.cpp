@@ -43,6 +43,13 @@ void yeram_client::TitleScene::Initialize()
 		tf->SetPos(Vector2{ pos.x,pos.y });
 		AddGameObject(player_obj, ELayerType::Player);
 
+		std::shared_ptr<GameObject> player_reg = core::ObjectPool<Animator>::Spawn();
+		player_reg->SetName(L"Reg");
+		player_obj->AddChild(player_reg);
+		std::shared_ptr<GameObject> player_head = core::ObjectPool<Animator>::Spawn();
+		player_head->SetName(L"Head");
+		player_obj->AddChild(player_head);
+
 		std::shared_ptr<GameObject> player_shooter = core::ObjectPool<Animator>::Spawn();
 		player_shooter->SetName(L"Shooter");
 		player_obj->AddChild(player_shooter);
@@ -52,10 +59,6 @@ void yeram_client::TitleScene::Initialize()
 		player->CreateCharacter(EPlayerType::Cuphead);
 		player_obj->SetActive(false);
 
-		std::shared_ptr<GameObject> player_head = core::ObjectPool<Animator>::Spawn();
-
-		std::shared_ptr<GameObject> player_reg = core::ObjectPool<Animator>::Spawn();
-		
 	}
 	
 }

@@ -6,6 +6,7 @@
 namespace yeram_client
 {
 	class Rigidbody;
+	class Animator;
 	class GameObject;
 	class Character
 	{
@@ -79,6 +80,7 @@ namespace yeram_client
 		float mDashTime;
 		//Rigidbody* mRigidBody;
 
+		Animator* mAni;
 		GameObject* mHead;
 		GameObject* mReg;
 		GameObject* mShooter;
