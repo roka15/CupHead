@@ -62,7 +62,7 @@ namespace yeram_client
 
 		std::shared_ptr<GameObject> mid = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
-			cloud->SetName(L"inworldintro_mid");
+			mid->SetName(L"inworldintro_mid");
 			Transform* tf = mid->GetComponent<Transform>();
 			tf->SetPos(Vector2{ 0.0f, 150.0f });
 			tf->SetScale(Vector2{ 1.3f, 1.0f});
