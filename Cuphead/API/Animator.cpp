@@ -1,6 +1,7 @@
 #include "Animator.h"
 #include "Resources.h"
 #include "GameObject.h"
+#include "Time.h"
 namespace yeram_client
 {
 	Animator::Animator()
@@ -28,17 +29,50 @@ namespace yeram_client
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Update();
-
-			if (mActiveAnimation->IsComplete() == true)
+			if (mLimitTime != 0)
 			{
-				std::wstring str = mActiveAnimation->GetName();
-				Events* event = FindEvents(str);
-				if (event != nullptr)
-					event->mCompleteEvent();
+				mCurTime += Time::DeltaTime();
+				if (mbLoop == true
+					&& mActiveAnimation->IsComplete() == true)
+				{
+					mActiveAnimation->Reset();
+				}
+				if (mLimitTime <= mCurTime)
+				{
+					Stop();
+				}
+				return;
 			}
-			if (mbLoop == true
-				&& mActiveAnimation->IsComplete() == true)
-				mActiveAnimation->Reset();
+			if (mbUseFsm == false)
+			{
+				if(mLimitTime==0)
+				{
+					if (mbLoop == true
+						&& mActiveAnimation->IsComplete() == true)
+					{
+						mActiveAnimation->Reset();
+					}
+				}
+			}
+			else
+			{
+				if(mLimitTime==0)
+				{
+					if (mActiveAnimation->IsComplete() == true)
+					{
+						std::wstring str = mActiveAnimation->GetName();
+						Events* event = FindEvents(str);
+						if (event != nullptr)
+							event->mCompleteEvent();
+					}
+
+					if (mbLoop == true
+						&& mActiveAnimation->IsComplete() == true)
+					{
+						mActiveAnimation->Reset();
+					}
+				}
+			}
 		}
 	}
 
@@ -68,7 +102,7 @@ namespace yeram_client
 		mEvents.clear();
 	}
 
-	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration,const std::vector<Vector2> _origin_size,bool _alpha)
+	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha)
 	{
 		Animation* ani = FindAnimation(_name);
 		if (ani != nullptr)
@@ -77,7 +111,7 @@ namespace yeram_client
 		}
 		ani = new Animation();
 		mSpriteSheet = _sheet;
-		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration, _origin_size,_alpha);
+		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration, _origin_size, _alpha);
 		ani->SetName(_name);
 		ani->SetAnimator(this);
 		Events* event = new Events();
@@ -90,7 +124,7 @@ namespace yeram_client
 		UINT width = 0;
 		UINT height = 0;
 		UINT fileCount = 0;
-	
+
 		std::filesystem::path fs(_path);
 		std::vector<Image*> images = {};
 		std::vector<Vector2> sizes = {};
@@ -113,7 +147,7 @@ namespace yeram_client
 			sizes.push_back(size);
 			if (width < size.x)
 			{
-				width =size.x;
+				width = size.x;
 			}
 			if (height < size.y)
 			{
@@ -141,7 +175,7 @@ namespace yeram_client
 
 		}
 
-		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration, sizes,_alpha);
+		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration, sizes, _alpha);
 		return key;
 	}
 
@@ -153,10 +187,9 @@ namespace yeram_client
 		return itr->second;
 	}
 
-	void Animator::Play(const std::wstring& _name, bool _loop)
+	void Animator::Play(const std::wstring& _name, bool _loop, bool _use_fsm)
 	{
-		
-
+		mbUseFsm = _use_fsm;
 		Animator::Events* prev_events = nullptr;
 		if (mActiveAnimation != nullptr)
 		{
@@ -180,6 +213,66 @@ namespace yeram_client
 			= FindEvents(mActiveAnimation->GetName());
 		if (events != nullptr)
 			events->mStartEvent();
+		mLimitTime = 0;
+	}
+
+	void Animator::Play(const std::wstring& _name, bool _loop, double _time, bool _use_fsm)
+	{
+		mbUseFsm = _use_fsm;
+		Animator::Events* prev_events = nullptr;
+		if (mActiveAnimation != nullptr)
+		{
+			if (mActiveAnimation->GetName().compare(_name) == 0)
+				return;
+
+			prev_events
+				= FindEvents(mActiveAnimation->GetName());
+		}
+
+		mActiveAnimation = FindAnimation(_name);
+
+		if (prev_events != nullptr)
+			prev_events->mEndEvent();
+
+
+		mActiveAnimation->Reset();
+		mbLoop = _loop;
+
+		Animator::Events* events
+			= FindEvents(mActiveAnimation->GetName());
+		if (events != nullptr)
+			events->mStartEvent();
+		mLimitTime = _time;
+	}
+
+	void Animator::Stop()
+	{
+		mLimitTime = 0;
+		mCurTime = 0;
+		if (mActiveAnimation != nullptr)
+		{
+			mActiveAnimation->Stop();
+			if (mbUseFsm == true)
+			{
+				Animator::Events* events
+					= FindEvents(mActiveAnimation->GetName());
+				if (events != nullptr)
+					events->mEndEvent();
+			}
+		}
+	}
+
+	void Animator::FSMStop()
+	{
+		mLimitTime = 0;
+		mCurTime = 0;
+		if (mActiveAnimation != nullptr)
+		{
+			Animator::Events* events
+				= FindEvents(mActiveAnimation->GetName());
+			if (events != nullptr)
+				events->mEndEvent();
+		}
 	}
 
 	const std::wstring& Animator::GetCurAniName()

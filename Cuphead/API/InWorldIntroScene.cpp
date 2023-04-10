@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "Layer.h"
 #include "ObjectPool.h"
+#include "Time.h"
+#include "CutScenePlayAnimation.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -79,10 +81,10 @@ namespace yeram_client
 			{
 				mouse->SetName(L"World4IntroAnicuphead_2_mouse");
 				Animator* ani = mouse->GetComponent<Animator>();
-				ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\cuphead_2_mouse", Vector2::Zero, 0.1f, false);
+				ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\cuphead_2_mouse", Vector2::Zero, 0.05f, false);
 				ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\cuphead_2_mouse_2", Vector2::Zero, 0.1f, false);
-				ani->Play(mouse->GetName(), false);
-				ani->GetCompleteEvent(L"World4IntroAnicuphead_2_mouse") = std::bind([ani]()->void {ani->Play(L"World4IntroAnicuphead_2_mouse_2", true); });
+				ani->Play(mouse->GetName(), true,5.0f);
+				ani->GetEndEvent(L"World4IntroAnicuphead_2_mouse") = std::bind([ani]()->void {ani->Play(L"World4IntroAnicuphead_2_mouse_2", true); });
 				Transform* tf = mouse->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ 20.0f, -220.0f });
 			}
@@ -102,6 +104,44 @@ namespace yeram_client
 			AddGameObject(cuphead, ELayerType::FrontObject);
 		}
 		
+		std::shared_ptr<GameObject> mugman = core::ObjectPool<CutScenePlayAnimation>::Spawn();
+		{
+			mugman->SetName(L"World4IntroAnimugman_1");
+			/*std::shared_ptr<GameObject> mouse = core::ObjectPool<Animator>::Spawn();
+			{
+				mouse->SetName(L"World4IntroAnimugman_1_mouse");
+				Animator* ani = mouse->GetComponent<Animator>();
+				ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\mugman_1_mouse", Vector2::Zero, 0.05f, false);
+				ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\cuphead_2_mouse_2", Vector2::Zero, 0.1f, false);
+				ani->Play(L"World4IntroAnimugman_1_mouse", false);
+				ani->GetEndEvent(L"World4IntroAnicuphead_2_mouse") = std::bind([ani]()->void {ani->Play(L"World4IntroAnicuphead_2_mouse_2", true); });
+				Transform* tf = mouse->GetComponent<Transform>();
+				tf->SetOffset(Vector2{ 20.0f, -220.0f });
+			}
+			mouse->SetActive(false);
+			mugman->AddChild(mouse);*/
+			
+			Animator* ani = mugman->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\mugman_1", Vector2::Zero, 0.1f, false);
+			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\mugman_1_2", Vector2::Zero, 0.1f, false);
+			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\mugman_2", Vector2::Zero, 0.1f, false);
+			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\mugman_2_1", Vector2::Zero, 0.05f, false);
+		
+			CutScenePlayAnimation* cutscene = mugman->GetComponent<CutScenePlayAnimation>();
+			cutscene->SetAnimation(L"World4IntroAnimugman_1_2", 0.0);
+			cutscene->SetAnimation(L"World4IntroAnimugman_2", 10);
+			cutscene->SetAnimation(L"World4IntroAnimugman_2_1", 0.0);
+			cutscene->SetAnimation(L"World4IntroAnimugman_1", 10);
+			/*ani->GetCompleteEvent(L"World4IntroAnicuphead_1") = std::bind([ani, mouse]()->void
+			{
+				ani->Play(L"World4IntroAnicuphead_2", true);
+				mouse->SetActive(true);
+			});*/
+			ani->Play(mugman->GetName(), false);
+			Transform* tf = mugman->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 750.0f, 650.0f });
+			AddGameObject(mugman, ELayerType::FrontObject);
+		}
 		
 #pragma endregion
 		std::shared_ptr<GameObject> s2_fg = core::ObjectPool<SpriteRenderer>::Spawn();

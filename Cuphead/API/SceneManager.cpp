@@ -15,6 +15,7 @@
 #include "ObjectPool.h"
 #include "Bullet.h"
 #include "MoveObject.h"
+#include "CutScenePlayAnimation.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -40,6 +41,7 @@ namespace yeram_client
 		//core::ObjectPool<Ground>::Initialize(100, 100);
 		core::ObjectPool<Ground>::Initialize(1, 1);
 		core::ObjectPool<MoveObject>::Initialize(300);
+		core::ObjectPool<CutScenePlayAnimation>::Initialize(10);
 		
 		core::ObjectPool<Bullet>::Initialize(300);
 		for (Scene* scene : mScenes)
@@ -72,7 +74,7 @@ namespace yeram_client
 			}*/
 			scene->Initialize();
 		}
-		mActiveScene = mScenes[(UINT)ESceneType::MoveWorldIntro];
+		mActiveScene = mScenes[(UINT)ESceneType::InWorldIntro];
 		mActiveScene->OnEnter();
 
 
@@ -142,6 +144,7 @@ namespace yeram_client
 		core::ObjectPool<Ground>::Release();
 		core::ObjectPool<Player>::Release();
 		core::ObjectPool<MoveObject>::Release();
+		core::ObjectPool<CutScenePlayAnimation>::Release();
 		//core::ObjectPool<Ground>::Release();
 
 		mLoadingScreen->Release();

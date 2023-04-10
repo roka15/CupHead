@@ -41,7 +41,11 @@ namespace yeram_client
 
 		Animation* FindAnimation(const std::wstring& _name);
 		void ActiveReset() { mActiveAnimation->Reset(); }
-		void Play(const std::wstring& _name, bool _loop);
+		void Play(const std::wstring& _name, bool _loop, bool _use_fsm = true);
+		void Play(const std::wstring& _name, bool _loop, double _time, bool _use_fsm = true);
+		void Stop();
+		void FSMStop();
+		bool Complete() { return mActiveAnimation->IsComplete(); }
 		const std::wstring& GetCurAniName();
 		const Vector2& GetSpriteSize();
 		const Vector2& GetImageSize();
@@ -60,6 +64,9 @@ namespace yeram_client
 		Animation* mActiveAnimation;
 		Image* mSpriteSheet;
 		bool mbLoop;
+		bool mbUseFsm;
+		double mLimitTime;
+		double mCurTime;
 	};
 }
 

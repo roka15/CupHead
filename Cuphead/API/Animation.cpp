@@ -136,4 +136,10 @@ namespace yeram_client
 		mbComplete = false;
 	}
 
+
+	void Animation::Stop()
+	{
+		mbComplete = true;
+	}
+
 }
