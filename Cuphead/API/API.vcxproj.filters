@@ -250,6 +250,7 @@
     <ClInclude Include="WorldMoveIntroScene.h" />
     <ClInclude Include="OriginalImagePos.h" />
     <ClInclude Include="InWorldIntroScene.h" />
+    <ClInclude Include="CutScenePlayAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -392,6 +393,7 @@
     <ClCompile Include="WorldMoveIntroScene.cpp" />
     <ClCompile Include="OriginalImagePos.cpp" />
     <ClCompile Include="InWorldIntroScene.cpp" />
+    <ClCompile Include="CutScenePlayAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

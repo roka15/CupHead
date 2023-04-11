@@ -142,6 +142,7 @@
     <ClInclude Include="CommonInclude.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Cuphead.h" />
+    <ClInclude Include="CutScenePlayAnimation.h" />
     <ClInclude Include="InWorldIntroScene.h" />
     <ClInclude Include="OriginalImagePos.h" />
     <ClInclude Include="TutorialScene.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="ColliderManager.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Cuphead.cpp" />
+    <ClCompile Include="CutScenePlayAnimation.cpp" />
     <ClCompile Include="InWorldIntroScene.cpp" />
     <ClCompile Include="OriginalImagePos.cpp" />
     <ClCompile Include="TutorialScene.cpp" />

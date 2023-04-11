@@ -74,6 +74,88 @@ namespace yeram_client
 			sprite->SetRenderType(ERenderType::TransParentBlt);
 			AddGameObject(mid, ELayerType::BackObject);
 		}
+
+		
+		std::shared_ptr<GameObject> chalice = core::ObjectPool<CutScenePlayAnimation>::Spawn();
+		Animator* chalice_ani = chalice->GetComponent<Animator>();
+		{
+			Transform* tf;
+			Animator* ani = chalice->GetComponent<Animator>();
+			Animator* head_ani = nullptr;
+			Animator* mouse_ani = nullptr;
+			std::shared_ptr<GameObject> mouse = core::ObjectPool<Animator>::Spawn();
+			{
+				mouse_ani = mouse->GetComponent<Animator>();
+				mouse_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\1_mouse", Vector2::Zero, 0.07f, false);
+				mouse_ani->Play(L"World4IntroAnichalice1_mouse", false);
+				tf = mouse->GetComponent<Transform>();
+				tf->SetOffset(Vector2{ -90.0f,-115.0f });
+			}
+			std::shared_ptr<GameObject> head = core::ObjectPool<Animator>::Spawn();
+			{
+				head_ani = head->GetComponent<Animator>();
+				head_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\1", Vector2::Zero, 0.07f, false);
+				head_ani->Play(L"World4IntroAnichalice1", true);
+
+				tf = head->GetComponent<Transform>();
+				tf->SetOffset(Vector2{ -70.0f,-15.0f });
+			}
+			chalice->AddChild(head);
+			chalice->AddChild(mouse);
+			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\tail", Vector2::Zero, 0.07f, false);
+			ani->GetStartEvent(L"World4IntroAnichalicetail") = std::bind([mouse_ani]()->void
+			{
+				mouse_ani->Play(L"World4IntroAnichalice1_mouse", false);
+			});
+
+			CutScenePlayAnimation* cutscene = chalice->GetComponent<CutScenePlayAnimation>();
+			cutscene->SetAnimation(L"World4IntroAnichalicetail", true);
+			tf = chalice->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 1290.0f,470.0f });
+			ani->Play(L"World4IntroAnichalicetail", false);
+			chalice->SetActive(false);
+			AddGameObject(chalice, ELayerType::FrontObject);
+		}
+		std::shared_ptr<GameObject> portal = core::ObjectPool<Animator>::Spawn();
+		Animator* portal_ani = portal->GetComponent<Animator>();
+		{
+			portal->SetName(L"World4IntroAniportalintro");
+			Animator* ani = portal_ani;
+			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAniportal\\intro", Vector2::Zero, 0.1f, false);
+			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAniportal\\normal", Vector2::Zero, 0.1f, false);
+			Animator* soul_ani = nullptr;
+			std::shared_ptr<GameObject> soul = core::ObjectPool<Animator>::Spawn();
+			{
+				soul->SetName(L"World4IntroAniportalchalice_intro");
+				MoveObject* mv = soul->AddComponent<MoveObject>();
+				mv->CreateInfo(Vector2{ 50.0f,1.0f }, EDirType::LEFT);
+				soul_ani = soul->GetComponent<Animator>();
+				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAniportal\\chalice_intro", Vector2::Zero, 0.07f, false);
+				soul_ani->GetCompleteEvent(L"World4IntroAniportalchalice_intro") = std::bind([soul_ani, chalice_ani]()->void {
+					soul_ani->GetOwner()->SetActive(false);
+					chalice_ani->GetOwner()->SetActive(true);
+				});
+				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
+
+
+				Transform* tf = soul->GetComponent<Transform>();
+				tf->SetOffset(Vector2{ -25.0f,-100.0f });
+			}
+			portal->AddChild(soul);
+			ani->GetCompleteEvent(L"World4IntroAniportalintro") = std::bind([ani, soul_ani]()->
+				void {
+				ani->Play(L"World4IntroAniportalnormal", true);
+				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
+			});
+
+			ani->Play(portal->GetName(), false);
+			Transform* tf = portal->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 1400.0f,500.0f });
+			portal->SetActive(false);
+			AddGameObject(portal, ELayerType::BackObject);
+		}
+		
+
 #pragma region cuphead ani
 		std::shared_ptr<GameObject> cuphead = core::ObjectPool<CutScenePlayAnimation>::Spawn();
 		{
@@ -91,7 +173,7 @@ namespace yeram_client
 				Transform* tf = mouse->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ 20.0f, -220.0f });
 			}
-			mouse->SetActive(false);
+			mouse_ani->SetActive(false);
 			cuphead->AddChild(mouse);
 			Animator* ani = cuphead->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\cuphead_1", Vector2::Zero, 0.1f, false);
@@ -129,7 +211,7 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnimugman\\3", Vector2::Zero, 0.05f, false);
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnimugman\\3_2", Vector2::Zero, 0.05f, false);
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnimugman\\4", Vector2::Zero, 0.05f, false);
-
+			
 			CutScenePlayAnimation* cutscene = mugman->GetComponent<CutScenePlayAnimation>();
 			cutscene->SetAnimation(L"World4IntroAnimugman_1_2", 0.0);
 			cutscene->SetAnimation(L"World4IntroAnimugman_2", 7);
@@ -161,7 +243,10 @@ namespace yeram_client
 				mouse_ani->SetActive(false);
 				mouse_ani->ActiveReset();
 			});
-
+			ani->GetStartEvent(L"World4IntroAnimugman3") = std::bind([portal_ani]()->void
+			{
+				portal_ani->GetOwner()->SetActive(true);
+			});
 			mugman->AddChild(mouse);
 			/*ani->GetCompleteEvent(L"World4IntroAnicuphead_1") = std::bind([ani, mouse]()->void
 			{
@@ -175,38 +260,7 @@ namespace yeram_client
 			AddGameObject(mugman, ELayerType::FrontObject);
 		}
 #pragma endregion
-
-		std::shared_ptr<GameObject> portal = core::ObjectPool<Animator>::Spawn();
-		{
-			portal->SetName(L"World4IntroAniportalintro");
-			Animator* ani = portal->GetComponent<Animator>();
-			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAniportal\\intro", Vector2::Zero, 0.1f, false);
-			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAniportal\\normal", Vector2::Zero, 0.1f, false);
-			Animator* soul_ani = nullptr;
-			std::shared_ptr<GameObject> soul = core::ObjectPool<Animator>::Spawn();
-			{
-				soul->SetName(L"World4IntroAniportalchalice_intro");
-				MoveObject* mv = soul->AddComponent<MoveObject>();
-				mv->CreateInfo(Vector2{ 50.0f,1.0f }, EDirType::LEFT);
-				soul_ani = soul->GetComponent<Animator>();
-				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAniportal\\chalice_intro", Vector2::Zero, 0.07f, false);
-				soul_ani->GetCompleteEvent(L"World4IntroAniportalchalice_intro") = std::bind([soul_ani]()->void {soul_ani->GetOwner()->SetActive(false); });
-				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
-				Transform* tf = soul->GetComponent<Transform>();
-				tf->SetOffset(Vector2{ -25.0f,-100.0f });
-			}
-			portal->AddChild(soul);
-			ani->GetCompleteEvent(L"World4IntroAniportalintro") = std::bind([ani, soul_ani]()->
-				void {
-				ani->Play(L"World4IntroAniportalnormal", true); 
-				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
-			});
-			
-			ani->Play(portal->GetName(), false);
-			Transform* tf = portal->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 1400.0f,500.0f });
-			AddGameObject(portal, ELayerType::FrontObject);
-		}
+		
 		std::shared_ptr<GameObject> s2_fg = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
 			s2_fg->SetName(L"inworldintro_s2fg");
