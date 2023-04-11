@@ -149,18 +149,17 @@ namespace yeram_client
 
 	void GameObject::AddChild(std::shared_ptr<GameObject> _child)
 	{
-		mChilds.push_back(_child);
-		Transform* tf = GetComponent<Transform>();
 		_child->SetParent(this);
+		mChilds.push_back(_child);
+		_child->RemoveChilds();
 	}
-
 	void GameObject::RemoveChild(std::shared_ptr<GameObject> _child)
 	{
 		int i = 0;
 		for (std::vector<std::shared_ptr<GameObject>>::iterator i = mChilds.begin();
 			i!=mChilds.end();)
 		{
-			std::shared_ptr<GameObject> obj = (*i);
+			std::shared_ptr<GameObject>& obj = (*i);
 			if (obj->GetName() == _child->GetName())
 			{
 				obj.reset();
@@ -173,7 +172,7 @@ namespace yeram_client
 
 	void GameObject::RemoveChilds()
 	{
-		for (std::shared_ptr<GameObject> child : mChilds)
+		for (std::shared_ptr<GameObject>& child : mChilds)
 		{
 			if (child == nullptr)
 				continue;

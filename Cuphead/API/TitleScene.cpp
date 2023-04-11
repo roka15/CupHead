@@ -41,7 +41,7 @@ void yeram_client::TitleScene::Initialize()
 		player_obj->SetName(L"Player");
 		Transform* tf = player_obj->GetComponent<Transform>();
 		tf->SetPos(Vector2{ pos.x,pos.y });
-		AddGameObject(player_obj, ELayerType::Player);
+		
 
 		std::shared_ptr<GameObject> player_reg = core::ObjectPool<Animator>::Spawn();
 		player_reg->SetName(L"Reg");
@@ -59,6 +59,7 @@ void yeram_client::TitleScene::Initialize()
 		player->CreateCharacter(EPlayerType::Cuphead);
 		player_obj->SetActive(false);
 
+		AddGameObject(player_obj, ELayerType::Player);
 	}
 	
 }
@@ -89,7 +90,7 @@ void yeram_client::TitleScene::OnEnter()
 	std::shared_ptr<GameObject> title = core::ObjectPool<SpriteRenderer>::Spawn();
 	{
 		title->SetName(L"TitleBackGround");
-		AddGameObject(title, ELayerType::BackObject);
+	
 
 		Transform* tf = title->GetComponent<Transform>();
 		tf->SetSize(Vector2{ (long)size.x, (long)size.y });
@@ -98,11 +99,12 @@ void yeram_client::TitleScene::OnEnter()
 		render->SetImage(title->GetName().c_str()
 			, L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp");
 		render->SetRenderType(ERenderType::StretchBlt);
+		AddGameObject(title, ELayerType::BackObject);
 	}
 	std::shared_ptr<GameObject> ground = core::ObjectPool<SpriteRenderer>::Spawn();
 	{
 		ground->SetName(L"TitleGround");
-		AddGameObject(ground, ELayerType::FrontObject);
+		
 
 		Transform* tf = ground->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 0l,(long)size.y - 280 });
@@ -111,10 +113,11 @@ void yeram_client::TitleScene::OnEnter()
 		render->SetImage(ground->GetName().c_str()
 			, L"..\\Resources\\title_screen\\DLC\\title_chips_left_0001.bmp");
 		render->SetRenderType(ERenderType::TransParentBlt);
+		AddGameObject(ground, ELayerType::FrontObject);
 	}
 	std::shared_ptr<GameObject> playobj1 = core::ObjectPool<Animator>::Spawn();
 	{
-		AddGameObject(playobj1, ELayerType::BackObject);
+		
 
 		Transform* tf = playobj1->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 400,680 });
@@ -126,10 +129,11 @@ void yeram_client::TitleScene::OnEnter()
 		ani->Play(key, true);
 
 		playobj1->SetName(key);
+		AddGameObject(playobj1, ELayerType::BackObject);
 	}
 	std::shared_ptr<GameObject> playobj2 = core::ObjectPool<Animator>::Spawn();
 	{
-		AddGameObject(playobj2, ELayerType::BackObject);
+		
 		Transform* tf = playobj2->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 775,750 });
 		tf->SetSize(Vector2{ 400l, 500l });
@@ -139,10 +143,11 @@ void yeram_client::TitleScene::OnEnter()
 	
 		ani->Play(key, true);
 		playobj2->SetName(key);
+		AddGameObject(playobj2, ELayerType::BackObject);
 	}
 	std::shared_ptr<GameObject> playobj3 = core::ObjectPool<Animator>::Spawn();
 	{
-		AddGameObject(playobj3, ELayerType::BackObject);
+	
 		Transform* tf = playobj3->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 1150,700 });
 		tf->SetSize(Vector2{ 400l, 500l });
@@ -151,10 +156,11 @@ void yeram_client::TitleScene::OnEnter()
 		
 		ani->Play(key, true);
 		playobj3->SetName(key);
+		AddGameObject(playobj3, ELayerType::BackObject);
 	}
 	std::shared_ptr<GameObject> text = core::ObjectPool<Animator>::Spawn();
 	{
-		AddGameObject(text, ELayerType::FrontObject);
+		
 		Transform* tf = text->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 650,750 });
 		tf->SetScale(Vector2{ 2.0f,2.0f });
@@ -164,6 +170,7 @@ void yeram_client::TitleScene::OnEnter()
 
 		ani->Play(key, true);
 		text->SetName(key);
+		AddGameObject(text, ELayerType::FrontObject);
 	}
 
 	Scene::OnEnter();

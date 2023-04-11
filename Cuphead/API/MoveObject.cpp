@@ -40,7 +40,8 @@ namespace yeram_client
 	void MoveObject::Move()
 	{
 		GameObject* owner = this->GetOwner();
-		Vector2 pos = mTf->GetPos();
+		GameObject* obj = owner->GetParent();
+		Vector2 pos = obj==nullptr? mTf->GetPos() : mTf->GetOffset();
 		float speed = mSpeed.x;
 		switch (mDir)
 		{
@@ -50,7 +51,16 @@ namespace yeram_client
 		}
 
 		pos.x += speed * Time::DeltaTime();
-		mTf->SetPos(pos);
+		
+		if (obj == nullptr)
+		{
+			mTf->SetPos(pos);
+		}
+		else
+		{
+			mTf->SetOffset(pos);
+		}
+		
 	}
 
 	void MoveObject::OnCollisionEnter(Collider* other)

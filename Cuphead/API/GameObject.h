@@ -231,6 +231,7 @@ namespace yeram_client
 		ELayerType GetLayerType() { return mLayerType; }
 
 		void AddChild(std::shared_ptr<GameObject> _child);
+	
 		UINT GetChildCount() { return mChilds.size(); }
 		void RemoveChild(std::shared_ptr<GameObject> _child);
 		void RemoveChilds();
@@ -267,6 +268,7 @@ namespace yeram_client
 		template <typename T>
 		T* GetComponentNomal()
 		{
+
 			for (auto comp : mComponents)
 			{
 				if (comp.second.empty() == true)

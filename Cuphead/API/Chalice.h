@@ -8,8 +8,6 @@ namespace yeram_client
 	class Chalice:public Character
 	{
 	public:
-		
-
 		Chalice();
 		~Chalice();
 		void Initialize()override;

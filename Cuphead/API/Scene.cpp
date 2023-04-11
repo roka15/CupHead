@@ -115,7 +115,7 @@ namespace yeram_client
 		return nullptr;
 	}
 
-	void Scene::AddGameObject(std::shared_ptr<GameObject> obj, ELayerType layer)
+	void Scene::AddGameObject(std::shared_ptr<GameObject>& obj, ELayerType layer)
 	{
 		mLayers[(UINT)layer]->AddGameObject(obj);
 		obj->SetLayerType(layer);

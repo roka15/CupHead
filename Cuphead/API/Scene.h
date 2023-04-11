@@ -22,7 +22,7 @@ namespace yeram_client
 	   void ChagePosGameObjects(const Vector2& _offset);
 	   void ChageScaleGameObjects(const Vector2& _scale);
 	   std::shared_ptr<GameObject> FindObject(std::wstring _name);
-	   void AddGameObject(std::shared_ptr<GameObject> obj, ELayerType layer);
+	   void AddGameObject(std::shared_ptr<GameObject>& obj, ELayerType layer);
 	   void RemoveGameObject(GameObject* _obj);
 	   const ESceneType& GetSceneType() { return mCurType; }
 	   std::vector<std::shared_ptr<GameObject>>& GetGameObjects(ELayerType _layer_type);

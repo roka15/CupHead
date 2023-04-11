@@ -6,7 +6,6 @@ enum class ESceneType
 	Title,
 	MainMenu,
 	PlayMap,
-	BossMedusa,
 	Tutorial,
     MoveWorldIntro,
 	InWorldIntro,
