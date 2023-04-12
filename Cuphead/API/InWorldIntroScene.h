@@ -15,6 +15,12 @@ namespace yeram_client
 
 		virtual void OnEnter()override;
 		virtual void OnExit()override;
+
+
+		void ActiveShot1();
+		void ActiveShot2();
+		void ActiveShot3();
+		void ActiveShot4();
 	private:
 	};
 }

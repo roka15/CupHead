@@ -211,13 +211,13 @@ namespace yeram_client
 				child->SetActive(_flag);
 			}*/
 
-			for (auto map : mComponents)
-			{
-				for (auto comp : map.second)
-				{
-					comp->SetActive(_flag);
-				}
-			}
+			//for (auto map : mComponents)
+			//{
+			//	for (auto comp : map.second)
+			//	{
+			//		comp->SetActive(_flag);
+			//	}
+			//}
 		}
 		const bool& GetActive()
 		{

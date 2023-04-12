@@ -20,6 +20,7 @@ namespace yeram_client
 		double mLimitTime;
 		double mCurTime;
 		Animator* mAni;
+		std::wstring mPrevAniName;
 	};
 }
 

@@ -14,7 +14,7 @@ yeram_client::Transform::~Transform()
 
 void yeram_client::Transform::Initialize()
 {
-	mbActive = false;
+	mbActive = true;
 	mPos=Vector2::Zero;
 	mScale=Vector2::One;
 	mSize=Vector2::Zero;
@@ -62,6 +62,20 @@ void yeram_client::Transform::SetPos(Vector2 _pos)
 	{*/
 		mPos = _pos;
 	//}
+}
+
+void yeram_client::Transform::SetScale(Vector2 _scale)
+{
+	mScale = _scale; 
+	int size = mOwner->GetChildCount();
+	for (int i = 0; i < size; i++)
+	{
+		Transform* tf = mOwner->FindChild(i)->GetComponent<Transform>();
+		tf->SetScale(_scale);
+		Vector2 offset = tf->GetOffset();
+		offset *= _scale;
+		tf->SetOffset(offset);
+	}
 }
 
 void yeram_client::Transform::CaluatePos(const Vector2& _offset)

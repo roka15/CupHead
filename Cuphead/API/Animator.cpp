@@ -29,6 +29,8 @@ namespace yeram_client
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Update();
+			
+
 			if (mLimitTime != 0)
 			{
 				mCurTime += Time::DeltaTime();
@@ -56,16 +58,15 @@ namespace yeram_client
 			}
 			else
 			{
+				if (mActiveAnimation->IsComplete() == true)
+				{
+					std::wstring str = mActiveAnimation->GetName();
+					Events* event = FindEvents(str);
+					if (event != nullptr)
+						event->mCompleteEvent();
+				}
 				if(mLimitTime==0)
 				{
-					if (mActiveAnimation->IsComplete() == true)
-					{
-						std::wstring str = mActiveAnimation->GetName();
-						Events* event = FindEvents(str);
-						if (event != nullptr)
-							event->mCompleteEvent();
-					}
-
 					if (mbLoop == true
 						&& mActiveAnimation->IsComplete() == true)
 					{
@@ -249,6 +250,11 @@ namespace yeram_client
 	{
 		mLimitTime = 0;
 		mCurTime = 0;
+		if (mbUseFsm == true)
+		{
+			FSMStop();
+			return;
+		}
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Stop();

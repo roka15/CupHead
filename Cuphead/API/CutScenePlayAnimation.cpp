@@ -19,9 +19,11 @@ namespace yeram_client
 
 	void CutScenePlayAnimation::Update()
 	{
+		if (mAni->GetActive() == false)
+			return;
 		if (mAniQueue.empty() == false)
 		{
-			if (mAni->Complete() == true)
+			if (mPrevAniName.size()==0||mAni->Complete() == true)
 			{
 				std::pair<std::wstring, double> p = mAniQueue.front();
 				mAniQueue.pop();
@@ -33,7 +35,12 @@ namespace yeram_client
 				{
 					mAni->Play(p.first, true, p.second,false);
 				}
+				mPrevAniName = p.first;
 			}
+		}
+		else
+		{
+			mPrevAniName.clear();
 		}
 
 	}
@@ -49,5 +56,6 @@ namespace yeram_client
 	{
 		mAniQueue.push(std::make_pair(_ani_name,_time));
 	}
+
 }
 

@@ -13,7 +13,7 @@ namespace yeram_client
 		virtual void Release()override;
 
 		void SetPos(Vector2 _pos);
-		void SetScale(Vector2 _scale) { mScale = _scale; }
+		void SetScale(Vector2 _scale); 
 		void SetSize(Vector2 _size) { mSize = _size; }
 		void SetOffset(Vector2 _offset) { mOffset = _offset; }
 		Vector2& GetPos() { return mPos; }

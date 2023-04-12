@@ -48,6 +48,9 @@ namespace yeram_client
 		case EDirType::LEFT:
 			speed *= -1;
 			break;
+		case EDirType::RIGHT:
+			speed *= 1;
+			break;
 		}
 
 		pos.x += speed * Time::DeltaTime();

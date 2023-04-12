@@ -82,7 +82,7 @@ namespace yeram_client
 		}
 		std::shared_ptr<GameObject> bg_leak= core::ObjectPool<SpriteRenderer>::Spawn();
 		{
-			cloud->SetName(L"moveintro_bg_leak");
+			bg_leak->SetName(L"moveintro_bg_leak");
 			Transform* tf = bg_leak->GetComponent<Transform>();
 			Vector2 pos = tf->GetPos();
 			pos.y += 405;
