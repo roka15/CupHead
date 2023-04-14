@@ -36,6 +36,13 @@ namespace yeram_client
 		mTf = GetOwner()->GetComponent<Transform>();
 	}
 
+	void MoveObject::CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos)
+	{
+		mEndPos = _kill_pos;
+		mbEndFlag = true;
+		CreateInfo(_speed, _dir);
+	}
+
 
 	void MoveObject::Move()
 	{
@@ -46,13 +53,29 @@ namespace yeram_client
 		switch (mDir)
 		{
 		case EDirType::LEFT:
+			if (mbEndFlag == true)
+			{
+				if (pos.x < mEndPos.x)
+				{
+					SetActive(false);
+					return;
+				}
+			}
 			speed *= -1;
 			break;
 		case EDirType::RIGHT:
+			if (mbEndFlag == true)
+			{
+				if (pos.x > mEndPos.x)
+				{
+					SetActive(false);
+					return;
+				}
+			}
 			speed *= 1;
 			break;
 		}
-
+		
 		pos.x += speed * Time::DeltaTime();
 		
 		if (obj == nullptr)

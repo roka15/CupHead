@@ -264,6 +264,7 @@ namespace yeram_client
 					= FindEvents(mActiveAnimation->GetName());
 				if (events != nullptr)
 					events->mEndEvent();
+				mActiveAnimation = nullptr;
 			}
 		}
 	}
@@ -278,6 +279,7 @@ namespace yeram_client
 				= FindEvents(mActiveAnimation->GetName());
 			if (events != nullptr)
 				events->mEndEvent();
+			mActiveAnimation = nullptr;
 		}
 	}
 
