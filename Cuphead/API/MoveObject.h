@@ -28,6 +28,8 @@ namespace yeram_client
 		static UINT create_numbers;
 		Vector2 mSpeed;
 		Vector2 mEndPos;
+		Vector2 mStartPos;
+		Vector2 mDirpos;
 		bool mbEndFlag;
 		UINT mID;
 		Transform* mTf;

@@ -22,6 +22,7 @@ namespace yeram_client
 		void ActiveShot3();
 		void ActiveShot4();
 		void ActiveShot5();
+		void ActiveShot6();
 	private:
 	};
 }

@@ -29,7 +29,7 @@ namespace yeram_client
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Update();
-			
+
 
 			if (mLimitTime != 0)
 			{
@@ -47,16 +47,13 @@ namespace yeram_client
 			}
 			if (mbUseFsm == false)
 			{
-				if(mLimitTime==0)
+				if (mbLoop == true
+					&& mActiveAnimation->IsComplete() == true)
 				{
-					if (mbLoop == true
-						&& mActiveAnimation->IsComplete() == true)
-					{
-						mActiveAnimation->Reset();
-					}
+					mActiveAnimation->Reset();
 				}
 			}
-			else
+			else // ÀÏ¹Ý play 
 			{
 				if (mActiveAnimation->IsComplete() == true)
 				{
@@ -64,13 +61,17 @@ namespace yeram_client
 					Events* event = FindEvents(str);
 					if (event != nullptr)
 						event->mCompleteEvent();
-				}
-				if(mLimitTime==0)
-				{
-					if (mbLoop == true
-						&& mActiveAnimation->IsComplete() == true)
+
+					if (mbLoop == true)
 					{
 						mActiveAnimation->Reset();
+					}
+					else if (mbLoop == false)
+					{
+							Animator::Events* events
+								= FindEvents(mActiveAnimation->GetName());
+							if (events != nullptr)
+								events->mEndEvent();
 					}
 				}
 			}
@@ -258,14 +259,11 @@ namespace yeram_client
 		if (mActiveAnimation != nullptr)
 		{
 			mActiveAnimation->Stop();
-			if (mbUseFsm == true)
-			{
-				Animator::Events* events
-					= FindEvents(mActiveAnimation->GetName());
-				if (events != nullptr)
-					events->mEndEvent();
-				mActiveAnimation = nullptr;
-			}
+
+			Animator::Events* events
+				= FindEvents(mActiveAnimation->GetName());
+			if (events != nullptr)
+				events->mEndEvent();
 		}
 	}
 
@@ -277,9 +275,9 @@ namespace yeram_client
 		{
 			Animator::Events* events
 				= FindEvents(mActiveAnimation->GetName());
+			mActiveAnimation = nullptr;
 			if (events != nullptr)
 				events->mEndEvent();
-			mActiveAnimation = nullptr;
 		}
 	}
 

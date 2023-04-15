@@ -29,7 +29,7 @@ namespace yeram_client
 	{
 	}
 
-	void MoveObject::CreateInfo(const Vector2& _speed,EDirType _dir)
+	void MoveObject::CreateInfo(const Vector2& _speed, EDirType _dir)
 	{
 		mSpeed = _speed;
 		mDir = _dir;
@@ -41,6 +41,10 @@ namespace yeram_client
 		mEndPos = _kill_pos;
 		mbEndFlag = true;
 		CreateInfo(_speed, _dir);
+		Vector2 pos = mTf->GetPos();
+		mDirpos = mEndPos - pos;
+		mDirpos.Normalize();
+		mStartPos = pos;
 	}
 
 
@@ -48,36 +52,80 @@ namespace yeram_client
 	{
 		GameObject* owner = this->GetOwner();
 		GameObject* obj = owner->GetParent();
-		Vector2 pos = obj==nullptr? mTf->GetPos() : mTf->GetOffset();
+		Vector2 originpos = mTf->GetPos();
+		Vector2 pos = obj == nullptr ? mTf->GetPos() : mTf->GetOffset();
 		float speed = mSpeed.x;
-		switch (mDir)
+		if (mbEndFlag == false)
 		{
-		case EDirType::LEFT:
-			if (mbEndFlag == true)
+			switch (mDir)
 			{
-				if (pos.x < mEndPos.x)
+			case EDirType::LEFT:
+				if (mbEndFlag == true)
 				{
-					SetActive(false);
-					return;
+					if (pos.x < mEndPos.x)
+					{
+						SetActive(false);
+						return;
+					}
 				}
-			}
-			speed *= -1;
-			break;
-		case EDirType::RIGHT:
-			if (mbEndFlag == true)
-			{
-				if (pos.x > mEndPos.x)
+				speed *= -1;
+				break;
+			case EDirType::RIGHT:
+				if (mbEndFlag == true)
 				{
-					SetActive(false);
-					return;
+					if (pos.x > mEndPos.x)
+					{
+						SetActive(false);
+						return;
+					}
 				}
+				speed *= 1;
+				break;
 			}
-			speed *= 1;
-			break;
+
+			pos.x += speed * Time::DeltaTime();
+
 		}
-		
-		pos.x += speed * Time::DeltaTime();
-		
+		else
+		{
+			bool xflag = false;
+			bool yflag = false;
+			if (mStartPos.x < mEndPos.x)
+			{
+				if (originpos.x >= mEndPos.x)
+					xflag = true;
+			}
+			else if (mStartPos.x > mEndPos.x)
+			{
+				if (originpos.x <= mEndPos.x)
+					xflag = true;
+			}
+			if (mStartPos.y < mEndPos.y)
+			{
+				if (originpos.y >= mEndPos.y)
+					yflag = true;
+			}
+			else if (mStartPos.y > mEndPos.y)
+			{
+				if (originpos.y <= mEndPos.y)
+					yflag = true;
+			}
+
+			if (xflag == false)
+			{
+				pos.x += mDirpos.x * mSpeed.x * Time::DeltaTime();
+			}
+			if (yflag == false)
+			{
+				pos.y += mDirpos.y * mSpeed.y * Time::DeltaTime();
+			}
+			if (xflag == true && yflag == true)
+			{
+				SetActive(false);
+				return;
+			}
+		}
+
 		if (obj == nullptr)
 		{
 			mTf->SetPos(pos);
@@ -86,12 +134,12 @@ namespace yeram_client
 		{
 			mTf->SetOffset(pos);
 		}
-		
+
 	}
 
 	void MoveObject::OnCollisionEnter(Collider* other)
 	{
-		
+
 	}
 	void MoveObject::OnCollisionStay(Collider* other)
 	{
