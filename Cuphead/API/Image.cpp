@@ -4,15 +4,15 @@
 extern yeram_client::Application application;
 namespace yeram_client
 {
-    Image* Image::Create(const std::wstring& _key, UINT _width, UINT _height)
-    {
+	Image* Image::Create(const std::wstring& _key, UINT _width, UINT _height, COLORREF rgb)
+	{
 		if (_width == 0 || _height == 0)
 			return nullptr;
 
 		Image* image = Resources::Find<Image>(_key);
 		if (image != nullptr)
 			return image;
-		
+
 		image = new Image();
 		HDC MainHDC = application.GetHDC();
 
@@ -23,23 +23,25 @@ namespace yeram_client
 		DeleteObject(oldBitmap);
 		image->mWidth = _width;
 		image->mHeight = _height;
-		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(RGB(255, 0, 255));
-		HBRUSH oldBrush = (HBRUSH)SelectObject(image->mHdc, myBrush);
-
-		Rectangle(image->mHdc, -1, -1,_width+1,_height+1);
-
-		SelectObject(image->mHdc, oldBrush);
-		DeleteObject(myBrush);
 
 		image->SetKey(_key);
 		Resources::Insert(_key, image);
-        return image;
-    }
-    Image::Image()
+
+		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(rgb);
+		HBRUSH oldBrush = (HBRUSH)SelectObject(image->mHdc, myBrush);
+
+		Rectangle(image->mHdc, -1, -1, _width + 1, _height + 1);
+
+		DeleteObject(SelectObject(image->mHdc, oldBrush));
+		
+		return image;
+	}
+
+	Image::Image()
 		:mBitmap(NULL)
-		,mHdc(NULL)
-		,mWidth(0)
-		,mHeight(0)
+		, mHdc(NULL)
+		, mWidth(0)
+		, mHeight(0)
 	{
 
 	}

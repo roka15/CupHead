@@ -1,6 +1,8 @@
 #include "MoveObject.h"
 #include "GameObject.h"
 #include "Time.h"
+#include "Application.h"
+extern yeram_client::Application application;
 namespace yeram_client
 {
 	MoveObject::MoveObject() :Script()
@@ -36,7 +38,7 @@ namespace yeram_client
 		mTf = GetOwner()->GetComponent<Transform>();
 	}
 
-	void MoveObject::CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos)
+	void MoveObject::CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos, bool _despawn, bool _outcheck)
 	{
 		mEndPos = _kill_pos;
 		mbEndFlag = true;
@@ -45,7 +47,11 @@ namespace yeram_client
 		mDirpos = mEndPos - pos;
 		mDirpos.Normalize();
 		mStartPos = pos;
+		mbOutCheck = _outcheck;
+		mbDespawn = _despawn;
 	}
+
+	
 
 
 	void MoveObject::Move()
@@ -110,7 +116,28 @@ namespace yeram_client
 				if (originpos.y <= mEndPos.y)
 					yflag = true;
 			}
-
+			if (mbOutCheck == true)
+			{
+				Animator* ani = GetOwner()->GetComponent<Animator>();
+				SpriteRenderer* sprite = GetOwner()->GetComponent<SpriteRenderer>();
+				Vector2 size;
+				Vector2 winsize = application.GetWindowSize();
+				if (ani != nullptr)
+				{
+					size = ani->GetSpriteSize();
+				}
+				else if (sprite != nullptr)
+				{
+					size.x = sprite->GetWidth();
+					size.y = sprite->GetHeight();
+				}
+				if (originpos.x + size.x < -10 || originpos.x - size.x>winsize.x + 10
+					|| originpos.y + size.y <-10 || originpos.y - size.y>winsize.y + 10)
+				{
+					xflag = true;
+					yflag = true;
+				}
+			}
 			if (xflag == false)
 			{
 				pos.x += mDirpos.x * mSpeed.x * Time::DeltaTime();
@@ -121,7 +148,14 @@ namespace yeram_client
 			}
 			if (xflag == true && yflag == true)
 			{
-				SetActive(false);
+				if (mbDespawn == true)
+				{
+					SceneManager::RemoveObject(GetOwner());
+				}
+				else
+				{
+					SetActive(false);
+				}
 				return;
 			}
 		}

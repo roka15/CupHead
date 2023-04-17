@@ -103,12 +103,18 @@ namespace yeram_client
 	}
 	void Layer::RemoveGameObject(GameObject* _obj)
 	{
+		std::vector<std::shared_ptr<GameObject>>::iterator itr = mObjs.begin();
 		for (auto& obj : mObjs)
 		{
 			if (obj.get() == _obj)
 			{
 				obj.reset();
+				mObjs.erase(itr);
+				return;
 			}
+			itr++;
+			if (itr == mObjs.end())
+				return;
 		}
 	}
 }

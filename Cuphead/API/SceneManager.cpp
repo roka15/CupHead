@@ -25,6 +25,8 @@ namespace yeram_client
 
 	void SceneManager::Initalize()
 	{
+
+
 		mScenes.resize((UINT)ESceneType::MAX);
 		mScenes[(UINT)ESceneType::Title] = new TitleScene(L"Title");
 		mScenes[(UINT)ESceneType::MainMenu] = new MainMenuScene(L"Main");
@@ -104,6 +106,7 @@ namespace yeram_client
 		});
 
 		mbLoadScreenFlag = false;
+	 
 	}
 
 	void SceneManager::Update()
@@ -119,7 +122,7 @@ namespace yeram_client
 	void SceneManager::Render(HDC hdc)
 	{
 		mActiveScene->Render(hdc);
-	
+		
 		if (mbLoadScreenFlag == true)
 		{
 			mLoadingScreen->Render(hdc);

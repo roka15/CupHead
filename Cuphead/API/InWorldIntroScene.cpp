@@ -240,7 +240,7 @@ namespace yeram_client
 					std::shared_ptr<GameObject> mouse = gost->FindChild(L"mouse");
 					mouse->SetActive(false);
 				});
-				head_ani->GetStartEvent(L"World4IntroAnichalice16_head") = std::bind([mouse_ani,this]()->void
+				head_ani->GetStartEvent(L"World4IntroAnichalice16_head") = std::bind([mouse_ani, this]()->void
 				{
 					mouse_ani->GetOwner()->SetActive(true);
 					mouse_ani->Play(L"World4IntroAnichalice16_mouse", true, 5.0f);
@@ -249,7 +249,7 @@ namespace yeram_client
 				{
 					eye_ani->GetOwner()->SetActive(false);
 				});
-				
+
 				tf = head->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ -70.0f,-15.0f });
 			}
@@ -262,7 +262,7 @@ namespace yeram_client
 			tf->SetPos(Vector2{ 1290.0f,470.0f });
 			gost->SetActive(false);
 
-			
+
 			AddGameObject(gost, ELayerType::FrontObject);
 		}
 		std::shared_ptr<GameObject> portal = core::ObjectPool<Animator>::Spawn();
@@ -288,7 +288,7 @@ namespace yeram_client
 				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\5_light", Vector2::Zero, 0.07f, false);
 				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnimugman\\9", Vector2::Zero, 0.07f, false);
 				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\15_effect", Vector2::Zero, 0.07f, false);
-				
+
 				soul_ani->GetCompleteEvent(L"World4IntroAniportalchalice_intro") = std::bind([soul_ani, gost_ani]()->void {
 					soul_ani->GetOwner()->SetActive(false);
 					gost_ani->GetOwner()->SetActive(true);
@@ -308,7 +308,7 @@ namespace yeram_client
 					tf->SetOffset(Vector2{ 140.0f,-20.0f });
 				});
 				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
-				soul_ani->GetEndEvent(L"World4IntroAnichalice15_effect") = std::bind([soul_ani,gost_ani]()->void
+				soul_ani->GetEndEvent(L"World4IntroAnichalice15_effect") = std::bind([soul_ani, gost_ani]()->void
 				{
 					soul_ani->SetActive(false);
 					gost_ani->GetOwner()->SetActive(true);
@@ -348,7 +348,7 @@ namespace yeram_client
 				mouse_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\cuphead_2_mouse_2", Vector2::Zero, 0.1f, false);
 				mouse_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnicuphead\\7_mouse", Vector2::Zero, 0.1f, false);
 				mouse_ani->Play(L"World4IntroAnicuphead_2_mouse", true, 5.0f);
-				mouse_ani->GetEndEvent(L"World4IntroAnicuphead_2_mouse") = std::bind([mouse_ani]()->void 
+				mouse_ani->GetEndEvent(L"World4IntroAnicuphead_2_mouse") = std::bind([mouse_ani]()->void
 				{
 					mouse_ani->Play(L"World4IntroAnicuphead_2_mouse_2", true);
 				});
@@ -553,7 +553,7 @@ namespace yeram_client
 					tf->SetPos(ptf->GetPos());
 				}
 			});
-			
+
 			mugman->AddChild(mouse);
 
 			ani->Play(L"World4IntroAnimugman_1", false);
@@ -637,6 +637,7 @@ namespace yeram_client
 				//here
 				MoveObject* mv = ani->GetOwner()->GetComponent<MoveObject>();
 				mv->SetActive(false);
+				ani->GetOwner()->SetActive(false);
 			}
 			);
 
@@ -657,6 +658,149 @@ namespace yeram_client
 			ani->Play(L"World4IntroAnimugman5_2_light", true);
 			effect1->SetActive(false);
 			AddGameObject(effect1, ELayerType::BackObject);
+		}
+
+
+		Vector2 nextpos;
+		std::shared_ptr<GameObject> start_tree = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			start_tree->SetName(L"cutscene_intro_s4_forest_start");
+			start_tree->SetActive(false);
+			MoveObject* mv = start_tree->AddComponent<MoveObject>();
+			Transform* tf = start_tree->GetComponent<Transform>();
+
+			SpriteRenderer* sprite = start_tree->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"cutscene_intro_s4_forest_start", L"..\\Resources\\World4IntroAni\\bg\\cutscene_intro_s4_forest_start.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Vector2 spritesize;
+			spritesize.x = sprite->GetWidth();
+			spritesize.y = sprite->GetHeight();
+			tf->SetPos(Vector2{ 600.0f,200.0f });
+			Vector2 pos = tf->GetPos();
+			nextpos.x = pos.x + spritesize.x;
+			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
+			AddGameObject(start_tree, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> tree_loop = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			tree_loop->SetName(L"cutscene_intro_s4_forest_loop");
+			tree_loop->SetActive(false);
+			MoveObject* mv = tree_loop->AddComponent<MoveObject>();
+			Transform* tf = tree_loop->GetComponent<Transform>();
+
+			SpriteRenderer* sprite = tree_loop->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"cutscene_intro_s4_forest_loop", L"..\\Resources\\World4IntroAni\\bg\\cutscene_intro_s4_forest_loop.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Vector2 spritesize;
+			spritesize.x = sprite->GetWidth();
+			spritesize.y = sprite->GetHeight();
+			tf->SetPos(Vector2{ nextpos.x-10.0f,180.0f });
+			Vector2 pos = tf->GetPos();
+			nextpos.x = pos.x + spritesize.x;
+			nextpos.y = pos.y;
+			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
+			AddGameObject(tree_loop, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> tree_loop2 = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			tree_loop2->SetName(L"cutscene_intro_s4_forest_loop2");
+			tree_loop2->SetActive(false);
+			MoveObject* mv = tree_loop2->AddComponent<MoveObject>();
+			Transform* tf = tree_loop2->GetComponent<Transform>();
+
+			SpriteRenderer* sprite = tree_loop2->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"cutscene_intro_s4_forest_loop", L"..\\Resources\\World4IntroAni\\bg\\cutscene_intro_s4_forest_loop.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Vector2 spritesize;
+			spritesize.x = sprite->GetWidth();
+			spritesize.y = sprite->GetHeight();
+			tf->SetPos(Vector2{ nextpos.x - 10.0f,180.0f });
+			Vector2 pos = tf->GetPos();
+			nextpos.x = pos.x + spritesize.x;
+			nextpos.y = pos.y;
+			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
+			AddGameObject(tree_loop2, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> tree_loop3 = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			tree_loop3->SetName(L"cutscene_intro_s4_forest_loop3");
+			tree_loop3->SetActive(false);
+			MoveObject* mv = tree_loop3->AddComponent<MoveObject>();
+			Transform* tf = tree_loop3->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			SpriteRenderer* sprite = tree_loop3->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"cutscene_intro_s4_forest_loop", L"..\\Resources\\World4IntroAni\\bg\\cutscene_intro_s4_forest_loop.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Vector2 spritesize;
+			spritesize.x = sprite->GetWidth();
+			spritesize.y = sprite->GetHeight();
+			tf->SetPos(Vector2{ nextpos.x - 10.0f,180.0f });
+			nextpos.x = pos.x + spritesize.x;
+			nextpos.y = pos.y;
+			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
+			AddGameObject(tree_loop3, ELayerType::BackObject);
+		}
+		nextpos = Vector2::Zero;
+		std::shared_ptr<GameObject> shot3_bg1 = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			shot3_bg1->SetName(L"cutscene_intro_s4_mid_start");
+			shot3_bg1->SetActive(false);
+			MoveObject* mv = shot3_bg1->AddComponent<MoveObject>();
+			Transform* tf = shot3_bg1->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 0.0f,0.0f });
+			tf->SetSize(size);
+			Vector2 pos = tf->GetPos();
+
+			SpriteRenderer* sprite = shot3_bg1->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"cutscene_intro_s4_mid_start", L"..\\Resources\\World4IntroAni\\bg\\cutscene_intro_s4_mid_start.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Vector2 spritesize;
+			spritesize.x = sprite->GetWidth();
+			spritesize.y = sprite->GetHeight();
+			nextpos.x = pos.x + size.x;
+
+			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
+			AddGameObject(shot3_bg1, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> shot3_bg2 = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			shot3_bg2->SetName(L"cutscene_intro_s4_mid_loop1");
+			shot3_bg2->SetActive(false);
+			MoveObject* mv = shot3_bg2->AddComponent<MoveObject>();
+			Transform* tf = shot3_bg2->GetComponent<Transform>();
+			tf->SetPos(nextpos);
+			tf->SetSize(size);
+			Vector2 pos = tf->GetPos();
+
+			SpriteRenderer* sprite = shot3_bg2->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"cutscene_intro_s4_mid_loop1", L"..\\Resources\\World4IntroAni\\bg\\cutscene_intro_s4_mid_loop1.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Vector2 spritesize;
+			spritesize.x = sprite->GetWidth();
+			spritesize.y = sprite->GetHeight();
+			nextpos.x = pos.x + size.x;
+			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
+			AddGameObject(shot3_bg2, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> shot3_bg3 = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			shot3_bg3->SetName(L"cutscene_intro_s4_main_finish");
+			shot3_bg3->SetActive(false);
+			MoveObject* mv = shot3_bg3->AddComponent<MoveObject>();
+			Transform* tf = shot3_bg3->GetComponent<Transform>();
+			tf->SetPos(nextpos);
+			tf->SetSize(size);
+			Vector2 pos = tf->GetPos();
+
+			SpriteRenderer* sprite = shot3_bg3->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"cutscene_intro_s4_main_finish", L"..\\Resources\\World4IntroAni\\bg\\cutscene_intro_s4_main_finish.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Vector2 spritesize;
+			spritesize.x = sprite->GetWidth();
+			spritesize.y = sprite->GetHeight();
+			nextpos.x = pos.x + size.x;
+			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
+			AddGameObject(shot3_bg3, ELayerType::BackObject);
 		}
 	}
 	void InWorldIntroScene::OnExit()
@@ -682,7 +826,7 @@ namespace yeram_client
 				cutscene->SetAnimation(L"World4IntroAnichalice6", 5.0f);
 				cutscene->SetAnimation(L"World4IntroAnichalice7", 0.0f);
 				cutscene->SetAnimation(L"World4IntroAnichalice8", 5.0f);
-				cutscene->SetAnimation(L"World4IntroAnichalice9", 21.0f);
+				cutscene->SetAnimation(L"World4IntroAnichalice9", 10.5f);
 				e_tf->SetPos(tf->GetPos());
 				e_tf->SetScale(Vector2{ 1.0f,1.0f });
 			}
@@ -797,6 +941,7 @@ namespace yeram_client
 		{
 			effect->SetActive(false);
 		}
+
 		std::shared_ptr<GameObject> s2fg = FindObject(L"inworldintro_s2fg");
 		{
 			s2fg->SetActive(false);
@@ -805,14 +950,44 @@ namespace yeram_client
 		{
 			mid->SetActive(false);
 		}
-		std::shared_ptr<GameObject> tree = FindObject(L"inwordintro_tree1");
+		/*std::shared_ptr<GameObject> tree = FindObject(L"inwordintro_tree1");
 		{
 			tree->SetActive(true);
+		}*/
+		/*	std::shared_ptr<GameObject> bg1 = FindObject(L"inwordintro_bg1");
+			{
+				bg1->SetActive(true);
+			}*/
+		std::shared_ptr<GameObject> tree_start = FindObject(L"cutscene_intro_s4_forest_start");
+		{
+			tree_start->SetActive(true);
 		}
-		std::shared_ptr<GameObject> bg1 = FindObject(L"inwordintro_bg1");
+		std::shared_ptr<GameObject> tree_loop = FindObject(L"cutscene_intro_s4_forest_loop");
+		{
+			tree_loop->SetActive(true);
+		}
+
+		std::shared_ptr<GameObject> tree_loop2 = FindObject(L"cutscene_intro_s4_forest_loop2");
+		{
+			tree_loop2->SetActive(true);
+		}
+		std::shared_ptr<GameObject> tree_loop3 = FindObject(L"cutscene_intro_s4_forest_loop3");
+		{
+			tree_loop3->SetActive(true);
+		}
+		std::shared_ptr<GameObject> bg1 = FindObject(L"cutscene_intro_s4_mid_start");
 		{
 			bg1->SetActive(true);
 		}
+		std::shared_ptr<GameObject> bg2 = FindObject(L"cutscene_intro_s4_mid_loop1");
+		{
+			bg2->SetActive(true);
+		}
+		std::shared_ptr<GameObject> bg3 = FindObject(L"cutscene_intro_s4_main_finish");
+		{
+			bg3->SetActive(true);
+		}
+
 		std::shared_ptr<GameObject> portal = FindObject(L"portal");
 		{
 			MoveObject* mv = portal->GetComponent<MoveObject>();
@@ -873,16 +1048,49 @@ namespace yeram_client
 	}
 	void InWorldIntroScene::ActiveShot4()
 	{
+		std::shared_ptr<GameObject> bg2 = FindObject(L"cutscene_intro_s4_mid_loop1");
+		{
+			if (bg2 != nullptr)
+			{
+				bg2->SetActive(false);
+				RemoveGameObject(bg2.get());
+			}
+		}
+		std::shared_ptr<GameObject> bg3 = FindObject(L"cutscene_intro_s4_main_finish");
+		{
+			if (bg3 != nullptr)
+			{
+				bg3->SetActive(false);
+				RemoveGameObject(bg3.get());
+			}
+		}
+		std::shared_ptr<GameObject> tree1 = FindObject(L"cutscene_intro_s4_forest_loop2");
+		{
+			if (tree1 != nullptr)
+			{
+				tree1->SetActive(false);
+				RemoveGameObject(tree1.get());
+			}
+		}
+		std::shared_ptr<GameObject> tree2 = FindObject(L"cutscene_intro_s4_forest_loop3");
+		{
+			if (tree2 != nullptr)
+			{
+				tree2->SetActive(false);
+				RemoveGameObject(tree2.get());
+			}
+		}
 		Vector2 size = application.GetWindowSize();
 		application.ScreenClear();
-		std::shared_ptr<GameObject> tree = FindObject(L"inwordintro_tree1");
+
+		/*std::shared_ptr<GameObject> tree = FindObject(L"inwordintro_tree1");
 		{
 			tree->SetActive(false);
-		}
-		std::shared_ptr<GameObject> bg1 = FindObject(L"inwordintro_bg1");
+		}*/
+		/*std::shared_ptr<GameObject> bg1 = FindObject(L"inwordintro_bg1");
 		{
 			bg1->SetActive(false);
-		}
+		}*/
 		std::shared_ptr<GameObject> cloude = FindObject(L"inworldintro_cloud");
 		{
 			cloude->SetActive(false);
@@ -1092,7 +1300,7 @@ namespace yeram_client
 			effect1->SetActive(true);
 			Transform* p_tf = player2->GetComponent<Transform>();
 			Transform* portal_tf = portal->GetComponent<Transform>();
-			Vector2 pos = portal_tf->GetPos(); 
+			Vector2 pos = portal_tf->GetPos();
 			Vector2 target_pos = p_tf->GetPos();
 			Transform* tf = effect1->GetComponent<Transform>();
 			Animator* ani = effect1->GetComponent<Animator>();
@@ -1100,7 +1308,7 @@ namespace yeram_client
 			ani->Play(L"World4IntroAnimugman11", false);
 			tf->SetPos(pos);
 			mv->SetActive(true);
-			
+
 			mv->CreateInfo(Vector2{ 400.0f,200.0f }, EDirType::RIGHT, target_pos);
 		}
 		std::shared_ptr<GameObject> sb = FindObject(L"salt_bakery");
@@ -1116,7 +1324,7 @@ namespace yeram_client
 			pos.y -= 150.0f;
 			tf->SetPos(pos);
 		}
-		
+
 		std::shared_ptr<GameObject> gost = FindObject(L"gost");
 		{
 			gost->SetActive(false);
@@ -1125,16 +1333,16 @@ namespace yeram_client
 			pos.x += 50.0f;
 			tf->SetPos(pos);
 			std::shared_ptr<GameObject> tail = gost->FindChild(L"tail");
-			tail->GetComponent<Animator>()->Play(L"World4IntroAnichalicetail3",true);
+			tail->GetComponent<Animator>()->Play(L"World4IntroAnichalicetail3", true);
 			std::shared_ptr<GameObject> head = gost->FindChild(L"head");
 			head->SetActive(true);
-	        
+
 			CutScenePlayAnimation* cutscene = head->GetComponent<CutScenePlayAnimation>();
 			cutscene->SetAnimation(L"World4IntroAnichalice16_head", 5.0);
-			cutscene->SetAnimation(L"World4IntroAnichalice17_1",0.0);
+			cutscene->SetAnimation(L"World4IntroAnichalice17_1", 0.0);
 			std::shared_ptr<GameObject> mouse = gost->FindChild(L"mouse");
 			Transform* mtf = mouse->GetComponent<Transform>();
-			Transform* htf = head->GetComponent<Transform>(); 
+			Transform* htf = head->GetComponent<Transform>();
 			Vector2 offset = htf->GetOffset();
 			offset.x -= 30.0f;
 			offset.y += 60.0f;
@@ -1163,7 +1371,7 @@ namespace yeram_client
 			tf->SetPos(pos);
 		}
 
-		
-		
+
+
 	}
 }

@@ -16,7 +16,7 @@ namespace yeram_client
 		virtual void Release()override;
 
 		void CreateInfo(const Vector2& _speed,EDirType _dir);
-		void CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos);
+		void CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos,bool _despawn=false, bool _outcheck=false);
 		void Move();
 		const UINT& GetID() { return mID; }
 	private:
@@ -31,9 +31,12 @@ namespace yeram_client
 		Vector2 mStartPos;
 		Vector2 mDirpos;
 		bool mbEndFlag;
+		bool mbOutCheck;
+		bool mbDespawn;
 		UINT mID;
 		Transform* mTf;
 		EDirType mDir;
+	
 	};
 }
 
