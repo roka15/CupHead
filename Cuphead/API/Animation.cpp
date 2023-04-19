@@ -52,6 +52,11 @@ namespace yeram_client
 				mSpriteIndex++;
 			}
 		}
+
+		if (mbAlpha == true)
+		{
+
+		}
 	}
 
 	void Animation::Render(HDC _hdc)

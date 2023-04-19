@@ -6,6 +6,8 @@
 #include "MoveObject.h"
 #include "OriginalImagePos.h"
 #include "Time.h"
+#include "Camera.h"
+#include "Resources.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -25,13 +27,22 @@ namespace yeram_client
 	{
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
+		Resources::Load<Image>(L"worldmove_intro_text", L"..\\Resources\\worldmove_intro\\bg\\cutscene_intro_s1_logo.bmp");
 	}
 	void WorldMoveIntroScene::Update()
 	{
 		mTime += Time::DeltaTime();
+		if (mTime >= 10.0f && mTime < 11.0f)
+		{
+			Camera::SetFadeImage(Resources::Find<Image>(L"worldmove_intro_text"));
+			Camera::SetFadeEndTime(20.0f);
+			Camera::SetFadePos(Vector2{ 250,200 }, Vector2{ 1050,500 });
+			Camera::FadeOut();
+		}
 		if (mTime >= 20.0f)
 		{
 			SceneManager::LoadScene(ESceneType::InWorldIntro);
+			Camera::InitFadeInfo();
 		}
 		Scene::Update();
 	}
@@ -46,6 +57,7 @@ namespace yeram_client
 	void WorldMoveIntroScene::OnEnter()
 	{
 		Vector2 size = application.GetWindowSize();
+		Camera::FadeIn();
 		std::shared_ptr<GameObject> background = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
 			background->SetName(L"moveintro_background");

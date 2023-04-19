@@ -71,5 +71,4 @@ namespace yeram_client
 		DeleteObject(oldBitmap);
 		return S_OK;
 	}
-
 }

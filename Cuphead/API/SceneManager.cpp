@@ -76,7 +76,7 @@ namespace yeram_client
 			}*/
 			scene->Initialize();
 		}
-		mActiveScene = mScenes[(UINT)ESceneType::InWorldIntro];
+		mActiveScene = mScenes[(UINT)ESceneType::MoveWorldIntro];
 		mActiveScene->OnEnter();
 
 

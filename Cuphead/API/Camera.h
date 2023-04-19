@@ -30,6 +30,12 @@ namespace yeram_client
 		static bool GetHorizontalMove() { return mbHorizonMove; }
 		static bool GetVerticalMove() { return mbVerticalMove; }
 		static bool UseTarget() { return mTarget != nullptr; }
+		static void FadeIn() { mType = ECameraEffectType::FADE_IN; }
+		static void FadeOut() { mType = ECameraEffectType::FADE_OUT; }
+		static void SetFadeImage(class Image* _image) { mCutton = _image; }
+		static void SetFadeEndTime(float _time) { mEndTime = _time; mAlphaTime = 0.0f; }
+		static void SetFadePos(const Vector2& _start, const Vector2& _end) { mAlphaStartPos = _start; mAlphaEndPos = _end; }
+		static void InitFadeInfo(); 
 		static void Clear();
 	
 	private:
@@ -41,6 +47,13 @@ namespace yeram_client
 		static GameObject* mTarget;
 		static bool mbHorizonMove;
 		static bool mbVerticalMove;
+		static float mAlphaTime;
+		static float mEndTime;
+		static float mCuttonAlpha;
+		static class Image* mCutton;
+		static Vector2 mAlphaStartPos;
+		static Vector2 mAlphaEndPos;
+		static ECameraEffectType mType;
 	};
 
 }
