@@ -6,6 +6,13 @@ namespace yeram_client
 	class SceneManager
 	{
 	public:
+		enum class ELoadingState
+		{
+			NONE,
+			FADE_OUT,
+		    LOADING,
+			FADE_IN,
+		};
 		static void Initalize();
 		static void Update();
 		static void Render(HDC hdc);
@@ -19,6 +26,8 @@ namespace yeram_client
 
 		static void OpenLodingScreen();
 		static void CloseLodingScreen();
+		static void LoadingComplete() { mbCompleteLoad = true; }
+		static void SetActivScene();
 	private:
 		SceneManager()=delete;
 		~SceneManager();
@@ -28,6 +37,10 @@ namespace yeram_client
 
 		static GameObject* mLoadingScreen;
 		static bool mbLoadScreenFlag;
+		static HANDLE mHThread;
+		static ESceneType mLoadSceneType;
+		static ELoadingState mLoadState;
+		static bool mbCompleteLoad;
 	};
 }
 

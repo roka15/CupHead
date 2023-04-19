@@ -16,15 +16,23 @@
 #include "Bullet.h"
 #include "MoveObject.h"
 #include "CutScenePlayAnimation.h"
+#include "Loading.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
 	Scene* SceneManager::mActiveScene = nullptr;
 	GameObject* SceneManager::mLoadingScreen = nullptr;
 	bool SceneManager::mbLoadScreenFlag;
+	HANDLE SceneManager::mHThread;
+	ESceneType SceneManager::mLoadSceneType;
+	SceneManager::ELoadingState SceneManager::mLoadState;
+	bool SceneManager::mbCompleteLoad;
 
 	void SceneManager::Initalize()
 	{
+		core::Loading::Initialize();
+		mHThread = CreateThread(NULL, 0, core::Loading::LoadingFunc, nullptr, 0, NULL);
+		if (mHThread == NULL) exit(1);
 
 
 		mScenes.resize((UINT)ESceneType::MAX);
@@ -44,7 +52,7 @@ namespace yeram_client
 		core::ObjectPool<Ground>::Initialize(1, 1);
 		core::ObjectPool<MoveObject>::Initialize(300);
 		core::ObjectPool<CutScenePlayAnimation>::Initialize(10);
-		
+
 		core::ObjectPool<Bullet>::Initialize(300);
 		for (Scene* scene : mScenes)
 		{
@@ -76,8 +84,7 @@ namespace yeram_client
 			}*/
 			scene->Initialize();
 		}
-		mActiveScene = mScenes[(UINT)ESceneType::MoveWorldIntro];
-		mActiveScene->OnEnter();
+
 
 
 		mLoadingScreen = new GameObject();
@@ -86,12 +93,16 @@ namespace yeram_client
 		Animator* ani = mLoadingScreen->AddComponent<Animator>();
 		std::wstring key
 			= ani->CreateAnimations(L"..\\Resources\\Menu_Screen\\Loading\\Open", Vector2::Zero, 0.1f, true);
-		
+
 		ani->GetCompleteEvent(key) = std::bind
 		(
-			[]()->void
+			[ani]()->void
 		{
-			CloseLodingScreen();
+			//fade out 재생 끝난 후 wakeup event
+			core::Loading::WakeUpEvent();
+			mLoadState = ELoadingState::LOADING;
+			//loading screen 재생
+			ani->Play(L"LoadingLoading", true);
 		});
 
 		key = ani->CreateAnimations(L"..\\Resources\\Menu_Screen\\Loading\\Close", Vector2::Zero, 0.1f, true);
@@ -102,30 +113,57 @@ namespace yeram_client
 			[]()->void
 		{
 			mLoadingScreen->SetActive(false);
-			mbLoadScreenFlag = false;
+			mLoadState = ELoadingState::NONE;
 		});
 
+		key = ani->CreateAnimations(L"..\\Resources\\Menu_Screen\\Loading\\Loading", Vector2::Zero, 0.1f, false);
+		ani->GetEndEvent(key) = std::bind
+		(
+			[ani]()->void
+		{
+			mLoadState = ELoadingState::FADE_IN;
+			CloseLodingScreen();
+		});
 		mbLoadScreenFlag = false;
-	 
+
+
+		LoadScene(ESceneType::Title);
 	}
 
 	void SceneManager::Update()
 	{
-		mActiveScene->Update();
-	
-		if (mbLoadScreenFlag == true)
+		switch (mLoadState)
 		{
+		case ELoadingState::NONE:
+			mActiveScene->Update();
+			break;
+		case ELoadingState::FADE_OUT:
+		case ELoadingState::FADE_IN:
+		case ELoadingState::LOADING:
+			if (mbCompleteLoad == true)
+			{
+				mLoadingScreen->GetComponent<Animator>()->Stop();
+				core::Loading::WakeUpEvent();
+				mbCompleteLoad = false;
+			}
 			mLoadingScreen->Update();
+			break;
 		}
 	}
 
 	void SceneManager::Render(HDC hdc)
 	{
-		mActiveScene->Render(hdc);
-		
-		if (mbLoadScreenFlag == true)
+		switch (mLoadState)
 		{
+		case ELoadingState::NONE:
+			mActiveScene->Render(hdc);
+			break;
+		case ELoadingState::FADE_OUT:
+		case ELoadingState::FADE_IN:
+		case ELoadingState::LOADING:
+			//mActiveScene->Render(hdc);
 			mLoadingScreen->Render(hdc);
+			break;
 		}
 	}
 
@@ -148,6 +186,7 @@ namespace yeram_client
 		core::ObjectPool<Player>::Release();
 		core::ObjectPool<MoveObject>::Release();
 		core::ObjectPool<CutScenePlayAnimation>::Release();
+		core::Loading::Release();
 		//core::ObjectPool<Ground>::Release();
 
 		mLoadingScreen->Release();
@@ -156,12 +195,27 @@ namespace yeram_client
 
 	void SceneManager::LoadScene(ESceneType _type)
 	{
-		Camera::Clear();
-		std::queue<GameObject*> temp_queue;
-		Scene* cur = mActiveScene;
-		mActiveScene = mScenes[(UINT)_type];
-		cur->OnExit();
-		mActiveScene->OnEnter();
+		bool flag = false;
+		mLoadSceneType = _type;
+		switch (_type)
+		{
+		default:
+			SetActivScene();
+			flag = true;
+			break;
+		}
+		if (flag == true)
+			return;
+
+		//로딩화면 띄우는건데 지금 문제 있어서 안하는중
+		mLoadState = ELoadingState::FADE_OUT;
+		//fade out 재생
+		OpenLodingScreen();
+
+		//loading 화면 재생
+		//loading 끝나면 fade in 재생
+
+
 	}
 
 	Scene* SceneManager::GetActiveScene()
@@ -203,8 +257,18 @@ namespace yeram_client
 		ani->Play(L"LoadingClose", false);
 	}
 
+	void SceneManager::SetActivScene()
+	{
+		yeram_client::Scene* cur = yeram_client::SceneManager::GetActiveScene();
+		mActiveScene = mScenes[(UINT)mLoadSceneType];
+		if (cur != nullptr)
+			cur->OnExit();
+		mActiveScene->OnEnter();
+	}
+
 	SceneManager::~SceneManager()
 	{
+		CloseHandle(mHThread);
 	}
 
 }

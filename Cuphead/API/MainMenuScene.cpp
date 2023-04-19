@@ -43,7 +43,7 @@ void yeram_client::MainMenuScene::Update()
 {
 	if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 	{
-		SceneManager::LoadScene(ESceneType::PlayMap);
+		SceneManager::LoadScene(ESceneType::MoveWorldIntro);
 	}
 
 	Scene::Update();

@@ -27,6 +27,7 @@ namespace yeram_client
 	{
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
+		mLayers[(UINT)ELayerType::Player] = new Layer();
 		Resources::Load<Image>(L"worldmove_intro_text", L"..\\Resources\\worldmove_intro\\bg\\cutscene_intro_s1_logo.bmp");
 	}
 	void WorldMoveIntroScene::Update()

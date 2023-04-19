@@ -37,9 +37,9 @@ namespace yeram_client
 		static void SetFadePos(const Vector2& _start, const Vector2& _end) { mAlphaStartPos = _start; mAlphaEndPos = _end; }
 		static void InitFadeInfo(); 
 		static void Clear();
-	
+		
 	private:
-		static bool CheckActive();
+		
 	private: 
 		static Vector2 mResolution;
 		static Vector2 mLookPosition;

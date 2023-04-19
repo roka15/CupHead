@@ -69,6 +69,7 @@ namespace yeram_client
 		Camera::SetVerticalMove(true);
 		Vector2 pos = application.GetWindowSize() / 2.0f;
 		GameObject* player_obj = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player").get();
+	
 		if (player_obj != nullptr)
 		{
 			player_obj->SetActive(true);
@@ -183,12 +184,11 @@ namespace yeram_client
 			AddGameObject(mapbl_obj_doorl, ELayerType::BackObject);
 		}
 		std::shared_ptr<GameObject> mapbl_obj_doorr = core::ObjectPool<SpriteRenderer>::Spawn();
-		_parent->AddChild(mapbl_obj_doorr);
 		{
 			mapbl_obj_doorr->SetName(L"MapBL_Door1_R");
 		
 			Transform* tf = mapbl_obj_doorr->GetComponent<Transform>();
-			tf->SetOffset(Vector2{380.0f,69.0f});
+			tf->SetPos(Vector2{1180.0f,530.0f});
 			SpriteRenderer* render = mapbl_obj_doorr->GetComponent<SpriteRenderer>();
 			render->SetImage(mapbl_obj_doorr->GetName().c_str()
 				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03_obj1_br.bmp");
@@ -196,12 +196,11 @@ namespace yeram_client
 			AddGameObject(mapbl_obj_doorr, ELayerType::FrontObject);
 		}
 		std::shared_ptr<GameObject> mapbl_obj_dooru = core::ObjectPool<SpriteRenderer>::Spawn();
-		_parent->AddChild(mapbl_obj_dooru);
 		{
 			mapbl_obj_dooru->SetName(L"MapBL_Door1_U");
 			
 			Transform* tf = mapbl_obj_dooru->GetComponent<Transform>();
-			tf->SetOffset(Vector2{380l,70l });
+			tf->SetPos(Vector2{ 1180l ,530l });
 			SpriteRenderer* render = mapbl_obj_dooru->GetComponent<SpriteRenderer>();
 			render->SetImage(mapbl_obj_dooru->GetName().c_str()
 				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03_obj1_u.bmp");
@@ -209,12 +208,11 @@ namespace yeram_client
 			AddGameObject(mapbl_obj_dooru, ELayerType::FrontObject);
 		}
 		std::shared_ptr<GameObject> mapbl_redbuildr = core::ObjectPool<SpriteRenderer>::Spawn();
-		_parent->AddChild(mapbl_redbuildr);
 		{
 			mapbl_redbuildr->SetName(L"MapBL_RedBulid_R");
 			
 			Transform* tf = mapbl_redbuildr->GetComponent<Transform>();
-			tf->SetOffset(Vector2{910l,400l });
+			tf->SetPos(Vector2{1710l,850l });
 			SpriteRenderer* render = mapbl_redbuildr->GetComponent<SpriteRenderer>();
 			render->SetImage(mapbl_redbuildr->GetName().c_str()
 				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_top_cornerBuilding01.bmp");

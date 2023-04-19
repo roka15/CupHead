@@ -25,10 +25,13 @@ namespace yeram_client
 	{
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
+		mLayers[(UINT)ELayerType::Player] = new Layer();
 	}
 	void InWorldIntroScene::Update()
 	{
 		Scene::Update();
+		if (mbEndFlag == true)
+			SceneManager::LoadScene(ESceneType::PlayMap);
 	}
 	void InWorldIntroScene::Render(HDC hdc)
 	{
@@ -41,8 +44,6 @@ namespace yeram_client
 	void InWorldIntroScene::OnEnter()
 	{
 		Vector2 size = application.GetWindowSize();
-
-
 		std::shared_ptr<GameObject> sky = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
 			sky->SetName(L"inworldintro_sky");
@@ -249,7 +250,10 @@ namespace yeram_client
 				{
 					eye_ani->GetOwner()->SetActive(false);
 				});
-
+				head_ani->GetEndEvent(L"World4IntroAnichalice17_1") = std::bind([eye_ani, this]()->void
+				{
+					mbEndFlag = true;
+				});
 				tf = head->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ -70.0f,-15.0f });
 			}
@@ -802,9 +806,11 @@ namespace yeram_client
 			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
 			AddGameObject(shot3_bg3, ELayerType::BackObject);
 		}
+		Scene::OnEnter();
 	}
 	void InWorldIntroScene::OnExit()
 	{
+		Scene::OnExit();
 	}
 	void InWorldIntroScene::ActiveShot1()
 	{

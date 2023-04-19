@@ -23,7 +23,7 @@ namespace yeram_client
 	Camera::ECameraEffectType Camera::mType = Camera::ECameraEffectType::NONE;
 	Vector2 Camera::mAlphaStartPos = Vector2::Zero;
 	Vector2 Camera::mAlphaEndPos = Vector2::Zero;
-
+	
 	void Camera::Initialize()
 	{
 		mDistance = Vector2::Zero;
@@ -37,8 +37,6 @@ namespace yeram_client
 
 	void Camera::Update()
 	{
-		if (CheckActive() == false)
-			return;
 		if (mTarget != nullptr)
 		{
 			const Vector2& target_pos = mTarget->GetComponent<Transform>()->GetPos();
@@ -53,8 +51,8 @@ namespace yeram_client
 		}
 		else
 		{
-			/*
-			if (core::Input::GetKey(core::EKeyCode::Left))
+			
+			/*if (core::Input::GetKey(core::EKeyCode::Left))
 			{
 				mLookPosition.x -= 100.0f * Time::DeltaTime();
 			}
@@ -69,8 +67,8 @@ namespace yeram_client
 			if (core::Input::GetKey(core::EKeyCode::Down))
 			{
 				mLookPosition.y += 100.0f * Time::DeltaTime();
-			}
-			*/
+			}*/
+			
 		}
 
 		if (mAlphaTime < mEndTime && mType != ECameraEffectType::NONE)
@@ -175,17 +173,5 @@ namespace yeram_client
 	}
 
 
-
-	bool Camera::CheckActive()
-	{
-		ESceneType cur_scene = SceneManager::GetActiveScene()->GetSceneType();
-		switch (cur_scene)
-		{
-		case ESceneType::Title:
-		case ESceneType::MainMenu:
-			return false;
-		}
-		return true;
-	}
 }
 
