@@ -9,6 +9,7 @@
 #include "Rectangle.h"
 #include "UI.h"
 #include "Player.h"
+#include "PixelCrash.h"
 #include "Ground.h"
 #include "Animator.h"
 #include "Time.h"
@@ -52,6 +53,7 @@ namespace yeram_client
 		core::ObjectPool<Ground>::Initialize(1, 1);
 		core::ObjectPool<MoveObject>::Initialize(300);
 		core::ObjectPool<CutScenePlayAnimation>::Initialize(10);
+		core::ObjectPool<PixelCrash>::Initialize(10);
 
 		core::ObjectPool<Bullet>::Initialize(300);
 		for (Scene* scene : mScenes)
@@ -127,7 +129,7 @@ namespace yeram_client
 		mbLoadScreenFlag = false;
 
 
-		LoadScene(ESceneType::Title);
+		LoadScene(ESceneType::PlayMap);
 	}
 
 	void SceneManager::Update()
@@ -178,6 +180,7 @@ namespace yeram_client
 			scene = nullptr;
 		}
 
+		core::ObjectPool<PixelCrash>::Release();
 		core::ObjectPool<Bullet>::Release();
 		core::ObjectPool<Animator>::Release();
 		core::ObjectPool<SpriteRenderer>::Release();
@@ -186,6 +189,7 @@ namespace yeram_client
 		core::ObjectPool<Player>::Release();
 		core::ObjectPool<MoveObject>::Release();
 		core::ObjectPool<CutScenePlayAnimation>::Release();
+		
 		core::Loading::Release();
 		//core::ObjectPool<Ground>::Release();
 

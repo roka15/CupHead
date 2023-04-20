@@ -49,6 +49,14 @@ namespace yeram_client
 	{
 
 	}
+	COLORREF Image::GetPixel(int x, int y)const
+	{
+		return ::GetPixel(mHdc,x,y);
+	}
+	void Image::SetPixel(int x, int y, COLORREF _color)const
+	{
+		::SetPixel(mHdc, x, y,_color);
+	}
 	HRESULT Image::Load(const std::wstring& _path)
 	{
 		//null,이미지경로,어떻게 이미지를 불러올것인가,얼마나 가져올것인가(다 가져올거라 0 0 ) , 로드 방식 

@@ -42,6 +42,7 @@ namespace yeram_client
 		void SetParry(bool _flag) { mbParry = _flag; }
 		bool GetParry() { return mbParry; }
 		void StopTransUpdate(bool _flag, EDirType _type);
+		Vector2 GetMoveOffset() { return mMoveOffset; }
 	protected:
 		typedef core::Input::PushInfo PushInfo;
 
@@ -63,6 +64,8 @@ namespace yeram_client
 		bool PriorityInput(core::EKeyCode _code1, core::EKeyCode _code2, core::EKeyCode& _result);
 		EDirType GetDirType(const  core::EKeyCode& _code);
 		const Vector2& GetShooterSpawnPos(int _count, EDirType ...);
+
+		
 	protected:
 		std::wstring mName;
 		GameObject* mOwner;
@@ -85,6 +88,8 @@ namespace yeram_client
 		GameObject* mReg;
 		GameObject* mShooter;
 		std::map<UINT, Vector2> mShooterSpawnPos;
+
+		Vector2 mMoveOffset;
 	};
 }
 

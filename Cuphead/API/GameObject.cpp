@@ -8,7 +8,7 @@ namespace yeram_client
 	void GameObject::Initialize()
 	{
 		//mComponents.resize((UINT)EComponentType::MAX);
-		
+		mbCameraMove = true;
 		for (int i = (int)EComponentType::NONE + 1; i < (int)EComponentType::MAX; i++)
 		{
 			EComponentType type = (EComponentType)i;

@@ -36,7 +36,7 @@ void yeram_client::TitleScene::Initialize()
 	mLayers[(UINT)ELayerType::Player] = new Layer();
 	mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 	Vector2 pos = application.GetWindowSize() / 2.0f;
-	std::shared_ptr<GameObject> player_obj = core::ObjectPool<Player>::Spawn();
+	/*std::shared_ptr<GameObject> player_obj = core::ObjectPool<Player>::Spawn();
 	{
 		player_obj->SetName(L"Player");
 		Transform* tf = player_obj->GetComponent<Transform>();
@@ -60,7 +60,7 @@ void yeram_client::TitleScene::Initialize()
 		player_obj->SetActive(false);
 
 		AddGameObject(player_obj, ELayerType::Player);
-	}
+	}*/
 	
 }
 

@@ -106,4 +106,8 @@ namespace yeram_client
 	{
 		mCharacter->StopTransUpdate(_flag,EDirType::LEFT);
 	}
+	Vector2 Player::GetMoveOffset()
+	{
+		return mCharacter->GetMoveOffset();
+	}
 }

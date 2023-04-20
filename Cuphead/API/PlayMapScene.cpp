@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Layer.h"
 #include "Animator.h"
+#include "PixelCrash.h"
 #include "Input.h"
 #include "Time.h"
 #include "ObjectPool.h"
@@ -43,6 +44,11 @@ namespace yeram_client
 			
 			//SceneManager::OpenLodingScreen();
 		}
+		if (core::Input::GetKeyDown(core::EKeyCode::Z))
+		{
+			bool flag = FindObject(L"pixel_map")->GetComponent<SpriteRenderer>()->GetActive();
+			FindObject(L"pixel_map")->GetComponent<SpriteRenderer>()->SetActive(!flag);
+		}
 		//화면 확대 축소
 		/*if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 		{
@@ -68,19 +74,57 @@ namespace yeram_client
 		Camera::SetHorizontalMove(true);
 		Camera::SetVerticalMove(true);
 		Vector2 pos = application.GetWindowSize() / 2.0f;
-		GameObject* player_obj = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player").get();
-	
-		if (player_obj != nullptr)
+		//GameObject* player_obj = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player").get();
+		std::shared_ptr<GameObject> player_obj = core::ObjectPool<Player>::Spawn();
 		{
-			player_obj->SetActive(true);
-			Camera::SetTarget(player_obj);
-			Player* player = player_obj->GetComponent<Player>();
-			player->ChangeCharacter(EPlayerType::Cuphead);
+			player_obj->SetName(L"Player");
 			Transform* tf = player_obj->GetComponent<Transform>();
 			tf->SetPos(Vector2{ pos.x,pos.y });
-		}
 
+
+			std::shared_ptr<GameObject> player_reg = core::ObjectPool<Animator>::Spawn();
+			player_reg->SetName(L"Reg");
+			player_obj->AddChild(player_reg);
+			std::shared_ptr<GameObject> player_head = core::ObjectPool<Animator>::Spawn();
+			player_head->SetName(L"Head");
+			player_obj->AddChild(player_head);
+
+			std::shared_ptr<GameObject> player_shooter = core::ObjectPool<Animator>::Spawn();
+			player_shooter->SetName(L"Shooter");
+			player_obj->AddChild(player_shooter);
+
+			Player* player = player_obj->GetComponent<Player>();
+			player->CreateCharacter(EPlayerType::MsChalice);
+			player->CreateCharacter(EPlayerType::Cuphead);
+			player_obj->SetActive(false);
+
+			if (player_obj != nullptr)
+			{
+				player_obj->SetActive(true);
+				Camera::SetTarget(player_obj.get());
+				Player* player = player_obj->GetComponent<Player>();
+				player->ChangeCharacter(EPlayerType::Cuphead);
+				Transform* tf = player_obj->GetComponent<Transform>();
+				tf->SetPos(Vector2{ pos.x,pos.y });
+			}
+			
+		}
 		CreateWorldMap(pos);
+
+#pragma region pixel crash
+		std::shared_ptr<GameObject> pixel_map= core::ObjectPool<PixelCrash>::Spawn();
+		pixel_map->SetName(L"pixel_map");
+		pixel_map->SetCameraMoveActive(true);
+		Transform* tf = pixel_map->GetComponent<Transform>();
+		tf->SetPos(Vector2{ 300.0f,-1000.0f });
+		PixelCrash* pixel = pixel_map->AddComponent<PixelCrash>();
+		pixel->SetImage(L"pixel_map_dlc", L"..\\Resources\\MapObject\\dlc\\pixelmap\\dlc_main_land_pixel.bmp");
+		pixel->SetTarget(player_obj);
+		pixel_map->GetComponent<SpriteRenderer>()->SetActive(false);
+		AddGameObject(pixel_map, ELayerType::FrontObject);
+#pragma endregion
+
+		AddGameObject(player_obj, ELayerType::Player);
 		//Camera::PlayLoad();
 		Scene::OnEnter();
 	}
@@ -96,56 +140,156 @@ namespace yeram_client
 		//temp map
 		std::shared_ptr<GameObject> ocean = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
-			ocean->SetName(L"MapBackGround");
-			
+			ocean->SetName(L"DLC_Water");
+			ocean->SetCameraMoveActive(false);
 
 			Transform* tf = ocean->GetComponent<Transform>();
 			tf->SetSize(Vector2{ (long)size.x,(long)size.y + 200l });
 
 			SpriteRenderer* render = ocean->GetComponent<SpriteRenderer>();
 			render->SetImage(ocean->GetName().c_str()
-				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Ocean\\Bottom\\Left\\world3_water_04.bmp");
+				, L"..\\Resources\\MapObject\\dlc\\water\\dlc_water_multiply.bmp");
 			render->SetRenderType(ERenderType::StretchBlt);
 			AddGameObject(ocean, ELayerType::BackObject);
 		}
-		GameObject* bl_parent = CreateWroldGround(L"MapBL", _startpos, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03.bmp");
-		GameObject* br_parent = CreateWroldGround(L"MapBR", Vector2{ _startpos.x + 1874.0f ,_startpos.y }, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Right\\world3_mainland_04.bmp");
-		GameObject* tl_parent = CreateWroldGround(L"MapTL", Vector2{ _startpos.x - 154.0f,_startpos.y - 1477.0f }, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Left\\world3_mainland_01.bmp");
-		GameObject* tr_parent = CreateWroldGround(L"MapTR", Vector2{ _startpos.x + 1874.0f,_startpos.y - 1440.0f }, nullptr, ELayerType::BackObject,
-			L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Top\\Right\\world3_mainland_02.bmp");
-
-		CreateMapBL(bl_parent);
-		CreateMapBR(br_parent);
-		CreateMapTL(tl_parent);
-		CreateMapTR(tr_parent);
-
-		/*std::shared_ptr<GameObject> map = core::ObjectPool<SpriteRenderer>::Spawn();
+		Vector2 base_pos = { 300.0f,-1000.0f };
+		std::shared_ptr<GameObject> map = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
-			map->SetName(L"MapBL");
-			AddGameObject(map, ELayerType::BackObject);
+			map->SetName(L"DLC_Main_Map");
 			Transform* tf = map->GetComponent<Transform>();
-			tf->SetPos(_startpos);
+			tf->SetPos(base_pos);
 			SpriteRenderer* render = map->AddComponent<SpriteRenderer>();
 			render->SetImage(map->GetName().c_str()
-				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03.bmp");
+				, L"..\\Resources\\MapObject\\dlc\\map\\dlc_main_land.bmp");
 			render->SetRenderType(ERenderType::TransParentBlt);
+			AddGameObject(map, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> maptop = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			maptop->SetName(L"DLC_Main_Map_Top");
+			Transform* tf = maptop->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 310.0f,-1000.0f });
+			SpriteRenderer* render = maptop->AddComponent<SpriteRenderer>();
+			render->SetImage(maptop->GetName().c_str()
+				, L"..\\Resources\\MapObject\\dlc\\map\\dlc_main_top.bmp");
+			render->SetRenderType(ERenderType::TransParentBlt);
+			AddGameObject(maptop, ELayerType::FrontObject);
+		}
+#pragma region map object
+		std::shared_ptr<GameObject> tutorial = core::ObjectPool<Animator>::Spawn();
+		{
+			tutorial->SetName(L"tutorial_obj");
+			Vector2 pos = base_pos;
+			pos.x += 1450.0f;
+			pos.y += 700.0f;
+			Transform* tf = tutorial->GetComponent<Transform>();
+			tf->SetPos(pos);
+			Animator* ani = tutorial->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\tutorial", Vector2::Zero, 0.1f);
+			ani->Play(L"objecttutorial", true);
+			AddGameObject(tutorial, ELayerType::BackObject);
 		}
 
-		std::shared_ptr<GameObject> mapbl_obj_doorl = core::ObjectPool<SpriteRenderer>::Spawn();
-		map->AddChild(mapbl_obj_doorl);
+		std::shared_ptr<GameObject> saltbaker = core::ObjectPool<Animator>::Spawn();
 		{
-			mapbl_obj_doorl->SetName(L"MapBL_Door1_L");
-			AddGameObject(mapbl_obj_doorl, ELayerType::BackObject);
-			Transform* tf = mapbl_obj_doorl->GetComponent<Transform>();
-			tf->SetOffset(Vector2{380.0f,73.0f});
-			SpriteRenderer* render = mapbl_obj_doorl->GetComponent<SpriteRenderer>();
-			render->SetImage(mapbl_obj_doorl->GetName().c_str()
-				, L"..\\Resources\\Worldmap\\Inkwell Isle III\\Main Land\\Bottom\\Left\\world3_mainland_03_obj1_bl.bmp");
+			saltbaker->SetName(L"objectsaltbaker");
+			Vector2 pos = base_pos;
+			pos.x += 1030.0f;
+			pos.y += 730.0f;
+			Transform* tf = saltbaker->GetComponent<Transform>();
+			tf->SetPos(pos);
+			Animator* ani = saltbaker->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\saltbaker", Vector2::Zero, 0.1f);
+			ani->Play(L"objectsaltbaker", true);
+			AddGameObject(saltbaker, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> sb_left_house = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			sb_left_house->SetName(L"sbLeftHouse");
+			Transform* tf = sb_left_house->GetComponent<Transform>();
+			Vector2 pos = base_pos;
+			pos.x += 830.0f;
+			pos.y += 550.0f;
+			tf->SetPos(pos);
+			SpriteRenderer* render = sb_left_house->AddComponent<SpriteRenderer>();
+			render->SetImage(sb_left_house->GetName().c_str()
+				, L"..\\Resources\\MapObject\\dlc\\object\\bakershop_lefthouse\\bakery_neighbor.bmp");
 			render->SetRenderType(ERenderType::TransParentBlt);
-		}*/
+			AddGameObject(sb_left_house, ELayerType::FrontObject);
+		}
+
+		std::shared_ptr<GameObject> shop = core::ObjectPool<Animator>::Spawn();
+		{
+			shop->SetName(L"objectshop");
+			Vector2 pos = base_pos;
+			pos.x += 1800.0f;
+			pos.y += 650.0f;
+			Transform* tf = shop->GetComponent<Transform>();
+			tf->SetPos(pos);
+			Animator* ani = shop->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\shop", Vector2::Zero, 0.1f);
+			ani->Play(L"objectshop", true);
+			AddGameObject(shop, ELayerType::BackObject);
+		}
+
+		std::shared_ptr<GameObject> boogie_house = core::ObjectPool<Animator>::Spawn();
+		{
+			boogie_house->SetName(L"objectboogieh");
+			Vector2 pos = base_pos;
+			pos.x += 1130.0f;
+			pos.y += 1450.0f;
+			Transform* tf = boogie_house->GetComponent<Transform>();
+			tf->SetPos(pos);
+			Animator* ani = boogie_house->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\boogie", Vector2::Zero, 0.1f);
+			ani->Play(L"objectboogie", true);
+			AddGameObject(boogie_house, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> boat_water = core::ObjectPool<Animator>::Spawn();
+		{
+			boat_water->SetName(L"boat_water");
+			Vector2 pos = base_pos;
+			pos.x += 30.0f;
+			pos.y += 1640.0f;
+			Transform* tf = boat_water->GetComponent<Transform>();
+			tf->SetPos(pos);
+			Animator* ani = boat_water->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\npc\\boat_water", Vector2::Zero, 0.1f);
+			ani->Play(L"npcboat_water", true);
+			AddGameObject(boat_water, ELayerType::BackObject);
+		}
+		std::shared_ptr<GameObject> boat = core::ObjectPool<Animator>::Spawn();
+		{
+			boat->SetName(L"boat");
+			Vector2 pos = base_pos;
+			pos.x += 30.0f;
+			pos.y += 1640.0f;
+			Transform* tf = boat->GetComponent<Transform>();
+			tf->SetPos(pos);
+			Animator* ani = boat->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\npc\\boat", Vector2::Zero, 0.1f);
+			ani->Play(L"npcboat", true);
+			AddGameObject(boat, ELayerType::BackObject);
+		}
+#pragma endregion
+
+#pragma region npc
+		std::shared_ptr<GameObject> boatman = core::ObjectPool<Animator>::Spawn();
+		{
+			boatman->SetName(L"boatman");
+			Vector2 pos = base_pos;
+			pos.x += 230.0f;
+			pos.y += 1540.0f;
+			Transform* tf = boatman->GetComponent<Transform>();
+			tf->SetPos(pos);
+			Animator* ani = boatman->GetComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\npc\\boatman", Vector2::Zero, 0.1f);
+			ani->Play(L"npcboatman", true);
+			AddGameObject(boatman, ELayerType::BackObject);
+		}
+	
+#pragma endregion
+
 
 	}
 	GameObject* PlayMapScene::CreateWroldGround(const std::wstring _name, const Vector2& _pos, GameObject* _parent, ELayerType _type, const std::wstring _image_path)

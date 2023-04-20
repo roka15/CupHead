@@ -114,6 +114,7 @@ namespace yeram_client
 			}
 			mComponents[type].push_back(comp);
 			comp->SetOwner(this);
+			comp->Initialize();
 			return comp;
 		}
 		template <typename T>
@@ -243,6 +244,8 @@ namespace yeram_client
 
 		virtual void MoveObjectSetting(float _speed, EDirType _dir_type = EDirType::LEFT);
 
+		void SetCameraMoveActive(bool _flag) { mbCameraMove = _flag; }
+		bool GetCameraMoveActive() { return mbCameraMove; }
 		//자식도 같이 move
 		//void MoveChild(const Vector2& _offset);
 	protected:
@@ -285,7 +288,7 @@ namespace yeram_client
 		std::vector<std::shared_ptr<GameObject>> mChilds;
 		GameObject* mParent;
 		bool mbActive;
-		bool mbCameraCul;
+		bool mbCameraMove;
 		ELayerType mLayerType;
 	};
 }

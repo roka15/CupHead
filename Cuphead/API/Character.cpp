@@ -51,7 +51,7 @@ namespace yeram_client
 			//rig->AddForce(Vector2(0.0f, +200.0f));
 			offset.y += 200.0f * Time::DeltaTime();
 		}
-
+		mMoveOffset = offset;
 		transform->SetPos(pos + offset);
 		SceneManager::ChagePosGameObjects(offset);
 	}

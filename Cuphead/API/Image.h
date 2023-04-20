@@ -2,6 +2,7 @@
 #include "My_Resource.h"
 namespace yeram_client
 {
+	
 	class Image:public My_Resource
 	{
 	public:
@@ -9,12 +10,14 @@ namespace yeram_client
 		
 		Image();
 		~Image();
-
+		
+		COLORREF GetPixel(int x, int y)const;
+		void SetPixel(int x, int y, COLORREF _color)const;
 		virtual HRESULT Load(const std::wstring& _path) override;
-		HDC GetHDC() { return mHdc; }
-		HBITMAP GetBitmap() { return mBitmap; }
-		UINT GetWidth() { return mWidth; }
-		UINT GetHeight() { return mHeight; }
+		HDC GetHDC()const { return mHdc; }
+		HBITMAP GetBitmap()const { return mBitmap; }
+		UINT GetWidth()const { return mWidth; }
+		UINT GetHeight()const { return mHeight; }
 		
 	private:
 		HBITMAP mBitmap;

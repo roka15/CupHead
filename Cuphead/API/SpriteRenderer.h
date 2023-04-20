@@ -12,6 +12,7 @@ namespace yeram_client
 		virtual void Update()override;
 		virtual void Render(HDC hdc)override;
 		virtual void Release()override;
+		const Image* GetImage() { return mImage; }
 		void SetImage(const std::wstring& _filename,const std::wstring& _path);
 		void SetRenderType(ERenderType _type)
 		{

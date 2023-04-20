@@ -70,14 +70,13 @@ namespace yeram_client
 		{
 			if (obj == nullptr)
 				continue;
-		
-			size_t str_pos = obj->GetName().find(L"BackGround");
-			if (str_pos == std::wstring::npos)
-			{
-				Transform* tf = obj->GetComponent<Transform>();
-				Vector2 pos = tf->GetPos();
-				tf->CaluatePos(_offset);
-			}
+			if (obj->GetCameraMoveActive() == false)
+				continue;
+
+			Transform* tf = obj->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			tf->CaluatePos(_offset);
+
 		}
 	}
 	void Layer::ChageScaleGameObjects(const Vector2& _scale)

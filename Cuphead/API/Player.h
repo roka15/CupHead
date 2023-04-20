@@ -24,10 +24,12 @@ namespace yeram_client
 
 		void Parry_Check();
 		void Stop_PositionUpdate(bool _flag, EDirType _type);
+		Vector2 GetMoveOffset();
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;
 		std::map<EPlayerType, Character*> mCharacters;
+	
 		/*float mTime;
 		int midx;*/
 	};
