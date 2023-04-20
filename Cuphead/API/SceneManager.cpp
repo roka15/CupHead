@@ -10,6 +10,7 @@
 #include "UI.h"
 #include "Player.h"
 #include "PixelCrash.h"
+#include "WorldMapObject.h"
 #include "Ground.h"
 #include "Animator.h"
 #include "Time.h"
@@ -28,7 +29,7 @@ namespace yeram_client
 	ESceneType SceneManager::mLoadSceneType;
 	SceneManager::ELoadingState SceneManager::mLoadState;
 	bool SceneManager::mbCompleteLoad;
-
+	std::function<void()> SceneManager::mLoadMessageEvent;
 	void SceneManager::Initalize()
 	{
 		core::Loading::Initialize();
@@ -54,7 +55,7 @@ namespace yeram_client
 		core::ObjectPool<MoveObject>::Initialize(300);
 		core::ObjectPool<CutScenePlayAnimation>::Initialize(10);
 		core::ObjectPool<PixelCrash>::Initialize(10);
-
+		core::ObjectPool<WorldMapObject>::Initialize(10);
 		core::ObjectPool<Bullet>::Initialize(300);
 		for (Scene* scene : mScenes)
 		{
@@ -151,6 +152,12 @@ namespace yeram_client
 			mLoadingScreen->Update();
 			break;
 		}
+
+		if (mLoadMessageEvent != nullptr)
+		{
+			mLoadMessageEvent();
+			mLoadMessageEvent = nullptr;
+		}
 	}
 
 	void SceneManager::Render(HDC hdc)
@@ -189,6 +196,7 @@ namespace yeram_client
 		core::ObjectPool<Player>::Release();
 		core::ObjectPool<MoveObject>::Release();
 		core::ObjectPool<CutScenePlayAnimation>::Release();
+		core::ObjectPool<WorldMapObject>::Release();
 		
 		core::Loading::Release();
 		//core::ObjectPool<Ground>::Release();

@@ -8,10 +8,12 @@
 #include "Layer.h"
 #include "Animator.h"
 #include "PixelCrash.h"
+#include "WorldMapObject.h"
 #include "Input.h"
 #include "Time.h"
 #include "ObjectPool.h"
 #include "Camera.h"
+#include "ColliderManager.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -31,6 +33,7 @@ namespace yeram_client
 	{
 		mLayers[(UINT)ELayerType::Player] = new Layer();
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
+		mLayers[(UINT)ELayerType::BackColObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 		//OnEnter();
 
@@ -44,7 +47,7 @@ namespace yeram_client
 			
 			//SceneManager::OpenLodingScreen();
 		}
-		if (core::Input::GetKeyDown(core::EKeyCode::Z))
+		if (core::Input::GetKeyDown(core::EKeyCode::N))
 		{
 			bool flag = FindObject(L"pixel_map")->GetComponent<SpriteRenderer>()->GetActive();
 			FindObject(L"pixel_map")->GetComponent<SpriteRenderer>()->SetActive(!flag);
@@ -73,6 +76,7 @@ namespace yeram_client
 	{
 		Camera::SetHorizontalMove(true);
 		Camera::SetVerticalMove(true);
+		ColliderManager::SetLayer(ELayerType::BackColObject, ELayerType::Player, true);
 		Vector2 pos = application.GetWindowSize() / 2.0f;
 		//GameObject* player_obj = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player").get();
 		std::shared_ptr<GameObject> player_obj = core::ObjectPool<Player>::Spawn();
@@ -130,6 +134,7 @@ namespace yeram_client
 	}
 	void PlayMapScene::OnExit()
 	{
+		ColliderManager::SetLayer(ELayerType::BackColObject, ELayerType::Player, false);
 		//switch 로 로드할 맵 타입에 따라 load 달리하기
 		Camera::SetTarget(nullptr);
 		Scene::OnExit();
@@ -162,7 +167,7 @@ namespace yeram_client
 			render->SetImage(map->GetName().c_str()
 				, L"..\\Resources\\MapObject\\dlc\\map\\dlc_main_land.bmp");
 			render->SetRenderType(ERenderType::TransParentBlt);
-			AddGameObject(map, ELayerType::BackObject);
+			AddGameObject(map, ELayerType::BackColObject);
 		}
 		std::shared_ptr<GameObject> maptop = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
@@ -176,7 +181,7 @@ namespace yeram_client
 			AddGameObject(maptop, ELayerType::FrontObject);
 		}
 #pragma region map object
-		std::shared_ptr<GameObject> tutorial = core::ObjectPool<Animator>::Spawn();
+		std::shared_ptr<GameObject> tutorial = core::ObjectPool<WorldMapObject>::Spawn();
 		{
 			tutorial->SetName(L"tutorial_obj");
 			Vector2 pos = base_pos;
@@ -187,10 +192,13 @@ namespace yeram_client
 			Animator* ani = tutorial->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\tutorial", Vector2::Zero, 0.1f);
 			ani->Play(L"objecttutorial", true);
-			AddGameObject(tutorial, ELayerType::BackObject);
+			WorldMapObject* wm = tutorial->GetComponent<WorldMapObject>();
+			wm->SetColliderInfo();
+			wm->SetSceneType(ESceneType::Tutorial);
+			AddGameObject(tutorial, ELayerType::BackColObject);
 		}
 
-		std::shared_ptr<GameObject> saltbaker = core::ObjectPool<Animator>::Spawn();
+		std::shared_ptr<GameObject> saltbaker = core::ObjectPool<WorldMapObject>::Spawn();
 		{
 			saltbaker->SetName(L"objectsaltbaker");
 			Vector2 pos = base_pos;
@@ -201,7 +209,9 @@ namespace yeram_client
 			Animator* ani = saltbaker->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\saltbaker", Vector2::Zero, 0.1f);
 			ani->Play(L"objectsaltbaker", true);
-			AddGameObject(saltbaker, ELayerType::BackObject);
+			WorldMapObject* wm = saltbaker->GetComponent<WorldMapObject>();
+			wm->SetColliderInfo();
+			AddGameObject(saltbaker, ELayerType::BackColObject);
 		}
 		std::shared_ptr<GameObject> sb_left_house = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
@@ -218,7 +228,7 @@ namespace yeram_client
 			AddGameObject(sb_left_house, ELayerType::FrontObject);
 		}
 
-		std::shared_ptr<GameObject> shop = core::ObjectPool<Animator>::Spawn();
+		std::shared_ptr<GameObject> shop = core::ObjectPool<WorldMapObject>::Spawn();
 		{
 			shop->SetName(L"objectshop");
 			Vector2 pos = base_pos;
@@ -229,10 +239,12 @@ namespace yeram_client
 			Animator* ani = shop->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\shop", Vector2::Zero, 0.1f);
 			ani->Play(L"objectshop", true);
-			AddGameObject(shop, ELayerType::BackObject);
+			WorldMapObject* wm = shop->GetComponent<WorldMapObject>();
+			wm->SetColliderInfo();
+			AddGameObject(shop, ELayerType::BackColObject);
 		}
 
-		std::shared_ptr<GameObject> boogie_house = core::ObjectPool<Animator>::Spawn();
+		std::shared_ptr<GameObject> boogie_house = core::ObjectPool<WorldMapObject>::Spawn();
 		{
 			boogie_house->SetName(L"objectboogieh");
 			Vector2 pos = base_pos;
@@ -243,7 +255,9 @@ namespace yeram_client
 			Animator* ani = boogie_house->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\object\\boogie", Vector2::Zero, 0.1f);
 			ani->Play(L"objectboogie", true);
-			AddGameObject(boogie_house, ELayerType::BackObject);
+			WorldMapObject* wm = boogie_house->GetComponent<WorldMapObject>();
+			wm->SetColliderInfo();
+			AddGameObject(boogie_house, ELayerType::BackColObject);
 		}
 		std::shared_ptr<GameObject> boat_water = core::ObjectPool<Animator>::Spawn();
 		{
@@ -274,7 +288,7 @@ namespace yeram_client
 #pragma endregion
 
 #pragma region npc
-		std::shared_ptr<GameObject> boatman = core::ObjectPool<Animator>::Spawn();
+		std::shared_ptr<GameObject> boatman = core::ObjectPool<WorldMapObject>::Spawn();
 		{
 			boatman->SetName(L"boatman");
 			Vector2 pos = base_pos;
@@ -285,7 +299,9 @@ namespace yeram_client
 			Animator* ani = boatman->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\MapObject\\dlc\\npc\\boatman", Vector2::Zero, 0.1f);
 			ani->Play(L"npcboatman", true);
-			AddGameObject(boatman, ELayerType::BackObject);
+			WorldMapObject* wm = boatman->GetComponent<WorldMapObject>();
+			wm->SetColliderInfo();
+			AddGameObject(boatman, ELayerType::BackColObject);
 		}
 	
 #pragma endregion

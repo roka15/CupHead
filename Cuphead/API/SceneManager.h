@@ -28,6 +28,7 @@ namespace yeram_client
 		static void CloseLodingScreen();
 		static void LoadingComplete() { mbCompleteLoad = true; }
 		static void SetActivScene();
+		static void SetLoadSceneMessage(std::function<void()> _func_event) { mLoadMessageEvent = _func_event; };
 	private:
 		SceneManager()=delete;
 		~SceneManager();
@@ -41,6 +42,7 @@ namespace yeram_client
 		static ESceneType mLoadSceneType;
 		static ELoadingState mLoadState;
 		static bool mbCompleteLoad;
+		static std::function<void()> mLoadMessageEvent;
 	};
 }
 

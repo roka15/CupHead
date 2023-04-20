@@ -5,6 +5,7 @@
 #include "Resources.h"
 #include "Image.h"
 #include "Transform.h"
+#include "WorldMapObject.h"
 #include "Animator.h"
 #include "Cuphead.h"
 #include "MugMan.h"
@@ -91,6 +92,19 @@ namespace yeram_client
 	}
 	void Player::OnCollisionStay(Collider* other)
 	{
+		ESceneType type = SceneManager::GetActiveScene()->GetSceneType();
+		switch (type)
+		{
+		case ESceneType::PlayMap:
+			if (core::Input::GetKeyDown(core::EKeyCode::Z))
+			{
+				WorldMapObject* wm = other->GetOwner()->GetComponent<WorldMapObject>();
+				ESceneType type = wm->GetSceneType();
+				SceneManager::SetLoadSceneMessage(std::bind([type]()->void {SceneManager::LoadScene(type);}));
+			}
+			break;
+		}
+		
 	}
 	void Player::OnCollisionExit(Collider* other)
 	{
