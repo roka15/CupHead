@@ -9,6 +9,8 @@ enum class ESceneType
 	Tutorial,
     MoveWorldIntro,
 	InWorldIntro,
+	SaltBakeryShop,
+	SaltBakerBossIntro,
 	Ending,
 	MAX,
 };

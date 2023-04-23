@@ -19,14 +19,64 @@ namespace yeram_client
 		Vector2 offset;
 		Animator* ani = mOwner->GetComponent<Animator>();
 
+		std::wstring ani_name;
+		bool horizontal_flag = false;
+		core::EKeyCode horizontal_key;
+		core::EKeyCode vertical_key;
+		horizontal_flag = PriorityInput(core::EKeyCode::Left, core::EKeyCode::Right, horizontal_key);
+		EDirType h_key = GetDirType(horizontal_key);
+		bool vertical_flag = PriorityInput(core::EKeyCode::Up, core::EKeyCode::Down, vertical_key);
+		EDirType v_key = GetDirType(vertical_key);
 
-		if (core::Input::GetKeyUp(core::EKeyCode::Left)
-			|| core::Input::GetKeyUp(core::EKeyCode::Right)
-			|| core::Input::GetKeyUp(core::EKeyCode::Up)
-			|| core::Input::GetKeyUp(core::EKeyCode::Down))
+		if (horizontal_flag == true && vertical_flag == true)
+		{
+			if (h_key == EDirType::RIGHT)
+			{
+				if (v_key == EDirType::UP)
+					ani_name = L"MapFowardRightUp";
+				else if (v_key == EDirType::DOWN)
+					ani_name = L"MapFowardRightDown";
+			}
+			else
+			{
+				if (v_key == EDirType::UP)
+					ani_name = L"MapFowardLeftUp";
+				else if (v_key == EDirType::DOWN)
+					ani_name = L"MapFowardLeftDown";
+			}
+		}
+		else if (horizontal_flag == true)
+		{
+			switch (h_key)
+			{
+			case EDirType::LEFT:
+				ani_name = L"MapFowardLeft";
+				break;
+			case EDirType::RIGHT:
+				ani_name = L"MapFowardRight";
+				break;
+			}
+		}
+		else if (vertical_flag == true)
+		{
+			switch (v_key)
+			{
+			case EDirType::UP:
+				ani_name = L"MapFowardUp";
+				break;
+			case EDirType::DOWN:
+				ani_name = L"MapFowardDown";
+				break;
+			}
+		}
+		else
 		{
 			mState = ECharacterState::Idle;
 			ani->Play(L"MapIdle", true);
+		}
+		if (ani_name.size() > 0)
+		{
+			ani->Play(ani_name, true);
 		}
 
 		//rigid 이동
@@ -53,7 +103,8 @@ namespace yeram_client
 		}
 		mMoveOffset = offset;
 		transform->SetPos(pos + offset);
-		SceneManager::ChagePosGameObjects(offset);
+		if (Camera::UseTarget() == true)
+			SceneManager::ChagePosGameObjects(offset);
 	}
 	void Character::idle(const PushInfo& _push_info)
 	{
@@ -65,24 +116,51 @@ namespace yeram_client
 			|| core::Input::GetKeyDown(core::EKeyCode::Up)
 			|| core::Input::GetKeyDown(core::EKeyCode::Down))
 		{
+			bool horizontal_flag = false;
+			core::EKeyCode horizontal_key;
+			core::EKeyCode vertical_key;
+			horizontal_flag = PriorityInput(core::EKeyCode::Left, core::EKeyCode::Right, horizontal_key);
+			EDirType h_key = GetDirType(horizontal_key);
+			bool vertical_flag = PriorityInput(core::EKeyCode::Up, core::EKeyCode::Down, vertical_key);
+			EDirType v_key = GetDirType(vertical_key);
+
+			if (horizontal_flag == true && vertical_flag == true)
+			{
+				if (h_key == EDirType::RIGHT)
+				{
+					if (v_key == EDirType::UP)
+						ani_name = L"MapFowardRightUp";
+					else if (v_key == EDirType::DOWN)
+						ani_name = L"MapFowardRightDown";
+				}
+			}
+			else if (horizontal_flag == true)
+			{
+				switch (h_key)
+				{
+				case EDirType::LEFT:
+					ani_name = L"MapFowardLeft";
+					break;
+				case EDirType::RIGHT:
+					ani_name = L"MapFowardRight";
+					break;
+				}
+			}
+			else if (vertical_flag == true)
+			{
+				switch (v_key)
+				{
+				case EDirType::UP:
+					ani_name = L"MapFowardUp";
+					break;
+				case EDirType::DOWN:
+					ani_name = L"MapFowardDown";
+					break;
+				}
+			}
 
 
-			if (core::Input::GetKeyDown(core::EKeyCode::Left))
-			{
-				ani_name = L"MapFowardLeft";
-			}
-			if (core::Input::GetKeyDown(core::EKeyCode::Right))
-			{
-				ani_name = L"MapFowardRight";
-			}
-			if (core::Input::GetKeyDown(core::EKeyCode::Up))
-			{
-				ani_name = L"MapFowardUp";
-			}
-			if (core::Input::GetKeyDown(core::EKeyCode::Down))
-			{
-				ani_name = L"MapFowardDown";
-			}
+
 
 			if (ani_name.size() > 0)
 			{
@@ -115,7 +193,7 @@ namespace yeram_client
 	{
 	}
 
-	
+
 	void Character::air_move()
 	{
 	}
@@ -143,7 +221,7 @@ namespace yeram_client
 
 	bool Character::PriorityInput(core::EKeyCode _code1, core::EKeyCode _code2, core::EKeyCode& _result)
 	{
-		if ((core::Input::GetKeyDown(_code1) || core::Input::GetKey(_code1)) &&(core::Input::GetKeyDown(_code2)|| core::Input::GetKey(_code2)))
+		if ((core::Input::GetKeyDown(_code1) || core::Input::GetKey(_code1)) && (core::Input::GetKeyDown(_code2) || core::Input::GetKey(_code2)))
 		{
 			_result = core::Input::GetFirstPriorityKey(_code1, _code2);
 			return true;
@@ -247,7 +325,7 @@ namespace yeram_client
 		}
 		PushInfo info;
 		//duck 아닐 경우
-	 	switch (mState)
+		switch (mState)
 		{
 		case ECharacterState::Dash:
 		{
@@ -279,7 +357,7 @@ namespace yeram_client
 			}
 			ani_name = ani->GetDirAniKey(L"Idle", mDirType);
 			ani->Play(ani_name, true);
-		
+
 			break;
 		}
 		case ECharacterState::Duck:
@@ -303,7 +381,7 @@ namespace yeram_client
 			}
 			break;
 		case ECharacterState::Shoot:
-			
+
 			if (core::Input::GetKey(core::EKeyCode::Z) == false &&
 				core::Input::GetKeyDown(core::EKeyCode::Z) == false)
 			{
@@ -339,13 +417,13 @@ namespace yeram_client
 
 	void Character::ResetDash()
 	{
-		mbDash = false;	
+		mbDash = false;
 		Rigidbody* rig = mOwner->GetComponent<Rigidbody>();
 		rig->SetActive(true);
 		Vector2 vel = rig->GetVelocity();
 		vel.y = 0;
 		rig->SetVelocity(vel);
-		mDashVelocity = 1.0f; 
+		mDashVelocity = 1.0f;
 		mDashTime = 0.0f;
 	}
 

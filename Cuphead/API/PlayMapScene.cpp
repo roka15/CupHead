@@ -14,6 +14,7 @@
 #include "ObjectPool.h"
 #include "Camera.h"
 #include "ColliderManager.h"
+#include "TitleCardUI.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -35,6 +36,7 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::BackColObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
+		mLayers[(UINT)ELayerType::UI] = new Layer();
 		//OnEnter();
 
 	}
@@ -129,6 +131,55 @@ namespace yeram_client
 #pragma endregion
 
 		AddGameObject(player_obj, ELayerType::Player);
+
+#pragma region ui
+		std::shared_ptr<GameObject> Abutton = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			Abutton->SetName(L"mapAButton");
+			Abutton->SetCameraMoveActive(false);
+			Abutton->SetActive(false);
+			SpriteRenderer* sprite = Abutton->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"mapAButton", L"..\\Resources\\MapObject\\dlc\\ui\\abutton.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			AddGameObject(Abutton, ELayerType::UI);
+		}
+		std::shared_ptr<GameObject> title_card = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			title_card->SetName(L"title_card");
+			title_card->SetCameraMoveActive(false);
+			title_card->SetActive(false);
+			SpriteRenderer* sprite = title_card->GetComponent<SpriteRenderer>();
+			sprite->SetImage(L"title_card", L"..\\Resources\\MapObject\\dlc\\title_card\\title_card_background_general_area.bmp");
+			sprite->SetRenderType(ERenderType::TransParentBlt);
+			Transform* tf = title_card->GetComponent<Transform>();
+			tf->SetPos(Vector2{ (pos.x / 2) ,(pos.y / 2)});
+			tf->SetScale(Vector2{ 1.5f,1.5f });
+
+			title_card->AddComponent<TitleCardUI>();
+			
+			std::shared_ptr<GameObject> title_text = core::ObjectPool<SpriteRenderer>::Spawn();
+			{
+				title_text->SetName(L"title_text");
+				sprite = title_text->GetComponent<SpriteRenderer>();
+				sprite->SetRenderType(ERenderType::TransParentBlt);
+				Transform* tf = title_text->GetComponent<Transform>();
+				tf->SetOffset(Vector2{ 30.0f,50.0f });
+			}
+			std::shared_ptr<GameObject> title_button = core::ObjectPool<SpriteRenderer>::Spawn();
+			{
+				title_button->SetName(L"title_button");
+				sprite = title_button->GetComponent<SpriteRenderer>();
+				sprite->SetImage(L"title_button", L"..\\Resources\\MapObject\\dlc\\title_card\\enter.bmp");
+				sprite->SetRenderType(ERenderType::TransParentBlt);
+				Transform* tf = title_button->GetComponent<Transform>();
+				tf->SetOffset(Vector2{ 280.0f,300.0f });
+			}
+			title_card->AddChild(title_text);
+			title_card->AddChild(title_button);
+
+			AddGameObject(title_card,ELayerType::UI);
+		}
+#pragma endregion
 		//Camera::PlayLoad();
 		Scene::OnEnter();
 	}
@@ -211,6 +262,7 @@ namespace yeram_client
 			ani->Play(L"objectsaltbaker", true);
 			WorldMapObject* wm = saltbaker->GetComponent<WorldMapObject>();
 			wm->SetColliderInfo();
+			wm->SetSceneType(ESceneType::SaltBakeryShop);
 			AddGameObject(saltbaker, ELayerType::BackColObject);
 		}
 		std::shared_ptr<GameObject> sb_left_house = core::ObjectPool<SpriteRenderer>::Spawn();
@@ -241,6 +293,7 @@ namespace yeram_client
 			ani->Play(L"objectshop", true);
 			WorldMapObject* wm = shop->GetComponent<WorldMapObject>();
 			wm->SetColliderInfo();
+			
 			AddGameObject(shop, ELayerType::BackColObject);
 		}
 
@@ -301,6 +354,7 @@ namespace yeram_client
 			ani->Play(L"npcboatman", true);
 			WorldMapObject* wm = boatman->GetComponent<WorldMapObject>();
 			wm->SetColliderInfo();
+			wm->SetSceneType(ESceneType::NONE);
 			AddGameObject(boatman, ELayerType::BackColObject);
 		}
 	

@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "Animator.h"
 #include "GameObject.h"
-
+#include "Camera.h"
 #include "Time.h"
 #include "ObjectPool.h"
 #include "Bullet.h"
@@ -46,7 +46,6 @@ namespace yeram_client
 			HeadAndRegSetAniPos();
 		}
 		Input();
-
 	}
 
 	void Chalice::Render(HDC hdc)
@@ -58,9 +57,6 @@ namespace yeram_client
 	}
 	void Chalice::Input()
 	{
-		
-		
-		
 		while (core::Input::KeyMessageQueueEmpty() == false)
 		{
 			core::Input::PushInfo& push = core::Input::GetQueueFront();
@@ -714,7 +710,12 @@ namespace yeram_client
 				offset.y += 400.0f * Time::DeltaTime();
 			}
 		}
+		mMoveOffset = offset;
 		transform->SetPos(pos + offset);
+		if (Camera::UseTarget() == true)
+		{
+			SceneManager::ChagePosGameObjects(offset);
+		}
 	}
 
 	void Chalice::Create()

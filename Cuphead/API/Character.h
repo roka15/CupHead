@@ -39,6 +39,7 @@ namespace yeram_client
 		virtual void Parrying();
 		void ResetDash();
 		bool GetDash() { return mbDash; }
+		bool GetJump() { return (mJump > 0); }
 		void SetParry(bool _flag) { mbParry = _flag; }
 		bool GetParry() { return mbParry; }
 		void StopTransUpdate(bool _flag, EDirType _type);

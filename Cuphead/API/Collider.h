@@ -24,8 +24,14 @@ namespace yeram_client
 		Vector2 GetPos() { return mPos; }
 		Vector2 GetSize() { return mSize; }
 		UINT GetID() { return mID; }
+		std::function<void()>& GetEnterEvent() { return mEnterEvent; }
+		std::function<void()>& GetStayEvent() { return mStayEvent; }
+		std::function<void()>& GetExitEvent() { return mExitEvent; }
 	private:
 		static UINT ColliderNumber;
+		std::function<void()> mEnterEvent;
+		std::function<void()> mStayEvent;
+		std::function<void()> mExitEvent;
 		UINT mCollisionCount;
 		UINT mID;
 		Vector2 mCenter;

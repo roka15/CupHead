@@ -9,7 +9,8 @@ namespace core
 	std::queue<Input::PushInfo> Input::mKeyMessageQueue;
 	int ASCII[(UINT)EKeyCode::MAX] =
 	{
-		'A','S','D','W','K','Z','C','N', VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_LBUTTON,VK_RBUTTON,VK_SPACE,VK_SHIFT
+		'A','S','D','W','K','Z','C','N', VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_LBUTTON,VK_RBUTTON,VK_SPACE,VK_SHIFT,
+	    VK_ESCAPE,VK_RETURN,
 	};
 	
 	void Input::Initialize()

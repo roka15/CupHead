@@ -14,6 +14,8 @@ namespace core
 		MouseRight,
 		SPACE,
 		SHIFT,
+		ESC,
+		ENTER,
 		MAX
 	};
 

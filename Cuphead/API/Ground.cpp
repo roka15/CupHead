@@ -76,10 +76,22 @@ void yeram_client::Ground::OnCollisionEnter(Collider* other)
 
 void yeram_client::Ground::OnCollisionStay(Collider* other)
 {
+	GameObject* other_obj = other->GetOwner();
+	Player* player = other_obj->GetComponent<Player>();
+	Rigidbody* rigid = other_obj->GetComponent<Rigidbody>();
+	Character* ch = player->GetActiveCharacter();
+	if (ch->GetJump() == false)
+	{
+		rigid->SetGround(true);
+	}
 }
 
 void yeram_client::Ground::OnCollisionExit(Collider* other)
 {
+	GameObject* other_obj = other->GetOwner();
+	Player* player = other_obj->GetComponent<Player>();
+	Rigidbody* rigid = other_obj->GetComponent<Rigidbody>();
+	rigid->SetGround(false);
 }
 
 

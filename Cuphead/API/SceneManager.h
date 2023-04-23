@@ -29,6 +29,8 @@ namespace yeram_client
 		static void LoadingComplete() { mbCompleteLoad = true; }
 		static void SetActivScene();
 		static void SetLoadSceneMessage(std::function<void()> _func_event) { mLoadMessageEvent = _func_event; };
+		static void UseUI(bool _flag) { mbUseUI = _flag; }
+		static bool UseUI() { return  mbUseUI; }
 	private:
 		SceneManager()=delete;
 		~SceneManager();
@@ -43,6 +45,7 @@ namespace yeram_client
 		static ELoadingState mLoadState;
 		static bool mbCompleteLoad;
 		static std::function<void()> mLoadMessageEvent;
+		static bool mbUseUI;
 	};
 }
 

@@ -5,6 +5,8 @@
 #include "TutorialScene.h"
 #include "WorldMoveIntroScene.h"
 #include "InWorldIntroScene.h"
+#include "SaltBakeryShopScene.h"
+#include "SaltBakerIntroScene.h"
 #include "Camera.h"
 #include "Rectangle.h"
 #include "UI.h"
@@ -30,6 +32,7 @@ namespace yeram_client
 	SceneManager::ELoadingState SceneManager::mLoadState;
 	bool SceneManager::mbCompleteLoad;
 	std::function<void()> SceneManager::mLoadMessageEvent;
+	bool SceneManager::mbUseUI;
 	void SceneManager::Initalize()
 	{
 		core::Loading::Initialize();
@@ -44,14 +47,16 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::Tutorial] = new TutorialScene(L"Tutorial");
 		mScenes[(UINT)ESceneType::MoveWorldIntro] = new WorldMoveIntroScene(L"WorldMoveIntro");
 		mScenes[(UINT)ESceneType::InWorldIntro] = new InWorldIntroScene(L"InWorldIntro");
-
+		mScenes[(UINT)ESceneType::SaltBakeryShop] = new SaltBakeryShopScene(L"SaltBakerShop");
+		mScenes[(UINT)ESceneType::SaltBakerBossIntro] = new SaltBakerIntroScene(L"SaltBakerIntro");
 		//애니 재생으로만 쓸 pool
 		core::ObjectPool<Animator>::Initialize(300);
 		core::ObjectPool<SpriteRenderer>::Initialize(300);
+		core::ObjectPool<Collider>::Initialize(10);
 		//core::ObjectPool<UI>::Initialize(200);
 		core::ObjectPool<Player>::Initialize(1, 1);
 		//core::ObjectPool<Ground>::Initialize(100, 100);
-		core::ObjectPool<Ground>::Initialize(1, 1);
+		core::ObjectPool<Ground>::Initialize(100);
 		core::ObjectPool<MoveObject>::Initialize(300);
 		core::ObjectPool<CutScenePlayAnimation>::Initialize(10);
 		core::ObjectPool<PixelCrash>::Initialize(10);
@@ -191,6 +196,7 @@ namespace yeram_client
 		core::ObjectPool<Bullet>::Release();
 		core::ObjectPool<Animator>::Release();
 		core::ObjectPool<SpriteRenderer>::Release();
+		core::ObjectPool<Collider>::Release();
 		//core::ObjectPool<UI>::Release();
 		core::ObjectPool<Ground>::Release();
 		core::ObjectPool<Player>::Release();

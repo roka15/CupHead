@@ -88,9 +88,7 @@ namespace yeram_client
 				speed *= 1;
 				break;
 			}
-
 			pos.x += speed * Time::DeltaTime();
-
 		}
 		else
 		{
@@ -116,6 +114,7 @@ namespace yeram_client
 				if (originpos.y <= mEndPos.y)
 					yflag = true;
 			}
+
 			if (mbOutCheck == true)
 			{
 				Animator* ani = GetOwner()->GetComponent<Animator>();

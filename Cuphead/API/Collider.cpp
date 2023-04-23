@@ -61,15 +61,21 @@ namespace yeram_client
 	}
 	void Collider::OnCollisionEnter(Collider* other)
 	{
+		if (mEnterEvent != nullptr)
+			mEnterEvent();
 		GetOwner()->OnCollisionEnter(other);
 	}
 	void Collider::OnCollisionStay(Collider* other)
 	{
+		if (mStayEvent != nullptr)
+			mStayEvent();
 		mCollisionCount = 1;
 		GetOwner()->OnCollisionStay(other);
 	}
 	void Collider::OnCollisionExit(Collider* other)
 	{
+		if (mExitEvent != nullptr)
+			mExitEvent();
 		GetOwner()->OnCollisionExit(other);
 	}
 

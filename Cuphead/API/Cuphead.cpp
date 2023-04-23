@@ -74,9 +74,11 @@ namespace yeram_client
 		mImage = Resources::Load<Image>(L"MapMoveBase", L"..\\Resources\\Cuphead_Stage_base.bmp");//받아오기 시트
 		mLImage = Resources::Load<Image>(L"MapMoveLeft", L"..\\Resources\\Cuphead_Stage_left.bmp");
 
-		ani->CreateAnimation(L"MapFowardUp", mImage, Vector2::Zero, 16, 8, 16, Vector2::Zero, 0.1f);
-		ani->CreateAnimation(L"MapFowardRight", mImage, Vector2(0.0f, 113.0f * 3), 16, 8, 14, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardUp", mImage, Vector2::Zero, 16, 8, 12, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardRight", mImage, Vector2(0.0f, 113.0f * 3), 16, 8, 11, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardRightUp", mImage, Vector2(0.0f, 113.0f), 16, 8, 12, Vector2::Zero, 0.1f);
 		ani->CreateAnimation(L"MapFowardDown", mImage, Vector2(0.0f, 113.0f * 6), 16, 8, 13, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardRightDown", mImage, Vector2(0.0f, 113.0f * 4), 16, 8, 12, Vector2::Zero, 0.1f);
 		ani->CreateAnimation(L"MapIdle", mImage, Vector2(0.0f, 113.0f * 5), 16, 8, 16, Vector2::Zero, 0.1f);
 
 		ani->GetStartEvent(L"MapFowardRight") = std::bind(&Cuphead::moveStartEvent, this);
@@ -84,7 +86,9 @@ namespace yeram_client
 
 		ani->GetCompleteEvent(L"MapFowardUp") = std::bind(&Cuphead::moveCompleteEvent, this);
 
-		ani->CreateAnimation(L"MapFowardLeft", mLImage, Vector2(0.0f, 113.0f * 3), 16, 8, 14, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardLeft", mLImage, Vector2(0.0f, 113.0f * 3), 16, 8, 11, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardLeftUp", mLImage, Vector2(0.0f, 113.0f), 16, 8, 12, Vector2::Zero, 0.1f);
+		ani->CreateAnimation(L"MapFowardLeftDown", mLImage, Vector2(0.0f, 113.0f*4), 16, 8, 12, Vector2::Zero, 0.1f);
 		ani->GetCompleteEvent(L"MapFowardLeft") = std::bind(&Cuphead::moveCompleteEvent, this);
 		//stage
 

@@ -33,15 +33,20 @@ namespace yeram_client
 		for (auto leftObject : lefts)
 		{
 			Collider* leftCollider = leftObject->GetComponent<Collider>();
+			
 			if (leftCollider == nullptr)
+				continue;
+			if (leftCollider->GetOwner()->GetActive() == false)
 				continue;
 
 			for (auto rightObject : rights)
 			{
 				Collider* rightCollider = rightObject->GetComponent<Collider>();
+				
 				if (rightCollider == nullptr)
 					continue;
-
+				if (rightCollider->GetOwner()->GetActive() == false)
+					continue;
 				if (leftObject == rightObject)
 					continue;
 
