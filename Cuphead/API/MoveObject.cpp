@@ -51,7 +51,19 @@ namespace yeram_client
 		mbDespawn = _despawn;
 	}
 
-	
+	void MoveObject::CreateInfo(const Vector2& _speed, const Vector2& _dir, bool _despawn, bool _outcheck)
+	{
+		mTf = GetOwner()->GetComponent<Transform>();
+		mbEndFlag = true;
+		mSpeed = _speed;
+		mDirpos = _dir;
+		Vector2 pos = mTf->GetPos();
+		mStartPos = pos;
+		mbOutCheck = _outcheck;
+		mbDespawn = _despawn;
+	}
+
+
 
 
 	void MoveObject::Move()
@@ -61,6 +73,9 @@ namespace yeram_client
 		Vector2 originpos = mTf->GetPos();
 		Vector2 pos = obj == nullptr ? mTf->GetPos() : mTf->GetOffset();
 		float speed = mSpeed.x;
+
+		bool xflag = false;
+		bool yflag = false;
 		if (mbEndFlag == false)
 		{
 			switch (mDir)
@@ -92,29 +107,6 @@ namespace yeram_client
 		}
 		else
 		{
-			bool xflag = false;
-			bool yflag = false;
-			if (mStartPos.x < mEndPos.x)
-			{
-				if (originpos.x >= mEndPos.x)
-					xflag = true;
-			}
-			else if (mStartPos.x > mEndPos.x)
-			{
-				if (originpos.x <= mEndPos.x)
-					xflag = true;
-			}
-			if (mStartPos.y < mEndPos.y)
-			{
-				if (originpos.y >= mEndPos.y)
-					yflag = true;
-			}
-			else if (mStartPos.y > mEndPos.y)
-			{
-				if (originpos.y <= mEndPos.y)
-					yflag = true;
-			}
-
 			if (mbOutCheck == true)
 			{
 				Animator* ani = GetOwner()->GetComponent<Animator>();
@@ -123,12 +115,13 @@ namespace yeram_client
 				Vector2 winsize = application.GetWindowSize();
 				if (ani != nullptr)
 				{
-					size = ani->GetSpriteSize();
+					if (ani->UseAnimation() == true)
+						size = ani->GetSpriteSize();
 				}
 				else if (sprite != nullptr)
 				{
-					size.x = sprite->GetWidth();
-					size.y = sprite->GetHeight();
+						size.x = sprite->GetWidth();
+						size.y = sprite->GetHeight();
 				}
 				if (originpos.x + size.x < -10 || originpos.x - size.x>winsize.x + 10
 					|| originpos.y + size.y <-10 || originpos.y - size.y>winsize.y + 10)
@@ -137,28 +130,50 @@ namespace yeram_client
 					yflag = true;
 				}
 			}
-			if (xflag == false)
+			else
 			{
-				pos.x += mDirpos.x * mSpeed.x * Time::DeltaTime();
-			}
-			if (yflag == false)
-			{
-				pos.y += mDirpos.y * mSpeed.y * Time::DeltaTime();
-			}
-			if (xflag == true && yflag == true)
-			{
-				if (mbDespawn == true)
+				if (mStartPos.x < mEndPos.x)
 				{
-					SceneManager::RemoveObject(GetOwner());
+					if (originpos.x >= mEndPos.x)
+						xflag = true;
 				}
-				else
+				else if (mStartPos.x > mEndPos.x)
 				{
-					SetActive(false);
+					if (originpos.x <= mEndPos.x)
+						xflag = true;
 				}
-				return;
+				if (mStartPos.y < mEndPos.y)
+				{
+					if (originpos.y >= mEndPos.y)
+						yflag = true;
+				}
+				else if (mStartPos.y > mEndPos.y)
+				{
+					if (originpos.y <= mEndPos.y)
+						yflag = true;
+				}
 			}
 		}
-
+		if (xflag == false)
+		{
+			pos.x += mDirpos.x * mSpeed.x * Time::DeltaTime();
+		}
+		if (yflag == false)
+		{
+			pos.y += mDirpos.y * mSpeed.y * Time::DeltaTime();
+		}
+		if (xflag == true && yflag == true)
+		{
+			if (mbDespawn == true)
+			{
+				SceneManager::RemoveObject(GetOwner());
+			}
+			else
+			{
+				SetActive(false);
+			}
+			return;
+		}
 		if (obj == nullptr)
 		{
 			mTf->SetPos(pos);

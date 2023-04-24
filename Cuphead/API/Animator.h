@@ -45,9 +45,11 @@ namespace yeram_client
 		void Play(const std::wstring& _name, bool _loop, double _time, bool _use_fsm = true);
 		void Stop();
 		void FSMStop();
+		bool UseAnimation() { return mActiveAnimation != nullptr; }
 		bool Complete() { return mActiveAnimation->IsComplete(); }
 		const std::wstring& GetCurAniName();
 		const Vector2& GetSpriteSize();
+		const Vector2& GetSpriteSize(const std::wstring& _key);
 		const Vector2& GetImageSize();
 		const Vector2& GetImageSize(int _index);
 		const UINT& GetAniIndex();
@@ -58,6 +60,7 @@ namespace yeram_client
 
 		std::wstring GetDirAniKey(const std::wstring& _name, EDirType _type);
 		std::wstring GetDirAniKey(const std::wstring& _name, EDirType _horizontal, EDirType _vertical);
+		void GetDirAniKey(EDirType& _horizontal,EDirType& _vertical,const std::wstring& _dir);
 	private:
 		std::map<std::wstring, Animation*> mAnimations;
 		std::map <std::wstring, Events*> mEvents;

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Time.h"
 #include "Application.h"
+#include "MoveObject.h"
 extern  yeram_client::Application application;
 namespace yeram_client
 {
@@ -17,6 +18,7 @@ namespace yeram_client
 	void Bullet::Initialize()
 	{
 		GameObject* owner = GetOwner();
+		mMoveObject = owner->AddComponent<MoveObject>();
 		mColider = owner->AddComponent<Collider>();
 		mTransform = owner->GetComponent<Transform>();
 		mAni = owner->AddComponent<Animator>();
@@ -24,22 +26,8 @@ namespace yeram_client
 
 	void Bullet::Update()
 	{
-		Vector2& pos = mTransform->GetPos();
-		pos.x += mDirVector.x * mSpeed * Time::DeltaTime();
-		pos.y += mDirVector.y * mSpeed * Time::DeltaTime();
-		//목표 지점까지 이동.
 
-		//update 후 check list 
-		
-	    //1.목표지점 도달
-		
-		
-		//2.맵 밖으로 나감.
-		if (MapOutCheck() == true)
-		{
- 			SceneManager::RemoveObject(GetOwner());
-		}
-		
+
 	}
 
 	void Bullet::Render(HDC hdc)
@@ -48,16 +36,13 @@ namespace yeram_client
 
 	void Bullet::Release()
 	{
+		Script::Release();
 	}
 
 	void Bullet::Reset()
 	{
-		mDeSpawnDistance = 0.0f;
-		mEndPos = Vector2::Zero;
-		mSpeed = 1000.0f;
-		mDirVector = Vector2::Zero;
 		mID = 0;
-		if (GetOwner()->GetName()!=L"Player")
+		if (GetOwner()->GetName() != L"Player")
 		{
 			mbParry = rand() % 2;
 		}
@@ -67,7 +52,7 @@ namespace yeram_client
 	void Bullet::OnCollisionEnter(Collider* other)
 	{
 		//3.충돌
-	
+		Death();
 	}
 
 	void Bullet::OnCollisionStay(Collider* other)
@@ -88,29 +73,53 @@ namespace yeram_client
 		mTransform->SetPos(_pos);
 	}
 
-	void Bullet::SetAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha)
+	void Bullet::CreateAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha)
 	{
-		std::wstring key = mAni->CreateAnimations(_path, _offset, _duration, _alpha);
-		mAni->Play(key, true);
+		mAni->CreateAnimations(_path, _offset, _duration, _alpha);
 	}
 
-	void Bullet::SetColInfo()
+	void Bullet::SetAnimation(std::wstring _name, bool _flag, EDirType _dir)
 	{
-		const Vector2 size = mAni->GetSpriteSize();
+		std::wstring ani_key = mAni->GetDirAniKey(_name, _dir);
+		mAni->Play(ani_key, _flag);
+	}
+
+	void Bullet::Shoot()
+	{
+		mOwner->SetActive(true);
+	}
+
+	void Bullet::Death()
+	{
+		
+	}
+
+	void Bullet::SetColInfo(std::wstring _ani_name)
+	{
+		
+		Vector2 size = mAni->GetSpriteSize(_ani_name);
+		const Vector2& scale = mTransform->GetScale();
 		mColider->SetCenter(Vector2{ -(size.x / 2),-size.y });
+		size *= scale;
 		mColider->SetSize(size);
 	}
 
-	void Bullet::CreateInfo(const Vector2& _startpos, const Vector2& _endpos)
+	void Bullet::CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _endpos)
 	{
 		Reset();
 		SetPos(_startpos);
-		SetEndPos(_endpos);
-		SetColInfo();
-		mStartPos = _startpos;
-	
-		mDirVector = mEndPos-mStartPos;
-		mDirVector = mDirVector.Normalize();
+		Vector2 dir = _endpos - _startpos;
+		dir = dir.Normalize();
+		mMoveObject->CreateInfo(_speed, dir, true, true);
+	}
+
+	void Bullet::CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos, bool _dir)
+	{
+		Reset();
+		SetPos(_startpos);
+		Vector2 dir = _dirpos;
+		dir = dir.Normalize();
+		mMoveObject->CreateInfo(_speed, dir, true, true);
 	}
 
 	bool Bullet::MapOutCheck()

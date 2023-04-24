@@ -32,10 +32,16 @@ namespace yeram_client
 	}
 	void GameObject::Update()
 	{
+		GameObject* parent = GetParent();
 		if (mbActive == false)
 			return;
+		if (parent != nullptr && parent->GetActive() == false)
+		{
+			return;
+		}
 		for (int i = (int)EComponentType::NONE + 1; i < (int)EComponentType::MAX; i++)
 		{
+			
 			EComponentType type = (EComponentType)i;
 			for (Component* com : mComponents[type])
 			{

@@ -8,6 +8,14 @@ namespace yeram_client
 	class Chalice:public Character
 	{
 	public:
+		struct CurBulletInfo
+		{
+		public:
+			~CurBulletInfo() {}
+			Vector2 mdir;
+			double mshoot_time;
+			std::wstring mdirstr;
+		};
 		Chalice();
 		~Chalice();
 		void Initialize()override;
@@ -16,7 +24,6 @@ namespace yeram_client
 		void Release()override;
 
        void Create()override;
-
 	private:
 		void Input();//message queue test
 
@@ -35,6 +42,7 @@ namespace yeram_client
 		void Parrying()override;
 
 		void PositionUpdate()override;
+		void Shooting();
 
 
 		virtual void air_move()override;
@@ -55,8 +63,12 @@ namespace yeram_client
 	
 		void JumpShoot(bool h_flag,bool v_flag,EDirType h_key,EDirType v_key);
 		void HeadAndRegSetAniPos();
-		
+		void UseIgnoreDamage(bool flag) { mbIgnoreDamage = flag; }
 	private:
 		float mFirstJumpTime;
+		bool mbIgnoreDamage;
+		CurBulletInfo mbulletInfo;
+		double mBulletDelayTime;
+		double mTime;
 	};
 }

@@ -102,6 +102,7 @@ struct Vector2
 		temp.y = y - _value.y;
 		return temp;
 	}
+	friend Vector2 operator-(const Vector2& _value1, const Vector2& _value2);
 	Vector2 operator+(const Vector2& _value)
 	{
 		Vector2 temp;

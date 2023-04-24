@@ -68,7 +68,6 @@ namespace yeram_client
 			mCharacters.insert(std::make_pair(EPlayerType::Cuphead, c));
 			break;
 		case EPlayerType::MsChalice:
-
 			c = new Chalice();
 			mCharacters.insert(std::make_pair(EPlayerType::MsChalice, c));
 			break;
@@ -114,7 +113,7 @@ namespace yeram_client
 				{
 
 					ESceneType type = wm->GetSceneType();
-					std::shared_ptr<GameObject> title_card = SceneManager::FindObject(L"title_card");
+					GameObject* title_card = SceneManager::FindObject(L"title_card").get();
 					title_card->SetActive(true);
 					SceneManager::UseUI(true);
 					std::shared_ptr<GameObject> title_text = title_card->FindChild(L"title_text");

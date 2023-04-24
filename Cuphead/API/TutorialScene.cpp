@@ -60,6 +60,7 @@ namespace yeram_client
 		Camera::SetVerticalMove(false);
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::FrontObject, true);
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::BackColObject,true);
+		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::BackColObject, true);
 
 		mStartPos = Vector2{ 200.0f,300.0f };
 		for (auto obj : GetGameObjects(ELayerType::Player))
@@ -123,6 +124,22 @@ namespace yeram_client
 			col->SetCenter(Vector2{ -(image_size.x/3.0f),-(image_size.y/1.2f)});
 			col->SetSize(Vector2{ image_size.x/1.5f ,image_size.y/1.5f});
 			AddGameObject(parry, ELayerType::BackColObject);
+		}
+
+		std::shared_ptr<GameObject> parry2 = core::ObjectPool<Animator>::Spawn();
+		{
+			parry2->SetName(L"ParryObject2");
+			ParryingObject* po = parry2->AddComponent<ParryingObject>();
+			Transform* tf = parry2->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 700.0f,300.0f });
+			Animator* ani = parry2->AddComponent<Animator>();
+			ani->CreateAnimations(L"..\\Resources\\TutorialScene\\Wheat\\C", Vector2::Zero, 0.04f);
+			ani->Play(L"WheatC", true);
+			const Vector2& image_size = ani->GetSpriteSize();
+			Collider* col = parry2->AddComponent<Collider>();
+			col->SetCenter(Vector2{ -(image_size.x / 3.0f),-(image_size.y / 1.2f) });
+			col->SetSize(Vector2{ image_size.x / 1.5f ,image_size.y / 1.5f });
+			AddGameObject(parry2, ELayerType::BackColObject);
 		}
 
 		Scene::OnEnter();

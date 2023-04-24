@@ -291,6 +291,12 @@ namespace yeram_client
 		return mActiveAnimation->GetSpriteSize();
 	}
 
+	const Vector2& Animator::GetSpriteSize(const std::wstring& _key)
+	{
+		Animation* ani = FindAnimation(_key);
+		return ani->GetSpriteSize();
+	}
+
 	const Vector2& Animator::GetImageSize()
 	{
 		return mActiveAnimation->GetImageSize();
@@ -384,5 +390,22 @@ namespace yeram_client
 			break;
 		}
 		return temp;
+	}
+	void Animator::GetDirAniKey(EDirType& _horizontal, EDirType& _vertical, const std::wstring& _dir)
+	{
+		size_t cursor = _dir.find(L"Up");
+		if (std::wstring::npos != cursor)
+			_vertical = EDirType::UP;
+		cursor = _dir.find(L"Down");
+		if (std::wstring::npos != cursor)
+			_vertical = EDirType::DOWN;
+
+
+		cursor = _dir.find(L"Left");
+		if (std::wstring::npos != cursor)
+			_horizontal = EDirType::LEFT;
+		cursor = _dir.find(L"Right");
+		if (std::wstring::npos != cursor)
+			_horizontal = EDirType::RIGHT;
 	}
 }

@@ -61,7 +61,7 @@ void yeram_client::SaltBakeryShopScene::Update()
 		}
 
 	}
-	
+
 	Scene::Update();
 }
 
@@ -133,8 +133,8 @@ void yeram_client::SaltBakeryShopScene::OnEnter()
 	}
 	std::shared_ptr<GameObject> ground_col = core::ObjectPool<Ground>::Spawn();
 	{
-    	ground_col->SetName(L"sbshop_ground");
-		ground_col->GetComponent<Collider>()->SetSize(Vector2{ (application.GetWindowSize().x / 2)+400.0f,100.0f });
+		ground_col->SetName(L"sbshop_ground");
+		ground_col->GetComponent<Collider>()->SetSize(Vector2{ (application.GetWindowSize().x / 2) + 400.0f,100.0f });
 		ground_col->GetComponent<Transform>()->SetPos(Vector2{ 0.0f,700.0f });
 		AddGameObject(ground_col, ELayerType::BackColObject);
 	}
@@ -250,7 +250,7 @@ void yeram_client::SaltBakeryShopScene::OnEnter()
 		cutscene->SetAnimation(L"cellar_salt_shadowintro2", 0.0f);
 		cutscene->SetAnimation(L"cellar_salt_shadowloop", 10.0f);
 		Transform* tf = saltaniobj->GetComponent<Transform>();
-		tf->SetPos(Vector2{ (application.GetWindowSize().x / 2) * 4.0f+500.0f,520.0f });
+		tf->SetPos(Vector2{ (application.GetWindowSize().x / 2) * 4.0f + 500.0f,520.0f });
 		AddGameObject(saltaniobj, ELayerType::BackObject);
 	}
 	std::shared_ptr<GameObject> flameaniobj1 = core::ObjectPool<Animator>::Spawn();
@@ -259,7 +259,7 @@ void yeram_client::SaltBakeryShopScene::OnEnter()
 		flameaniobj1->SetName(L"cellarflame1");
 		Animator* ani = flameaniobj1->GetComponent<Animator>();
 		ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_shop_scene\\Cellar\\cellar_flame\\1", Vector2::Zero, 0.1f);
-		ani->Play(L"cellar_flame1",true);
+		ani->Play(L"cellar_flame1", true);
 		Transform* tf = flameaniobj1->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 740.0f,390.0f });
 		AddGameObject(flameaniobj1, ELayerType::BackObject);
@@ -275,7 +275,7 @@ void yeram_client::SaltBakeryShopScene::OnEnter()
 		tf->SetPos(Vector2{ 1390.0f,390.0f });
 		AddGameObject(flameaniobj2, ELayerType::BackObject);
 	}
-	std::shared_ptr<GameObject> flameaniobj3= core::ObjectPool<Animator>::Spawn();
+	std::shared_ptr<GameObject> flameaniobj3 = core::ObjectPool<Animator>::Spawn();
 	{
 		flameaniobj3->SetActive(false);
 		flameaniobj3->SetName(L"cellarflame3");
@@ -313,7 +313,7 @@ void yeram_client::SaltBakeryShopScene::ActiveScene1()
 	tf->SetPos(Vector2{ 100.0f,400.0f });
 	mWindowPos = tf->GetPos();
 
-	
+
 	std::shared_ptr<GameObject> ground_col = FindObject(L"sbshop_ground");
 	{
 		ground_col->GetComponent<Collider>()->SetSize(Vector2{ (application.GetWindowSize().x / 2) * 5.0f,100.0f });
@@ -389,7 +389,7 @@ void yeram_client::SaltBakeryShopScene::ActiveScene1()
 		);
 
 		Transform* tf = portal->GetComponent<Transform>();
-		tf->SetPos(Vector2{ (application.GetWindowSize().x / 2) * 4.0f+650.0f ,450.0f });
+		tf->SetPos(Vector2{ (application.GetWindowSize().x / 2) * 4.0f + 650.0f ,450.0f });
 		portal->GetComponent<Collider>()->SetSize(Vector2{ 80.0f,80.0f });
 	}
 	std::shared_ptr<GameObject> bg1 = FindObject(L"sbshop_bg");
@@ -398,7 +398,7 @@ void yeram_client::SaltBakeryShopScene::ActiveScene1()
 		sprite->SetImage(L"sbshop_cellar_dark_bg", L"..\\Resources\\scene\\dlc\\salt_baker_shop_scene\\Cellar\\hall_bg_darkness.bmp");
 	}
 
-	
+
 
 	std::shared_ptr<GameObject> frontobj = FindObject(L"sbshop_frontobj");
 	{

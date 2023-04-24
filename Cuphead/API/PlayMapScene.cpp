@@ -188,6 +188,7 @@ namespace yeram_client
 		ColliderManager::SetLayer(ELayerType::BackColObject, ELayerType::Player, false);
 		//switch 로 로드할 맵 타입에 따라 load 달리하기
 		Camera::SetTarget(nullptr);
+
 		Scene::OnExit();
 	}
 	void PlayMapScene::CreateWorldMap(const Vector2& _startpos)

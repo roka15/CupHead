@@ -6,6 +6,7 @@ namespace yeram_client
 	class Transform;
 	class Animator;
 	class Collider;
+	class MoveObject;
 	class Bullet : public Script
 	{
 	
@@ -33,28 +34,26 @@ namespace yeram_client
 
 		void SetParry(bool _flag) { mbParry = _flag; }
 		void SetID(const UINT& _id) { mID = _id; }
-		void SetEndPos(const Vector2& _pos) { mEndPos = _pos; }
 		void SetScale(const Vector2& _scale);
 		void SetPos(const Vector2& _pos); 
-		void SetAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha = false);
-		void SetColInfo();
+		void CreateAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha = false);
+		void SetAnimation(std::wstring _name,bool _flag,EDirType _dir);
+		virtual void Shoot();
+		virtual void Death();
+		void SetColInfo(std::wstring _ani_name);
 		void SetShotType(EShotBulletType _type) { mShotType = _type; }
 		
-		void CreateInfo(const Vector2& _startpos, const Vector2& _endpos);
+		void CreateInfo(const Vector2& _speed,const Vector2& _startpos, const Vector2& _endpos);
+		void CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos,bool _dir);
 		bool MapOutCheck();
 		const UINT& GetID() { return mID; }
 		const bool& GetParry() { return mbParry; }
-	private:
+	protected:
 		UINT mID;
 		UINT mDamage;
-		float mDeSpawnDistance;
-		Vector2 mStartPos; //spawn À§Ä¡. 
-		Vector2 mEndPos;
-		float mSpeed;
-		Vector2 mDirVector;
-		EDirType mDirType;
 		EShotBulletType mShotType;
 		bool mbParry;
+		MoveObject* mMoveObject;
 		Collider* mColider;
 		Transform* mTransform;
 		Animator* mAni;

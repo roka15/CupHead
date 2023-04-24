@@ -14,6 +14,7 @@
 #include "PixelCrash.h"
 #include "WorldMapObject.h"
 #include "Ground.h"
+#include "PlayerBullet.h"
 #include "Animator.h"
 #include "Time.h"
 #include "ObjectPool.h"
@@ -61,7 +62,7 @@ namespace yeram_client
 		core::ObjectPool<CutScenePlayAnimation>::Initialize(10);
 		core::ObjectPool<PixelCrash>::Initialize(10);
 		core::ObjectPool<WorldMapObject>::Initialize(10);
-		core::ObjectPool<Bullet>::Initialize(300);
+		core::ObjectPool<PlayerBullet>::Initialize(300);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -191,9 +192,7 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
-
 		core::ObjectPool<PixelCrash>::Release();
-		core::ObjectPool<Bullet>::Release();
 		core::ObjectPool<Animator>::Release();
 		core::ObjectPool<SpriteRenderer>::Release();
 		core::ObjectPool<Collider>::Release();
@@ -203,7 +202,7 @@ namespace yeram_client
 		core::ObjectPool<MoveObject>::Release();
 		core::ObjectPool<CutScenePlayAnimation>::Release();
 		core::ObjectPool<WorldMapObject>::Release();
-		
+		core::ObjectPool<PlayerBullet>::Release();
 		core::Loading::Release();
 		//core::ObjectPool<Ground>::Release();
 
