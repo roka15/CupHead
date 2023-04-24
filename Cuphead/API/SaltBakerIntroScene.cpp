@@ -265,7 +265,12 @@ namespace yeram_client
 				arm->SetActive(true);
 				arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene5_arm2", true);
 			});
-		
+			ani->GetEndEvent(L"salt_baker_boss_intro_scene5_3") =
+				std::bind([this]()->void
+			{
+				SceneManager::SetLoadSceneMessage(std::bind([this]()->void {SceneManager::LoadScene(ESceneType::SaltBakerBoss); }));
+			});
+
 			CutScenePlayAnimation* cutscene = saltbaker->GetComponent<CutScenePlayAnimation>();
 			cutscene->SetAnimation(L"salt_baker_boss_intro_scene1", 5.0);
 			cutscene->SetAnimation(L"salt_baker_boss_intro_scene2", 0.0);

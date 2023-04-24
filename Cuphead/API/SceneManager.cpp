@@ -7,11 +7,13 @@
 #include "InWorldIntroScene.h"
 #include "SaltBakeryShopScene.h"
 #include "SaltBakerIntroScene.h"
+#include "SaltBakerBossScene.h"
 #include "Camera.h"
 #include "Rectangle.h"
 #include "UI.h"
 #include "Player.h"
 #include "PixelCrash.h"
+#include "SaltBaker.h"
 #include "WorldMapObject.h"
 #include "Ground.h"
 #include "PlayerBullet.h"
@@ -50,6 +52,7 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::InWorldIntro] = new InWorldIntroScene(L"InWorldIntro");
 		mScenes[(UINT)ESceneType::SaltBakeryShop] = new SaltBakeryShopScene(L"SaltBakerShop");
 		mScenes[(UINT)ESceneType::SaltBakerBossIntro] = new SaltBakerIntroScene(L"SaltBakerIntro");
+		mScenes[(UINT)ESceneType::SaltBakerBoss] = new SaltBakerBossScene(L"SaltBakerBoss");
 		//애니 재생으로만 쓸 pool
 		core::ObjectPool<Animator>::Initialize(300);
 		core::ObjectPool<SpriteRenderer>::Initialize(300);
@@ -63,6 +66,7 @@ namespace yeram_client
 		core::ObjectPool<PixelCrash>::Initialize(10);
 		core::ObjectPool<WorldMapObject>::Initialize(10);
 		core::ObjectPool<PlayerBullet>::Initialize(300);
+		core::ObjectPool<SaltBaker>::Initialize(1);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -136,7 +140,7 @@ namespace yeram_client
 		mbLoadScreenFlag = false;
 
 
-		LoadScene(ESceneType::PlayMap);
+		LoadScene(ESceneType::SaltBakerBoss);
 	}
 
 	void SceneManager::Update()
@@ -203,6 +207,7 @@ namespace yeram_client
 		core::ObjectPool<CutScenePlayAnimation>::Release();
 		core::ObjectPool<WorldMapObject>::Release();
 		core::ObjectPool<PlayerBullet>::Release();
+		core::ObjectPool<SaltBaker>::Release();
 		core::Loading::Release();
 		//core::ObjectPool<Ground>::Release();
 

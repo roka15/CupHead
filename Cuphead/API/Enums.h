@@ -11,6 +11,7 @@ enum class ESceneType
 	InWorldIntro,
 	SaltBakeryShop,
 	SaltBakerBossIntro,
+	SaltBakerBoss,
 	Ending,
 	MAX,
 };
