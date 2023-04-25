@@ -52,7 +52,7 @@ namespace yeram_client
 	void Bullet::OnCollisionEnter(Collider* other)
 	{
 		//3.Ãæµ¹
-		Death();
+		Death(other);
 	}
 
 	void Bullet::OnCollisionStay(Collider* other)
@@ -78,6 +78,11 @@ namespace yeram_client
 		mAni->CreateAnimations(_path, _offset, _duration, _alpha);
 	}
 
+	void Bullet::SetAnimation(std::wstring _name, bool _flag)
+	{
+		mAni->Play(_name, _flag);
+	}
+
 	void Bullet::SetAnimation(std::wstring _name, bool _flag, EDirType _dir)
 	{
 		std::wstring ani_key = mAni->GetDirAniKey(_name, _dir);
@@ -89,7 +94,7 @@ namespace yeram_client
 		mOwner->SetActive(true);
 	}
 
-	void Bullet::Death()
+	void Bullet::Death(Collider* _other)
 	{
 		
 	}

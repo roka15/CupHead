@@ -19,10 +19,23 @@ namespace yeram_client
 		mCol = owner->AddComponent<Collider>();
 		mAni = owner->AddComponent<Animator>();
 		mTransform = owner->GetComponent<Transform>();
+		mPhaseType = EPhaseType::NONE;
 	}
 
 	void Boss::Update()
 	{
+		switch (mPhaseType)
+		{
+		case EPhaseType::PHASE1:
+			Phase1();
+			break;
+		case EPhaseType::PHASE2:
+			Phase2();
+			break;
+		case EPhaseType::PHASE3:
+			Phase3();
+			break;
+		}
 	}
 
 	void Boss::Render(HDC hdc)
@@ -32,7 +45,7 @@ namespace yeram_client
 	void Boss::Release()
 	{
 	}
-
+	
 	void Boss::OnCollisionEnter(Collider* other)
 	{
 	}
@@ -42,6 +55,19 @@ namespace yeram_client
 	}
 
 	void Boss::OnCollisionExit(Collider* other)
+	{
+	}
+
+	void Boss::Phase1()
+	{
+
+	}
+
+	void Boss::Phase2()
+	{
+	}
+
+	void Boss::Phase3()
 	{
 	}
 

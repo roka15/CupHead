@@ -22,14 +22,14 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other)override;
 		virtual void OnCollisionExit(class Collider* other)override;
 
-		void Parry_Check();
+		bool Parry_Check();
 		void Stop_PositionUpdate(bool _flag, EDirType _type);
 		Vector2 GetMoveOffset();
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;
 		std::map<EPlayerType, Character*> mCharacters;
-	
+		EGameObjectType mobjType;
 		/*float mTime;
 		int midx;*/
 	};

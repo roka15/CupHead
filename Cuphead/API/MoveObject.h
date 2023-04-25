@@ -18,8 +18,12 @@ namespace yeram_client
 		void CreateInfo(const Vector2& _speed,EDirType _dir);
 		void CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos,bool _despawn=false, bool _outcheck=false);
 		void CreateInfo(const Vector2& _speed,const Vector2& _dir, bool _despawn = false, bool _outcheck = false);
+		void CreateInfo(const Vector2& _speed, const Vector2& _dir, const Vector2& _kill_pos, bool _despawn = false, bool _outcheck = false);
 		void Move();
+		bool IsArrive() { return mbArrive; }
+
 		const UINT& GetID() { return mID; }
+		void SetArriveEvent(std::function<void()> _func) { mArriveEvent = _func; }
 	private:
 
 		virtual void OnCollisionEnter(class Collider* other)override;
@@ -34,9 +38,11 @@ namespace yeram_client
 		bool mbEndFlag;
 		bool mbOutCheck;
 		bool mbDespawn;
+		bool mbArrive;
 		UINT mID;
 		Transform* mTf;
 		EDirType mDir;
+		std::function<void()> mArriveEvent;
 	};
 }
 

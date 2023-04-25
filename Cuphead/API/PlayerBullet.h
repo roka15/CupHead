@@ -15,7 +15,7 @@ namespace yeram_client
 
 		virtual void Shoot()override;
 		void Shoot(std::wstring _dirstr);
-		virtual void Death()override;
+		virtual void Death(Collider* _other)override;
 		void CreateInfo(const Vector2& _startpos, const Vector2 _dir);
 		void SetDiagonalColInfo(EDirType _vertical_dir, std::wstring _ani_name);
 	private:

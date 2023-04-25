@@ -172,9 +172,9 @@ namespace yeram_client
 		}
 		mAni->Play(key, false);
 	}
-	void PlayerBullet::Death()
+	void PlayerBullet::Death(Collider* _other)
 	{
-		Bullet::Death();
+		Bullet::Death(_other);
 		mColider->SetActive(false);
 		mAni->Stop();
 	}

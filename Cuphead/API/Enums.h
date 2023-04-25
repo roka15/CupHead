@@ -32,6 +32,8 @@ enum class  ELayerType
 enum class EGameObjectType
 {
 	NONE,
+	Player,
+	Boss,
 	MAX,
 };
 enum class EComponentType
@@ -82,4 +84,13 @@ enum class EStateType
 	START,
 	ING,
 	NOTHING,
+};
+enum class EShotBulletType
+{
+	NONE,
+	Direct,
+	Guided_Missile,
+	ZigZag,
+	Scatter,
+	MAX
 };

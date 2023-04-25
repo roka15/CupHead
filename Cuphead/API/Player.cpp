@@ -18,6 +18,7 @@ namespace yeram_client
 	Player::Player() :Script()
 	{
 		SetName(L"Player");
+		mobjType = EGameObjectType::Player;
 	}
 
 	Player::~Player()
@@ -167,12 +168,15 @@ namespace yeram_client
 		}
 
 	}
-	void Player::Parry_Check()
+	bool Player::Parry_Check()
 	{
 		if (mCharacter->GetDash() == true)
 		{
 			mCharacter->Parrying();
+			return true;
 		}
+
+		return false;
 	}
 	void Player::Stop_PositionUpdate(bool _flag, EDirType _type)
 	{

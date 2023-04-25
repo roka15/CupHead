@@ -11,15 +11,6 @@ namespace yeram_client
 	{
 	
 	public:
-		enum class EShotBulletType
-		{
-			NONE,
-			Direct,
-			Guided_Missile,
-			ZigZag,
-			Scatter,
-			MAX
-		};
 		Bullet();
 		virtual ~Bullet();
 		virtual void Initialize()override;
@@ -31,20 +22,22 @@ namespace yeram_client
 		virtual void OnCollisionEnter(class Collider* other)override;
 		virtual void OnCollisionStay(class Collider* other)override;
 		virtual void OnCollisionExit(class Collider* other)override;
+		virtual void Shoot();
+		virtual void Death(Collider* _other);
 
 		void SetParry(bool _flag) { mbParry = _flag; }
 		void SetID(const UINT& _id) { mID = _id; }
 		void SetScale(const Vector2& _scale);
 		void SetPos(const Vector2& _pos); 
 		void CreateAnimation(std::wstring _path, Vector2 _offset, float _duration, bool _alpha = false);
+		void SetAnimation(std::wstring _name, bool _flag);
 		void SetAnimation(std::wstring _name,bool _flag,EDirType _dir);
-		virtual void Shoot();
-		virtual void Death();
+	
 		void SetColInfo(std::wstring _ani_name);
 		void SetShotType(EShotBulletType _type) { mShotType = _type; }
 		
-		void CreateInfo(const Vector2& _speed,const Vector2& _startpos, const Vector2& _endpos);
-		void CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos,bool _dir);
+		virtual void CreateInfo(const Vector2& _speed,const Vector2& _startpos, const Vector2& _endpos);
+		virtual void CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos,bool _dir);
 		bool MapOutCheck();
 		const UINT& GetID() { return mID; }
 		const bool& GetParry() { return mbParry; }

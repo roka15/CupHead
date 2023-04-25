@@ -17,7 +17,11 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
 	private:
-        
+		void RegisterPattern1();
+		void RegisterPattern2();
+		void RegisterPattern3();
+	private:
+		EGameObjectType mobjType;
 	};
 }
 

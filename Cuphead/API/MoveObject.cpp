@@ -16,6 +16,7 @@ namespace yeram_client
 	void MoveObject::Initialize()
 	{
 		Script::Initialize();
+		mArriveEvent = std::bind([this]()->void {SetActive(false); });
 	}
 
 	void MoveObject::Update()
@@ -33,6 +34,7 @@ namespace yeram_client
 
 	void MoveObject::CreateInfo(const Vector2& _speed, EDirType _dir)
 	{
+		
 		mSpeed = _speed;
 		mDir = _dir;
 		mTf = GetOwner()->GetComponent<Transform>();
@@ -49,6 +51,7 @@ namespace yeram_client
 		mStartPos = pos;
 		mbOutCheck = _outcheck;
 		mbDespawn = _despawn;
+		mbArrive = false;
 	}
 
 	void MoveObject::CreateInfo(const Vector2& _speed, const Vector2& _dir, bool _despawn, bool _outcheck)
@@ -61,6 +64,22 @@ namespace yeram_client
 		mStartPos = pos;
 		mbOutCheck = _outcheck;
 		mbDespawn = _despawn;
+		mbArrive = false;
+	}
+
+	void MoveObject::CreateInfo(const Vector2& _speed, const Vector2& _dir, const Vector2& _kill_pos, bool _despawn, bool _outcheck)
+	{
+		mTf = GetOwner()->GetComponent<Transform>();
+		mbEndFlag = true;
+		mSpeed = _speed;
+		mDirpos = _dir;
+	
+		Vector2 pos = mTf->GetPos();
+		mStartPos = pos;
+		mEndPos = _kill_pos;
+		mbOutCheck = _outcheck;
+		mbDespawn = _despawn;
+		mbArrive = false;
 	}
 
 
@@ -74,6 +93,7 @@ namespace yeram_client
 		Vector2 pos = obj == nullptr ? mTf->GetPos() : mTf->GetOffset();
 		float speed = mSpeed.x;
 
+		bool map_out_flag = false;
 		bool xflag = false;
 		bool yflag = false;
 		if (mbEndFlag == false)
@@ -126,11 +146,12 @@ namespace yeram_client
 				if (originpos.x + size.x < -10 || originpos.x - size.x>winsize.x + 10
 					|| originpos.y + size.y <-10 || originpos.y - size.y>winsize.y + 10)
 				{
+					map_out_flag = true;
 					xflag = true;
 					yflag = true;
 				}
 			}
-			else
+			//else
 			{
 				if (mStartPos.x < mEndPos.x)
 				{
@@ -164,13 +185,14 @@ namespace yeram_client
 		}
 		if (xflag == true && yflag == true)
 		{
-			if (mbDespawn == true)
+			mbArrive = true;
+			if (map_out_flag==true && mbDespawn == true)
 			{
 				SceneManager::RemoveObject(GetOwner());
 			}
 			else
 			{
-				SetActive(false);
+				mArriveEvent();
 			}
 			return;
 		}

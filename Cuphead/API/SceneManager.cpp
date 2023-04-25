@@ -14,6 +14,7 @@
 #include "Player.h"
 #include "PixelCrash.h"
 #include "SaltBaker.h"
+#include "ZigZagBullet.h"
 #include "WorldMapObject.h"
 #include "Ground.h"
 #include "PlayerBullet.h"
@@ -67,6 +68,7 @@ namespace yeram_client
 		core::ObjectPool<WorldMapObject>::Initialize(10);
 		core::ObjectPool<PlayerBullet>::Initialize(300);
 		core::ObjectPool<SaltBaker>::Initialize(1);
+		core::ObjectPool<ZigZagBullet>::Initialize(100, 200);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -196,18 +198,22 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
+		core::ObjectPool<ZigZagBullet>::Release();
+		core::ObjectPool<SaltBaker>::Release();
 		core::ObjectPool<PixelCrash>::Release();
-		core::ObjectPool<Animator>::Release();
-		core::ObjectPool<SpriteRenderer>::Release();
-		core::ObjectPool<Collider>::Release();
+		
 		//core::ObjectPool<UI>::Release();
 		core::ObjectPool<Ground>::Release();
 		core::ObjectPool<Player>::Release();
-		core::ObjectPool<MoveObject>::Release();
+		
 		core::ObjectPool<CutScenePlayAnimation>::Release();
 		core::ObjectPool<WorldMapObject>::Release();
 		core::ObjectPool<PlayerBullet>::Release();
-		core::ObjectPool<SaltBaker>::Release();
+        
+		core::ObjectPool<MoveObject>::Release();
+		core::ObjectPool<Animator>::Release();
+		core::ObjectPool<SpriteRenderer>::Release();
+		core::ObjectPool<Collider>::Release();
 		core::Loading::Release();
 		//core::ObjectPool<Ground>::Release();
 
