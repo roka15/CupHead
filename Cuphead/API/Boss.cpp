@@ -1,7 +1,7 @@
 #include "Boss.h"
 #include "GameObject.h"
 #include "MoveObject.h"
-
+#include "Time.h"
 namespace yeram_client
 {
 	Boss::Boss()
@@ -24,7 +24,8 @@ namespace yeram_client
 
 	void Boss::Update()
 	{
-		switch (mPhaseType)
+		mTime += Time::DeltaTime();
+		/*switch (mPhaseType)
 		{
 		case EPhaseType::PHASE1:
 			Phase1();
@@ -35,7 +36,7 @@ namespace yeram_client
 		case EPhaseType::PHASE3:
 			Phase3();
 			break;
-		}
+		}*/
 	}
 
 	void Boss::Render(HDC hdc)

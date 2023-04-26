@@ -68,10 +68,10 @@ namespace yeram_client
 					}
 					else if (mbLoop == false)
 					{
-							Animator::Events* events
+						/*	Animator::Events* events
 								= FindEvents(mActiveAnimation->GetName());
 							if (events != nullptr)
-								events->mEndEvent();
+								events->mEndEvent();*/
 					}
 				}
 			}

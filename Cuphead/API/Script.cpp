@@ -38,4 +38,5 @@ namespace yeram_client
 	void Script::OnCollisionExit(Collider* other)
 	{
 	}
+	
 }

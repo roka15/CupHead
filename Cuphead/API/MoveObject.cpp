@@ -21,7 +21,14 @@ namespace yeram_client
 
 	void MoveObject::Update()
 	{
-		Move();
+		if (mbWave == true)
+		{
+			WaveMove();
+		}
+		else
+		{
+			Move();
+		}
 	}
 
 	void MoveObject::Render(HDC hdc)
@@ -80,6 +87,17 @@ namespace yeram_client
 		mbOutCheck = _outcheck;
 		mbDespawn = _despawn;
 		mbArrive = false;
+	}
+
+	void MoveObject::WaveMove()
+	{
+		GameObject* owner = this->GetOwner();
+		GameObject* obj = owner->GetParent();
+		Vector2 pos = obj == nullptr ? mTf->GetPos() : mTf->GetOffset();
+		pos.x += mDirpos.x * mSpeed.x * Time::DeltaTime();
+		pos.y += mEndPos.y * sinf(pos.x * (3.14159254f / 180.0f))* Time::DeltaTime();
+
+		mTf->SetPos(pos);
 	}
 
 
@@ -146,9 +164,31 @@ namespace yeram_client
 				if (originpos.x + size.x < -10 || originpos.x - size.x>winsize.x + 10
 					|| originpos.y + size.y <-10 || originpos.y - size.y>winsize.y + 10)
 				{
-					map_out_flag = true;
-					xflag = true;
-					yflag = true;
+					if ((mStartPos.x < -10&& originpos.x + size.x < -10)
+						||(mStartPos.x > winsize.x + 10 && originpos.x - size.x > winsize.x + 10))
+					{
+						xflag = false;
+					}
+					else
+					{
+						xflag = true;
+					}
+
+					if ((mStartPos.y < -10 && originpos.y + size.y < -10)
+						|| (mStartPos.y > winsize.y + 10 && originpos.y - size.y > winsize.y + 10))
+					{
+						yflag = false;
+					}
+					else
+					{
+						yflag = true;
+					}
+					if (xflag == true && yflag == true)
+					{
+						map_out_flag = true;
+					}
+					
+					
 				}
 			}
 			//else

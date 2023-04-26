@@ -14,7 +14,8 @@
 #include "Player.h"
 #include "PixelCrash.h"
 #include "SaltBaker.h"
-#include "ZigZagBullet.h"
+#include "CookieBullet.h"
+#include "SugarBullet.h"
 #include "WorldMapObject.h"
 #include "Ground.h"
 #include "PlayerBullet.h"
@@ -68,7 +69,8 @@ namespace yeram_client
 		core::ObjectPool<WorldMapObject>::Initialize(10);
 		core::ObjectPool<PlayerBullet>::Initialize(300);
 		core::ObjectPool<SaltBaker>::Initialize(1);
-		core::ObjectPool<ZigZagBullet>::Initialize(100, 200);
+		core::ObjectPool<CookieBullet>::Initialize(100, 200);
+		core::ObjectPool<SugarBullet>::Initialize(100, 200);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -198,7 +200,8 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
-		core::ObjectPool<ZigZagBullet>::Release();
+		core::ObjectPool<SugarBullet>::Release();
+		core::ObjectPool<CookieBullet>::Release();
 		core::ObjectPool<SaltBaker>::Release();
 		core::ObjectPool<PixelCrash>::Release();
 		

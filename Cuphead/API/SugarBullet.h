@@ -1,0 +1,30 @@
+#pragma once
+#include "ZigZagBullet.h"
+namespace yeram_client
+{
+	class SugarBullet :
+		public ZigZagBullet
+	{
+	public:
+		SugarBullet();
+		virtual ~SugarBullet();
+		virtual void Initialize()override;
+		virtual void Update()override;
+		virtual void Render(HDC hdc)override;
+		virtual void Release()override;
+
+		virtual void OnCollisionEnter(class Collider* other)override;
+		virtual void OnCollisionStay(class Collider* other)override;
+		virtual void OnCollisionExit(class Collider* other)override;
+		virtual void Shoot()override;
+		virtual void Death(Collider* _other)override;
+		virtual void SetColInfo(std::wstring _ani_name)override;
+		virtual void CreateInfo(const Vector2& _speed, const Vector2& _distance, const Vector2& _start_dir)override;
+	
+	private:
+
+
+	};
+
+}
+

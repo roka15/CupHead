@@ -11,6 +11,18 @@ namespace yeram_client
 		SetName(L"Bullet");
 	}
 
+	Bullet::Bullet(const Bullet& _other)
+	{
+		mID = _other.mID;
+		mDamage= _other.mDamage;
+		mShotType= _other.mShotType;
+		mbParry = _other.mbParry;
+		mMoveObject = mOwner->AddComponent<MoveObject>();
+		mColider = mOwner->AddComponent<Collider>();
+		mTransform = mOwner->GetComponent<Transform>();
+		mAni = mOwner->AddComponent<Animator>();;
+	}
+
 	Bullet::~Bullet()
 	{
 	}
@@ -126,6 +138,7 @@ namespace yeram_client
 		dir = dir.Normalize();
 		mMoveObject->CreateInfo(_speed, dir, true, true);
 	}
+
 
 	bool Bullet::MapOutCheck()
 	{

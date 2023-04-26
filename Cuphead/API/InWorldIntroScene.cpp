@@ -250,7 +250,7 @@ namespace yeram_client
 				{
 					eye_ani->GetOwner()->SetActive(false);
 				});
-				head_ani->GetEndEvent(L"World4IntroAnichalice17_1") = std::bind([eye_ani, this]()->void
+				head_ani->GetCompleteEvent(L"World4IntroAnichalice17_1") = std::bind([eye_ani, this]()->void
 				{
 					mbEndFlag = true;
 				});
@@ -312,7 +312,7 @@ namespace yeram_client
 					tf->SetOffset(Vector2{ 140.0f,-20.0f });
 				});
 				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
-				soul_ani->GetEndEvent(L"World4IntroAnichalice15_effect") = std::bind([soul_ani, gost_ani]()->void
+				soul_ani->GetCompleteEvent(L"World4IntroAnichalice15_effect") = std::bind([soul_ani, gost_ani]()->void
 				{
 					soul_ani->SetActive(false);
 					gost_ani->GetOwner()->SetActive(true);
@@ -457,7 +457,7 @@ namespace yeram_client
 				{
 					mouse_ani->GetOwner()->SetActive(false);
 				});
-				mouse_ani->GetEndEvent(L"World4IntroAnichalice14_mouse") = std::bind([mouse_ani, this]()->void
+				mouse_ani->GetCompleteEvent(L"World4IntroAnichalice14_mouse") = std::bind([mouse_ani, this]()->void
 				{
 					ActiveShot6();
 				});

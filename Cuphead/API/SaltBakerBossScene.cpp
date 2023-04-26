@@ -63,6 +63,7 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase1_Info_Register()
 	{
+
 		Vector2 pos = application.GetWindowSize();
 		std::shared_ptr<GameObject> farbg = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
@@ -82,7 +83,7 @@ namespace yeram_client
 			sprite->SetRenderType(ERenderType::TransParentBlt);
 			Transform* tf = bg->GetComponent<Transform>();
 			tf->SetPos(Vector2{ 0.0f,-220.0f });
-			tf->SetSize(Vector2{ pos.x+100.0f,pos.y/2.0f+pos.y/3.0f});
+			tf->SetSize(Vector2{ pos.x + 100.0f,pos.y / 2.0f + pos.y / 3.0f });
 			AddGameObject(bg, ELayerType::BackObject);
 		}
 		std::shared_ptr<GameObject> side_table = core::ObjectPool<SpriteRenderer>::Spawn();
@@ -117,7 +118,7 @@ namespace yeram_client
 			tf->SetPos(Vector2{ 125.0f,235.0f });
 			AddGameObject(glass, ELayerType::BackObject);
 		}
-		
+
 		std::shared_ptr<GameObject> front_obj1 = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
 			front_obj1->SetName(L"front_left_obj");
@@ -125,7 +126,7 @@ namespace yeram_client
 			sprite->SetImage(L"sb_ph1_ph2_front_left_obj", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\bg\\03-sb_ph1_ph2_fg_objects_left.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
 			Transform* tf = front_obj1->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 0.0f,pos.y/2.0f + 250.0f});
+			tf->SetPos(Vector2{ 0.0f,pos.y / 2.0f + 250.0f });
 			AddGameObject(front_obj1, ELayerType::FrontObject);
 		}
 		std::shared_ptr<GameObject> front_obj2 = core::ObjectPool<SpriteRenderer>::Spawn();
@@ -138,15 +139,6 @@ namespace yeram_client
 			tf->SetPos(Vector2{ pos.x - 300.0f,pos.y / 2.0f + 220.0f });
 			AddGameObject(front_obj2, ELayerType::FrontObject);
 		}
-		
-		/*std::shared_ptr<GameObject> saltbaker = core::ObjectPool<SaltBaker>::Spawn();
-		{
-			saltbaker->SetName(L"saltbaker");
-			SaltBaker* sb = saltbaker->GetComponent<SaltBaker>();
-			std::shared_ptr<GameObject> arm = sb->GetParts(SaltBaker::EParts::ARM);
-			AddGameObject(arm, ELayerType::FrontObject);
-			AddGameObject(saltbaker, ELayerType::BackObject);
-		}*/
 		std::shared_ptr<GameObject> mid = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
 			mid->SetName(L"bg_main");
@@ -156,42 +148,18 @@ namespace yeram_client
 			Transform* tf = mid->GetComponent<Transform>();
 			tf->SetPos(Vector2{ 0.0f,500.0f });
 			tf->SetScale(Vector2{ 1.3f,1.3f });
-			AddGameObject(mid, ELayerType::BackObject);
+
 		}
+		std::shared_ptr<GameObject> saltbaker = core::ObjectPool<SaltBaker>::Spawn();
+		saltbaker->SetName(L"saltbaker");
+		SaltBaker* sb = saltbaker->GetComponent<SaltBaker>();
+		AddGameObject(saltbaker, ELayerType::BackObject);
 
-		std::shared_ptr<GameObject> zigzag_bullet = core::ObjectPool<ZigZagBullet>::Spawn();
-		{
-			ZigZagBullet* zigzag = zigzag_bullet->GetComponent<ZigZagBullet>();
-			zigzag->CreateAnimation(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_camel\\camel_type1\\1s", Vector2::Zero, 0.1f);
-			zigzag->SetPos(Vector2{ 100.0f,500.0f });
-			zigzag->CreateInfo(Vector2{ 100.0f,200.0f }, Vector2{ 100.0f,100.0f }, Vector2{ 1.0f,-1.0f });
-			zigzag->Shoot();
-			Animator* ani = zigzag_bullet->GetComponent<Animator>();
-			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_camel\\camel_type1\\1e", Vector2::Zero, 0.1f);
-			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_camel\\camel_type1\\2s", Vector2::Zero, 0.1f);
-			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_camel\\camel_type1\\2e", Vector2::Zero, 0.1f);
-
-			ani->GetEndEvent(L"camel_type11s") = std::bind([ani]()->void
-			{
-				ani->Play(L"camel_type11e", false);
-			});
-
-			ani->GetEndEvent(L"camel_type11e") = std::bind([ani]()->void
-			{
-				ani->Play(L"camel_type12s", false);
-			});
-			ani->GetEndEvent(L"camel_type12s") = std::bind([ani]()->void
-			{
-				ani->Play(L"camel_type12e", false);
-			});
-			ani->GetEndEvent(L"camel_type12e") = std::bind([ani]()->void
-			{
-				ani->Play(L"camel_type11s", false);
-			});
-			ani->Play(L"camel_type11s", false);
-			AddGameObject(zigzag_bullet, ELayerType::Bullet);
-		}
-
+		AddGameObject(mid, ELayerType::BackObject);
+		std::shared_ptr<GameObject> arm = sb->GetParts(SaltBaker::EParts::ARM);
+		std::shared_ptr<GameObject> sugar = sb->GetParts(SaltBaker::EParts::ACC);
+		AddGameObject(sugar, ELayerType::BackObject);
+		AddGameObject(arm, ELayerType::BackObject);
 		Scene::OnEnter();
 	}
 	void SaltBakerBossScene::Phase2_Info_Register()

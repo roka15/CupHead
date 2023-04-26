@@ -6,6 +6,14 @@ namespace yeram_client
 	class SaltBaker :public Boss
 	{
 	public:
+		struct SpawnInfo
+		{
+			bool mActive;
+			double mCoolTime;
+			int mCount;
+			double mSpawnTime;
+			std::function<void()> mSpawnEvent;
+		};
 		SaltBaker();
 		virtual ~SaltBaker();
 		virtual void Initialize()override;
@@ -17,11 +25,20 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
 	private:
+		virtual void Phase1()override;
+		virtual void Phase2()override;
+		virtual void Phase3()override;
 		void RegisterPattern1();
 		void RegisterPattern2();
 		void RegisterPattern3();
+
+		void P1AttackType1();
+		void P1AttackType2();
 	private:
 		EGameObjectType mobjType;
+		std::map<EPhaseType, std::map<EAttackType, std::vector<std::wstring>>> mPhaseInfo;
+		std::vector<std::wstring> mActiveAttack;
+		std::map<EPhaseType, std::map<EAttackType, SpawnInfo*>> mAttackCheck;
 	};
 }
 

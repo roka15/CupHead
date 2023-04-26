@@ -16,7 +16,7 @@ namespace yeram_client
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
 		
-	
+		
 	private:
 		
 	};

@@ -19,9 +19,10 @@ namespace yeram_client
 		void CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos,bool _despawn=false, bool _outcheck=false);
 		void CreateInfo(const Vector2& _speed,const Vector2& _dir, bool _despawn = false, bool _outcheck = false);
 		void CreateInfo(const Vector2& _speed, const Vector2& _dir, const Vector2& _kill_pos, bool _despawn = false, bool _outcheck = false);
+		void WaveMove();
 		void Move();
 		bool IsArrive() { return mbArrive; }
-
+		void SetWave(bool _flag) { mbWave = _flag; }
 		const UINT& GetID() { return mID; }
 		void SetArriveEvent(std::function<void()> _func) { mArriveEvent = _func; }
 	private:
@@ -35,6 +36,7 @@ namespace yeram_client
 		Vector2 mEndPos;
 		Vector2 mStartPos;
 		Vector2 mDirpos;
+		bool mbWave;
 		bool mbEndFlag;
 		bool mbOutCheck;
 		bool mbDespawn;
