@@ -34,6 +34,8 @@ namespace yeram_client
 
 		void P1AttackType1();
 		void P1AttackType2();
+		void P1AttackType4();
+		void P1AttackType5();
 	private:
 		EGameObjectType mobjType;
 		std::map<EPhaseType, std::map<EAttackType, std::vector<std::wstring>>> mPhaseInfo;

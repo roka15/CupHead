@@ -24,6 +24,7 @@ enum class  ELayerType
 	Monster,
 	Player,
 	Bullet,
+	PlayerBullet,
 	FrontObject,
 	Effect,
 	UI,

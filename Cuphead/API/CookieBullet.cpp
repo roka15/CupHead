@@ -1,5 +1,6 @@
 #include "CookieBullet.h"
 #include "GameObject.h"
+#include "PlayerBullet.h"
 namespace yeram_client
 {
 	CookieBullet::CookieBullet():ZigZagBullet()
@@ -30,6 +31,12 @@ namespace yeram_client
 		SetCompleteEvent(L"camel_type2");
 		SetCompleteEvent(L"camel_type3");
 
+		mAni->GetCompleteEvent(L"dough_cameleffect") = std::bind([this]()->void
+		{
+			GetOwner()->SetActive(false);
+			SceneManager::RemoveObjectRequest(GetOwner());
+		});
+
 	}
 	void CookieBullet::Update()
 	{
@@ -42,6 +49,7 @@ namespace yeram_client
 	}
 	void CookieBullet::OnCollisionEnter(Collider* other)
 	{
+		Bullet::OnCollisionEnter(other);
 	}
 	void CookieBullet::OnCollisionStay(Collider* other)
 	{
@@ -55,6 +63,14 @@ namespace yeram_client
 	}
 	void CookieBullet::Death(Collider* _other)
 	{
+		ZigZagBullet::Death(_other);
+		PlayerBullet* pb = _other->GetOwner()->GetComponent<PlayerBullet>();
+		if (pb != nullptr)
+		{
+			//부셔지기.
+			//애니 complete ani 에 removeobject 함수 연결해두기.
+			mAni->Play(L"dough_cameleffect", false);
+		}
 	}
 	void CookieBullet::SetColInfo(std::wstring _ani_name)
 	{

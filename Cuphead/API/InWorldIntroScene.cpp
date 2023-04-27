@@ -282,6 +282,7 @@ namespace yeram_client
 			Animator* soul_ani = nullptr;
 			MoveObject* mv = portal->AddComponent<MoveObject>();
 			mv->SetActive(false);
+	
 			std::shared_ptr<GameObject> soul = core::ObjectPool<Animator>::Spawn();
 			{
 				soul->SetName(L"soul");

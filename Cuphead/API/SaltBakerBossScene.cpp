@@ -6,6 +6,11 @@
 #include "MoveObject.h"
 #include "ZigZagBullet.h"
 #include "SaltBaker.h"
+#include "Ground.h"
+#include "Player.h"
+#include "Character.h"
+#include "ColliderManager.h"
+
 
 extern yeram_client::Application application;
 namespace yeram_client
@@ -30,6 +35,8 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::BackColObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
+		mLayers[(UINT)ELayerType::Ground] = new Layer();
+		mLayers[(UINT)ELayerType::Monster] = new Layer();
 		mLayers[(UINT)ELayerType::Player] = new Layer();
 		mLayers[(UINT)ELayerType::Bullet] = new Layer();
 		Scene::Initialize();
@@ -52,9 +59,54 @@ namespace yeram_client
 
 	void SaltBakerBossScene::OnEnter()
 	{
+		Scene::OnEnter();
+		std::shared_ptr<GameObject> player_obj = FindObject(L"Player");
+		if (player_obj == nullptr)
+		{
+			std::shared_ptr<GameObject> player_obj = core::ObjectPool<Player>::Spawn();
+			player_obj->SetName(L"Player");
+			Transform* tf = player_obj->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 400.0f,400.0f });
+
+
+			std::shared_ptr<GameObject> player_reg = core::ObjectPool<Animator>::Spawn();
+			player_reg->SetName(L"Reg");
+			player_obj->AddChild(player_reg);
+			std::shared_ptr<GameObject> player_head = core::ObjectPool<Animator>::Spawn();
+			player_head->SetName(L"Head");
+			player_obj->AddChild(player_head);
+
+			std::shared_ptr<GameObject> player_shooter = core::ObjectPool<Animator>::Spawn();
+			player_shooter->SetName(L"Shooter");
+			player_obj->AddChild(player_shooter);
+
+			Player* player = player_obj->GetComponent<Player>();
+			player->CreateCharacter(EPlayerType::MsChalice);
+			player->CreateCharacter(EPlayerType::Cuphead);
+			player->ChangeCharacter(EPlayerType::MsChalice);
+			player->GetActiveCharacter()->Initialize();
+
+			Rigidbody* rigd = player_obj->GetComponent<Rigidbody>();
+			rigd->Use_Gravity(true);
+			rigd->SetGround(false);
+			rigd->SetMass(1.0f);
+
+			player_obj->SetActive(true);
+			SceneManager::GetActiveScene()->AddGameObject(player_obj, ELayerType::Player);
+		}
+		else
+		{
+			player_obj->SetActive(true);
+		}
+	
+		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Ground, true);
+		ColliderManager::SetLayer(ELayerType::Player, ELayerType::Ground, true);
+		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Bullet, true);
+		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Player, true);
 		Phase1_Info_Register();
 		Phase2_Info_Register();
 		Phase3_Info_Register();
+		
 	}
 
 	void SaltBakerBossScene::OnExit()
@@ -63,7 +115,6 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase1_Info_Register()
 	{
-
 		Vector2 pos = application.GetWindowSize();
 		std::shared_ptr<GameObject> farbg = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
@@ -139,28 +190,30 @@ namespace yeram_client
 			tf->SetPos(Vector2{ pos.x - 300.0f,pos.y / 2.0f + 220.0f });
 			AddGameObject(front_obj2, ELayerType::FrontObject);
 		}
-		std::shared_ptr<GameObject> mid = core::ObjectPool<SpriteRenderer>::Spawn();
+		std::shared_ptr<GameObject> mid = core::ObjectPool<Ground>::Spawn();
 		{
 			mid->SetName(L"bg_main");
-			SpriteRenderer* sprite = mid->GetComponent<SpriteRenderer>();
+			SpriteRenderer* sprite = mid->AddComponent<SpriteRenderer>();
 			sprite->SetImage(L"sb_ph1_ph2_bg_mid_table", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\bg\\04-sb_ph1_ph2_mid_table.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
 			Transform* tf = mid->GetComponent<Transform>();
 			tf->SetPos(Vector2{ 0.0f,500.0f });
 			tf->SetScale(Vector2{ 1.3f,1.3f });
-
+			Vector2 scale = tf->GetScale();
+			Collider* col = mid->GetComponent<Collider>();
+			col->SetCenter(Vector2{ 0.0f, +(sprite->GetHeight())/2.0f });
+			col->SetSize(Vector2{ sprite->GetWidth()*scale.x,sprite->GetHeight()*scale.y /2.0f});
 		}
 		std::shared_ptr<GameObject> saltbaker = core::ObjectPool<SaltBaker>::Spawn();
 		saltbaker->SetName(L"saltbaker");
 		SaltBaker* sb = saltbaker->GetComponent<SaltBaker>();
 		AddGameObject(saltbaker, ELayerType::BackObject);
 
-		AddGameObject(mid, ELayerType::BackObject);
+		AddGameObject(mid, ELayerType::Ground);
 		std::shared_ptr<GameObject> arm = sb->GetParts(SaltBaker::EParts::ARM);
 		std::shared_ptr<GameObject> sugar = sb->GetParts(SaltBaker::EParts::ACC);
-		AddGameObject(sugar, ELayerType::BackObject);
-		AddGameObject(arm, ELayerType::BackObject);
-		Scene::OnEnter();
+		AddGameObject(sugar, ELayerType::Monster);
+		AddGameObject(arm, ELayerType::Monster);
 	}
 	void SaltBakerBossScene::Phase2_Info_Register()
 	{

@@ -1,6 +1,7 @@
 #include "SugarBullet.h"
 #include "GameObject.h"
 #include "MoveObject.h"
+#include "Player.h"
 namespace yeram_client
 {
 	SugarBullet::SugarBullet() :ZigZagBullet()
@@ -29,6 +30,7 @@ namespace yeram_client
 	}
 	void SugarBullet::OnCollisionEnter(Collider* other)
 	{
+		ZigZagBullet::OnCollisionEnter(other);
 	}
 	void SugarBullet::OnCollisionStay(Collider* other)
 	{
@@ -42,6 +44,25 @@ namespace yeram_client
 	}
 	void SugarBullet::Death(Collider* _other)
 	{
+		GameObject* other_owner = _other->GetOwner();
+		Player* player = other_owner->GetComponent<Player>();
+		if (player!=nullptr)
+		{
+			if (mbParry == true)
+			{
+				bool suc = player->Parry_Check();
+				if (suc == true)
+				{
+					SceneManager::RemoveObjectRequest(GetOwner());
+					return;
+				}
+
+			}
+			//데미지 주기
+		}
+
+		//터지기.
+
 	}
 	void SugarBullet::SetColInfo(std::wstring _ani_name)
 	{

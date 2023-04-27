@@ -47,6 +47,7 @@ namespace yeram_client
 
 	void ZigZagBullet::OnCollisionEnter(Collider* other)
 	{
+		Bullet::OnCollisionEnter(other);
 	}
 
 	void ZigZagBullet::OnCollisionStay(Collider* other)
@@ -64,26 +65,8 @@ namespace yeram_client
 
 	void ZigZagBullet::Death(Collider* _other)
 	{
+		Bullet::Death(_other);
 		
-		GameObject* other_owner = _other->GetOwner();
-		if (other_owner->GetName().compare(L"Player") == 0)
-		{
-			if (mbParry == true)
-			{
-				Player* player = other_owner->GetComponent<Player>();
-				bool suc = player->Parry_Check();
-				if (suc == true)
-				{
-					SceneManager::GetActiveScene()->RemoveGameObject(mOwner);
-					return;
-				}
-
-			}
-			//데미지 주기
-		}
-
-		//터지기.
-
 
 
 	}

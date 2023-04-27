@@ -102,6 +102,7 @@ namespace yeram_client
 
 	void SaltBakerIntroScene::OnEnter()
 	{
+		Scene::OnEnter();
 		Vector2 WindowSize = application.GetWindowSize();
 		std::shared_ptr<GameObject> player = FindObject(L"Player");
 		{
@@ -317,6 +318,7 @@ namespace yeram_client
 
 	void SaltBakerIntroScene::OnExit()
 	{
+		Scene::OnExit();
 	}
 
 }

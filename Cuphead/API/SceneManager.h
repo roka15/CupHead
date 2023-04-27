@@ -31,6 +31,9 @@ namespace yeram_client
 		static void SetLoadSceneMessage(std::function<void()> _func_event) { mLoadMessageEvent = _func_event; };
 		static void UseUI(bool _flag) { mbUseUI = _flag; }
 		static bool UseUI() { return  mbUseUI; }
+
+		static void RemoveObjectRequest(GameObject* _obj) { mRemoveRequestObjs.push(_obj); }
+		static void RemoveObjectRequestRelease();
 	private:
 		SceneManager()=delete;
 		~SceneManager();
@@ -46,6 +49,7 @@ namespace yeram_client
 		static bool mbCompleteLoad;
 		static std::function<void()> mLoadMessageEvent;
 		static bool mbUseUI;
+		static std::queue<GameObject*> mRemoveRequestObjs;
 	};
 }
 

@@ -16,6 +16,8 @@
 #include "SaltBaker.h"
 #include "CookieBullet.h"
 #include "SugarBullet.h"
+#include "BerryBullet.h"
+#include "LemonBullet.h"
 #include "WorldMapObject.h"
 #include "Ground.h"
 #include "PlayerBullet.h"
@@ -38,6 +40,7 @@ namespace yeram_client
 	bool SceneManager::mbCompleteLoad;
 	std::function<void()> SceneManager::mLoadMessageEvent;
 	bool SceneManager::mbUseUI;
+	std::queue<GameObject*> SceneManager::mRemoveRequestObjs;
 	void SceneManager::Initalize()
 	{
 		core::Loading::Initialize();
@@ -71,6 +74,8 @@ namespace yeram_client
 		core::ObjectPool<SaltBaker>::Initialize(1);
 		core::ObjectPool<CookieBullet>::Initialize(100, 200);
 		core::ObjectPool<SugarBullet>::Initialize(100, 200);
+		core::ObjectPool<BerryBullet>::Initialize(100, 200);
+		core::ObjectPool<LemonBullet>::Initialize(100, 200);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -172,6 +177,7 @@ namespace yeram_client
 			mLoadMessageEvent();
 			mLoadMessageEvent = nullptr;
 		}
+		RemoveObjectRequestRelease();
 	}
 
 	void SceneManager::Render(HDC hdc)
@@ -200,6 +206,9 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
+
+		core::ObjectPool<LemonBullet>::Release();
+		core::ObjectPool<BerryBullet>::Release();
 		core::ObjectPool<SugarBullet>::Release();
 		core::ObjectPool<CookieBullet>::Release();
 		core::ObjectPool<SaltBaker>::Release();
@@ -295,6 +304,16 @@ namespace yeram_client
 		if (cur != nullptr)
 			cur->OnExit();
 		mActiveScene->OnEnter();
+	}
+
+	void SceneManager::RemoveObjectRequestRelease()
+	{
+		while (mRemoveRequestObjs.empty() == false)
+		{
+			GameObject* obj = mRemoveRequestObjs.front();
+			mRemoveRequestObjs.pop();
+			RemoveObject(obj);
+		}
 	}
 
 	SceneManager::~SceneManager()

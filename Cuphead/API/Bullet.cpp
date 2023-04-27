@@ -54,10 +54,10 @@ namespace yeram_client
 	void Bullet::Reset()
 	{
 		mID = 0;
-		if (GetOwner()->GetName() != L"Player")
+		/*if (GetOwner()->GetName() != L"Player")
 		{
 			mbParry = rand() % 2;
-		}
+		}*/
 		mDamage = 1;
 	}
 
@@ -137,6 +137,15 @@ namespace yeram_client
 		Vector2 dir = _dirpos;
 		dir = dir.Normalize();
 		mMoveObject->CreateInfo(_speed, dir, true, true);
+	}
+
+	void Bullet::CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos, const Vector2& _killpos, bool _dir)
+	{
+		Reset();
+		SetPos(_startpos);
+		Vector2 dir = _dirpos;
+		dir = dir.Normalize();
+		mMoveObject->CreateInfo(_speed, dir, _killpos, true, true);
 	}
 
 

@@ -197,22 +197,35 @@ namespace yeram_client
 				{
 					if (originpos.x >= mEndPos.x)
 						xflag = true;
+					else if (mbOutCheck == true && map_out_flag == false)
+						xflag = false;
 				}
 				else if (mStartPos.x > mEndPos.x)
 				{
 					if (originpos.x <= mEndPos.x)
 						xflag = true;
+					else if (mbOutCheck == true && map_out_flag == false)
+						xflag = false;
 				}
+				else if (originpos.x == mEndPos.x)
+					xflag = true;
+
 				if (mStartPos.y < mEndPos.y)
 				{
 					if (originpos.y >= mEndPos.y)
 						yflag = true;
+					else if (mbOutCheck == true && map_out_flag == false)
+						yflag = false;
 				}
 				else if (mStartPos.y > mEndPos.y)
 				{
 					if (originpos.y <= mEndPos.y)
 						yflag = true;
+					else if (mbOutCheck == true && map_out_flag == false)
+						yflag = false;
 				}
+				else if (originpos.y == mEndPos.y)
+					yflag = true;
 			}
 		}
 		if (xflag == false)
@@ -228,7 +241,7 @@ namespace yeram_client
 			mbArrive = true;
 			if (map_out_flag==true && mbDespawn == true)
 			{
-				SceneManager::RemoveObject(GetOwner());
+				SceneManager::RemoveObjectRequest(GetOwner());
 			}
 			else
 			{

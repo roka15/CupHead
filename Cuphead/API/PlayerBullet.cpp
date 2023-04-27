@@ -134,7 +134,7 @@ namespace yeram_client
 		
 		mAni->GetEndEvent(L"weaponnormal_shot_death") = std::bind([this]()->void
 		{
-			SceneManager::RemoveObject(mOwner);
+			SceneManager::RemoveObjectRequest(mOwner);
 		});
 		//mAni->Play(L"normal_shot_introRight",false);
 	}
