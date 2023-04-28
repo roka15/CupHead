@@ -17,6 +17,7 @@ namespace yeram_client
 {
 	Player::Player() :Script()
 	{
+		mHP = 4;
 		SetName(L"Player");
 		mobjType = EGameObjectType::Player;
 	}
@@ -45,6 +46,7 @@ namespace yeram_client
 	}
 	void Player::Render(HDC hdc)
 	{
+		mCharacter->Render(hdc);
 	}
 	void Player::Release()
 	{
@@ -185,5 +187,13 @@ namespace yeram_client
 	Vector2 Player::GetMoveOffset()
 	{
 		return mCharacter->GetMoveOffset();
+	}
+	void Player::TakeDamage()
+	{
+		mHP--; 
+		if (mHP <= 0)
+		{
+			//게임 종료
+		}
 	}
 }

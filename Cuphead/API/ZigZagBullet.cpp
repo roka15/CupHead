@@ -52,6 +52,7 @@ namespace yeram_client
 
 	void ZigZagBullet::OnCollisionStay(Collider* other)
 	{
+		Bullet::OnCollisionStay(other);
 	}
 
 	void ZigZagBullet::OnCollisionExit(Collider* other)

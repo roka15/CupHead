@@ -51,6 +51,16 @@ namespace yeram_client
 
 	void Chalice::Render(HDC hdc)
 	{
+		//총알 스폰 지점 확인용
+		/*
+			Vector2 owner_pos = mOwner->GetComponent<Transform>()->GetPos();
+			for (auto vec2 : mShooterSpawnPos)
+			{
+				Vector2 pos = vec2.second;
+				::Rectangle(hdc, owner_pos.x + (pos.x - 10), owner_pos.x + (pos.y - 10), owner_pos.x + (pos.x + 10), owner_pos.y + (pos.y + 10));
+			}
+		*/
+		
 	}
 
 	void Chalice::Release()
@@ -272,6 +282,7 @@ namespace yeram_client
 					ani_name = ani->GetDirAniKey(L"ShootAim", h_key, v_key);
 					shoot_dir = ani->GetDirAniKey(L"", h_key, v_key);
 					mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(2, h_key, v_key));
+					
 				}
 				else if (horizontal_flag == true)
 				{
@@ -850,6 +861,7 @@ namespace yeram_client
 		PlayerBullet* bullet = bullet_obj->GetComponent<PlayerBullet>();
 		bullet->CreateInfo(start_pos, mbulletInfo.mdir);
 		bullet->Shoot(dir_key);
+		
 		SceneManager::GetActiveScene()->AddGameObject(bullet_obj, ELayerType::Bullet);
 		mbulletInfo.mshoot_time = mTime;
 		mbulletInfo.mdirstr = dir_key;
@@ -1292,6 +1304,7 @@ namespace yeram_client
 		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::RUN | (UINT)EDirType::RIGHT, Vector2{ offset.x - 10,offset.y }));
 		mShooterSpawnPos.insert(std::make_pair((UINT)EDirType::RUN | (UINT)EDirType::LEFT, Vector2{ -(offset.x) + 10,offset.y }));
 	}
+
 
 
 	void Chalice::JumpShoot(bool h_flag, bool v_flag, EDirType h_key, EDirType v_key)

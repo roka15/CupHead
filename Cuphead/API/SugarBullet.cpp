@@ -34,6 +34,7 @@ namespace yeram_client
 	}
 	void SugarBullet::OnCollisionStay(Collider* other)
 	{
+		ZigZagBullet::OnCollisionStay(other);
 	}
 	void SugarBullet::OnCollisionExit(Collider* other)
 	{
@@ -55,6 +56,10 @@ namespace yeram_client
 				{
 					SceneManager::RemoveObjectRequest(GetOwner());
 					return;
+				}
+				else
+				{
+
 				}
 
 			}

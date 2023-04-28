@@ -69,6 +69,7 @@ namespace yeram_client
 
 	void Bullet::OnCollisionStay(Collider* other)
 	{
+		Death(other);
 	}
 
 	void Bullet::OnCollisionExit(Collider* other)
@@ -116,9 +117,10 @@ namespace yeram_client
 		
 		Vector2 size = mAni->GetSpriteSize(_ani_name);
 		const Vector2& scale = mTransform->GetScale();
-		mColider->SetCenter(Vector2{ -(size.x / 2),-size.y });
 		size *= scale;
 		mColider->SetSize(size);
+		mColider->SetCenter(Vector2{ -(size.x / 2),-size.y });
+		
 	}
 
 	void Bullet::CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _endpos)
@@ -146,6 +148,11 @@ namespace yeram_client
 		Vector2 dir = _dirpos;
 		dir = dir.Normalize();
 		mMoveObject->CreateInfo(_speed, dir, _killpos, true, true);
+	}
+
+	void Bullet::SetEndPos()
+	{
+		mMoveObject->SetEndPos();
 	}
 
 

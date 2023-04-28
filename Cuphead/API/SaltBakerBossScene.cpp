@@ -36,6 +36,7 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::BackColObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 		mLayers[(UINT)ELayerType::Ground] = new Layer();
+		mLayers[(UINT)ELayerType::Boss] = new Layer();
 		mLayers[(UINT)ELayerType::Monster] = new Layer();
 		mLayers[(UINT)ELayerType::Player] = new Layer();
 		mLayers[(UINT)ELayerType::Bullet] = new Layer();
@@ -103,6 +104,7 @@ namespace yeram_client
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::Ground, true);
 		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Bullet, true);
 		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Player, true);
+		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Boss, true);
 		Phase1_Info_Register();
 		Phase2_Info_Register();
 		Phase3_Info_Register();
@@ -155,7 +157,7 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\6", Vector2::Zero, 0.01f);
 			ani->Play(L"salt_baker_boss_intro_scene6", true);
 			Transform* tf = cuphead->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 200.0f,380.0f });
+			tf->SetPos(Vector2{ 170.0f,310.0f });
 			tf->SetScale(Vector2{ 0.5f,0.5f });
 			AddGameObject(cuphead, ELayerType::BackObject);
 		}
@@ -207,7 +209,7 @@ namespace yeram_client
 		std::shared_ptr<GameObject> saltbaker = core::ObjectPool<SaltBaker>::Spawn();
 		saltbaker->SetName(L"saltbaker");
 		SaltBaker* sb = saltbaker->GetComponent<SaltBaker>();
-		AddGameObject(saltbaker, ELayerType::BackObject);
+		AddGameObject(saltbaker, ELayerType::Boss);
 
 		AddGameObject(mid, ELayerType::Ground);
 		std::shared_ptr<GameObject> arm = sb->GetParts(SaltBaker::EParts::ARM);

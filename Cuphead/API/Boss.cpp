@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "MoveObject.h"
 #include "Time.h"
+#include "PlayerBullet.h"
 namespace yeram_client
 {
 	Boss::Boss()
@@ -19,7 +20,8 @@ namespace yeram_client
 		mCol = owner->AddComponent<Collider>();
 		mAni = owner->AddComponent<Animator>();
 		mTransform = owner->GetComponent<Transform>();
-		mPhaseType = EPhaseType::NONE;
+		mPhaseType = EPhaseType::PHASE1;
+		mbChagePhase = false;
 	}
 
 	void Boss::Update()
@@ -46,9 +48,16 @@ namespace yeram_client
 	void Boss::Release()
 	{
 	}
-	
+
 	void Boss::OnCollisionEnter(Collider* other)
 	{
+		GameObject* owner = other->GetOwner();
+		PlayerBullet* player_bullet = owner->GetComponent<PlayerBullet>();
+		if (player_bullet != nullptr)
+		{
+			mHP;
+			TakeDamage();
+		}
 	}
 
 	void Boss::OnCollisionStay(Collider* other)
@@ -57,6 +66,19 @@ namespace yeram_client
 
 	void Boss::OnCollisionExit(Collider* other)
 	{
+	}
+
+	void Boss::TakeDamage()
+	{
+		mHP--;
+		if ((mMaxHP / 3) < mHP&& mHP <= mMaxHP - (mMaxHP / 3))//phase 2 전환
+		{
+			mbChagePhase = true;
+		}
+		else if (mHP < (mMaxHP / 3)) // phase 3 전환
+		{
+			mbChagePhase = true;
+		}
 	}
 
 	void Boss::Phase1()

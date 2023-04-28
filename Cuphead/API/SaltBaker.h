@@ -11,8 +11,10 @@ namespace yeram_client
 			bool mActive;
 			double mCoolTime;
 			int mCount;
+			int mCurCount;
 			double mSpawnTime;
 			std::function<void()> mSpawnEvent;
+			~SpawnInfo() {}
 		};
 		SaltBaker();
 		virtual ~SaltBaker();
@@ -40,7 +42,7 @@ namespace yeram_client
 		EGameObjectType mobjType;
 		std::map<EPhaseType, std::map<EAttackType, std::vector<std::wstring>>> mPhaseInfo;
 		std::vector<std::wstring> mActiveAttack;
-		std::map<EPhaseType, std::map<EAttackType, SpawnInfo*>> mAttackCheck;
+		std::map<EPhaseType, std::map<EAttackType, std::shared_ptr<SpawnInfo>>> mAttackCheck;
 	};
 }
 

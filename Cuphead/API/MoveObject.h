@@ -25,6 +25,7 @@ namespace yeram_client
 		void SetWave(bool _flag) { mbWave = _flag; }
 		const UINT& GetID() { return mID; }
 		void SetArriveEvent(std::function<void()> _func) { mArriveEvent = _func; }
+		void SetEndPos();
 	private:
 
 		virtual void OnCollisionEnter(class Collider* other)override;

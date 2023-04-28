@@ -16,6 +16,7 @@ namespace yeram_client
 {
 	SaltBaker::SaltBaker() :Boss()
 	{
+		mMaxHP = mHP = 600;
 		SetName(L"SaltBaker");
 		mobjType = EGameObjectType::Boss;
 	}
@@ -30,6 +31,8 @@ namespace yeram_client
 		mMoveObject->CreateInfo(Vector2{ 550.0f,20.0f }, Vector2{ -1.0f,-1.0f });
 		mMoveObject->SetActive(false);
 
+		mCol->SetCenter(Vector2{ -125.0f,-480.0f });
+		mCol->SetSize(Vector2{ 200.0f,100.0f });
 
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro", Vector2::Zero, 0.1f);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro2", Vector2::Zero, 0.1f);
@@ -91,7 +94,7 @@ namespace yeram_client
 		Animator* ani = mAni;
 		MoveObject* mv = mMoveObject;
 		SetPhase(EPhaseType::PHASE1);
-#pragma region intro event
+ #pragma region intro event
 		mAni->GetCompleteEvent(L"saltbaker_phase_1intro") = std::bind([ani]()->void
 		{
 			ani->Play(L"saltbaker_phase_1intro2", false);
@@ -111,8 +114,8 @@ namespace yeram_client
 			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
 			Transform* a_tf = arm->GetComponent<Transform>();
 			Vector2 pos = a_tf->GetPos();
-			pos.x += 50.0f;
-			pos.y += 50.0f;
+			//pos.x += 50.0f;
+			pos.y += 20.0f;
 			a_tf->SetPos(pos);
 			arm->SetActive(false);
 			arm->GetComponent<MoveObject>()->SetActive(false);
@@ -172,8 +175,8 @@ namespace yeram_client
 			
 			Transform* a_tf = arm->GetComponent<Transform>();
 			Vector2 pos = o_pos;
-			pos.x -= 0.0f;
-			pos.y += 30.0f;
+			pos.x -= 80.0f;
+			//pos.y += 30.0f;
 			a_tf->SetPos(pos);
 			GameObject* owner = ani->GetOwner();
 			MoveObject* o_mv = owner->GetComponent<MoveObject>();
@@ -336,7 +339,7 @@ namespace yeram_client
 			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
 			Transform* s_tf = sugar->GetComponent<Transform>();
 			Vector2 pos = s_tf->GetPos();
-			pos.x += 60.0f;
+			pos.x -= 100.0f;
 			pos.y += 110.0f;
 			s_tf->SetPos(pos);
 			sugar->GetComponent<Animator>()->Play(L"attack_type22_sugar", false);
@@ -485,7 +488,7 @@ namespace yeram_client
 			Vector2 pos = o_tf->GetPos();
 			Transform* a_tf = arm->GetComponent<Transform>();
 			pos.x -= 100.0f;
-			pos.y += 100.0f;
+			//pos.y += 100.0f;
 			a_tf->SetPos(pos);
 			Animator* a_ani = arm->GetComponent<Animator>();
 			a_ani->Play(L"attack_type42_arm", false);
@@ -503,7 +506,7 @@ namespace yeram_client
 			Vector2 pos = o_tf->GetPos();
 			Transform* a_tf = acc->GetComponent<Transform>();
 			pos.x -= 00.0f;
-			pos.y += 100.0f;
+			//pos.y += 100.0f;
 			a_tf->SetPos(pos);
 			Animator* a_ani = acc->GetComponent<Animator>();
 			a_ani->Play(L"attack_type43_remon", false);
@@ -521,7 +524,7 @@ namespace yeram_client
 			Vector2 pos = o_tf->GetPos();
 			Transform* a_tf = arm->GetComponent<Transform>();
 			pos.x += 250.0f;
-			pos.y += 50.0f;
+			//pos.y += 50.0f;
 			a_tf->SetPos(pos);
 			MoveObject* amv = arm->GetComponent<MoveObject>();
 			//amv->SetActive(true);
@@ -542,7 +545,7 @@ namespace yeram_client
 			Vector2 pos = o_tf->GetPos();
 			Transform* a_tf = acc->GetComponent<Transform>();
 			pos.x -= 00.0f;
-			pos.y += 100.0f;
+			//pos.y += 100.0f;
 			a_tf->SetPos(pos);
 			Animator* a_ani = acc->GetComponent<Animator>();
 			a_ani->Play(L"attack_type45_remon", false);
@@ -559,8 +562,8 @@ namespace yeram_client
 			Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
 			Vector2 pos = o_tf->GetPos();
 			Transform* a_tf = arm->GetComponent<Transform>();
-			pos.x += 100.0f;
-			pos.y += 100.0f;
+			pos.x += 120.0f;
+			//pos.y += 100.0f;
 			a_tf->SetPos(pos);
 			//MoveObject* amv = acc->GetComponent<MoveObject>();
 			//amv->SetActive(true);
@@ -582,7 +585,7 @@ namespace yeram_client
 			mAttackCheck[EPhaseType::PHASE1][EAttackType::Type4]->mActive = true;
 			mv->SetActive(true);
 			Vector2 pos = mv->GetOwner()->GetComponent<Transform>()->GetPos();
-			mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ 200.0f,pos.y });
+			mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ 300.0f,pos.y });
 			mv->SetArriveEvent(std::bind([mv,ani]()->void
 			{
 				ani->Play(L"attack_type21", false);
@@ -701,7 +704,7 @@ namespace yeram_client
 				Transform* tf = owner->GetComponent<Transform>();
 				Vector2 pos = tf->GetPos();
 				pos.x += 75.0f;
-				pos.y += 120.0f;
+				//pos.y += 120.0f;
 				Transform* a_tf = acc->GetComponent<Transform>();
 				a_tf->SetPos(pos);
 				acc->GetComponent<Animator>()->Play(L"attack_type58_berrybox", false);
@@ -716,7 +719,7 @@ namespace yeram_client
 				Transform* tf = owner->GetComponent<Transform>();
 				Vector2 pos = tf->GetPos();
 				pos.x += 85.0f;
-				pos.y += 120.0f;
+				//pos.y += 120.0f;
 				Transform* a_tf = acc->GetComponent<Transform>();
 				a_tf->SetPos(pos);
 				acc->GetComponent<Animator>()->Play(L"attack_type59_berrybox", false);
@@ -745,8 +748,8 @@ namespace yeram_client
 			}
 			mv->SetActive(true);
 			Vector2 pos = ani->GetOwner()->GetComponent<Transform>()->GetPos();
-			pos.x += 400.0f;
-			mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ 1.0f,0.0f }, pos, false, false);
+			pos.x -= 600.0f;
+			mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ -1.0f,0.0f }, pos, false, false);
 		
 			ani->Play(L"attack_type510", false);
 		});
@@ -757,15 +760,15 @@ namespace yeram_client
 		});
 		mAni->GetCompleteEvent(L"attack_type511") = std::bind([ani]()->void
 		{
-			//ani->Play(L"attack_type21", false);
+			ani->Play(L"attack_type11", false);
 		});
 #pragma endregion
-		mAni->Play(L"saltbaker_phase_1intro", false);
+		
 		//test
 	   // mAni->Play(L"attack_type48", false);
 		Vector2 pos = application.GetWindowSize();
 
-		mTransform->SetPos(Vector2{ pos.x / 2.0f,450.0f });
+		mTransform->SetPos(Vector2{ pos.x / 2.0f,650.0f });
 		mTransform->SetScale(Vector2{ 1.1f,1.3f });
 
 
@@ -902,48 +905,60 @@ namespace yeram_client
 			mPhaseInfo[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type4, vec));
 		}
 
-
-
-
-
-
-		mAttackCheck.insert(std::make_pair(EPhaseType::PHASE1, std::map<EAttackType, SpawnInfo*>()));
-		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type1, new SpawnInfo{ false,3.0,7,0,std::bind([this]()->void
+		mAttackCheck.insert(std::make_pair(EPhaseType::PHASE1, std::map<EAttackType, std::shared_ptr<SpawnInfo>>()));
+		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type1, std::make_shared<SpawnInfo>(false,3.0,7,7,0,std::bind([this]()->void
 		{
 			P1AttackType1();
-		}) }));
-		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type2, new SpawnInfo{ false,3.0,8,0,std::bind([this]()->void
+		}) )));
+		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type2, std::make_shared<SpawnInfo>(false,3.0,8,8,0,std::bind([this]()->void
 		{
 			P1AttackType2();
-		}) }));
-		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type4, new SpawnInfo{ false,4.0,8,0,std::bind([this]()->void
+		}) )));
+		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type4, std::make_shared<SpawnInfo>( false,4.0,8,8,0,std::bind([this]()->void
 		{
 			P1AttackType4();
-		}) }));
-		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type5, new SpawnInfo{ false,3.0,8,0,std::bind([this]()->void
+		}) )));
+		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type5, std::make_shared<SpawnInfo>( false,3.0,8,8,0,std::bind([this]()->void
 		{
 			P1AttackType5();
-		}) }));
+		}) )));
+		Phase1();
 	}
 
 	void SaltBaker::Update()
 	{
 		Boss::Update();
-		std::map<EAttackType, SpawnInfo*> map = mAttackCheck[mPhaseType];
+		if (mbChagePhase == true)
+		{
+			switch (mPhaseType)
+			{
+			case EPhaseType::PHASE1:
+				Phase2();
+				break;
+			case EPhaseType::PHASE2:
+				Phase3();
+				break;
+			case EPhaseType::PHASE3:
+				break;
+			}
+			mbChagePhase = false;
+		}
+		std::map<EAttackType, std::shared_ptr<SpawnInfo>> map = mAttackCheck[mPhaseType];
 		for (auto& spawn_info : map)
 		{
-			SpawnInfo* spawn = spawn_info.second;
+			SpawnInfo* spawn = spawn_info.second.get();
 			if (spawn->mActive == false)
 				continue;
 			double diff = mTime - spawn->mSpawnTime;
 			if (diff >= spawn->mCoolTime)
 			{
-				if (spawn->mCount <= 0)
+				if (spawn->mCurCount <= 0)
 				{
+					spawn->mCurCount = spawn->mCount;
 					spawn->mActive = false;
 					continue;
 				}
-				spawn->mCount--;
+				spawn->mCurCount--;
 				spawn->mSpawnEvent();
 				spawn->mSpawnTime = mTime;
 			}
@@ -968,9 +983,13 @@ namespace yeram_client
 		{
 			for (auto& spawninfo : m.second)
 			{
-				delete spawninfo.second;
-				spawninfo.second = nullptr;
+				//SpawnInfo*& spawn = spawninfo.second;
+				//delete spawn;
+				//spawn = nullptr;
+				spawninfo.second.get()->mSpawnEvent=std::bind([]()->void {});
+				spawninfo.second.reset();
 			}
+
 			m.second.clear();
 		}
 		mAttackCheck.clear();
@@ -978,6 +997,7 @@ namespace yeram_client
 
 	void SaltBaker::OnCollisionEnter(Collider* other)
 	{
+		Boss::OnCollisionEnter(other);
 	}
 
 	void SaltBaker::OnCollisionStay(Collider* other)
@@ -1069,14 +1089,16 @@ namespace yeram_client
 	}
 	void SaltBaker::Phase1()
 	{
-		mAni->Play(L"attack_type11", false);
+		mAni->Play(L"saltbaker_phase_1intro", false);
 
-		std::map<EAttackType, std::vector<std::wstring>>& phase1_map = mPhaseInfo[EPhaseType::PHASE1];
+		// 이미지 왼쪽 오른쪽 이동하는거 다 편집하기에는 시간이 너무 오래 걸려서 random attack 은 안쓰기로 함.
+		// 레몬을 예를 들면 오른쪽 버전 왼쪽 버전 다 편집 및 배치해야하는데 시간 없어서 1->4->2->5->1 로 고정함.
+		/*std::map<EAttackType, std::vector<std::wstring>>& phase1_map = mPhaseInfo[EPhaseType::PHASE1];
 
 		int size = phase1_map.size();
 
 		int attack_type = rand() % size;
-		mActiveAttack = phase1_map[(EAttackType)attack_type];
+		mActiveAttack = phase1_map[(EAttackType)attack_type];*/
 
 	}
 

@@ -45,7 +45,7 @@ namespace yeram_client
 		{
 			std::shared_ptr<GameObject> cuphead = FindObject(L"sb_intro_cuphead");
 			Transform* tf = cuphead->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 600.0f,330.0f });
+			tf->SetPos(Vector2{ 730.0f,630.0f });
 			tf->SetScale(Vector2{ 3.5f,3.5f });
 			std::shared_ptr<GameObject> bg1 = FindObject(L"sb_intro_bg");
 			bg1->SetActive(false);
@@ -170,7 +170,7 @@ namespace yeram_client
 			knife->SetName(L"sb_intro_knife");
 			knife->SetActive(false);
 			Transform* tf = knife->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 1300.0f,550.0f });
+			tf->SetPos(Vector2{ 1260.0f,800.0f });
 			tf->SetScale(Vector2{ 1.25f,1.55f });
 			Animator* ani = knife->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\4_knife", Vector2::Zero, 0.1);
@@ -182,10 +182,10 @@ namespace yeram_client
 		{
 			saltbaker->SetName(L"sb_intro_salt");
 			Transform* tf = saltbaker->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 300.0f,750.0f });
+			tf->SetPos(Vector2{ 400.0f,850.0f });
 			tf->SetScale(Vector2{ 1.2f,1.2f });
 			MoveObject* mv = saltbaker->AddComponent<MoveObject>();
-			mv->CreateInfo(Vector2{ 200.0f,200.0f }, EDirType::RIGHT, Vector2{ 600.0f,830.0f });
+			mv->CreateInfo(Vector2{ 200.0f,200.0f }, EDirType::RIGHT, Vector2{ 680.0f,970.0f });
 			mv->SetActive(false);
 			Animator* ani = saltbaker->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\1", Vector2::Zero, 0.1);
@@ -235,8 +235,9 @@ namespace yeram_client
 			{
 				GameObject* owner = ani->GetOwner();
 				MoveObject* mv = owner->GetComponent<MoveObject>();
+				Vector2 pos = owner->GetComponent<Transform>()->GetPos();
 				mv->SetActive(true);
-				mv->CreateInfo(Vector2{ 0.0f,200.0f }, EDirType::LEFT, Vector2{ 600.0f,700.0f });
+				mv->CreateInfo(Vector2{ 1.0f,200.0f }, Vector2{ 1.0f,-1.0f }, Vector2{ pos.x+50.0f,pos.y-100.0f});
 				std::shared_ptr<GameObject> knife = FindObject(L"sb_intro_knife");
 				knife->SetActive(true);
 			});
@@ -258,6 +259,11 @@ namespace yeram_client
 				std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
 				arm->SetActive(true);
 				arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene5_arm", false);
+				Transform* tf = arm->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x += 100.0f;
+				pos.y += 80.0f;
+				tf->SetPos(pos);
 			});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene5_1") =
 				std::bind([this]()->void
@@ -302,7 +308,7 @@ namespace yeram_client
 		{
 			arm->SetName(L"sb_intro_arm");
 			Transform* tf = arm->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 240.0f,720.0f });
+			tf->SetPos(Vector2{ 240.0f,780.0f });
 			tf->SetScale(Vector2{ 1.3f,1.2f });
 			Animator* ani = arm->GetComponent<Animator>();
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\2_arm", Vector2::Zero, 0.1);

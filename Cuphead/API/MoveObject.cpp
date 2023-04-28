@@ -41,10 +41,9 @@ namespace yeram_client
 
 	void MoveObject::CreateInfo(const Vector2& _speed, EDirType _dir)
 	{
-		
+		mTf = GetOwner()->GetComponent<Transform>();
 		mSpeed = _speed;
 		mDir = _dir;
-		mTf = GetOwner()->GetComponent<Transform>();
 	}
 
 	void MoveObject::CreateInfo(const Vector2& _speed, EDirType _dir, const Vector2& _kill_pos, bool _despawn, bool _outcheck)
@@ -80,7 +79,7 @@ namespace yeram_client
 		mbEndFlag = true;
 		mSpeed = _speed;
 		mDirpos = _dir;
-	
+
 		Vector2 pos = mTf->GetPos();
 		mStartPos = pos;
 		mEndPos = _kill_pos;
@@ -95,7 +94,7 @@ namespace yeram_client
 		GameObject* obj = owner->GetParent();
 		Vector2 pos = obj == nullptr ? mTf->GetPos() : mTf->GetOffset();
 		pos.x += mDirpos.x * mSpeed.x * Time::DeltaTime();
-		pos.y += mEndPos.y * sinf(pos.x * (3.14159254f / 180.0f))* Time::DeltaTime();
+		pos.y += mEndPos.y * sinf(pos.x * (3.14159254f / 180.0f)) * Time::DeltaTime();
 
 		mTf->SetPos(pos);
 	}
@@ -158,14 +157,15 @@ namespace yeram_client
 				}
 				else if (sprite != nullptr)
 				{
-						size.x = sprite->GetWidth();
-						size.y = sprite->GetHeight();
+					size.x = sprite->GetWidth();
+					size.y = sprite->GetHeight();
 				}
-				if (originpos.x + size.x < -10 || originpos.x - size.x>winsize.x + 10
-					|| originpos.y + size.y <-10 || originpos.y - size.y>winsize.y + 10)
+				size *= mTf->GetScale();
+				if (originpos.x + size.x < -size.x || originpos.x - size.x>winsize.x + size.x
+					|| originpos.y + size.y <-size.y || originpos.y - size.y>winsize.y + size.y)
 				{
-					if ((mStartPos.x < -10&& originpos.x + size.x < -10)
-						||(mStartPos.x > winsize.x + 10 && originpos.x - size.x > winsize.x + 10))
+					if ((mStartPos.x < -size.x && originpos.x + size.x < -size.x)
+						|| (mStartPos.x > winsize.x + size.x && originpos.x - size.x > winsize.x + size.x))
 					{
 						xflag = false;
 					}
@@ -174,8 +174,8 @@ namespace yeram_client
 						xflag = true;
 					}
 
-					if ((mStartPos.y < -10 && originpos.y + size.y < -10)
-						|| (mStartPos.y > winsize.y + 10 && originpos.y - size.y > winsize.y + 10))
+					if ((mStartPos.y < -size.y && originpos.y + size.y < -size.y)
+						|| (mStartPos.y > winsize.y + size.y && originpos.y - size.y > winsize.y + size.y))
 					{
 						yflag = false;
 					}
@@ -185,11 +185,14 @@ namespace yeram_client
 					}
 					if (xflag == true && yflag == true)
 					{
-						map_out_flag = true;
+						if (mbDespawn == true)
+						{
+							SceneManager::RemoveObjectRequest(GetOwner());
+							return;
+						}
 					}
-					
-					
 				}
+				int a = 0;
 			}
 			//else
 			{
@@ -239,14 +242,7 @@ namespace yeram_client
 		if (xflag == true && yflag == true)
 		{
 			mbArrive = true;
-			if (map_out_flag==true && mbDespawn == true)
-			{
-				SceneManager::RemoveObjectRequest(GetOwner());
-			}
-			else
-			{
-				mArriveEvent();
-			}
+			mArriveEvent();
 			return;
 		}
 		if (obj == nullptr)
@@ -256,6 +252,67 @@ namespace yeram_client
 		else
 		{
 			mTf->SetOffset(pos);
+		}
+
+	}
+
+	void MoveObject::SetEndPos()
+	{
+		Vector2 winsize = application.GetWindowSize();
+		SpriteRenderer* sprite = GetOwner()->GetComponent<SpriteRenderer>();
+		Animator* ani = GetOwner()->GetComponent<Animator>();
+		Vector2 size;
+		if (ani != nullptr)
+			size = ani->GetSpriteSize();
+		else
+			size = Vector2{ sprite->GetWidth(),sprite->GetHeight() };
+		if (mbEndFlag == false)
+		{
+			if (mDir == EDirType::LEFT)
+			{
+				mEndPos = Vector2{ -size.x,mTf->GetPos().y };
+			}
+			else if (mDir == EDirType::RIGHT)
+			{
+				mEndPos = Vector2{ winsize.x + size.x,mTf->GetPos().y };
+			}
+		}
+		else
+		{
+			Vector2 winsize = application.GetWindowSize();
+			SpriteRenderer* sprite = GetOwner()->GetComponent<SpriteRenderer>();
+			Animator* ani = GetOwner()->GetComponent<Animator>();
+			Vector2 size;
+			if (ani != nullptr)
+				size = ani->GetSpriteSize();
+			else
+				size = Vector2{ sprite->GetWidth(),sprite->GetHeight() };
+
+			if (mDirpos.x < 0)
+			{
+				mEndPos.x = -size.x;
+			}
+			else if (mDirpos.x > 0)
+			{
+				mEndPos.x = winsize.x + size.x;
+			}
+			else
+			{
+				mEndPos.x = mTf->GetPos().x;
+			}
+
+			if (mDirpos.y < 0)
+			{
+				mEndPos.y = -size.y;
+			}
+			else if (mDirpos.y > 0)
+			{
+				mEndPos.y = winsize.y + size.y;
+			}
+			else
+			{
+				mEndPos.y = mTf->GetPos().y;
+			}
 		}
 
 	}

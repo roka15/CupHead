@@ -62,6 +62,46 @@ namespace yeram_client
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::BackColObject,true);
 		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::BackColObject, true);
 
+		std::shared_ptr<GameObject> player_obj = FindObject(L"Player");
+		if (player_obj == nullptr)
+		{
+			std::shared_ptr<GameObject> player_obj = core::ObjectPool<Player>::Spawn();
+			player_obj->SetName(L"Player");
+			Transform* tf = player_obj->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 400.0f,400.0f });
+
+
+			std::shared_ptr<GameObject> player_reg = core::ObjectPool<Animator>::Spawn();
+			player_reg->SetName(L"Reg");
+			player_obj->AddChild(player_reg);
+			std::shared_ptr<GameObject> player_head = core::ObjectPool<Animator>::Spawn();
+			player_head->SetName(L"Head");
+			player_obj->AddChild(player_head);
+
+			std::shared_ptr<GameObject> player_shooter = core::ObjectPool<Animator>::Spawn();
+			player_shooter->SetName(L"Shooter");
+			player_obj->AddChild(player_shooter);
+
+			Player* player = player_obj->GetComponent<Player>();
+			player->CreateCharacter(EPlayerType::MsChalice);
+			player->CreateCharacter(EPlayerType::Cuphead);
+			player->ChangeCharacter(EPlayerType::MsChalice);
+			player->GetActiveCharacter()->Initialize();
+
+			Rigidbody* rigd = player_obj->GetComponent<Rigidbody>();
+			rigd->Use_Gravity(true);
+			rigd->SetGround(false);
+			rigd->SetMass(1.0f);
+
+			player_obj->SetActive(true);
+			SceneManager::GetActiveScene()->AddGameObject(player_obj, ELayerType::Player);
+		}
+		else
+		{
+			player_obj->SetActive(true);
+		}
+
+
 		mStartPos = Vector2{ 200.0f,300.0f };
 		for (auto obj : GetGameObjects(ELayerType::Player))
 		{
@@ -97,7 +137,7 @@ namespace yeram_client
 		{
 			background->SetName(L"tutorial_background");
 			Transform* tf = background->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 650.0f,size.y - 50 });
+			tf->SetPos(Vector2{ 800.0f,1050.0f });
 			Vector2& scale = tf->GetScale();
 			scale.x *= 1.28f;
 			scale.y *= 1.2f;

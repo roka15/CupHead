@@ -69,8 +69,8 @@ namespace yeram_client
 		Vector2 pos = tf->GetPos();
 		pos = Camera::CaluatePos(pos); 
 		pos += mSpriteSheet[mSpriteIndex].offset;
-		pos.x -= mSpriteSheet[mSpriteIndex].size.x / 2.0f;
-		pos.y -= mSpriteSheet[mSpriteIndex].size.y;
+		pos.x -= mSpriteSheet[mSpriteIndex].size.x *scale.x/ 2.0f;
+		pos.y -= mSpriteSheet[mSpriteIndex].size.y*scale.y;
 
 		std::wstring str = this->mAnimator->GetOwner()->GetName();
 		if (str == L"LoadingClose")

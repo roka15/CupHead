@@ -25,11 +25,13 @@ namespace yeram_client
 		bool Parry_Check();
 		void Stop_PositionUpdate(bool _flag, EDirType _type);
 		Vector2 GetMoveOffset();
+		void TakeDamage(); 
 	private:
 		Animator* mAnimator;
 		Character* mCharacter;
 		std::map<EPlayerType, Character*> mCharacters;
 		EGameObjectType mobjType;
+		int mHP;
 		/*float mTime;
 		int midx;*/
 	};

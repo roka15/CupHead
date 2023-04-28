@@ -40,6 +40,7 @@ namespace yeram_client
 		virtual void CreateInfo(const Vector2& _speed,const Vector2& _startpos, const Vector2& _endpos);
 		virtual void CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos,bool _dir);
 		virtual void CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos,const Vector2& _killpos, bool _dir);
+		void SetEndPos();
 		bool MapOutCheck();
 		const UINT& GetID() { return mID; }
 		const bool& GetParry() { return mbParry; }
@@ -52,6 +53,7 @@ namespace yeram_client
 		Collider* mColider;
 		Transform* mTransform;
 		Animator* mAni;
+		bool mbDeath;
 	};
 }
 

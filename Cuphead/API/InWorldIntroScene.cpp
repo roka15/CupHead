@@ -902,9 +902,9 @@ namespace yeram_client
 		{
 			Transform* tf = portal->GetComponent<Transform>();
 			tf->SetScale(Vector2{ 2.0f,2.0f });
-			Vector2 offset = tf->GetOffset();
-			offset.y -= 100.0f;
-			tf->SetOffset(offset);
+			Vector2 pos = tf->GetPos();
+			pos.y += 200.0f;
+			tf->SetPos(pos);
 		}
 		std::shared_ptr<GameObject> gost = FindObject(L"gost");
 		{
@@ -913,7 +913,7 @@ namespace yeram_client
 			tf->SetPos(Vector2{ 1200.0f,600.0f });
 			Transform* t_tf = gost->FindChild(L"tail")->GetComponent<Transform>();
 			t_tf->SetScale(Vector2{ 2.0f,2.0f });
-			t_tf->SetOffset(Vector2{ -90.0f,-120.0f });
+			t_tf->SetOffset(Vector2{ 0.0f,50.0f });
 			Transform* h_tf = gost->FindChild(L"head")->GetComponent<Transform>();
 			Vector2 h_offset = h_tf->GetOffset();
 			h_offset.x -= 60.0f;
@@ -1210,15 +1210,15 @@ namespace yeram_client
 			cutscene->SetAnimation(L"World4IntroAnichalice13", 4.0);
 			cutscene->SetAnimation(L"World4IntroAnichalice14", 4.0);
 			Transform* tf = player2->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 500.0f,820.0f });
+			tf->SetPos(Vector2{ 500.0f,900.0f });
 			tf->SetScale(Vector2{ 1.2f,1.2f });
 			std::shared_ptr<GameObject> mouse = player2->FindChild(L"mouse");
 			{
 				mouse->SetActive(true);
 				Transform* tf = mouse->GetComponent<Transform>();
 				Vector2 offset = tf->GetOffset();
-				offset.x = -25.0f;
-				offset.y = -130.0f;
+				offset.x = -35.0f;
+				offset.y -= 40.0f;
 				tf->SetOffset(offset);
 			}
 		}

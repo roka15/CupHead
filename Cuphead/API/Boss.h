@@ -53,6 +53,7 @@ namespace yeram_client
 
 		std::shared_ptr<GameObject> GetParts(EParts _parts_type) { return mParts[_parts_type]; }
 		void SetPhase(EPhaseType _type) { mPhaseType = _type; }
+		void TakeDamage(); 
 	protected:
 		 virtual void Phase1();
 		 virtual void Phase2();
@@ -66,6 +67,9 @@ namespace yeram_client
 		EPhaseType mPhaseType;
 		std::map<EPhaseType, std::vector<PatternInfo>> mPatterns;
 		std::map <EParts, std::shared_ptr<GameObject>> mParts;
+		int mHP;
+		int mMaxHP;
+		bool mbChagePhase;
 	};
 }
 

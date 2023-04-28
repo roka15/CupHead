@@ -55,7 +55,7 @@ namespace yeram_client
 	{
 	}
 	void CookieBullet::OnCollisionExit(Collider* other)
-	{
+	{	
 	}
 	void CookieBullet::Shoot()
 	{
@@ -67,6 +67,7 @@ namespace yeram_client
 		PlayerBullet* pb = _other->GetOwner()->GetComponent<PlayerBullet>();
 		if (pb != nullptr)
 		{
+			mbDeath = true;
 			//부셔지기.
 			//애니 complete ani 에 removeobject 함수 연결해두기.
 			mAni->Play(L"dough_cameleffect", false);
@@ -82,6 +83,8 @@ namespace yeram_client
 	}
 	void CookieBullet::NextInfoSetting()
 	{
+		if (mbDeath == true)
+			return;
 		ZigZagBullet::NextInfoSetting();
 		if (mDir.y <= 0)
 		{

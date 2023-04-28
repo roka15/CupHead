@@ -20,6 +20,7 @@ enum class  ELayerType
 	NONE,
 	BackObject,
 	BackColObject,
+	Boss,
 	Ground,
 	Monster,
 	Player,

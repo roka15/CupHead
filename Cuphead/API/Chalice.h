@@ -60,6 +60,7 @@ namespace yeram_client
 		void moveCompleteEvent()override;
 		void RegisterShooterSpawnPos();
 		
+		
 	
 		void JumpShoot(bool h_flag,bool v_flag,EDirType h_key,EDirType v_key);
 		void HeadAndRegSetAniPos();
