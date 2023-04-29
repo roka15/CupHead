@@ -118,8 +118,8 @@ namespace yeram_client
 		Vector2 size = mAni->GetSpriteSize(_ani_name);
 		const Vector2& scale = mTransform->GetScale();
 		size *= scale;
-		mColider->SetSize(size);
-		mColider->SetCenter(Vector2{ -(size.x / 2),-size.y });
+		mColider->SetSize(size/2);
+		mColider->SetCenter(Vector2{ (-size.x/4) ,-size.y + (size.y / 4) });
 		
 	}
 

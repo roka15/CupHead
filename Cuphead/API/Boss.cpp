@@ -21,7 +21,7 @@ namespace yeram_client
 		mAni = owner->AddComponent<Animator>();
 		mTransform = owner->GetComponent<Transform>();
 		mPhaseType = EPhaseType::PHASE1;
-		mbChagePhase = false;
+		mbChagePhase = true;
 	}
 
 	void Boss::Update()
@@ -74,9 +74,11 @@ namespace yeram_client
 		if ((mMaxHP / 3) < mHP&& mHP <= mMaxHP - (mMaxHP / 3))//phase 2 전환
 		{
 			mbChagePhase = true;
+			Phase2();
 		}
 		else if (mHP < (mMaxHP / 3)) // phase 3 전환
 		{
+			mPhaseType = EPhaseType::PHASE3;
 			mbChagePhase = true;
 		}
 	}

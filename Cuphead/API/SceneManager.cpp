@@ -40,7 +40,8 @@ namespace yeram_client
 	bool SceneManager::mbCompleteLoad;
 	std::function<void()> SceneManager::mLoadMessageEvent;
 	bool SceneManager::mbUseUI;
-	std::queue<GameObject*> SceneManager::mRemoveRequestObjs;
+	std::queue<SceneManager::RemoveObjectInfo> SceneManager::mRemoveRequestObjs;
+
 	void SceneManager::Initalize()
 	{
 		core::Loading::Initialize();
@@ -273,6 +274,16 @@ namespace yeram_client
 		mActiveScene->RemoveGameObject(_obj);
 	}
 
+	void SceneManager::RemoveObject(GameObject* _obj, ELayerType _type)
+	{
+		mActiveScene->RemoveGameObject(_obj, _type);
+	}
+
+	void SceneManager::RemoveObject(ELayerType _type)
+	{
+		mActiveScene->RemoveGameObject(_type);
+	}
+
 	void SceneManager::ChagePosGameObjects(const Vector2& _offset)
 	{
 		mActiveScene->ChagePosGameObjects(_offset);
@@ -306,13 +317,34 @@ namespace yeram_client
 		mActiveScene->OnEnter();
 	}
 
+	void SceneManager::ChageLayer(GameObject* _obj, ELayerType _add)
+	{
+		std::shared_ptr<GameObject> obj = mActiveScene->FindObject(_obj->GetName());
+		RemoveObjectRequest(obj.get(),obj->GetLayerType());
+		mActiveScene->AddGameObject(obj, _add);
+	}
+
+	
+
 	void SceneManager::RemoveObjectRequestRelease()
 	{
 		while (mRemoveRequestObjs.empty() == false)
 		{
-			GameObject* obj = mRemoveRequestObjs.front();
+			RemoveObjectInfo remove = mRemoveRequestObjs.front();
 			mRemoveRequestObjs.pop();
-			RemoveObject(obj);
+			if (remove.mtype == ELayerType::NONE)
+			{
+				RemoveObject(remove.mobj);
+			}
+			else if (remove.mobj == nullptr)
+			{
+				RemoveObject(remove.mtype);
+			}
+			else
+			{
+				RemoveObject(remove.mobj, remove.mtype);
+			}
+			
 		}
 	}
 

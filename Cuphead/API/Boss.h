@@ -31,15 +31,7 @@ namespace yeram_client
 			ACC,//¾Ç¼¼¼­¸®
 			MAX
 		};
-		enum class EPhaseType
-		{
-			NONE,
-			PHASE1,
-			PHASE2,
-			PHASE3,
-			MAX
-		};
-	
+		
 		Boss();
 		virtual ~Boss();
 		virtual void Initialize()override;
@@ -52,9 +44,12 @@ namespace yeram_client
 		virtual void OnCollisionExit(class Collider* other);
 
 		std::shared_ptr<GameObject> GetParts(EParts _parts_type) { return mParts[_parts_type]; }
-		void SetPhase(EPhaseType _type) { mPhaseType = _type; }
+		EPhaseType GetPhase() { return mPhaseType; }
 		void TakeDamage(); 
+		bool ChagePhase() { return mbChagePhase == true; }
+		void OffChagePhase() { mbChagePhase = false; }
 	protected:
+		void SetPhase(EPhaseType _type) { mPhaseType = _type; }
 		 virtual void Phase1();
 		 virtual void Phase2();
 		 virtual void Phase3();

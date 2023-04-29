@@ -13,6 +13,11 @@ namespace yeram_client
 		    LOADING,
 			FADE_IN,
 		};
+		struct RemoveObjectInfo
+		{
+			GameObject* mobj;
+			ELayerType mtype;
+		};
 		static void Initalize();
 		static void Update();
 		static void Render(HDC hdc);
@@ -21,6 +26,8 @@ namespace yeram_client
 		static Scene* GetActiveScene();
 		static std::shared_ptr<GameObject> FindObject(std::wstring _name);
 		static void RemoveObject(GameObject* _obj);
+		static void RemoveObject(GameObject* _obj, ELayerType _type);
+		static void RemoveObject(ELayerType _type);
 		static void ChagePosGameObjects(const Vector2& _offset);
 		static void ChangeScaleGameObjects(const Vector2& _scale);
 
@@ -32,7 +39,10 @@ namespace yeram_client
 		static void UseUI(bool _flag) { mbUseUI = _flag; }
 		static bool UseUI() { return  mbUseUI; }
 
-		static void RemoveObjectRequest(GameObject* _obj) { mRemoveRequestObjs.push(_obj); }
+		static void ChageLayer(GameObject* _obj,ELayerType _add);
+		static void RemoveObjectRequest(ELayerType _type){ mRemoveRequestObjs.push(RemoveObjectInfo{ nullptr,_type }); }
+		static void RemoveObjectRequest(GameObject* _obj) { mRemoveRequestObjs.push(RemoveObjectInfo{ _obj,ELayerType::NONE}); }
+		static void RemoveObjectRequest(GameObject* _obj, ELayerType _type) { mRemoveRequestObjs.push(RemoveObjectInfo{ _obj,_type}); }
 		static void RemoveObjectRequestRelease();
 	private:
 		SceneManager()=delete;
@@ -49,7 +59,8 @@ namespace yeram_client
 		static bool mbCompleteLoad;
 		static std::function<void()> mLoadMessageEvent;
 		static bool mbUseUI;
-		static std::queue<GameObject*> mRemoveRequestObjs;
+		static std::queue<RemoveObjectInfo> mRemoveRequestObjs;
+		
 	};
 }
 

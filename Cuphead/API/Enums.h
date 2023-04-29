@@ -96,3 +96,11 @@ enum class EShotBulletType
 	Scatter,
 	MAX
 };
+enum class EPhaseType
+{
+	NONE,
+	PHASE1,
+	PHASE2,
+	PHASE3,
+	MAX
+};

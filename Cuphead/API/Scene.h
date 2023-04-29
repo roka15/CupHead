@@ -24,6 +24,8 @@ namespace yeram_client
 	   std::shared_ptr<GameObject> FindObject(std::wstring _name);
 	   void AddGameObject(std::shared_ptr<GameObject>& obj, ELayerType layer);
 	   void RemoveGameObject(GameObject* _obj);
+	   void RemoveGameObject(GameObject* _obj,ELayerType _type);
+	   void RemoveGameObject(ELayerType _type);
 	   const ESceneType& GetSceneType() { return mCurType; }
 	   std::vector<std::shared_ptr<GameObject>>& GetGameObjects(ELayerType _layer_type);
 	   bool UseingLayer(ELayerType _layer_type);

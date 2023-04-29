@@ -127,6 +127,16 @@ namespace yeram_client
 		mLayers[(UINT)_obj->GetLayerType()]->RemoveGameObject(_obj);
 	}
 
+	void Scene::RemoveGameObject(GameObject* _obj, ELayerType _type)
+	{
+		mLayers[(UINT)_type]->RemoveGameObject(_obj);
+	}
+
+	void Scene::RemoveGameObject(ELayerType _type)
+	{
+		mLayers[(UINT)_type]->Release();
+	}
+
 	std::vector<std::shared_ptr<GameObject>>& Scene::GetGameObjects(ELayerType _layer_type)
 	{
 		return mLayers[(UINT)_layer_type]->GetGameObjectList();
