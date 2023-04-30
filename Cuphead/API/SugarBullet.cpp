@@ -34,6 +34,7 @@ namespace yeram_client
 	}
 	void SugarBullet::OnCollisionStay(Collider* other)
 	{
+		Death(other);
 		ZigZagBullet::OnCollisionStay(other);
 	}
 	void SugarBullet::OnCollisionExit(Collider* other)

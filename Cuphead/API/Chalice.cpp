@@ -387,7 +387,7 @@ namespace yeram_client
 				PlayerBullet* bullet = bullet_obj->GetComponent<PlayerBullet>();
 				bullet->CreateInfo(start_pos, dir);
 				bullet->Shoot(shoot_dir);
-				SceneManager::GetActiveScene()->AddGameObject(bullet_obj, ELayerType::Bullet);
+				SceneManager::GetActiveScene()->AddGameObject(bullet_obj, ELayerType::PlayerBullet);
 				mbulletInfo.mshoot_time = mTime;
 				mbulletInfo.mdirstr = shoot_dir;
 			}
@@ -862,7 +862,7 @@ namespace yeram_client
 		bullet->CreateInfo(start_pos, mbulletInfo.mdir);
 		bullet->Shoot(dir_key);
 		
-		SceneManager::GetActiveScene()->AddGameObject(bullet_obj, ELayerType::Bullet);
+		SceneManager::GetActiveScene()->AddGameObject(bullet_obj, ELayerType::PlayerBullet);
 		mbulletInfo.mshoot_time = mTime;
 		mbulletInfo.mdirstr = dir_key;
 	}

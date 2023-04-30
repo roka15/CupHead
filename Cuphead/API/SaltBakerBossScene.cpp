@@ -39,6 +39,7 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::Boss] = new Layer();
 		mLayers[(UINT)ELayerType::Monster] = new Layer();
 		mLayers[(UINT)ELayerType::Player] = new Layer();
+		mLayers[(UINT)ELayerType::PlayerBullet] = new Layer();
 		mLayers[(UINT)ELayerType::Bullet] = new Layer();
 		Scene::Initialize();
 	}
@@ -46,7 +47,7 @@ namespace yeram_client
 	void SaltBakerBossScene::Update()
 	{
 		SaltBaker* salt = mBoss->GetComponent<SaltBaker>();
-		//test 끝나면 풀기
+		
 		EPhaseType phase = salt->GetPhase();
 		if (salt->ChagePhase() == false)
 		{
@@ -142,14 +143,19 @@ namespace yeram_client
 		}
 		else
 		{
+			Player* player = player_obj->GetComponent<Player>();
+			player->ChangeCharacter(EPlayerType::MsChalice);
+			Transform* tf = player_obj->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 400.0f,400.0f });
 			player_obj->SetActive(true);
 		}
 
+		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Ground, true);
 		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Ground, true);
 		ColliderManager::SetLayer(ELayerType::Player, ELayerType::Ground, true);
-		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Bullet, true);
+		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Bullet, true);
 		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Player, true);
-		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Boss, true);
+		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Boss, true);
 
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE1, std::vector<std::shared_ptr<GameObject>>()));
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE2, std::vector<std::shared_ptr<GameObject>>()));
@@ -314,6 +320,8 @@ namespace yeram_client
 		AddGameObject(mid, ELayerType::Ground);
 		std::shared_ptr<GameObject> arm = sb->GetParts(SaltBaker::EParts::ARM);
 		std::shared_ptr<GameObject> sugar = sb->GetParts(SaltBaker::EParts::ACC);
+		std::shared_ptr<GameObject> arm2 = sb->GetParts(SaltBaker::EParts::ARM2);
+		AddGameObject(arm2, ELayerType::Boss);
 		AddGameObject(sugar, ELayerType::Monster);
 		AddGameObject(arm, ELayerType::Monster);
 	}
@@ -390,7 +398,7 @@ namespace yeram_client
 			tf->SetSize(winsize);
 			tf->SetPos(nextpos);
 			MoveObject* mv = bg3->AddComponent<MoveObject>();
-			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,winsize.y-(winsize.y/5.0f)});
+			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,winsize.y-(winsize.y/5.0f) - 100.0f });
 			mv->SetArriveEvent(std::bind([]()->void
 			{
 			}));
@@ -446,7 +454,7 @@ namespace yeram_client
 			tf->SetSize(Vector2{ winsize.x+100.0f,winsize.y});
 			tf->SetPos(Vector2{ -100.0f,nextpos.y+(winsize.y / 2.0f)-150.0f });
 			MoveObject* mv = bg6->AddComponent<MoveObject>();
-			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,(winsize.y / 2.0f)-100.0f });
+			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,(winsize.y / 2.0f)-200.0f });
 			mv->SetArriveEvent(std::bind([]()->void
 			{
 			}));
@@ -475,8 +483,6 @@ namespace yeram_client
 			mBgObjects[EPhaseType::PHASE2].push_back(bg7);
 			AddGameObject(bg7, ELayerType::BackObject);
 		}
-
-		
 	}
 	void SaltBakerBossScene::Phase3_Info_Register()
 	{

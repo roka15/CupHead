@@ -28,6 +28,7 @@ namespace yeram_client
 		{
 			NONE,
 			ARM,
+			ARM2,
 			ACC,//¾Ç¼¼¼­¸®
 			MAX
 		};

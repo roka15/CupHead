@@ -41,6 +41,8 @@ namespace yeram_client
 		Vector2 mDistance;
 		Vector2 mSpeed;
 		Vector2 mStartpos;
+		bool mbXFlag;
+		bool mbYFlag;
 	};
 }
 

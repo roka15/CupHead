@@ -66,13 +66,13 @@ namespace yeram_client
 					{
 						mActiveAnimation->Reset();
 					}
-					else if (mbLoop == false)
-					{
-						/*	Animator::Events* events
-								= FindEvents(mActiveAnimation->GetName());
-							if (events != nullptr)
-								events->mEndEvent();*/
-					}
+					//else if (mbLoop == false)
+					//{
+					//	/*	Animator::Events* events
+					//			= FindEvents(mActiveAnimation->GetName());
+					//		if (events != nullptr)
+					//			events->mEndEvent();*/
+					//}
 				}
 			}
 		}
@@ -196,8 +196,13 @@ namespace yeram_client
 		if (mActiveAnimation != nullptr)
 		{
 			if (mActiveAnimation->GetName().compare(_name) == 0)
+			{
+				if (_loop == false)
+				{
+					mActiveAnimation->Reset();
+				}
 				return;
-
+			}
 			prev_events
 				= FindEvents(mActiveAnimation->GetName());
 		}

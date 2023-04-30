@@ -5,8 +5,9 @@
 #include "PlayerBullet.h"
 namespace yeram_client
 {
-	Boss::Boss()
+	Boss::Boss():Script()
 	{
+		SetName(L"Boss");
 	}
 
 	Boss::~Boss()
@@ -22,6 +23,7 @@ namespace yeram_client
 		mTransform = owner->GetComponent<Transform>();
 		mPhaseType = EPhaseType::PHASE1;
 		mbChagePhase = true;
+		Script::Initialize();
 	}
 
 	void Boss::Update()
@@ -47,6 +49,7 @@ namespace yeram_client
 
 	void Boss::Release()
 	{
+		Script::Release();
 	}
 
 	void Boss::OnCollisionEnter(Collider* other)
@@ -71,12 +74,16 @@ namespace yeram_client
 	void Boss::TakeDamage()
 	{
 		mHP--;
-		if ((mMaxHP / 3) < mHP&& mHP <= mMaxHP - (mMaxHP / 3))//phase 2 전환
+		if (mbChagePhase == true)
+		{
+			return;
+		}
+		if ((mMaxHP / 3) < mHP&& mHP <= mMaxHP - (mMaxHP / 3)&&mPhaseType==EPhaseType::PHASE1)//phase 2 전환
 		{
 			mbChagePhase = true;
 			Phase2();
 		}
-		else if (mHP < (mMaxHP / 3)) // phase 3 전환
+		else if (mHP < (mMaxHP / 3) && mPhaseType == EPhaseType::PHASE2) // phase 3 전환
 		{
 			mPhaseType = EPhaseType::PHASE3;
 			mbChagePhase = true;

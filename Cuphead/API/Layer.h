@@ -18,6 +18,7 @@ namespace yeram_client
 		void ChageScaleGameObjects(const Vector2& _scale);
 		void AddGameObject(std::shared_ptr<GameObject>& obj);
 		void RemoveGameObject(GameObject* _obj);
+		void RemoveAll();
 		void SetActive(const bool _flag) { mbActive = _flag; }
 		const bool& GetActive() { return mbActive; }
  	private:

@@ -30,7 +30,7 @@ namespace yeram_client
 
 	void ZigZagBullet::Update()
 	{
-		
+
 	}
 
 	void ZigZagBullet::Render(HDC hdc)
@@ -39,6 +39,7 @@ namespace yeram_client
 
 	void ZigZagBullet::Release()
 	{
+		Bullet::Release();
 	}
 
 	void ZigZagBullet::Reset()
@@ -67,9 +68,6 @@ namespace yeram_client
 	void ZigZagBullet::Death(Collider* _other)
 	{
 		Bullet::Death(_other);
-		
-
-
 	}
 
 	void ZigZagBullet::RegisterAniKey(const std::wstring& _up, const std::wstring& _down, const std::wstring& _death)
@@ -82,37 +80,69 @@ namespace yeram_client
 
 	void ZigZagBullet::CreateInfo(const Vector2& _speed, const Vector2& _distance, const Vector2& _start_dir)
 	{
-		
+
 		mSpeed = _speed;
 		mDistance = _distance;
 		mDir = _start_dir;
 		Vector2 pos = mTransform->GetPos();
 		mStartpos = pos;
 		pos.x += mDistance.x * mDir.x;
-		pos.y += mDistance.y*mDir.y;
-		mMoveObject->CreateInfo(mSpeed, mDir,pos,true,true);
+		pos.y += mDistance.y * mDir.y;
+		mMoveObject->CreateInfo(mSpeed, mDir, pos, true, true);
 		mMoveObject->SetArriveEvent(std::bind([this]()->void
 		{
 			NextInfoSetting();
-		})); 
+		}));
 	}
 
 	const Vector2 ZigZagBullet::GetEndPos()
 	{
 		Vector2 pos = mTransform->GetPos();
-		pos.x += mDistance.x;
-		if (mDir.y < 0)
-			pos.y = mStartpos.y - mDistance.y;
-		else
-			pos.y = mStartpos.y +mDistance.y;
+		if (mbYFlag == true)
+		{
+			if (mDir.x > 0)
+				pos.x += mDistance.x;
+			else
+			{
+				pos.x -= mDistance.x;
+			}
+
+			if (mDir.y < 0)
+				pos.y = mStartpos.y - mDistance.y;
+			else
+				pos.y = mStartpos.y + mDistance.y;
+		}
+		else if (mbXFlag == true)
+		{
+			if (mDir.y > 0)
+				pos.y += mDistance.y;
+			else
+			{
+				pos.y -= mDistance.y;
+			}
+			if (mDir.x < 0)
+				pos.x = mStartpos.x - mDistance.x;
+			else
+				pos.x = mStartpos.x + mDistance.x;
+		}
+
 		return pos;
 	}
 
 	void ZigZagBullet::NextInfoSetting()
 	{
+		if (mbDeath == true)
+			return;
 		if (mMoveObject->IsArrive() == true)
 		{
-			mDir.y *= -1;
+			if (mbYFlag == true)
+			{
+				mDir.y *= -1;
+			}
+			else if (mbXFlag == true)
+			{
+				mDir.x *= -1;
+			}
 			const Vector2& pos = GetEndPos();
 			mMoveObject->CreateInfo(mSpeed, mDir, pos, true, true);
 		}
@@ -129,7 +159,7 @@ namespace yeram_client
 
 	std::function<void()>& ZigZagBullet::GetCompleteEvent(std::wstring _name)
 	{
-		 return mAni->GetCompleteEvent(_name);
+		return mAni->GetCompleteEvent(_name);
 	}
 
 }

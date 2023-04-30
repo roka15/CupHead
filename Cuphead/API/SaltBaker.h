@@ -6,6 +6,15 @@ namespace yeram_client
 	class SaltBaker :public Boss
 	{
 	public:
+		struct SkillInfo
+		{
+			double mSkillCoolTime;
+			double mUseTime;
+			SkillInfo() :mSkillCoolTime(10.0),mUseTime(0.0)
+			{
+
+			}
+		};
 		struct SpawnInfo
 		{
 			bool mActive;
@@ -16,6 +25,7 @@ namespace yeram_client
 			std::function<void()> mSpawnEvent;
 			~SpawnInfo() {}
 		};
+		
 		SaltBaker();
 		virtual ~SaltBaker();
 		virtual void Initialize()override;
@@ -38,11 +48,18 @@ namespace yeram_client
 		void P1AttackType2();
 		void P1AttackType4();
 		void P1AttackType5();
+
+		void P2AttackType1();
+		void P2AttackAni();
 	private:
 		EGameObjectType mobjType;
 		std::map<EPhaseType, std::map<EAttackType, std::vector<std::wstring>>> mPhaseInfo;
 		std::vector<std::wstring> mActiveAttack;
 		std::map<EPhaseType, std::map<EAttackType, std::shared_ptr<SpawnInfo>>> mAttackCheck;
+
+		bool mbSkillUseCheck;
+		SkillInfo mP2BossSkill;
+		
 	};
 }
 

@@ -34,6 +34,7 @@ namespace yeram_client
 		mColider = owner->AddComponent<Collider>();
 		mTransform = owner->GetComponent<Transform>();
 		mAni = owner->AddComponent<Animator>();
+		owner->SetLayerType(ELayerType::Bullet);
 	}
 
 	void Bullet::Update()
@@ -69,7 +70,7 @@ namespace yeram_client
 
 	void Bullet::OnCollisionStay(Collider* other)
 	{
-		Death(other);
+		//Death(other);
 	}
 
 	void Bullet::OnCollisionExit(Collider* other)
@@ -109,18 +110,16 @@ namespace yeram_client
 
 	void Bullet::Death(Collider* _other)
 	{
-		
+
 	}
 
 	void Bullet::SetColInfo(std::wstring _ani_name)
 	{
-		
 		Vector2 size = mAni->GetSpriteSize(_ani_name);
 		const Vector2& scale = mTransform->GetScale();
 		size *= scale;
 		mColider->SetSize(size/2);
 		mColider->SetCenter(Vector2{ (-size.x/4) ,-size.y + (size.y / 4) });
-		
 	}
 
 	void Bullet::CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _endpos)

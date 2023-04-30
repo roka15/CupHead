@@ -18,6 +18,8 @@
 #include "SugarBullet.h"
 #include "BerryBullet.h"
 #include "LemonBullet.h"
+#include "MintBullet.h"
+#include "Pepper.h"
 #include "WorldMapObject.h"
 #include "Ground.h"
 #include "PlayerBullet.h"
@@ -77,6 +79,8 @@ namespace yeram_client
 		core::ObjectPool<SugarBullet>::Initialize(100, 200);
 		core::ObjectPool<BerryBullet>::Initialize(100, 200);
 		core::ObjectPool<LemonBullet>::Initialize(100, 200);
+		core::ObjectPool<MintBullet>::Initialize(100, 200);
+		core::ObjectPool<Pepper>::Initialize(100, 200);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -150,7 +154,7 @@ namespace yeram_client
 		mbLoadScreenFlag = false;
 
 
-		LoadScene(ESceneType::SaltBakerBoss);
+		LoadScene(ESceneType::Title);
 	}
 
 	void SceneManager::Update()
@@ -207,7 +211,8 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
-
+		core::ObjectPool<Pepper>::Release();
+		core::ObjectPool<MintBullet>::Release();
 		core::ObjectPool<LemonBullet>::Release();
 		core::ObjectPool<BerryBullet>::Release();
 		core::ObjectPool<SugarBullet>::Release();

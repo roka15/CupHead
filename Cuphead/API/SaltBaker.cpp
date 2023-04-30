@@ -9,6 +9,8 @@
 #include "SugarBullet.h"
 #include "BerryBullet.h"
 #include "LemonBullet.h"
+#include "MintBullet.h"
+#include "Pepper.h"
 #include "ParryingObject.h"
 #include "Ground.h"
 extern yeram_client::Application application;
@@ -20,6 +22,7 @@ namespace yeram_client
 		mMaxHP = mHP = 30;
 		SetName(L"SaltBaker");
 		mobjType = EGameObjectType::Boss;
+		mbSkillUseCheck = true;
 	}
 
 	SaltBaker::~SaltBaker()
@@ -124,6 +127,24 @@ namespace yeram_client
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\22", Vector2::Zero, 0.1f);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\23", Vector2::Zero, 0.1f);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\24", Vector2::Zero, 0.1f);
+
+
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_2", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_3", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_4", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\2", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3_1", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3_2", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\4", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\5", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\6", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Idle", Vector2::Zero, 0.1f);
+		
+		
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype1", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype2", Vector2::Zero, 0.1f);
 		Animator* ani = mAni;
 		MoveObject* mv = mMoveObject;
 		SetPhase(EPhaseType::PHASE1);
@@ -160,6 +181,7 @@ namespace yeram_client
 			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type2]->mActive = true;
 			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type5]->mActive = true;
 			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type4]->mActive = true;
+			
 			mv->SetActive(false);
 			ani->Play(L"saltbaker_phase_1idle", false);
 		});
@@ -800,8 +822,8 @@ namespace yeram_client
 		mAni->GetCompleteEvent(L"translate_p1_p21") = std::bind([ani, this]()->void
 		{
 			GameObject* owner = ani->GetOwner();
-			Vector2 pos = owner->GetComponent<Transform>()->GetPos();
 			owner->GetComponent<Transform>()->SetPos(Vector2{ application.GetWindowSize().x / 2.0f, 650.0f });
+			Vector2 pos = owner->GetComponent<Transform>()->GetPos();
 			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
 			arm->SetActive(true);
 			Transform* arm_tf = arm->GetComponent<Transform>();
@@ -1060,10 +1082,12 @@ namespace yeram_client
 		{
 			GameObject* owner = ani->GetOwner();
 			SceneManager::ChageLayer(owner, ELayerType::Boss);
+			std::shared_ptr<GameObject> arm2 = mParts[EParts::ARM2];
+			SceneManager::ChageLayer(arm2.get(), ELayerType::Boss);
 			Transform* tf = owner->GetComponent<Transform>();
 			Vector2 pos = tf->GetPos();
 			pos.x -= 100.0f;
-			pos.y += 120.0f;
+			pos.y += 220.0f;
 			tf->SetPos(pos);
 			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
 			Transform* arm_tf = arm->GetComponent<Transform>();
@@ -1137,6 +1161,10 @@ namespace yeram_client
 			std::shared_ptr<GameObject> player = SceneManager::FindObject(L"Player");
 			player->SetActive(true);
 			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			/*Vector2 pos = tf->GetPos();
+			pos.y += 100.0f;
+			tf->SetPos(pos);*/
 			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
 			Transform* arm_tf = arm->GetComponent<Transform>();
 			Vector2 armpos = arm_tf->GetPos();
@@ -1166,18 +1194,187 @@ namespace yeram_client
 			Vector2 setpos = armpos;
 			setpos.y += 500.0f;
 			arm_tf->SetPos(setpos);
-			
+
 			Animator* arm_ani = arm->GetComponent<Animator>();
 			arm_ani->Play(L"translate_p1_p225_arm", false);
 			Ground* ground = arm->AddComponent<Ground>();
 			Collider* col = arm->GetComponent<Collider>();
 			Vector2 size = arm_ani->GetSpriteSize();
-			col->SetCenter(Vector2{ -size.x/2.0f,-200.0f });
+			col->SetCenter(Vector2{ -size.x / 2.0f,-200.0f });
 			col->SetSize(Vector2{ size.x,size.y / 2.0f });
 		});
 #pragma endregion
+#pragma region p2 intro event
+		mAni->GetStartEvent(L"sb_p2_Intro1") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			owner->SetActive(true);
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x += 500.0f;
+			tf->SetPos(pos);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro1") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x -= 110.0f;
+			pos.y += 50.0f;
+			tf->SetPos(pos);
+			ani->Play(L"sb_p2_Intro1_2", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro1_2") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+		    pos.x -= 120.0f;
+			tf->SetPos(pos);
+			ani->Play(L"sb_p2_Intro1_3", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro1_3") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x -= 100.0f;
+			tf->SetPos(pos);
+			ani->Play(L"sb_p2_Intro1_4", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro1_4") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x -= 100.0f;
+			tf->SetPos(pos);
+			ani->Play(L"sb_p2_Intro2", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro2") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			ani->Play(L"sb_p2_Intro3", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro3") = std::bind([ani,this]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			ani->Play(L"sb_p2_Intro3_1", false);
+
+			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+			acc->SetActive(true);
+			Transform* a_tf = acc->GetComponent<Transform>();
+			a_tf->SetPos(Vector2{ 700.0f,550.0f });
+			Animator* a_ani = acc->GetComponent<Animator>();
+			a_ani->Play(L"sb_p2_pepperintro_flash", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro3_1") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			ani->Play(L"sb_p2_Intro3_2", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro3_2") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x += 100.0f;
+			tf->SetPos(pos);
+			ani->Play(L"sb_p2_Intro4", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro4") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			ani->Play(L"sb_p2_Intro5", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro5") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			ani->Play(L"sb_p2_Intro6", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Intro6") = std::bind([ani]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x -= 100.0f;
+			tf->SetPos(pos);
+			ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
+		});
+		mAni->GetCompleteEvent(L"saltbaker_phase_2sb_p2_Idle") = std::bind([this]()->void
+		{
+			mbSkillUseCheck = false;
+		});
+#pragma endregion
+#pragma region p2 attacktype1 event
+		mAni->GetStartEvent(L"sb_p2_bossattacktype1") = std::bind([ani, this]()->void
+		{
+			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+			arm->SetActive(true);
+			arm->GetComponent<Animator>()->Play(L"sb_p2_handattacktype1", false);
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x -= 100.0f;
+			tf->SetPos(pos);
+			Transform* arm_tf = arm->GetComponent<Transform>();
+			Vector2 armpos = pos;
+			armpos.x -= 800.0f;
+			armpos.y -= 50.0f;
+			arm_tf->SetPos(armpos);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_bossattacktype1") = std::bind([ani,this]()->void
+		{
+			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+			arm->SetActive(false);
+			ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x += 100.0f;
+			tf->SetPos(pos);
+			mP2BossSkill.mUseTime = mTime;
+			mbSkillUseCheck = false;
+			mAttackCheck[EPhaseType::PHASE2][EAttackType::Type1]->mActive = true;
+		});
+#pragma endregion
+#pragma region p2 attacktype2 event
+		mAni->GetStartEvent(L"sb_p2_bossattacktype2") = std::bind([ani, this]()->void
+		{
+			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+			arm->SetActive(true);
+			arm->GetComponent<Animator>()->Play(L"sb_p2_handattacktype2", false);
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x -= 100.0f;
+			tf->SetPos(pos);
+			Transform* arm_tf = arm->GetComponent<Transform>();
+			Vector2 armpos = pos;
+			armpos.x -= 800.0f;
+			armpos.y -= 50.0f;
+			arm_tf->SetPos(armpos);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_bossattacktype2") = std::bind([ani, this]()->void
+		{
+			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+			arm->SetActive(false);
+			ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			Vector2 pos = tf->GetPos();
+			pos.x += 100.0f;
+			tf->SetPos(pos);
+			mP2BossSkill.mUseTime = mTime;
+			mbSkillUseCheck = false;
+			mAttackCheck[EPhaseType::PHASE2][EAttackType::Type1]->mActive = true;
+		});
+#pragma endregion
+
 		//test
-		//mAni->Play(L"translate_p1_p21", false);
+		//mAni->Play(L"saltbaker_phase_1intro", false);
 		Vector2 pos = application.GetWindowSize();
 
 		mTransform->SetPos(Vector2{ pos.x / 2.0f,650.0f });
@@ -1189,7 +1386,6 @@ namespace yeram_client
 			std::shared_ptr<GameObject> arm = core::ObjectPool<Animator>::Spawn();
 			{
 				arm->SetName(L"sb_arm");
-
 				MoveObject* mv = arm->AddComponent<MoveObject>();
 				mv->SetActive(false);
 				mv->CreateInfo(Vector2{ 450.0f,20.0f }, Vector2{ -1.0f,-1.0f });
@@ -1233,6 +1429,8 @@ namespace yeram_client
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\22_arm", Vector2::Zero, 0.09f);
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\23_arm", Vector2::Zero, 0.09f);
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\25_arm", Vector2::Zero, 0.09f);
+
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_ground\\Idle", Vector2::Zero, 0.1f);
 				ani->GetCompleteEvent(L"attack_type210_arm") = std::bind([ani, tf]()->void
 				{
 					Vector2 pos = tf->GetPos();
@@ -1262,24 +1460,45 @@ namespace yeram_client
 					tf->SetPos(pos);
 					ani->Play(L"translate_p1_p22_2arm", false);
 				});
-				ani->GetCompleteEvent(L"translate_p1_p218_arm") = std::bind([ani,this]()->void
+				ani->GetCompleteEvent(L"translate_p1_p218_arm") = std::bind([ani, this]()->void
 				{
 					ani->Play(L"translate_p1_p218_2_arm", false);
 				});
-				ani->GetCompleteEvent(L"translate_p1_p218_2_arm") = std::bind([ani,this]()->void
+				ani->GetCompleteEvent(L"translate_p1_p218_2_arm") = std::bind([ani, this]()->void
 				{
 					this->GetOwner()->SetActive(true);
 					this->GetOwner()->GetComponent<Animator>()->Play(L"translate_p1_p218", false);
 				});
 				ani->GetCompleteEvent(L"translate_p1_p225_arm") = std::bind([ani, this]()->void
 				{
+					mAni->Play(L"sb_p2_Intro1", false);
 					SceneManager::FindObject(L"Player")->GetComponent<Rigidbody>()->SetActive(true);
+					ani->Play(L"sb_p2_groundIdle", true);
 				});
 				ani->Play(L"saltbaker_phase_1intro_arm", false);
 				arm->SetActive(false);
 				//ani->Play(L"attack_type44_2arm", false);
 			}
 			mParts.insert(std::make_pair(EParts::ARM, arm));
+		}
+		if (mParts.find(EParts::ARM2) == mParts.end())
+		{
+			std::shared_ptr<GameObject> arm2 = core::ObjectPool<Animator>::Spawn();
+			{
+				arm2->SetName(L"sb_arm2");
+				arm2->SetActive(false);
+				MoveObject* mv = arm2->AddComponent<MoveObject>();
+				mv->SetActive(false);
+				mv->CreateInfo(Vector2{ 450.0f,20.0f }, Vector2{ -1.0f,-1.0f });
+				Vector2 pos = mTransform->GetPos();
+				Transform* tf = arm2->GetComponent<Transform>();
+				tf->SetScale(mTransform->GetScale());
+				tf->SetPos(Vector2{ pos.x + 320.0f,pos.y + 20.0f });
+				Animator* ani = arm2->GetComponent<Animator>();
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_hand\\attacktype1", Vector2::Zero, 0.1f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_hand\\attacktype2", Vector2::Zero, 0.1f);
+			}
+			mParts.insert(std::make_pair(EParts::ARM2, arm2));
 		}
 		if (mParts.find(EParts::ACC) == mParts.end())
 		{
@@ -1317,9 +1536,36 @@ namespace yeram_client
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\8_berrybox", Vector2::Zero, 0.1f);
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\9_berrybox", Vector2::Zero, 0.1f);
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\10_berrybox", Vector2::Zero, 0.1f);
+
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_pepper\\intro_flash", Vector2::Zero, 0.05f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_pepper\\intro_flash2", Vector2::Zero, 0.05f);
 				ani->GetCompleteEvent(L"attack_type1dough_attack1") = std::bind([ani]()->void
 				{
 					ani->Play(L"attack_type1dough_attack2", false);
+				});
+				ani->GetCompleteEvent(L"sb_p2_pepperintro_flash") = std::bind([ani,this]()->void
+				{
+					std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+					Transform* tf = acc->GetComponent<Transform>();
+					Vector2 pos = tf->GetPos();
+					pos.x += 200.0f;
+					pos.y += 250.0f;
+					tf->SetPos(pos);
+					ani->Play(L"sb_p2_pepperintro_flash2",false);
+				});
+				ani->GetCompleteEvent(L"sb_p2_pepperintro_flash2") = std::bind([this]()->void
+				{
+					std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+					acc->SetActive(false);
+					//pepper 생성 및 인트로 재생하기.
+					for (int i = 0; i < Pepper::mSpawnMax; i++)
+					{
+						std::shared_ptr<GameObject> pepper_obj = core::ObjectPool<Pepper>::Spawn();
+						Pepper* pepper = pepper_obj->GetComponent<Pepper>();
+						pepper->SetSpawnPos();
+						pepper->Intro();
+						SceneManager::GetActiveScene()->AddGameObject(pepper_obj, ELayerType::Monster);
+					}
 				});
 			}
 			mParts.insert(std::make_pair(EParts::ACC, acc));
@@ -1359,6 +1605,16 @@ namespace yeram_client
 			mPhaseInfo[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type4, vec));
 		}
 
+		{
+			std::vector<std::wstring> vec;
+			vec.push_back(L"sb_p2_MintBulletType1");
+			vec.push_back(L"sb_p2_MintBulletType2");
+			vec.push_back(L"sb_p2_MintBulletType3");
+			vec.push_back(L"sb_p2_MintBulletType4");
+			mPhaseInfo[EPhaseType::PHASE2].insert(std::make_pair(EAttackType::Type1, vec));
+		}
+
+
 		mAttackCheck.insert(std::make_pair(EPhaseType::PHASE1, std::map<EAttackType, std::shared_ptr<SpawnInfo>>()));
 		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type1, std::make_shared<SpawnInfo>(false, 3.0, 7, 7, 0, std::bind([this]()->void
 		{
@@ -1376,14 +1632,27 @@ namespace yeram_client
 		{
 			P1AttackType5();
 		}))));
-
+		mAttackCheck[EPhaseType::PHASE2].insert(std::make_pair(EAttackType::Type1, std::make_shared<SpawnInfo>(false, 0.0, 0, 0, 0, std::bind([this]()->void
+		{
+			P2AttackType1();
+		}))));
 		Phase1();
+		//test
+		//mPhaseType = EPhaseType::PHASE2;
+		//Phase2();
 	}
 
 	void SaltBaker::Update()
 	{
 		Boss::Update();
-		
+
+		if (mPhaseType == EPhaseType::PHASE2&& mbSkillUseCheck ==false)
+		{
+			if (mP2BossSkill.mUseTime==0.0 || mTime-mP2BossSkill.mUseTime >= mP2BossSkill.mSkillCoolTime)
+			{
+				P2AttackAni();
+			}
+		}
 		std::map<EAttackType, std::shared_ptr<SpawnInfo>> map = mAttackCheck[mPhaseType];
 		for (auto& spawn_info : map)
 		{
@@ -1391,7 +1660,12 @@ namespace yeram_client
 			if (spawn->mActive == false)
 				continue;
 			double diff = mTime - spawn->mSpawnTime;
-			if (diff >= spawn->mCoolTime)
+			if (spawn->mCoolTime == 0.0)
+			{
+				spawn->mSpawnEvent();
+				spawn->mActive = false;
+			}
+			else if (diff >= spawn->mCoolTime)
 			{
 				if (spawn->mCurCount <= 0)
 				{
@@ -1528,10 +1802,49 @@ namespace yeram_client
 		bb->Shoot();
 		SceneManager::GetActiveScene()->AddGameObject(berry, ELayerType::Bullet);
 	}
+	void SaltBaker::P2AttackType1()
+	{
+		mActiveAttack = mPhaseInfo[EPhaseType::PHASE2][EAttackType::Type1];
+		int str_cnt = mActiveAttack.size();
+		int str_type;
+		
+		
+		std::wstring ani_name;
+		int spawn_cnt = rand() % 2 + 4;
+		int distance = spawn_cnt == 4 ? 400 : 300;
+		Vector2 pos = Vector2{ 100.0f,-10.0f };
+		for (int i = 0; i < spawn_cnt; i++)
+		{
+			str_type = rand() % str_cnt;
+			ani_name = mActiveAttack[str_type];
+			std::shared_ptr<GameObject> mint = core::ObjectPool<MintBullet>::Spawn();
+			MintBullet* mb = mint->GetComponent<MintBullet>();
+			mb->SetPos(pos);
+			mb->SetAnimation(ani_name, true);
+			mb->SetColInfo(ani_name);
+			mb->CreateInfo(Vector2{ 200.0f,100.0f }, Vector2{ 100.0f,100.0f }, Vector2{ 1.0f,1.0f });
+			mb->Shoot();
+			pos.x += distance;
+			SceneManager::GetActiveScene()->AddGameObject(mint, ELayerType::Bullet);
+		}
+	}
+	void SaltBaker::P2AttackAni()
+	{
+		bool flag = rand() % 2;
+		if (flag == true)
+		{
+			mAni->Play(L"sb_p2_bossattacktype1", false);
+		}
+		else
+		{
+			mAni->Play(L"sb_p2_bossattacktype2", false);
+		}
+		mbSkillUseCheck = true;
+	}
 	void SaltBaker::Phase1()
 	{
 		mAni->Play(L"saltbaker_phase_1intro", false);
-		
+
 		// 이미지 왼쪽 오른쪽 이동하는거 다 편집하기에는 시간이 너무 오래 걸려서 random attack 은 안쓰기로 함.
 		// 레몬을 예를 들면 오른쪽 버전 왼쪽 버전 다 편집 및 배치해야하는데 시간 없어서 1->4->2->5->1 로 고정함.
 		/*std::map<EAttackType, std::vector<std::wstring>>& phase1_map = mPhaseInfo[EPhaseType::PHASE1];

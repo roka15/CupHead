@@ -75,6 +75,7 @@ namespace yeram_client
 	}
 	void BerryBullet::Death(Collider* _other)
 	{
+		Bullet::Death(_other);
 		GameObject* other_owner = _other->GetOwner();
 		if (other_owner->GetName().compare(L"Player") == 0)
 		{

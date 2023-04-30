@@ -31,14 +31,6 @@ namespace yeram_client
 		if (mbComplete == true)
 			return;
 		std::wstring str = this->mAnimator->GetOwner()->GetName();
-		if (str == L"LoadingClose")
-		{
-			int a = 0;
-		}
-		else if (str == L"LoadingOpen")
-		{
-			int a = 0;
-		}
 		mTime += Time::DeltaTime();
 		if (mSpriteSheet[mSpriteIndex].duration < mTime)
 		{
