@@ -40,9 +40,9 @@ namespace yeram_client
 		static bool UseUI() { return  mbUseUI; }
 
 		static void ChageLayer(GameObject* _obj,ELayerType _add);
-		static void RemoveObjectRequest(ELayerType _type){ mRemoveRequestObjs.push(RemoveObjectInfo{ nullptr,_type }); }
+		static void RemoveObjectRequest(ELayerType _type) { mRemoveRequestObjs.push(RemoveObjectInfo{ nullptr,_type }); }
 		static void RemoveObjectRequest(GameObject* _obj) { mRemoveRequestObjs.push(RemoveObjectInfo{ _obj,ELayerType::NONE}); }
-		static void RemoveObjectRequest(GameObject* _obj, ELayerType _type) { mRemoveRequestObjs.push(RemoveObjectInfo{ _obj,_type}); }
+		static void RemoveObjectRequest(GameObject* _obj, ELayerType _type) {  mRemoveRequestObjs.push(RemoveObjectInfo{ _obj,_type}); }
 		static void RemoveObjectRequestRelease();
 	private:
 		SceneManager()=delete;

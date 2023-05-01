@@ -156,6 +156,8 @@ namespace yeram_client
 		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Bullet, true);
 		ColliderManager::SetLayer(ELayerType::Bullet, ELayerType::Player, true);
 		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Boss, true);
+		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Monster, true);
+		ColliderManager::SetLayer(ELayerType::Monster, ELayerType::Boss, true);
 
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE1, std::vector<std::shared_ptr<GameObject>>()));
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE2, std::vector<std::shared_ptr<GameObject>>()));
@@ -493,6 +495,7 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase2_Run()
 	{
+		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Boss, false);
 		SceneManager::RemoveObjectRequest(ELayerType::Bullet);
 		for (auto& vec_itr : mBgObjects[EPhaseType::PHASE1])
 		{

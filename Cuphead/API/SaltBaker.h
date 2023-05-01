@@ -1,20 +1,12 @@
 #pragma once
 #include "Boss.h"
 
+
 namespace yeram_client
 {
 	class SaltBaker :public Boss
 	{
 	public:
-		struct SkillInfo
-		{
-			double mSkillCoolTime;
-			double mUseTime;
-			SkillInfo() :mSkillCoolTime(10.0),mUseTime(0.0)
-			{
-
-			}
-		};
 		struct SpawnInfo
 		{
 			bool mActive;
@@ -58,8 +50,8 @@ namespace yeram_client
 		std::map<EPhaseType, std::map<EAttackType, std::shared_ptr<SpawnInfo>>> mAttackCheck;
 
 		bool mbSkillUseCheck;
+		bool mbPepperSpawnCheck;
 		SkillInfo mP2BossSkill;
-		
 	};
 }
 

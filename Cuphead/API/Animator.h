@@ -47,6 +47,7 @@ namespace yeram_client
 		void FSMStop();
 		bool UseAnimation() { return mActiveAnimation != nullptr; }
 		bool Complete() { return mActiveAnimation->IsComplete(); }
+		void SetCurAniIndex(UINT _index) { mActiveAnimation->SetSpriteIndex(_index); }
 		const std::wstring& GetCurAniName();
 		const Vector2& GetSpriteSize();
 		const Vector2& GetSpriteSize(const std::wstring& _key);

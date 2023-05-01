@@ -23,12 +23,20 @@ namespace yeram_client
 		virtual void Death(Collider* _other)override;
 		virtual void Attack()override;
 		virtual void Intro()override;
+		virtual void Idle()override;
+		void Init();
 		void SetSpawnPos();
+		static bool IsSpawn();
+		virtual void TakeDamage(Collider* other)override; 
 		static const int mSpawnMax;
 	private:
-		
 		static bool mbSpawnInit;
 		static std::vector<SpawnInfo> mSpawners;
+		static bool mbAttackActive;
+		SkillInfo mSkill;
+		double mDeSpawnStartTime;
+		double mReSpawnTime;
+		bool mbReSpawn;
 	};
 }
 

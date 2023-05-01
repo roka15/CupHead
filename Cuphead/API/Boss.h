@@ -1,5 +1,6 @@
 #pragma once
 #include "Script.h"
+#include "SkillInfo.h"
 namespace yeram_client
 {
 	class Boss :public Script

@@ -2,6 +2,9 @@
 #include "GameObject.h"
 #include "MoveObject.h"
 #include "Time.h"
+#include "PlayerBullet.h"
+#include "Application.h"
+extern yeram_client::Application application;
 namespace yeram_client
 {
 	Monster::Monster():Script()
@@ -43,7 +46,7 @@ namespace yeram_client
 
 	void Monster::OnCollisionEnter(Collider* other)
 	{
-		Death(other);
+		TakeDamage(other);
 	}
 
 	void Monster::OnCollisionStay(Collider* other)
@@ -62,6 +65,10 @@ namespace yeram_client
 	{
 	}
 
+	void Monster::Idle()
+	{
+	}
+
 	void Monster::Intro()
 	{
 	}
@@ -73,6 +80,40 @@ namespace yeram_client
 		size *= scale;
 		mCol->SetSize(size / 2);
 		mCol->SetCenter(Vector2{ (-size.x / 4) ,-size.y + (size.y / 4) });
+	}
+
+	void Monster::TakeDamage(Collider* other)
+	{
+		GameObject* obj = other->GetOwner();
+		PlayerBullet* pb = obj->GetComponent<PlayerBullet>();
+		if (pb != nullptr)
+		{
+			mHP--;
+		}
+	}
+
+	std::wstring Monster::GetSpawnDir()
+	{
+		std::wstring name;
+		Vector2 center = application.GetWindowSize() / 2.0f;
+		Vector2 pos = mTransform->GetPos();
+		if (pos.x < center.x && pos.y < center.y)//left up
+		{
+			name = L"LeftUp";
+		}
+		else if (pos.x<center.x && pos.y>center.y)//left down
+		{
+			name = L"LeftDown";
+		}
+		else if (pos.x > center.x && pos.y < center.y)//right up
+		{
+			name = L"RightUp";
+		}
+		else if (pos.x > center.x && pos.y > center.y)//right down
+		{
+			name = L"RightDown";
+		}
+		return name;
 	}
 
 }
