@@ -38,7 +38,7 @@ namespace yeram_client
 		static void SetLoadSceneMessage(std::function<void()> _func_event) { mLoadMessageEvent = _func_event; };
 		static void UseUI(bool _flag) { mbUseUI = _flag; }
 		static bool UseUI() { return  mbUseUI; }
-
+		static ESceneType GetLoadScene() { return mLoadSceneType; }
 		static void ChageLayer(GameObject* _obj,ELayerType _add);
 		static void RemoveObjectRequest(ELayerType _type) { mRemoveRequestObjs.push(RemoveObjectInfo{ nullptr,_type }); }
 		static void RemoveObjectRequest(GameObject* _obj) { mRemoveRequestObjs.push(RemoveObjectInfo{ _obj,ELayerType::NONE}); }

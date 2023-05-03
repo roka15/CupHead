@@ -58,6 +58,15 @@ namespace yeram_client
 
 	void LemonBullet::Death(Collider* _other)
 	{
+		if (mbDeath == true)
+			return;
+		Bullet::Death(_other);
+	}
+
+	void LemonBullet::DeathPlay()
+	{
+		GetOwner()->SetActive(false);
+		SceneManager::RemoveObjectRequest(GetOwner());
 	}
 
 	void LemonBullet::CreateInfo(const Vector2& _dirpos, bool _dir)

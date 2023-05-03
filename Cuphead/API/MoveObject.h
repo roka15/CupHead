@@ -26,6 +26,8 @@ namespace yeram_client
 		const UINT& GetID() { return mID; }
 		void SetArriveEvent(std::function<void()> _func) { mArriveEvent = _func; }
 		void SetEndPos();
+		void SetYFlag(bool _flag) { mbYFlag = _flag; }
+		
 	private:
 
 		virtual void OnCollisionEnter(class Collider* other)override;
@@ -46,6 +48,7 @@ namespace yeram_client
 		Transform* mTf;
 		EDirType mDir;
 		std::function<void()> mArriveEvent;
+		bool mbYFlag;
 	};
 }
 

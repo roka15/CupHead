@@ -807,6 +807,43 @@ namespace yeram_client
 			mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::LEFT, Vector2{ -10.0f - size.x,pos.y }, true, false);
 			AddGameObject(shot3_bg3, ELayerType::BackObject);
 		}
+		std::shared_ptr<GameObject> letterboxTop = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			letterboxTop->SetActive(true);
+			letterboxTop->SetName(L"letterboxTop");
+
+			SpriteRenderer* sprite = letterboxTop->GetComponent<SpriteRenderer>();
+			sprite->SetImage(letterboxTop->GetName(), L"..\\Resources\\black.bmp");
+			sprite->SetRenderType(ERenderType::StretchBlt);
+
+			Transform* tf = letterboxTop->GetComponent<Transform>();
+			Vector2 size;
+			size.x = sprite->GetWidth();
+			size.y = sprite->GetHeight() * 2.5f;
+			tf->SetSize(size);
+		}
+		std::shared_ptr<GameObject> letterboxBottom = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			letterboxBottom->SetActive(true);
+			letterboxBottom->SetName(L"letterboxBottom");
+
+			RECT rc;
+			GetClientRect(application.GetHandle(), &rc);
+
+			SpriteRenderer* sprite = letterboxBottom->GetComponent<SpriteRenderer>();
+			sprite->SetImage(letterboxBottom->GetName(), L"..\\Resources\\black.bmp");
+			sprite->SetRenderType(ERenderType::StretchBlt);
+
+			Transform* tf = letterboxBottom->GetComponent<Transform>();
+			Vector2 size;
+			size.x = sprite->GetWidth();
+			size.y = sprite->GetHeight() * 2.5f;
+			tf->SetSize(size);
+			tf->SetPos(Vector2{ 0.0f, rc.bottom - rc.top - size.y });
+			//tf->SetPos(Vector2 { 0.0f, application.GetWindowSize().y - size.y });
+		}
+		AddGameObject(letterboxTop, ELayerType::FrontObject);
+		AddGameObject(letterboxBottom, ELayerType::FrontObject);
 		Scene::OnEnter();
 	}
 	void InWorldIntroScene::OnExit()

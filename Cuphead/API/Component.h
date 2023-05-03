@@ -17,7 +17,10 @@ namespace yeram_client
 		void SetOwner(GameObject* _owner) { mOwner = _owner; }
 		GameObject* GetOwner() { return mOwner; }
 		const bool& GetActive() { return mbActive; }
-		void SetActive(const bool _flag) { mbActive = _flag; }
+		void SetActive(const bool _flag) 
+		{
+			mbActive = _flag; 
+		}
 	
 	protected:
 		bool mbActive;

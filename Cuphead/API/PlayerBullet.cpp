@@ -81,6 +81,7 @@ namespace yeram_client
 		});
 		mAni->GetCompleteEvent(L"weaponnormal_shot_death") = std::bind([this]()->void
 		{
+			GetOwner()->SetActive(false);
 			SceneManager::RemoveObjectRequest(mOwner);
 		});
 		//mAni->Play(L"normal_shot_introRight",false);
@@ -123,11 +124,14 @@ namespace yeram_client
 	}
 	void PlayerBullet::Death(Collider* _other)
 	{
+		if (mbDeath == true)
+			return;
 		Bullet::Death(_other);
 		CookieBullet* cookie = _other->GetOwner()->GetComponent<CookieBullet>();
 		SaltBaker* salt = _other->GetOwner()->GetComponent<SaltBaker>();
 		if (cookie != nullptr||salt!=nullptr)
-		{
+		{   
+			mbDeath = true;
 			mMoveObject->SetActive(false);
 			mColider->SetActive(false);
 			mAni->Play(L"weaponnormal_shot_death", false);
@@ -141,8 +145,10 @@ namespace yeram_client
 			mDirType = EDirType::LEFT;
 		mMoveObject->SetArriveEvent(std::bind([this]()->void
 		{
-			mAni->Play(L"weaponnormal_shot_death", false);
+			GetOwner()->SetActive(false);
+			SceneManager::RemoveObjectRequest(mOwner);
 		}));
+
 		Bullet::CreateInfo(mSpeed, _startpos, _dir, true);
 	}
 	void PlayerBullet::SetDiagonalColInfo(EDirType _vertical_dir, std::wstring _ani_name)

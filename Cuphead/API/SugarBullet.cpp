@@ -46,29 +46,15 @@ namespace yeram_client
 	}
 	void SugarBullet::Death(Collider* _other)
 	{
-		GameObject* other_owner = _other->GetOwner();
-		Player* player = other_owner->GetComponent<Player>();
-		if (player!=nullptr)
-		{
-			if (mbParry == true)
-			{
-				bool suc = player->Parry_Check();
-				if (suc == true)
-				{
-					SceneManager::RemoveObjectRequest(GetOwner());
-					return;
-				}
-				else
-				{
-
-				}
-
-			}
-			//데미지 주기
-		}
-
-		//터지기.
-
+		if (mbDeath == true)
+			return;
+		Bullet::Death(_other);
+		
+	}
+	void SugarBullet::DeathPlay()
+	{
+		GetOwner()->SetActive(false);
+		SceneManager::RemoveObjectRequest(GetOwner());
 	}
 	void SugarBullet::SetColInfo(std::wstring _ani_name)
 	{

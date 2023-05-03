@@ -49,6 +49,7 @@ namespace yeram_client
 		bool Complete() { return mActiveAnimation->IsComplete(); }
 		void SetCurAniIndex(UINT _index) { mActiveAnimation->SetSpriteIndex(_index); }
 		const std::wstring& GetCurAniName();
+		const int& GetComEventPlayCnt() { return mComEventCnt; }
 		const Vector2& GetSpriteSize();
 		const Vector2& GetSpriteSize(const std::wstring& _key);
 		const Vector2& GetImageSize();
@@ -71,6 +72,7 @@ namespace yeram_client
 		bool mbUseFsm;
 		double mLimitTime;
 		double mCurTime;
+		int mComEventCnt;
 	};
 }
 

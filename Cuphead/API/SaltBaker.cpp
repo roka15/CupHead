@@ -13,6 +13,8 @@
 #include "Pepper.h"
 #include "ParryingObject.h"
 #include "Ground.h"
+#include "Camera.h"
+#include "SlatPhase3.h"
 extern yeram_client::Application application;
 
 namespace yeram_client
@@ -32,6 +34,9 @@ namespace yeram_client
 
 	void SaltBaker::Initialize()
 	{
+		
+		mbPepperSpawnCheck = false;
+		mbPhase3IntroStart = false;
 		Boss::Initialize();
 		mMoveObject->CreateInfo(Vector2{ 550.0f,20.0f }, Vector2{ -1.0f,-1.0f });
 		mMoveObject->SetActive(false);
@@ -39,120 +44,149 @@ namespace yeram_client
 		mCol->SetCenter(Vector2{ -125.0f,-480.0f });
 		mCol->SetSize(Vector2{ 200.0f,100.0f });
 
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\idle", Vector2::Zero, 0.1f);
+		float speed = 0.05f;
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\idle", Vector2::Zero, speed);
 
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5_3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\6", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\7", Vector2::Zero, 0.1f);
-
-
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\1_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\5", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\6", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\7", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\9", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\10", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\12", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5_3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\6", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\7", Vector2::Zero, speed);
 
 
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\5", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\6", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\7", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\8", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\9", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\10", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\11", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\1_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\6", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\7", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\9", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\10", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\12", Vector2::Zero, speed);
 
 
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\5", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\6", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\7", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\8", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\6", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\7", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\8", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\9", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\10", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\11", Vector2::Zero, speed);
 
 
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\5", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\6", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\7", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\8", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9_3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9_4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\10", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\11", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\12", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\13", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\14", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\14_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\15", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\16", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\17", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\19", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\20", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\21", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\22", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\23", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\24", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\6", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\7", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\8", Vector2::Zero, speed);
 
 
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3_1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3_2", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\4", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\5", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\6", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Idle", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\6", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\7", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\8", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9_3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\9_4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\10", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\11", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\12", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\13", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\14", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\14_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\15", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\16", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\17", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\19", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\20", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\21", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\22", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\23", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\24", Vector2::Zero, speed);
 
 
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype1", Vector2::Zero, 0.1f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype2", Vector2::Zero, 0.1f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\1_4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3_1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\3_2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Intro\\6", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Idle", Vector2::Zero, speed);
+
+
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype2", Vector2::Zero, speed);
 		
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\LeftDown", Vector2::Zero, 0.05f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\LeftUp", Vector2::Zero, 0.05f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\RightDown", Vector2::Zero, 0.05f);
-		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\RightUp", Vector2::Zero, 0.05f);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\LeftDown", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\LeftUp", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\RightDown", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\RightUp", Vector2::Zero, speed);
+		
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\6", Vector2::Zero, speed);
+
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_boss\\idle", Vector2::Zero, speed);
+	
 		
 		
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\1", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\2", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\3", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\4", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\5", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\6", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\7", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\8", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\9", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\10", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\11", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\12", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\13", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\14", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\15", Vector2::Zero, speed);
+		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\16", Vector2::Zero, speed);
+		
+	
 		Animator* ani = mAni;
 		MoveObject* mv = mMoveObject;
 		SetPhase(EPhaseType::PHASE1);
@@ -1165,7 +1199,6 @@ namespace yeram_client
 		});
 		mAni->GetCompleteEvent(L"translate_p1_p222") = std::bind([ani, this]()->void
 		{
-
 			std::shared_ptr<GameObject> player = SceneManager::FindObject(L"Player");
 			player->SetActive(true);
 			GameObject* owner = ani->GetOwner();
@@ -1217,6 +1250,10 @@ namespace yeram_client
 		{
 			GameObject* owner = ani->GetOwner();
 			owner->SetActive(true);
+			Collider* col = owner->GetComponent<Collider>();
+			Vector2 center = col->GetCenter();
+			col->SetCenter(Vector2{ center.x - 50.0f ,center.y - 250.0f });
+			col->SetSize(Vector2{ 500.0f,300.0f });
 			Transform* tf = owner->GetComponent<Transform>();
 			Vector2 pos = tf->GetPos();
 			pos.x += 500.0f;
@@ -1309,9 +1346,6 @@ namespace yeram_client
 			Vector2 pos = tf->GetPos();
 			pos.x -= 100.0f;
 			tf->SetPos(pos);
-			Collider* col = owner->GetComponent<Collider>();
-			Vector2 center = col->GetCenter();
-			col->SetCenter(Vector2{ center.x-50.0f ,center.y - 250.0f });
 			ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
 		});
 		mAni->GetCompleteEvent(L"saltbaker_phase_2sb_p2_Idle") = std::bind([this]()->void
@@ -1376,9 +1410,120 @@ namespace yeram_client
 			mAttackCheck[EPhaseType::PHASE2][EAttackType::Type1]->mActive = true;
 		});
 #pragma endregion
+#pragma region death event
+		mAni->GetCompleteEvent(L"sb_p2_Death1") = std::bind([ani,this]()->void
+		{
+			mParts[EParts::ARM2]->SetActive(false);
+			ani->Play(L"sb_p2_Death2", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Death2") = std::bind([ani]()->void
+		{
+			ani->Play(L"sb_p2_Death3", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Death3") = std::bind([ani]()->void
+		{
+			ani->Play(L"sb_p2_Death4", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Death4") = std::bind([ani]()->void
+		{
+			ani->Play(L"sb_p2_Death5", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Death5") = std::bind([ani]()->void
+		{
+			ani->Play(L"sb_p2_Death6", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p2_Death6") = std::bind([ani]()->void
+		{
+			if (ani->GetComEventPlayCnt() >= 1)
+				return;
+			ani->SetActive(false);
+		});
+		
+#pragma endregion
+#pragma region p3 intro
+		mAni->GetStartEvent(L"sb_p3_introacc1") = std::bind([ani, this]()->void
+		{
+			GameObject* owner = ani->GetOwner();
+			Transform* tf = owner->GetComponent<Transform>();
+			tf->SetPos(Vector2{ 300.0f,400.0f });
+			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+			arm->SetActive(false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc1") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc2", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc2") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc3", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc3") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc4", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc4") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc5", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc5") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc6", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc6") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc7", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc7") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc8", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc8") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc9", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc9") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc10", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc10") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc11", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc11") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc12", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc12") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc13", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc13") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc14", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc14") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc15", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc15") = std::bind([ani, this]()->void
+		{
+			mAni->Play(L"sb_p3_introacc16", false);
+		});
+		mAni->GetCompleteEvent(L"sb_p3_introacc16") = std::bind([ani, this]()->void
+		{
+			if (mAni->GetComEventPlayCnt() > 1)
+				return;
+			std::shared_ptr<GameObject> phase3_obj = core::ObjectPool<SlatPhase3>::Spawn();
+			SlatPhase3* salt = phase3_obj->GetComponent<SlatPhase3>();
+			salt->SetCompleteEvent();
+			salt->SetColCenter();
+			SceneManager::GetActiveScene()->AddGameObject(phase3_obj, ELayerType::Monster);
+		});
 
+
+#pragma endregion
 		//test
-		//mAni->Play(L"saltbaker_phase_1intro", false);
+		//mAni->Play(L"sb_p3_introacc1", false);
 		Vector2 pos = application.GetWindowSize();
 
 		mTransform->SetPos(Vector2{ pos.x / 2.0f,650.0f });
@@ -1398,41 +1543,41 @@ namespace yeram_client
 				tf->SetScale(mTransform->GetScale());
 				tf->SetPos(Vector2{ pos.x + 320.0f,pos.y + 20.0f });
 				Animator* ani = arm->GetComponent<Animator>();
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_arm", Vector2::Zero, 0.09575f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_1arm", Vector2::Zero, 0.09575f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_2arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\3_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\4_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\10_arm", Vector2::Zero, 0.099f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11_arm", Vector2::Zero, 0.099f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11_2_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\2_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\4_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\4_2arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\6_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\6_arm", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\2_arm", Vector2::Zero, 0.08f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\2_2arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\3_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\4_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\5_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\12_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\13_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\15_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\16_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\17_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_2_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_3_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_4_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_5_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\19_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\20_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\22_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\23_arm", Vector2::Zero, 0.09f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\25_arm", Vector2::Zero, 0.09f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\intro_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_arm", Vector2::Zero, 0.04575f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_1arm", Vector2::Zero, 0.04575f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\2_2arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\3_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\4_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\5_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\10_arm", Vector2::Zero, 0.049f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11_arm", Vector2::Zero, 0.049f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\11_2_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\2_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\4_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\4_2arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\6_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\6_arm", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\2_arm", Vector2::Zero, 0.03f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\2_2arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\3_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\4_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\5_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\12_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\13_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\15_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\16_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\17_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_2_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_3_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_4_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\18_5_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\19_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\20_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\22_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\23_arm", Vector2::Zero, 0.04f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\translate_p1_p2\\25_arm", Vector2::Zero, 0.04f);
 
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_ground\\Idle", Vector2::Zero, 0.1f);
 				ani->GetCompleteEvent(L"attack_type210_arm") = std::bind([ani, tf]()->void
@@ -1518,33 +1663,34 @@ namespace yeram_client
 				tf->SetPos(Vector2{ 730.0f,500.0f });
 				Animator* ani = acc->GetComponent<Animator>();
 
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_attack1", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_attack2", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_attack2_1", Vector2::Zero, 0.09575f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_attack1", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_attack2", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type1\\dough_attack2_1", Vector2::Zero, 0.05575f);
 
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\1_2reg", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\2_sugar", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\3_sugar", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\4_sugar", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\6_sugar", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\7_sugar", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8_sugar", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8_2_sugar", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\9_sugar", Vector2::Zero, 0.1f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\1_2reg", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\2_sugar", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\3_sugar", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\4_sugar", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\6_sugar", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\7_sugar", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8_sugar", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\8_2_sugar", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type2\\9_sugar", Vector2::Zero, speed);
 
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\3_remon", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\5_remon", Vector2::Zero, 0.1f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\3_remon", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type4\\5_remon", Vector2::Zero, speed);
 
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\2_berrybox", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\7_berrybox", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\8_berrybox", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\9_berrybox", Vector2::Zero, 0.1f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\10_berrybox", Vector2::Zero, 0.1f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\2_berrybox", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\7_berrybox", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\8_berrybox", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\9_berrybox", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\attack_type5\\10_berrybox", Vector2::Zero, speed);
 
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_pepper\\intro_flash", Vector2::Zero, 0.05f);
-				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_pepper\\intro_flash2", Vector2::Zero, 0.05f);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_pepper\\intro_flash", Vector2::Zero, speed);
+				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_pepper\\intro_flash2", Vector2::Zero, speed);
 
-				
+
+
 				ani->GetCompleteEvent(L"attack_type1dough_attack1") = std::bind([ani]()->void
 				{
 					ani->Play(L"attack_type1dough_attack2", false);
@@ -1563,6 +1709,7 @@ namespace yeram_client
 				{
 					std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
 					acc->SetActive(false);
+					SceneManager::ChageLayer(acc.get(), ELayerType::BackObject);
 					//pepper 생성 및 인트로 재생하기.
 					for (int i = 0; i < Pepper::mSpawnMax; i++)
 					{
@@ -1570,9 +1717,11 @@ namespace yeram_client
 						Pepper* pepper = pepper_obj->GetComponent<Pepper>();
 						pepper->SetSpawnPos();
 						pepper->Intro();
+						mPeppers.push_back(pepper_obj);
 						SceneManager::GetActiveScene()->AddGameObject(pepper_obj, ELayerType::Monster);
 					}
 				});
+		      
 			}
 			mParts.insert(std::make_pair(EParts::ACC, acc));
 		}
@@ -1643,6 +1792,7 @@ namespace yeram_client
 			P2AttackType1();
 		}))));
 		Phase1();
+		
 		//test
 		//mPhaseType = EPhaseType::PHASE2;
 		//Phase2();
@@ -1651,7 +1801,11 @@ namespace yeram_client
 	void SaltBaker::Update()
 	{
 		Boss::Update();
-
+		if (mbPhase3IntroStart ==true)//fadein 됨.
+		{
+			mAni->Play(L"sb_p3_introacc1",false);
+			mbPhase3IntroStart = false;
+		}
 		if (mPhaseType == EPhaseType::PHASE2&& mbSkillUseCheck == false)
 		{
 				if (mP2BossSkill.GetUseTime() == 0.0 || mTime - mP2BossSkill.GetUseTime() >= mP2BossSkill.GetCoolTime())
@@ -1714,14 +1868,15 @@ namespace yeram_client
 			m.second.clear();
 		}
 		mAttackCheck.clear();
+		
 	}
 
 	void SaltBaker::OnCollisionEnter(Collider* other)
 	{
 		Boss::OnCollisionEnter(other);
+		GameObject* owner = other->GetOwner();
 		if (mPhaseType == EPhaseType::PHASE2)
 		{
-			GameObject* owner = other->GetOwner();
 			Pepper* pepper = owner->GetComponent<Pepper>();
 			if (pepper != nullptr)
 			{
@@ -1740,6 +1895,7 @@ namespace yeram_client
 				});
 			}
 		}
+		
 	}
 
 	void SaltBaker::OnCollisionStay(Collider* other)
@@ -1868,6 +2024,7 @@ namespace yeram_client
 		}
 		mbSkillUseCheck = true;
 	}
+	
 	void SaltBaker::Phase1()
 	{
 		mAni->Play(L"saltbaker_phase_1intro", false);
@@ -1890,6 +2047,15 @@ namespace yeram_client
 
 	void SaltBaker::Phase3()
 	{
+		mPhaseType = EPhaseType::PHASE3;
+		mAni->Play(L"sb_p2_Death1", false);
+		for (auto& p : mPeppers)
+		{
+			p->GetComponent<Pepper>()->SceneDeath();
+			p.reset();
+		}
+		mPeppers.clear();
+		//SceneManager::RemoveObjectRequest(ELayerType::Monster);
 	}
 	void SaltBaker::RegisterPattern1()
 	{

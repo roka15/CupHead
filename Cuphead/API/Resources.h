@@ -42,6 +42,11 @@ namespace yeram_client
 		{
 			mResources.insert(std::make_pair(_key, _resource));
 		}
+		
+		static void Remove(const std::wstring& _key)
+		{
+			mResources.erase(mResources.find(_key));
+		}
 		static void Release()
 		{
 			for (auto pair : mResources)

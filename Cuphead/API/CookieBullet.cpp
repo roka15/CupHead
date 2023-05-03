@@ -66,8 +66,11 @@ namespace yeram_client
 	}
 	void CookieBullet::Death(Collider* _other)
 	{
-		ZigZagBullet::Death(_other);
+		if (mbDeath == true)
+			return;
+		Bullet::Death(_other);
 		PlayerBullet* pb = _other->GetOwner()->GetComponent<PlayerBullet>();
+       
 		if (pb != nullptr)
 		{
 			if (mbDeath == false)
@@ -75,9 +78,13 @@ namespace yeram_client
 				mbDeath = true;
 				//부셔지기.
 				//애니 complete ani 에 removeobject 함수 연결해두기.
-				mAni->Play(L"dough_cameleffect", false);
+				DeathPlay();
 			}
 		}
+	}
+	void CookieBullet::DeathPlay()
+	{
+		mAni->Play(L"dough_cameleffect", false);
 	}
 	void CookieBullet::SetColInfo(std::wstring _ani_name)
 	{

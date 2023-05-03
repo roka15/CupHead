@@ -125,6 +125,7 @@ namespace core
 		/*T* obj = dynamic_cast<T*>(_obj);
 		if (obj == nullptr)
 			return;*/
+		_obj->Release();
 		_obj->Initialize();
 		_obj->SetActive(false);
 		_obj->RemoveChilds();

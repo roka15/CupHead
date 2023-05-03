@@ -78,15 +78,22 @@ void yeram_client::MintBullet::Shoot()
 
 void yeram_client::MintBullet::Death(Collider* _other)
 {
-	ZigZagBullet::Death(_other);
+	if (mbDeath == true)
+		return;
+	Bullet::Death(_other);
 	Ground* ground = _other->GetOwner()->GetComponent<Ground>();
 	if (ground != nullptr)
 	{
 		if (mbDeath == false)
 		{
 			mbDeath = true;
-			std::wstring ani_name = mAni->GetCurAniName();
-			mAni->Play(ani_name + L"Death", false);
+			DeathPlay();
 		}
 	}
+}
+
+void yeram_client::MintBullet::DeathPlay()
+{
+	std::wstring ani_name = mAni->GetCurAniName();
+	mAni->Play(ani_name + L"Death", false);
 }

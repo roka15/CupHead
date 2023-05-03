@@ -23,7 +23,7 @@ namespace yeram_client
 	Camera::ECameraEffectType Camera::mType = Camera::ECameraEffectType::NONE;
 	Vector2 Camera::mAlphaStartPos = Vector2::Zero;
 	Vector2 Camera::mAlphaEndPos = Vector2::Zero;
-	
+	float Camera::mAlphaSpeed = 1.0f;
 	void Camera::Initialize()
 	{
 		mDistance = Vector2::Zero;
@@ -33,6 +33,8 @@ namespace yeram_client
 
 		mCutton = Image::Create(L"Cutton", mResolution.x, mResolution.y, RGB(0, 0, 0));
 		mAlphaEndPos = mResolution;
+		mAlphaSpeed = 1.0f;
+		mCuttonAlpha = 0.0f;
 	}
 
 	void Camera::Update()
@@ -51,7 +53,7 @@ namespace yeram_client
 		}
 		else
 		{
-			
+
 			/*if (core::Input::GetKey(core::EKeyCode::Left))
 			{
 				mLookPosition.x -= 100.0f * Time::DeltaTime();
@@ -68,7 +70,7 @@ namespace yeram_client
 			{
 				mLookPosition.y += 100.0f * Time::DeltaTime();
 			}*/
-			
+
 		}
 
 		if (mAlphaTime < mEndTime && mType != ECameraEffectType::NONE)
@@ -77,29 +79,33 @@ namespace yeram_client
 			float ratio = 0.0f;
 			if (mCutton->GetKey().compare(L"Cutton") == 0)
 			{
-				ratio = (mAlphaTime / mEndTime);
+				ratio = (mAlphaTime / mEndTime) * mAlphaSpeed;
 			}
 			else
 			{
-				ratio = (mAlphaTime / mEndTime) * 2.0f;
+				ratio = (mAlphaTime / mEndTime) * 2.0f * mAlphaSpeed;
 			}
 
 			if (mType == ECameraEffectType::FADE_IN)
 			{
 				mCuttonAlpha = 1.0f - ratio;
+				if (mCuttonAlpha <= 0.0)
+					mCuttonAlpha = 0.0f;
 			}
 			else if (mType == ECameraEffectType::FADE_OUT)
 			{
 				mCuttonAlpha = ratio;
+				if (mCuttonAlpha >= 1.0f)
+					mCuttonAlpha = 1.0f;
 			}
-			else
-			{
 
-			}
 		}
 		else if (mAlphaTime >= mEndTime)
 		{
+			if (mType == ECameraEffectType::FADE_IN)
 				InitFadeInfo();
+			else
+				mCuttonAlpha = 1.0f;
 		}
 
 		mDistance = mLookPosition - (mResolution / 2.0f);
@@ -109,6 +115,29 @@ namespace yeram_client
 	{
 		if (mAlphaTime < mEndTime
 			&& (mType == ECameraEffectType::FADE_IN || mType == ECameraEffectType::FADE_OUT))
+		{
+			BLENDFUNCTION func = {};
+			func.BlendOp = AC_SRC_OVER;
+			func.BlendFlags = 0;
+			if (mCutton->GetKey().compare(L"Cutton") == 0)
+			{
+				func.AlphaFormat = AC_SRC_OVER;
+			}
+			else
+			{
+				func.AlphaFormat = AC_SRC_ALPHA;
+			}
+
+			func.SourceConstantAlpha = (BYTE)(255.0f * mCuttonAlpha);
+
+			AlphaBlend(_hdc, mAlphaStartPos.x, mAlphaStartPos.y
+				, mAlphaEndPos.x, mAlphaEndPos.y
+				, mCutton->GetHDC()
+				, 0, 0
+				, mCutton->GetWidth(), mCutton->GetHeight()
+				, func);
+		}
+		else if (mType == ECameraEffectType::FADE_OUT && mCuttonAlpha == 1.0f)
 		{
 			BLENDFUNCTION func = {};
 			func.BlendOp = AC_SRC_OVER;
@@ -152,6 +181,16 @@ namespace yeram_client
 		//mDistance = mDistance * _distance;
 	}
 
+	void Camera::FadeIn()
+	{
+		InitFadeInfo();
+		mType = ECameraEffectType::FADE_IN;
+	}
+	void Camera::FadeOut()
+	{
+		InitFadeInfo();
+		mType = ECameraEffectType::FADE_OUT;
+	}
 
 
 	void Camera::InitFadeInfo()
@@ -162,7 +201,7 @@ namespace yeram_client
 		mAlphaStartPos = Vector2::Zero;
 		mType = ECameraEffectType::NONE;
 		mAlphaTime = 0.0f;
-		mCuttonAlpha = 1.0f;
+		mCuttonAlpha = 0.0f;
 	}
 
 	void Camera::Clear()
@@ -171,6 +210,8 @@ namespace yeram_client
 		mLookPosition = (mResolution / 2.0f);
 		mDistance = Vector2::Zero;
 	}
+
+
 
 
 }

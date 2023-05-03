@@ -21,7 +21,7 @@ namespace yeram_client
 			mVelocity =_velocity; 
 		}
 		void Use_Gravity(bool _flag) { mbGravity = _flag; }
-		
+		void SetGravity(float _gravity) { mGravity.y = _gravity; }
 		Vector2 GetVelocity() { return mVelocity; }
 		bool GetGround() { return mbGround; }
 	private:

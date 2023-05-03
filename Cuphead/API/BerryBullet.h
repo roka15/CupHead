@@ -18,7 +18,7 @@ namespace yeram_client
         virtual void OnCollisionExit(class Collider* other)override;
         virtual void Shoot();
         virtual void Death(Collider* _other);
-
+        virtual void DeathPlay()override;
         void CreateInfo(const Vector2& _speed);
     private:
         Vector2 mDistance;

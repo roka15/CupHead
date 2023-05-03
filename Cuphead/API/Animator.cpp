@@ -60,12 +60,15 @@ namespace yeram_client
 					std::wstring str = mActiveAnimation->GetName();
 					Events* event = FindEvents(str);
 					if (event != nullptr)
+					{
 						event->mCompleteEvent();
-
+						mComEventCnt++;
+					}
 					if (mbLoop == true)
 					{
 						mActiveAnimation->Reset();
 					}
+					
 					//else if (mbLoop == false)
 					//{
 					//	/*	Animator::Events* events
@@ -191,6 +194,7 @@ namespace yeram_client
 
 	void Animator::Play(const std::wstring& _name, bool _loop, bool _use_fsm)
 	{
+		mComEventCnt = 0;
 		mbUseFsm = _use_fsm;
 		Animator::Events* prev_events = nullptr;
 		if (mActiveAnimation != nullptr)
@@ -225,6 +229,7 @@ namespace yeram_client
 
 	void Animator::Play(const std::wstring& _name, bool _loop, double _time, bool _use_fsm)
 	{
+		mComEventCnt = 0;
 		mbUseFsm = _use_fsm;
 		Animator::Events* prev_events = nullptr;
 		if (mActiveAnimation != nullptr)

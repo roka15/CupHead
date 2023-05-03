@@ -18,6 +18,7 @@ namespace yeram_client
 		virtual void OnCollisionExit(class Collider* other)override;
 		virtual void Shoot()override;
 		virtual void Death(Collider* _other)override;
+		virtual void DeathPlay()override;
 		virtual void SetColInfo(std::wstring _ani_name)override;
 
 		virtual void SetAnimation(std::wstring _name, bool _flag)override;

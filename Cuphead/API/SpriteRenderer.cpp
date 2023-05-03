@@ -59,6 +59,8 @@ namespace yeram_client
 
 	void SpriteRenderer::Release()
 	{
+		/*const std::wstring name = mImage->GetKey();
+		Resources::Remove(name);*/
 	}
 
 	void SpriteRenderer::SetImage(const std::wstring& _filename, const std::wstring& _path)

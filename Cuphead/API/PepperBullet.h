@@ -19,6 +19,7 @@ namespace yeram_client
 		virtual void SetColInfo(std::wstring _ani_name);
 		virtual void Shoot();
 		virtual void Death(Collider* _other);
+		virtual void DeathPlay();
 	private:
 		std::vector<std::wstring> mAnis;
 	

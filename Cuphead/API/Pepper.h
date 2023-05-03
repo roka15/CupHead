@@ -29,6 +29,7 @@ namespace yeram_client
 		static bool IsSpawn();
 		virtual void TakeDamage(Collider* other)override; 
 		static const int mSpawnMax;
+		
 	private:
 		static bool mbSpawnInit;
 		static std::vector<SpawnInfo> mSpawners;

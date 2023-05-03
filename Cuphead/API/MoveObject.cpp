@@ -8,6 +8,7 @@ namespace yeram_client
 	MoveObject::MoveObject() :Script()
 	{
 		SetName(L"MoveObject");
+		mbYFlag = true;
 	}
 	MoveObject::~MoveObject()
 	{
@@ -235,11 +236,20 @@ namespace yeram_client
 		{
 			pos.x += mDirpos.x * mSpeed.x * Time::DeltaTime();
 		}
-		if (yflag == false)
+		if (mbYFlag == true)
 		{
-			pos.y += mDirpos.y * mSpeed.y * Time::DeltaTime();
+			if (yflag == false)
+			{
+				pos.y += mDirpos.y * mSpeed.y * Time::DeltaTime();
+			}
 		}
-		if (xflag == true && yflag == true)
+		if (mbYFlag == false && xflag == true)
+		{
+			mbArrive = true;
+			mArriveEvent();
+			return;
+		}
+		else if (xflag == true && yflag == true)
 		{
 			mbArrive = true;
 			mArriveEvent();

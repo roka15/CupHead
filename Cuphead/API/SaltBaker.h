@@ -28,6 +28,8 @@ namespace yeram_client
 		virtual void OnCollisionEnter(class Collider* other);
 		virtual void OnCollisionStay(class Collider* other);
 		virtual void OnCollisionExit(class Collider* other);
+
+		void SetPhase3Intro() { mbPhase3IntroStart = true; }
 	private:
 		virtual void Phase1()override;
 		virtual void Phase2()override;
@@ -43,6 +45,8 @@ namespace yeram_client
 
 		void P2AttackType1();
 		void P2AttackAni();
+
+		
 	private:
 		EGameObjectType mobjType;
 		std::map<EPhaseType, std::map<EAttackType, std::vector<std::wstring>>> mPhaseInfo;
@@ -52,6 +56,8 @@ namespace yeram_client
 		bool mbSkillUseCheck;
 		bool mbPepperSpawnCheck;
 		SkillInfo mP2BossSkill;
+		std::vector<std::shared_ptr<GameObject>> mPeppers;
+		bool mbPhase3IntroStart;
 	};
 }
 

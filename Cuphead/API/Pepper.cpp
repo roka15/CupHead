@@ -17,6 +17,7 @@ namespace yeram_client
 		mHP = 4;
 		mReSpawnTime = 5.0;
 		mbReSpawn = false;
+		mbDeath = false;
 	}
 
 	Pepper::~Pepper()
@@ -26,6 +27,10 @@ namespace yeram_client
 	void Pepper::Initialize()
 	{
 		mOwner->SetName(L"Pepper");
+		mHP = 4;
+		mReSpawnTime = 5.0;
+		mbReSpawn = false;
+		mbDeath = false;
 		Vector2 winsize = application.GetWindowSize();
 		if (mbSpawnInit == false)
 		{
@@ -64,6 +69,11 @@ namespace yeram_client
 
 	void Pepper::Update()
 	{
+		if (mbSceneDeath == true)
+		{
+			GetOwner()->SetActive(false);
+			return;
+		}
 		Monster::Update();
 		if (mbReSpawn == true)
 		{

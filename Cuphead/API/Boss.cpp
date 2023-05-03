@@ -3,6 +3,7 @@
 #include "MoveObject.h"
 #include "Time.h"
 #include "PlayerBullet.h"
+#include "Pepper.h"
 namespace yeram_client
 {
 	Boss::Boss():Script()
@@ -56,9 +57,9 @@ namespace yeram_client
 	{
 		GameObject* owner = other->GetOwner();
 		PlayerBullet* player_bullet = owner->GetComponent<PlayerBullet>();
-		if (player_bullet != nullptr)
+		Pepper* pepper = owner->GetComponent<Pepper>();
+		if (player_bullet != nullptr|| pepper !=nullptr)
 		{
-			mHP;
 			TakeDamage();
 		}
 	}
@@ -85,8 +86,8 @@ namespace yeram_client
 		}
 		else if (mHP < (mMaxHP / 3) && mPhaseType == EPhaseType::PHASE2) // phase 3 ÀüÈ¯
 		{
-			mPhaseType = EPhaseType::PHASE3;
 			mbChagePhase = true;
+			Phase3();
 		}
 	}
 

@@ -25,17 +25,24 @@ namespace yeram_client
 		void Phase1_Run();
 		void Phase2_Run();
 		void Phase3_Run();
+		void Phase3_2Run();
 		void ActivePhaseObject(EPhaseType _type,bool _flag);
 		void RemovePhaseObject(EPhaseType _type);
 	private:
 		bool mbPhase1_Flag;
 		bool mbPhase2_Flag;
 		bool mbPhase3_Flag;
+
+		bool mbTranslateFlag; // 바꾸는중.
 		std::shared_ptr<GameObject> mPlayer;
 		std::shared_ptr<GameObject> mBoss;
 		std::map<EPhaseType, std::vector<std::shared_ptr<GameObject>>> mBgObjects;
 
 		const float mPhase2SceneMoveSpeed;
+		int mPhaseTranslateObj_Cnt;
+		bool mbDeath;
+		double mTime;
+		double mPhase3CloseTime;
 	};
 }
 

@@ -23,6 +23,7 @@ namespace yeram_client
 		void SetColCenter();
 		virtual void TakeDamage(Collider* other);
 		std::wstring GetSpawnDir();
+		void SceneDeath() { mbSceneDeath = true; }
 	protected:
 		class MoveObject* mMoveObject;
 		class Collider* mCol;
@@ -31,6 +32,7 @@ namespace yeram_client
 		double mTime;
 		int mHP;
 		bool mbDeath;
+		bool mbSceneDeath;
 	};
 }
 

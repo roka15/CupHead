@@ -31,6 +31,7 @@
 #include "MoveObject.h"
 #include "CutScenePlayAnimation.h"
 #include "Loading.h"
+#include "SlatPhase3.h"
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -63,26 +64,27 @@ namespace yeram_client
 		mScenes[(UINT)ESceneType::SaltBakerBossIntro] = new SaltBakerIntroScene(L"SaltBakerIntro");
 		mScenes[(UINT)ESceneType::SaltBakerBoss] = new SaltBakerBossScene(L"SaltBakerBoss");
 		//애니 재생으로만 쓸 pool
-		core::ObjectPool<Animator>::Initialize(300);
-		core::ObjectPool<SpriteRenderer>::Initialize(300);
+		core::ObjectPool<Animator>::Initialize(100,200);
+		core::ObjectPool<SpriteRenderer>::Initialize(100,200);
 		core::ObjectPool<Collider>::Initialize(10);
 		//core::ObjectPool<UI>::Initialize(200);
 		core::ObjectPool<Player>::Initialize(1, 1);
 		//core::ObjectPool<Ground>::Initialize(100, 100);
 		core::ObjectPool<Ground>::Initialize(100);
-		core::ObjectPool<MoveObject>::Initialize(300);
+		core::ObjectPool<MoveObject>::Initialize(100,200);
 		core::ObjectPool<CutScenePlayAnimation>::Initialize(10);
 		core::ObjectPool<PixelCrash>::Initialize(10);
 		core::ObjectPool<WorldMapObject>::Initialize(10);
-		core::ObjectPool<PlayerBullet>::Initialize(300);
+		core::ObjectPool<PlayerBullet>::Initialize(100,200);
 		core::ObjectPool<SaltBaker>::Initialize(1);
-		core::ObjectPool<CookieBullet>::Initialize(100, 200);
-		core::ObjectPool<SugarBullet>::Initialize(100, 200);
-		core::ObjectPool<BerryBullet>::Initialize(100, 200);
-		core::ObjectPool<LemonBullet>::Initialize(100, 200);
-		core::ObjectPool<MintBullet>::Initialize(100, 200);
-		core::ObjectPool<PepperBullet>::Initialize(100, 200);
-		core::ObjectPool<Pepper>::Initialize(100, 200);
+		core::ObjectPool<CookieBullet>::Initialize(50, 100);
+		core::ObjectPool<SugarBullet>::Initialize(50, 100);
+		core::ObjectPool<BerryBullet>::Initialize(50, 100);
+		core::ObjectPool<LemonBullet>::Initialize(50, 100);
+		core::ObjectPool<MintBullet>::Initialize(50, 100);
+		core::ObjectPool<PepperBullet>::Initialize(50, 100);
+		core::ObjectPool<Pepper>::Initialize(10, 100);
+		core::ObjectPool<SlatPhase3>::Initialize(1, 1);
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
@@ -213,6 +215,7 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
+		core::ObjectPool<SlatPhase3>::Release();
 		core::ObjectPool<PepperBullet>::Release();
 		core::ObjectPool<Pepper>::Release();
 		core::ObjectPool<MintBullet>::Release();

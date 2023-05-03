@@ -75,19 +75,22 @@ namespace yeram_client
 	}
 	void BerryBullet::Death(Collider* _other)
 	{
+		if (mbDeath == true)
+			return;
 		Bullet::Death(_other);
-		GameObject* other_owner = _other->GetOwner();
-		if (other_owner->GetName().compare(L"Player") == 0)
+		Ground* g = _other->GetOwner()->GetComponent<Ground>();
+		if (g != nullptr)
 		{
-			//데미지 주기
+			DeathPlay();
+			mbDeath = true;
 		}
-		Ground* ground = other_owner->GetComponent<Ground>();
-		if (ground != nullptr)
-		{
-			mMoveObject->SetActive(false);
-			std::wstring aniname = mAni->GetCurAniName();
-			mAni->Play(aniname + L"Death", false);
-		}
+	}
+
+	void BerryBullet::DeathPlay()
+	{
+		mMoveObject->SetActive(false);
+		std::wstring aniname = mAni->GetCurAniName();
+		mAni->Play(aniname + L"Death", false);
 	}
 	
 	void BerryBullet::CreateInfo(const Vector2& _speed)
@@ -104,6 +107,6 @@ namespace yeram_client
 		Vector2 dir = arrive_point - spawn_point;
 		dir.Normalize();
 		Vector2 dummyendpos = { -100.0f,1000.0f };
-		Bullet::CreateInfo(_speed,spawn_point,dir,dummyendpos,true);
+		Bullet::CreateInfo(_speed,spawn_point,dir,true);
 	}
 }

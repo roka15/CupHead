@@ -40,8 +40,11 @@ namespace yeram_client
 		virtual void CreateInfo(const Vector2& _speed,const Vector2& _startpos, const Vector2& _endpos);
 		virtual void CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos,bool _dir);
 		virtual void CreateInfo(const Vector2& _speed, const Vector2& _startpos, const Vector2& _dirpos,const Vector2& _killpos, bool _dir);
+		
+		virtual void DeathPlay();
 		void SetEndPos();
 		bool MapOutCheck();
+		bool ParryCheck(class Player* _player);
 		const UINT& GetID() { return mID; }
 		const bool& GetParry() { return mbParry; }
 	protected:

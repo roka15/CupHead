@@ -76,7 +76,10 @@ void yeram_client::PepperBullet::Shoot()
 	int index = rand() % mAnis.size();
 	std::wstring ani_name = mAnis[index];
 	mAni->Play(ani_name, false);
-
+	if (ani_name.compare(L"pepperbulletType3") == 0)
+	{
+		mbParry = true;
+	}
 	Bullet::SetColInfo(ani_name);
 
 	std::shared_ptr<GameObject> player_obj = SceneManager::GetActiveScene()->FindObject(L"Player");
@@ -88,22 +91,27 @@ void yeram_client::PepperBullet::Death(Collider* _other)
 {
 	if (mbDeath == true)
 		return;
-	GameObject* owner = _other->GetOwner();
-	Player* player = owner->GetComponent<Player>();
-	Ground* ground = owner->GetComponent<Ground>();
-	if (player != nullptr|| ground != nullptr)
+	Bullet::Death(_other);
+	Ground* g = _other->GetOwner()->GetComponent<Ground>();
+	if (g != nullptr)
 	{
-		std::wstring aniname = mAni->GetCurAniName();
-
-		if (aniname == L"pepperbulletType3")
-		{
-			mAni->Play(aniname + L"Death", false);
-		}
-		else
-		{
-			mAni->Play(L"pepperbulletType1Death", false);
-		}
+		DeathPlay();
 		mbDeath = true;
 	}
-	
 }
+
+void yeram_client::PepperBullet::DeathPlay()
+{
+	std::wstring aniname = mAni->GetCurAniName();
+
+	if (aniname == L"pepperbulletType3")
+	{
+		mAni->Play(aniname + L"Death", false);
+	}
+	else
+	{
+		mAni->Play(L"pepperbulletType1Death", false);
+	}
+}
+
+

@@ -116,6 +116,7 @@ namespace yeram_client
 	{
 		for (auto itr = mObjs.begin(); itr != mObjs.end(); itr++)
 		{
+			(*itr)->SetActive(false);
 			(*itr).reset();
 			mObjs.erase(itr);
 			itr = mObjs.begin();

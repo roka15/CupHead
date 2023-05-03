@@ -17,6 +17,7 @@ namespace yeram_client
 		virtual void OnCollisionExit(class Collider* other)override;
 		virtual void Shoot()override;
 		virtual void Death(Collider* _other)override;
+		virtual void DeathPlay()override;
 	private:
 	};
 

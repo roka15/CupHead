@@ -3,6 +3,9 @@
 #include "Time.h"
 #include "Application.h"
 #include "MoveObject.h"
+#include "Player.h"
+#include "Ground.h"
+#include "PlayerBullet.h"
 extern  yeram_client::Application application;
 namespace yeram_client
 {
@@ -35,6 +38,7 @@ namespace yeram_client
 		mTransform = owner->GetComponent<Transform>();
 		mAni = owner->AddComponent<Animator>();
 		owner->SetLayerType(ELayerType::Bullet);
+		mbParry = false;
 	}
 
 	void Bullet::Update()
@@ -110,7 +114,21 @@ namespace yeram_client
 
 	void Bullet::Death(Collider* _other)
 	{
-
+		if (GetOwner()->GetComponent<PlayerBullet>() == nullptr)
+		{
+			Player* p = _other->GetOwner()->GetComponent<Player>();
+			if (p != nullptr )
+			{
+				if (mbParry == true && p->Parry_Check() == true)
+				{
+					//µ¥¹ÌÁö X
+				}
+					
+				DeathPlay();
+				mbDeath = true;
+			}
+		}
+		
 	}
 
 	void Bullet::SetColInfo(std::wstring _ani_name)
@@ -149,6 +167,10 @@ namespace yeram_client
 		mMoveObject->CreateInfo(_speed, dir, _killpos, true, true);
 	}
 
+	void Bullet::DeathPlay()
+	{
+	}
+
 	void Bullet::SetEndPos()
 	{
 		mMoveObject->SetEndPos();
@@ -164,6 +186,21 @@ namespace yeram_client
 			pos.y + size.y <= 0.0f || pos.y - size.y >= winrect.y)
 			return true;
 
+		return false;
+	}
+
+	bool Bullet::ParryCheck(Player* _player)
+	{
+		if (mbParry == true)
+		{
+			bool suc = _player->Parry_Check();
+			if (suc == true)
+			{
+				SceneManager::RemoveObjectRequest(GetOwner());
+				return true;
+			}
+
+		}
 		return false;
 	}
 
