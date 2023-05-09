@@ -77,14 +77,9 @@ namespace yeram_client
 		{
 			mAlphaTime += Time::DeltaTime();
 			float ratio = 0.0f;
-			if (mCutton->GetKey().compare(L"Cutton") == 0)
-			{
-				ratio = (mAlphaTime / mEndTime) * mAlphaSpeed;
-			}
-			else
-			{
-				ratio = (mAlphaTime / mEndTime) * 2.0f * mAlphaSpeed;
-			}
+
+			ratio = (mAlphaTime / mEndTime) * mAlphaSpeed;
+
 
 			if (mType == ECameraEffectType::FADE_IN)
 			{
@@ -195,10 +190,14 @@ namespace yeram_client
 
 	void Camera::InitFadeInfo()
 	{
-		mCutton = Resources::Find<Image>(L"Cutton");
-		mEndTime = 5.0f;
-		mAlphaEndPos = application.GetWindowSize();
-		mAlphaStartPos = Vector2::Zero;
+		if (mCutton == nullptr)
+		{
+			mCutton = Resources::Find<Image>(L"Cutton");
+
+			mEndTime = 5.0f;
+			mAlphaEndPos = application.GetWindowSize();
+			mAlphaStartPos = Vector2::Zero;
+		}
 		mType = ECameraEffectType::NONE;
 		mAlphaTime = 0.0f;
 		mCuttonAlpha = 0.0f;

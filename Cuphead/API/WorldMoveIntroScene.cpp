@@ -28,19 +28,24 @@ namespace yeram_client
 		mLayers[(UINT)ELayerType::BackObject] = new Layer();
 		mLayers[(UINT)ELayerType::FrontObject] = new Layer();
 		mLayers[(UINT)ELayerType::Player] = new Layer();
-		Resources::Load<Image>(L"worldmove_intro_text", L"..\\Resources\\worldmove_intro\\bg\\cutscene_intro_s1_logo.bmp");
+		
 	}
 	void WorldMoveIntroScene::Update()
 	{
 		mTime += Time::DeltaTime();
 		if (mTime >= 10.0f && mTime < 11.0f)
 		{
+			Camera::FadeOut();
 			Camera::SetFadeImage(Resources::Find<Image>(L"worldmove_intro_text"));
 			Camera::SetFadeEndTime(20.0f);
 			Camera::SetFadePos(Vector2{ 250,200 }, Vector2{ 1050,500 });
+		}
+		if (mTime< 21.0f&&mTime >= 20.0f)
+		{
+			Camera::SetFadeImage(nullptr);
 			Camera::FadeOut();
 		}
-		if (mTime >= 20.0f)
+		if (mTime >= 30.0f)
 		{
 			SceneManager::LoadScene(ESceneType::InWorldIntro);
 			Camera::InitFadeInfo();
@@ -59,6 +64,7 @@ namespace yeram_client
 	{
 		Vector2 size = application.GetWindowSize();
 		Camera::FadeIn();
+		Resources::Load<Image>(L"worldmove_intro_text", L"..\\Resources\\worldmove_intro\\bg\\cutscene_intro_s1_logo.bmp");
 		std::shared_ptr<GameObject> background = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
 			background->SetName(L"moveintro_background");

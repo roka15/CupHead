@@ -162,9 +162,9 @@ void yeram_client::TitleScene::OnEnter()
 	{
 		
 		Transform* tf = text->GetComponent<Transform>();
-		tf->SetPos(Vector2{ 650,750 });
+		tf->SetPos(Vector2{ 900,850 });
 		tf->SetScale(Vector2{ 2.0f,2.0f });
-		tf->SetSize(Vector2{ 400l, 500l });
+		tf->SetSize(Vector2{ 800l, 700l });
 		Animator* ani = text->GetComponent<Animator>();
 		std::wstring key = ani->CreateAnimations(L"..\\Resources\\title_screen\\DLC\\Text", Vector2::Zero, 0.5f);
 
