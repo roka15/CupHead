@@ -10,7 +10,6 @@ namespace yeram_client
 	SpriteRenderer::SpriteRenderer()
 		:Component(EComponentType::SpriteRenderer)
 		, mRenderType(ERenderType::StretchBlt)
-		, mImage(nullptr)
 	{
 		SetName(L"SpriteRenderer");
 	}
@@ -37,21 +36,26 @@ namespace yeram_client
 		Vector2 obj_size = transform->GetSize();
 		Vector2 scale = transform->GetScale();
 		Vector2 size;
-		size.x = obj_size.x == 0 ? mImage->GetWidth() : obj_size.x;
-		size.y = obj_size.y == 0 ? mImage->GetHeight() : obj_size.y;
+		size.x = obj_size.x == 0 ?mImageSize.x : obj_size.x;
+		size.y = obj_size.y == 0 ? mImageSize.y : obj_size.y;
 
-		if (mImage != nullptr)
+		if (mImageKey.size() != 0)
 		{
+			Image* findImage = Resources::Find<Image>(mImageKey);
+			if (findImage == nullptr)
+			{
+				findImage = Resources::Load<Image>(mImageKey, mPath);
+			}	
 			switch (mRenderType)
 			{
 			case ERenderType::BitBlt:
-				BitBlt(hdc, pos.x, pos.y, size.x * scale.x, size.y * scale.y, mImage->GetHDC(), 0, 0, SRCCOPY);
+				BitBlt(hdc, pos.x, pos.y, size.x * scale.x, size.y * scale.y, findImage->GetHDC(), 0, 0, SRCCOPY);
 				break;
 			case ERenderType::TransParentBlt:
-				TransparentBlt(hdc, pos.x, pos.y, size.x*scale.x, size.y*scale.y, mImage->GetHDC(), 0, 0, mImage->GetWidth(), mImage->GetHeight(), (RGB(255, 0, 255)));
+				TransparentBlt(hdc, pos.x, pos.y, size.x*scale.x, size.y*scale.y, findImage->GetHDC(), 0, 0, mImageSize.x, mImageSize.y, (RGB(255, 0, 255)));
 				break;
 			case ERenderType::StretchBlt:
-				StretchBlt(hdc, pos.x, pos.y, size.x * scale.x, size.y * scale.y, mImage->GetHDC(), 0, 0, mImage->GetWidth(), mImage->GetHeight(), SRCCOPY);
+				StretchBlt(hdc, pos.x, pos.y, size.x * scale.x, size.y * scale.y, findImage->GetHDC(), 0, 0, mImageSize.x, mImageSize.y, SRCCOPY);
 				break;
 			}
 		}
@@ -65,21 +69,24 @@ namespace yeram_client
 
 	void SpriteRenderer::SetImage(const std::wstring& _filename, const std::wstring& _path)
 	{
-		mImage = Resources::Load<Image>(_filename.c_str(), _path.c_str());
+		Image* image = Resources::Load<Image>(_filename.c_str(), _path.c_str());
+		mImageKey = image->GetKey();
+		mPath = _path;
 		Transform* tf = mOwner->GetComponent<Transform>();
 		Vector2 pos = tf->GetPos();
-		pos.x -= mImage->GetWidth();
-		pos.y -= mImage->GetHeight();
+		mImageSize = Vector2{(int)image->GetWidth(),(int)image->GetHeight()};
+		pos.x -= mImageSize.x;
+		pos.y -= mImageSize.y;
 	}
 
 	const float& SpriteRenderer::GetWidth()
 	{
-		return mImage->GetWidth();
+		return mImageSize.x;
 	}
 
 	const float& SpriteRenderer::GetHeight()
 	{
-		return mImage->GetHeight();
+		return mImageSize.y;
 	}
 
 }

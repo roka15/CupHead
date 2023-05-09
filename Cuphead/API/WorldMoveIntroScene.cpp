@@ -36,13 +36,13 @@ namespace yeram_client
 		if (mTime >= 10.0f && mTime < 11.0f)
 		{
 			Camera::FadeOut();
-			Camera::SetFadeImage(Resources::Find<Image>(L"worldmove_intro_text"));
+			Camera::SetFadeImage(L"worldmove_intro_text");
 			Camera::SetFadeEndTime(20.0f);
 			Camera::SetFadePos(Vector2{ 250,200 }, Vector2{ 1050,500 });
 		}
 		if (mTime< 21.0f&&mTime >= 20.0f)
 		{
-			Camera::SetFadeImage(nullptr);
+			Camera::SetFadeImage(L"");
 			Camera::FadeOut();
 		}
 		if (mTime >= 30.0f)

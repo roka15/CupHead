@@ -95,6 +95,9 @@
     <Filter Include="Contents\Script\Bullet">
       <UniqueIdentifier>{59f8ade2-9128-4569-b77b-4d62f2d760bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\Script\Boss">
+      <UniqueIdentifier>{c0c03629-fef7-437c-9600-1ab9bcf463f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -248,27 +251,69 @@
     </ClInclude>
     <ClInclude Include="ParryingObject.h" />
     <ClInclude Include="WorldMoveIntroScene.h" />
-    <ClInclude Include="OriginalImagePos.h" />
     <ClInclude Include="InWorldIntroScene.h" />
-    <ClInclude Include="CutScenePlayAnimation.h" />
     <ClInclude Include="Loading.h" />
-    <ClInclude Include="PixelCrash.h" />
-    <ClInclude Include="WorldMapObject.h" />
-    <ClInclude Include="TitleCardUI.h" />
     <ClInclude Include="SaltBakeryShopScene.h" />
     <ClInclude Include="SaltBakerIntroScene.h" />
-    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="SaltBakerBossScene.h" />
-    <ClInclude Include="SaltBaker.h" />
-    <ClInclude Include="Boss.h" />
-    <ClInclude Include="ZigZagBullet.h" />
     <ClInclude Include="BulletManager.h" />
-    <ClInclude Include="CookieBullet.h" />
-    <ClInclude Include="SugarBullet.h" />
-    <ClInclude Include="BerryBullet.h" />
-    <ClInclude Include="LemonBullet.h" />
-    <ClInclude Include="MintBullet.h" />
-    <ClInclude Include="Pepper.h" />
+    <ClInclude Include="BerryBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="CookieBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="LemonBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="MintBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SugarBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="ZigZagBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelCrash.h">
+      <Filter>Contents\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCardUI.h">
+      <Filter>Contents\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapObject.h">
+      <Filter>Contents\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="OriginalImagePos.h">
+      <Filter>Contents\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CutScenePlayAnimation.h">
+      <Filter>Contents\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Contents\Script\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="SaltBaker.h">
+      <Filter>Contents\Script\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Pepper.h">
+      <Filter>Contents\Script\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillInfo.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="HomingBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="PepperBullet.h">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SlatPhase3.h">
+      <Filter>Contents\Script\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -409,27 +454,69 @@
       <Filter>Engine\Component\Script</Filter>
     </ClCompile>
     <ClCompile Include="WorldMoveIntroScene.cpp" />
-    <ClCompile Include="OriginalImagePos.cpp" />
     <ClCompile Include="InWorldIntroScene.cpp" />
-    <ClCompile Include="CutScenePlayAnimation.cpp" />
     <ClCompile Include="Loading.cpp" />
-    <ClCompile Include="PixelCrash.cpp" />
-    <ClCompile Include="WorldMapObject.cpp" />
-    <ClCompile Include="TitleCardUI.cpp" />
     <ClCompile Include="SaltBakeryShopScene.cpp" />
     <ClCompile Include="SaltBakerIntroScene.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="SaltBakerBossScene.cpp" />
-    <ClCompile Include="SaltBaker.cpp" />
-    <ClCompile Include="Boss.cpp" />
-    <ClCompile Include="ZigZagBullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
-    <ClCompile Include="CookieBullet.cpp" />
-    <ClCompile Include="SugarBullet.cpp" />
-    <ClCompile Include="BerryBullet.cpp" />
-    <ClCompile Include="LemonBullet.cpp" />
-    <ClCompile Include="MintBullet.cpp" />
-    <ClCompile Include="Pepper.cpp" />
+    <ClCompile Include="BerryBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="CookieBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="LemonBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="MintBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SugarBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="ZigZagBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelCrash.cpp">
+      <Filter>Contents\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCardUI.cpp">
+      <Filter>Contents\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMapObject.cpp">
+      <Filter>Contents\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="OriginalImagePos.cpp">
+      <Filter>Contents\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CutScenePlayAnimation.cpp">
+      <Filter>Contents\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Contents\Script\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="SaltBaker.cpp">
+      <Filter>Contents\Script\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Pepper.cpp">
+      <Filter>Contents\Script\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillInfo.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="HomingBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="PepperBullet.cpp">
+      <Filter>Contents\Script\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SlatPhase3.cpp">
+      <Filter>Contents\Script\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="API.rc">

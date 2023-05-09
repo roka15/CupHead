@@ -6,11 +6,11 @@
 #include "GameObject.h"
 #include "Input.h"
 #include "Camera.h"
+#include "Resources.h"
 namespace yeram_client
 {
 	Animation::Animation()
 		:mAnimator(nullptr),
-		mSheet(nullptr),
 		mTime(0.0f),
 		mbComplete(false),
 		mSpriteIndex(0)
@@ -64,20 +64,15 @@ namespace yeram_client
 		pos.y -= mSpriteSheet[mSpriteIndex].size.y*scale.y;
 
 		std::wstring str = this->mAnimator->GetOwner()->GetName();
-		if (str == L"LoadingClose")
-		{
-			int a = 0;
-		}
-		else if(str == L"LoadingOpen")
-		{
-			int a = 0;
-		}
+		Image* image = Resources::Find<Image>(mImageKey);
+		CreateImage(image);
+
 		if (mbAlpha == false)
 		{
 			TransparentBlt(_hdc, pos.x, pos.y,
 				mSpriteSheet[mSpriteIndex].size.x * scale.x,
 				mSpriteSheet[mSpriteIndex].size.y * scale.y,
-				mSheet->GetHDC(), mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y
+				image->GetHDC(), mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y
 				, mSpriteSheet[mSpriteIndex].size.x, mSpriteSheet[mSpriteIndex].size.y,
 				(RGB(255, 0, 255)));
 		}
@@ -93,7 +88,7 @@ namespace yeram_client
 			AlphaBlend(_hdc, pos.x, pos.y,
 				mSpriteSheet[mSpriteIndex].size.x * scale.x,
 				mSpriteSheet[mSpriteIndex].size.y * scale.y,
-				mSheet->GetHDC(), mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y,
+				image->GetHDC(), mSpriteSheet[mSpriteIndex].leftTop.x, mSpriteSheet[mSpriteIndex].leftTop.y,
 				mSpriteSheet[mSpriteIndex].size.x, mSpriteSheet[mSpriteIndex].size.y,
 				func);
 		}
@@ -101,13 +96,15 @@ namespace yeram_client
 
 	}
 
-	void Animation::Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha)
+	void Animation::Create(const std::wstring& _key, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha)
 	{
-		mSheet = _sheet;
+		mImageKey =_key;
+		Image* find_image = Resources::Find<Image>(mImageKey);
+		CreateImage(find_image);
 		mbAlpha = _alpha;
 		Vector2 size = Vector2::One;
-		size.x = mSheet->GetWidth() / (float)_col;
-		size.y = mSheet->GetHeight() / (float)_row;
+		size.x = find_image->GetWidth() / (float)_col;
+		size.y = find_image->GetHeight() / (float)_row;
 
 		mOriginSize = _origin_size;
 
@@ -122,7 +119,6 @@ namespace yeram_client
 
 			mSpriteSheet.push_back(sprite_info);
 		}
-
 	}
 
 	void Animation::Reset()
@@ -136,6 +132,21 @@ namespace yeram_client
 	void Animation::Stop()
 	{
 		mbComplete = true;
+	}
+
+	void Animation::CreateImage(Image*& _image)
+	{
+		//image가 사용되지 않아 삭제 됐는데 사용을 위한 요청이 들어온 경우 생성하도록 함.
+	
+		if (_image == nullptr)
+		{
+			if (mAnimator->FindPubAnimation(GetName()) == true)
+			{
+				Animator::CreateAniInfo pubInfo = mAnimator->GetPubAnimation(GetName());
+				_image = Resources::Load<Image>(pubInfo.mImageKey, pubInfo.mPath);
+			}
+		}
+
 	}
 
 }

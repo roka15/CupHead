@@ -51,7 +51,14 @@ void yeram_client::PixelCrash::Update()
 		result_pos = pos;
 		break;
 	}
-	COLORREF color = mImage->GetPixel(result_pos.x, result_pos.y);
+	std::wstring imageKey = mSprite->GetImageKey();
+	Image* findImage = Resources::Find<Image>(imageKey);
+	if (findImage == nullptr)
+	{
+		std::wstring imagePath = mSprite->GetPath();
+		Resources::Load<Image>(imageKey, imagePath);
+	}
+	COLORREF color = findImage->GetPixel(result_pos.x, result_pos.y);
 
 	if (color == RGB(255, 0, 255))
 	{
@@ -121,5 +128,4 @@ void yeram_client::PixelCrash::OnCollisionExit(Collider* other)
 void yeram_client::PixelCrash::SetImage(std::wstring _name, std::wstring _path)
 {
 	mSprite->SetImage(_name, _path);
-	mImage = mSprite->GetImage();
 }

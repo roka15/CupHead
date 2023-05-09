@@ -32,13 +32,14 @@ namespace yeram_client
 		static bool UseTarget() { return mTarget != nullptr; }
 		static void FadeIn(); 
 		static void FadeOut(); 
-		static void SetFadeImage(class Image* _image) { mCutton = _image; }
+		static void SetFadeImage(std::wstring _image_key) { mImageKey = _image_key; }
 		static void SetFadeEndTime(float _time) { mEndTime = _time; mAlphaTime = 0.0f; }
 		static void SetFadePos(const Vector2& _start, const Vector2& _end) { mAlphaStartPos = _start; mAlphaEndPos = _end; }
 		static void InitFadeInfo(); 
 		static void Clear();
 		static float GetAlpha() { return mCuttonAlpha; }
 		static void SetAlphaSpeed(float _speed) { mAlphaSpeed = _speed; }
+		static void CreateCuttonImage();
 	private:
 		
 	private: 
@@ -51,7 +52,7 @@ namespace yeram_client
 		static float mAlphaTime;
 		static float mEndTime;
 		static float mCuttonAlpha;
-		static class Image* mCutton;
+		static std::wstring mImageKey;
 		static Vector2 mAlphaStartPos;
 		static Vector2 mAlphaEndPos;
 		static ECameraEffectType mType;

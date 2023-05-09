@@ -4,10 +4,10 @@
 #include "Time.h"
 namespace yeram_client
 {
+	std::map<std::wstring, Animator::CreateAniInfo> Animator::mPublicAniInfo;
 	Animator::Animator()
 		:Component(EComponentType::Animator)
 		, mActiveAnimation(nullptr)
-		, mSpriteSheet(nullptr)
 		, mbLoop(false)
 	{
 		SetName(L"Animator");
@@ -107,21 +107,50 @@ namespace yeram_client
 		mEvents.clear();
 	}
 
-	void Animator::CreateAnimation(const std::wstring& _name, Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha)
+	void Animator::CreateAnimation(const std::wstring& _name, const std::wstring& _path, const std::wstring& _image_key, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha)
 	{
 		Animation* ani = FindAnimation(_name);
 		if (ani != nullptr)
 		{
 			return;
 		}
+		if (FindPubAnimation(_name) == false)
+		{
+			CreateAniInfo public_info(_image_key,_path,_leftTop, _col , _row, _size, _offset, _duration, _origin_size, _alpha);
+			mPublicAniInfo.insert(std::make_pair(_name, public_info));
+		}
+	
 		ani = new Animation();
-		mSpriteSheet = _sheet;
-		ani->Create(_sheet, _leftTop, _col, _row, _size, _offset, _duration, _origin_size, _alpha);
 		ani->SetName(_name);
+		ani->Create(_image_key,_leftTop, _col, _row, _size, _offset, _duration, _origin_size, _alpha);
 		ani->SetAnimator(this);
 		Events* event = new Events();
 		mAnimations.insert(std::make_pair(_name, ani));
 		mEvents.insert(std::make_pair(_name, event));
+	}
+
+	void Animator::CreateAnimation(const std::wstring& _name)
+	{
+		Animation* ani = FindAnimation(_name);
+		if (ani != nullptr)
+		{
+			return;
+		}
+		if (FindPubAnimation(_name) == true)
+		{
+			CreateAniInfo pub_ani = GetPubAnimation(_name);
+			ani = new Animation();
+			ani->SetName(_name);
+			ani->Create(pub_ani.mImageKey,pub_ani.mLeftTop, pub_ani.mCol, pub_ani.mRow, pub_ani.mSize, pub_ani.mOffset, pub_ani.mDuration, pub_ani.mSizes, pub_ani.mAlpha);
+			ani->SetAnimator(this);
+			Events* event = new Events();
+			mAnimations.insert(std::make_pair(_name, ani));
+			mEvents.insert(std::make_pair(_name, event));
+		}
+		else
+		{
+			return;
+		}
 	}
 
 	std::wstring Animator::CreateAnimations(const std::wstring& _path, Vector2 _offset, float _duration, bool _alpha)
@@ -137,7 +166,12 @@ namespace yeram_client
 		key += fs.filename();
 		if (FindAnimation(key) != nullptr)
 			return key;
-
+		Image* findImage = Resources::Find<Image>(key);
+		if (findImage != nullptr)
+		{
+			CreateAnimation(key);
+			return key;
+		}
 		for (auto& itr : std::filesystem::recursive_directory_iterator(_path))
 		{
 			const std::wstring ext = itr.path().extension();
@@ -161,7 +195,7 @@ namespace yeram_client
 			fileCount++;
 		}
 
-		mSpriteSheet = Image::Create(key, width * fileCount, height);
+		Image* result_Image = Image::Create(key, width * fileCount, height);
 
 		int index = 0;
 		for (Image* image : images)
@@ -169,7 +203,7 @@ namespace yeram_client
 			int centerX = (width - image->GetWidth()) / 2;
 			int centerY = (height - image->GetHeight());
 
-			BitBlt(mSpriteSheet->GetHDC()
+			BitBlt(result_Image->GetHDC()
 				, width * index + centerX
 				, 0 + centerY
 				, image->GetWidth(), image->GetHeight()
@@ -177,10 +211,10 @@ namespace yeram_client
 
 
 			index++;
-
 		}
-
-		CreateAnimation(key, mSpriteSheet, Vector2::Zero, index, 1, index, _offset, _duration, sizes, _alpha);
+		CreateAniInfo public_info(key,_path,Vector2::Zero, index, 1, index, _offset, _duration, sizes, _alpha);
+		mPublicAniInfo.insert(std::make_pair(key, public_info));
+		CreateAnimation(key);
 		return key;
 	}
 
@@ -190,6 +224,24 @@ namespace yeram_client
 		if (itr == mAnimations.end())
 			return nullptr;
 		return itr->second;
+	}
+
+	bool Animator::FindPubAnimation(const std::wstring& _name)
+	{
+		std::map<std::wstring, CreateAniInfo>::iterator itr = mPublicAniInfo.find(_name);
+		if (itr == mPublicAniInfo.end())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	Animator::CreateAniInfo Animator::GetPubAnimation(const std::wstring& _name)
+	{
+		return mPublicAniInfo[_name];
 	}
 
 	void Animator::Play(const std::wstring& _name, bool _loop, bool _use_fsm)

@@ -19,7 +19,7 @@ namespace yeram_client
 	float Camera::mAlphaTime = 0.0f;
 	float Camera::mEndTime = 5.0f;
 	float Camera::mCuttonAlpha = 1.0f;
-	class Image* Camera::mCutton = nullptr;
+	std::wstring Camera:: mImageKey = L"Cutton";
 	Camera::ECameraEffectType Camera::mType = Camera::ECameraEffectType::NONE;
 	Vector2 Camera::mAlphaStartPos = Vector2::Zero;
 	Vector2 Camera::mAlphaEndPos = Vector2::Zero;
@@ -31,7 +31,8 @@ namespace yeram_client
 		//operator ±¸Çö
 		mLookPosition = (mResolution / 2.0f);
 
-		mCutton = Image::Create(L"Cutton", mResolution.x, mResolution.y, RGB(0, 0, 0));
+		CreateCuttonImage();
+		
 		mAlphaEndPos = mResolution;
 		mAlphaSpeed = 1.0f;
 		mCuttonAlpha = 0.0f;
@@ -108,13 +109,21 @@ namespace yeram_client
 
 	void Camera::Render(HDC _hdc)
 	{
+		if (mImageKey.size() == 0)
+			return;
+		Image* findImage = Resources::Find<Image>(mImageKey);
+		if (findImage == nullptr)
+			return;
+
+		Vector2 imageSize = Vector2{ (int)findImage->GetWidth(),(int)findImage->GetHeight() };
+
 		if (mAlphaTime < mEndTime
 			&& (mType == ECameraEffectType::FADE_IN || mType == ECameraEffectType::FADE_OUT))
 		{
 			BLENDFUNCTION func = {};
 			func.BlendOp = AC_SRC_OVER;
 			func.BlendFlags = 0;
-			if (mCutton->GetKey().compare(L"Cutton") == 0)
+			if (mImageKey.compare(L"Cutton") == 0)
 			{
 				func.AlphaFormat = AC_SRC_OVER;
 			}
@@ -127,9 +136,9 @@ namespace yeram_client
 
 			AlphaBlend(_hdc, mAlphaStartPos.x, mAlphaStartPos.y
 				, mAlphaEndPos.x, mAlphaEndPos.y
-				, mCutton->GetHDC()
+				, findImage->GetHDC()
 				, 0, 0
-				, mCutton->GetWidth(), mCutton->GetHeight()
+				, imageSize.x, imageSize.y
 				, func);
 		}
 		else if (mType == ECameraEffectType::FADE_OUT && mCuttonAlpha == 1.0f)
@@ -137,7 +146,7 @@ namespace yeram_client
 			BLENDFUNCTION func = {};
 			func.BlendOp = AC_SRC_OVER;
 			func.BlendFlags = 0;
-			if (mCutton->GetKey().compare(L"Cutton") == 0)
+			if (mImageKey.compare(L"Cutton") == 0)
 			{
 				func.AlphaFormat = AC_SRC_OVER;
 			}
@@ -150,9 +159,9 @@ namespace yeram_client
 
 			AlphaBlend(_hdc, mAlphaStartPos.x, mAlphaStartPos.y
 				, mAlphaEndPos.x, mAlphaEndPos.y
-				, mCutton->GetHDC()
+				, findImage->GetHDC()
 				, 0, 0
-				, mCutton->GetWidth(), mCutton->GetHeight()
+				, imageSize.x, imageSize.y
 				, func);
 		}
 	}
@@ -190,9 +199,12 @@ namespace yeram_client
 
 	void Camera::InitFadeInfo()
 	{
-		if (mCutton == nullptr)
+		if (mImageKey.size() == 0)
 		{
-			mCutton = Resources::Find<Image>(L"Cutton");
+			mImageKey = L"Cutton";
+			Image* findImage = Resources::Find<Image>(mImageKey);
+			if (findImage == nullptr)
+				CreateCuttonImage();
 
 			mEndTime = 5.0f;
 			mAlphaEndPos = application.GetWindowSize();
@@ -208,6 +220,11 @@ namespace yeram_client
 		mResolution = application.GetWindowSize();
 		mLookPosition = (mResolution / 2.0f);
 		mDistance = Vector2::Zero;
+	}
+
+	void Camera::CreateCuttonImage()
+	{
+		Image::Create(L"Cutton", mResolution.x, mResolution.y, RGB(0, 0, 0));
 	}
 
 

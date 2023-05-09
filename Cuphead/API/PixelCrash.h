@@ -19,7 +19,6 @@ namespace yeram_client
 		void SetTarget(std::shared_ptr<GameObject>& _target) { mTarget = _target; }
 	private:
 		class SpriteRenderer* mSprite;
-		const class Image* mImage;
 		class Collider* mCollider;
 		class std::shared_ptr<GameObject> mTarget;
 	};

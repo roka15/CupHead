@@ -6,12 +6,15 @@ namespace yeram_client
 	class Resources
 	{
 	public:
+		static void Update();
+		
 		template <typename T>
 		static T* Find(const std::wstring& _key)
 		{
 			std::map<std::wstring, My_Resource*>::iterator itr = mResources.find(_key);
 			if (itr != mResources.end())
 			{
+				
 				return dynamic_cast<T*>(itr->second);
 			}
 
@@ -32,7 +35,7 @@ namespace yeram_client
 			}
 			resource->SetKey(_key);
 			resource->SetPath(_path);
-
+			//mLRUQueue.push(std::make_pair(mTime,));
 			mResources.insert(std::make_pair(_key, resource));
 
 			return dynamic_cast<T*>(resource);
@@ -58,6 +61,9 @@ namespace yeram_client
 		}
 	private:
 		static std::map<std::wstring, My_Resource*> mResources;
+		static double mTime;
+		typedef double pq_time;
+		//static std::priority_queue<pq_time, std::map<std::wstring,My_Resource*>> mLRUQueue;
 	};
 
 }

@@ -123,10 +123,10 @@ namespace yeram_client
 					{
 						vec.reset();
 					}
-					map.second.clear();
 				}
-				mBgObjects.clear();
+				map.second.clear();
 			}
+			mBgObjects.clear();
 		}
 
 		Scene::Release();

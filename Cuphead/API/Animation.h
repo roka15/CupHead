@@ -31,7 +31,7 @@ namespace yeram_client
 		void Initialize();
 		void Update();
 		void Render(HDC _hdc);
-		void Create(Image* _sheet, Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha);
+		void Create(const std::wstring& _key,Vector2 _leftTop, UINT _col, UINT _row, UINT _size, Vector2 _offset, float _duration, const std::vector<Vector2> _origin_size, bool _alpha);
 		void Reset();
 		bool IsComplete() { return mbComplete; }
 	
@@ -42,8 +42,12 @@ namespace yeram_client
 		const Vector2& GetSpriteSize() { return mSpriteSheet[0].size; }
 		const Vector2& GetImageSize() { return mOriginSize[mSpriteIndex]; }
 		const Vector2& GetImageSize(int index) { return mOriginSize[index]; }
+	    
+		void SetImageKey(const std::wstring& _key) { mImageKey = _key; }
+		void CreateImage(Image*& _image);
+
+		const std::wstring& GetImageKey() { return mImageKey; }
 	private:
-		Image* mSheet;
 		std::vector<Vector2> mOriginSize;
 		std::vector<Sprite> mSpriteSheet;
 		float mTime;
@@ -51,6 +55,7 @@ namespace yeram_client
 		int mSpriteIndex;
 		Animator* mAnimator;
 		bool mbAlpha;
+		std::wstring mImageKey;
 	};
 }
 
