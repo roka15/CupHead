@@ -151,12 +151,15 @@
     <ClInclude Include="InWorldIntroScene.h" />
     <ClInclude Include="LemonBullet.h" />
     <ClInclude Include="Loading.h" />
+    <ClInclude Include="LRU_Queue.h" />
     <ClInclude Include="MintBullet.h" />
     <ClInclude Include="OriginalImagePos.h" />
     <ClInclude Include="Pepper.h" />
     <ClInclude Include="PepperBullet.h" />
     <ClInclude Include="PixelCrash.h" />
     <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="PriorityQueue.h" />
+    <ClInclude Include="ResourceDeleterThread.h" />
     <ClInclude Include="SaltBaker.h" />
     <ClInclude Include="SaltBakerBossScene.h" />
     <ClInclude Include="SaltBakerIntroScene.h" />
@@ -247,6 +250,7 @@
     <ClCompile Include="PepperBullet.cpp" />
     <ClCompile Include="PixelCrash.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="ResourceDeleterThread.cpp" />
     <ClCompile Include="SaltBaker.cpp" />
     <ClCompile Include="SaltBakerBossScene.cpp" />
     <ClCompile Include="SaltBakerIntroScene.cpp" />

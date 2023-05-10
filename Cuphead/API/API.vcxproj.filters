@@ -98,6 +98,27 @@
     <Filter Include="Contents\Script\Boss">
       <UniqueIdentifier>{c0c03629-fef7-437c-9600-1ab9bcf463f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\STL\PriorityQueue">
+      <UniqueIdentifier>{180ce79f-6fbb-4827-87f7-7b17072d6b14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\STL\RedBlackTree">
+      <UniqueIdentifier>{f7c5d499-1230-4536-98f2-ea7de67f59a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\STL\LRU_Queue">
+      <UniqueIdentifier>{c36cc843-e0d8-4fad-b844-d696095cd5b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{191ccc3d-fc4e-4ff1-942e-50d43ad91f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Scene\SaltBakerBoss">
+      <UniqueIdentifier>{058d6a8d-1d6c-49b8-8798-6ad83da36f44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Scene\WorldMoveIntro">
+      <UniqueIdentifier>{17acfb3f-960d-4682-b360-8b7df87bbdd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\Scene\WorldInIntro">
+      <UniqueIdentifier>{135803b7-4a0d-4fb6-8b97-75f92ff3e635}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -203,9 +224,6 @@
     <ClInclude Include="MemoryPool.h">
       <Filter>Core\MemoryPool</Filter>
     </ClInclude>
-    <ClInclude Include="RBT.h">
-      <Filter>Core\STL</Filter>
-    </ClInclude>
     <ClInclude Include="Script.h">
       <Filter>Engine\Component\Script</Filter>
     </ClInclude>
@@ -250,12 +268,7 @@
       <Filter>Contents\Script</Filter>
     </ClInclude>
     <ClInclude Include="ParryingObject.h" />
-    <ClInclude Include="WorldMoveIntroScene.h" />
-    <ClInclude Include="InWorldIntroScene.h" />
     <ClInclude Include="Loading.h" />
-    <ClInclude Include="SaltBakeryShopScene.h" />
-    <ClInclude Include="SaltBakerIntroScene.h" />
-    <ClInclude Include="SaltBakerBossScene.h" />
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="BerryBullet.h">
       <Filter>Contents\Script\Bullet</Filter>
@@ -313,6 +326,33 @@
     </ClInclude>
     <ClInclude Include="SlatPhase3.h">
       <Filter>Contents\Script\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="LRU_Queue.h">
+      <Filter>Core\STL\LRU_Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="PriorityQueue.h">
+      <Filter>Core\STL\PriorityQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="RBT.h">
+      <Filter>Core\STL\RedBlackTree</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceDeleterThread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="SaltBakerBossScene.h">
+      <Filter>Contents\Scene\SaltBakerBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="SaltBakerIntroScene.h">
+      <Filter>Contents\Scene\SaltBakerBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="SaltBakeryShopScene.h">
+      <Filter>Contents\Scene\SaltBakerBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMoveIntroScene.h">
+      <Filter>Contents\Scene\WorldMoveIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="InWorldIntroScene.h">
+      <Filter>Contents\Scene\WorldInIntro</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -406,9 +446,6 @@
     <ClCompile Include="MemoryPool.cpp">
       <Filter>Core\MemoryPool</Filter>
     </ClCompile>
-    <ClCompile Include="RBT.cpp">
-      <Filter>Core\STL</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectPool.cpp">
       <Filter>Core\ObjectPool</Filter>
     </ClCompile>
@@ -453,12 +490,7 @@
     <ClCompile Include="Script.cpp">
       <Filter>Engine\Component\Script</Filter>
     </ClCompile>
-    <ClCompile Include="WorldMoveIntroScene.cpp" />
-    <ClCompile Include="InWorldIntroScene.cpp" />
     <ClCompile Include="Loading.cpp" />
-    <ClCompile Include="SaltBakeryShopScene.cpp" />
-    <ClCompile Include="SaltBakerIntroScene.cpp" />
-    <ClCompile Include="SaltBakerBossScene.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="BerryBullet.cpp">
       <Filter>Contents\Script\Bullet</Filter>
@@ -516,6 +548,27 @@
     </ClCompile>
     <ClCompile Include="SlatPhase3.cpp">
       <Filter>Contents\Script\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="RBT.cpp">
+      <Filter>Core\STL\RedBlackTree</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceDeleterThread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="SaltBakerBossScene.cpp">
+      <Filter>Contents\Scene\SaltBakerBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="SaltBakerIntroScene.cpp">
+      <Filter>Contents\Scene\SaltBakerBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="SaltBakeryShopScene.cpp">
+      <Filter>Contents\Scene\SaltBakerBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMoveIntroScene.cpp">
+      <Filter>Contents\Scene\WorldMoveIntro</Filter>
+    </ClCompile>
+    <ClCompile Include="InWorldIntroScene.cpp">
+      <Filter>Contents\Scene\WorldInIntro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
