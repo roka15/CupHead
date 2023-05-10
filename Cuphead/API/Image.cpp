@@ -33,7 +33,8 @@ namespace yeram_client
 		Rectangle(image->mHdc, -1, -1, _width + 1, _height + 1);
 
 		DeleteObject(SelectObject(image->mHdc, oldBrush));
-		
+
+		core::ResourceDeleterThread::RegisterResourceInfo(image);
 		return image;
 	}
 

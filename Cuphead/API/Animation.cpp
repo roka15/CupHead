@@ -140,10 +140,20 @@ namespace yeram_client
 	
 		if (_image == nullptr)
 		{
+			std::wstring animationName = GetName();
 			if (mAnimator->FindPubAnimation(GetName()) == true)
 			{
 				Animator::CreateAniInfo pubInfo = mAnimator->GetPubAnimation(GetName());
-				_image = Resources::Load<Image>(pubInfo.mImageKey, pubInfo.mPath);
+				std::wstring imageName = pubInfo.mImageKey;
+				if (animationName.compare(imageName) != 0) // 원래 sprite 인 경우
+				{
+					_image = Resources::Load<Image>(imageName,pubInfo.mPath);
+				}
+				else // 폴더 읽어와서 sprite화 시키는 경우
+				{
+					mAnimator->CreateAnimations(pubInfo.mPath, pubInfo.mOffset, pubInfo.mDuration, pubInfo.mAlpha);
+					_image = Resources::Find<Image>(pubInfo.mImageKey);
+				}
 			}
 		}
 

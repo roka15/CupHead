@@ -122,8 +122,8 @@ namespace yeram_client
 	
 		ani = new Animation();
 		ani->SetName(_name);
-		ani->Create(_image_key,_leftTop, _col, _row, _size, _offset, _duration, _origin_size, _alpha);
 		ani->SetAnimator(this);
+		ani->Create(_image_key,_leftTop, _col, _row, _size, _offset, _duration, _origin_size, _alpha);
 		Events* event = new Events();
 		mAnimations.insert(std::make_pair(_name, ani));
 		mEvents.insert(std::make_pair(_name, event));
@@ -141,8 +141,8 @@ namespace yeram_client
 			CreateAniInfo pub_ani = GetPubAnimation(_name);
 			ani = new Animation();
 			ani->SetName(_name);
-			ani->Create(pub_ani.mImageKey,pub_ani.mLeftTop, pub_ani.mCol, pub_ani.mRow, pub_ani.mSize, pub_ani.mOffset, pub_ani.mDuration, pub_ani.mSizes, pub_ani.mAlpha);
 			ani->SetAnimator(this);
+			ani->Create(pub_ani.mImageKey,pub_ani.mLeftTop, pub_ani.mCol, pub_ani.mRow, pub_ani.mSize, pub_ani.mOffset, pub_ani.mDuration, pub_ani.mSizes, pub_ani.mAlpha);
 			Events* event = new Events();
 			mAnimations.insert(std::make_pair(_name, ani));
 			mEvents.insert(std::make_pair(_name, event));

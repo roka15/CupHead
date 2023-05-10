@@ -68,7 +68,7 @@ void yeram_client::TitleScene::Update()
 {
 	if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 	{
-		//SceneManager::LoadScene(ESceneType::MainMenu);
+		SceneManager::LoadScene(ESceneType::MainMenu);
 	}
 	Scene::Update();
 }
@@ -117,8 +117,6 @@ void yeram_client::TitleScene::OnEnter()
 	}
 	std::shared_ptr<GameObject> playobj1 = core::ObjectPool<Animator>::Spawn();
 	{
-		
-
 		Transform* tf = playobj1->GetComponent<Transform>();
 		tf->SetPos(Vector2{ 400,680 });
 		tf->SetSize(Vector2{ 400l, 500l });

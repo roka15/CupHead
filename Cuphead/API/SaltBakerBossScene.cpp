@@ -220,7 +220,7 @@ namespace yeram_client
 			core::ObjectPool<SlatPhase3>::Initialize(1, 1);
 #pragma endregion
 		Phase1_Info_Register();
-		Phase2_Info_Register();
+		
 
 		//test
 		{
@@ -1094,6 +1094,7 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase2_Run()
 	{
+		Phase2_Info_Register();
 		ColliderManager::SetLayer(ELayerType::PlayerBullet, ELayerType::Boss, false);
 		SceneManager::RemoveObjectRequest(ELayerType::Bullet);
 		for (auto& vec_itr : mBgObjects[EPhaseType::PHASE1])
