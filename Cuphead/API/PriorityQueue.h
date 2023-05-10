@@ -61,7 +61,7 @@ private:
 		}
 	}
 public:
-	PriorityQueue(int capacity=40)
+	PriorityQueue(int capacity = 40)
 	{
 		contain.reserve(capacity);
 	}
@@ -73,8 +73,16 @@ public:
 	void Pop()
 	{
 		int size = contain.size() - 1;
-		T data = contain[size];
-
+		T data;
+		if (this->mycompare(contain[0], contain[size]) == false) // 우선순위 조건이 동일한 경우 들어온 순서대로 나간다.
+		{
+			data = contain[0];
+		}
+		else
+		{
+			data = contain[size];
+		}
+		
 		for (auto itr = contain.begin(); itr != contain.end(); itr++)
 		{
 			if (data == *itr)
@@ -83,13 +91,18 @@ public:
 				break;
 			}
 		}
-
 	}
 	// 나중에 참조로 변경해야 함.
 	T Front()
 	{
+		T data;
 		T temp = contain[0];
 		int size = contain.size() - 1;
+		if (this->mycompare(contain[0], contain[size]) == false) // 우선순위 조건이 동일한 경우 들어온 순서대로 나간다.
+		{
+			data = contain[0];
+			return data;
+		}
 		contain[0] = contain[size];
 		contain[size] = temp;
 		int root = 0;
@@ -110,7 +123,7 @@ public:
 			root = child;
 		} while (child < size);
 
-		T data = contain[size];
+		data = contain[size];
 		return data;
 	}
 	size_t Size()
