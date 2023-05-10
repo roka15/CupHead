@@ -1,5 +1,5 @@
 #pragma once
-#include "My_Resource.h"
+#include "ResourceDeleterThread.h"
 namespace yeram_client
 {
 
@@ -14,7 +14,7 @@ namespace yeram_client
 			std::map<std::wstring, My_Resource*>::iterator itr = mResources.find(_key);
 			if (itr != mResources.end())
 			{
-				
+				itr->second->SetTime(mTime);
 				return dynamic_cast<T*>(itr->second);
 			}
 
@@ -35,9 +35,9 @@ namespace yeram_client
 			}
 			resource->SetKey(_key);
 			resource->SetPath(_path);
-			//mLRUQueue.push(std::make_pair(mTime,));
+			resource->SetTime(mTime);
 			mResources.insert(std::make_pair(_key, resource));
-
+			core::ResourceDeleterThread::RegisterResourceInfo(resource);
 			return dynamic_cast<T*>(resource);
 		}
 		template<typename T>
@@ -62,7 +62,6 @@ namespace yeram_client
 	private:
 		static std::map<std::wstring, My_Resource*> mResources;
 		static double mTime;
-		typedef double pq_time;
 		//static std::priority_queue<pq_time, std::map<std::wstring,My_Resource*>> mLRUQueue;
 	};
 

@@ -68,7 +68,7 @@ void yeram_client::TitleScene::Update()
 {
 	if (core::Input::GetKeyDown(core::EKeyCode::MouseLeft))
 	{
-		SceneManager::LoadScene(ESceneType::MainMenu);
+		//SceneManager::LoadScene(ESceneType::MainMenu);
 	}
 	Scene::Update();
 }
@@ -96,7 +96,7 @@ void yeram_client::TitleScene::OnEnter()
 		tf->SetSize(Vector2{ (long)size.x, (long)size.y });
 
 		SpriteRenderer* render = title->GetComponent<SpriteRenderer>();
-		render->SetImage(title->GetName().c_str()
+		render->SetImage(title->GetName()
 			, L"..\\Resources\\title_screen\\Background\\title_screen_background.bmp");
 		render->SetRenderType(ERenderType::StretchBlt);
 		AddGameObject(title, ELayerType::BackObject);
@@ -110,7 +110,7 @@ void yeram_client::TitleScene::OnEnter()
 		tf->SetPos(Vector2{ 0l,(long)size.y - 280 });
 		tf->SetSize(Vector2{ (long)size.x,280l });
 		SpriteRenderer* render = ground->GetComponent<SpriteRenderer>();
-		render->SetImage(ground->GetName().c_str()
+		render->SetImage(ground->GetName()
 			, L"..\\Resources\\title_screen\\DLC\\title_chips_left_0001.bmp");
 		render->SetRenderType(ERenderType::TransParentBlt);
 		AddGameObject(ground, ELayerType::FrontObject);

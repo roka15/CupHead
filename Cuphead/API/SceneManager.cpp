@@ -13,14 +13,7 @@
 #include "UI.h"
 #include "Player.h"
 #include "PixelCrash.h"
-#include "SaltBaker.h"
-#include "CookieBullet.h"
-#include "SugarBullet.h"
-#include "BerryBullet.h"
-#include "LemonBullet.h"
-#include "MintBullet.h"
-#include "PepperBullet.h"
-#include "Pepper.h"
+
 #include "WorldMapObject.h"
 #include "Ground.h"
 #include "PlayerBullet.h"
@@ -31,7 +24,7 @@
 #include "MoveObject.h"
 #include "CutScenePlayAnimation.h"
 #include "Loading.h"
-#include "SlatPhase3.h"
+
 namespace yeram_client
 {
 	std::vector<Scene*> SceneManager::mScenes = {};
@@ -76,43 +69,11 @@ namespace yeram_client
 		core::ObjectPool<PixelCrash>::Initialize(10);
 		core::ObjectPool<WorldMapObject>::Initialize(10);
 		core::ObjectPool<PlayerBullet>::Initialize(100,200);
-		core::ObjectPool<SaltBaker>::Initialize(1);
-		core::ObjectPool<CookieBullet>::Initialize(50, 100);
-		core::ObjectPool<SugarBullet>::Initialize(50, 100);
-		core::ObjectPool<BerryBullet>::Initialize(50, 100);
-		core::ObjectPool<LemonBullet>::Initialize(50, 100);
-		core::ObjectPool<MintBullet>::Initialize(50, 100);
-		core::ObjectPool<PepperBullet>::Initialize(50, 100);
-		core::ObjectPool<Pepper>::Initialize(10, 100);
-		core::ObjectPool<SlatPhase3>::Initialize(1, 1);
+		
 		for (Scene* scene : mScenes)
 		{
 			if (scene == nullptr)
 				continue;
-			/*switch (scene->GetSceneType())
-			{
-			case ESceneType::Title:
-				mActiveScene = mScenes[(UINT)ESceneType::Title];
-				break;
-			case ESceneType::MainMenu:
-				mActiveScene = mScenes[(UINT)ESceneType::MainMenu];
-				break;
-			case ESceneType::PlayMap:
-				mActiveScene = mScenes[(UINT)ESceneType::PlayMap];
-				break;
-			case ESceneType::BossMedusa:
-				mActiveScene = mScenes[(UINT)ESceneType::BossMedusa];
-				break;
-			case ESceneType::Ending:
-				mActiveScene = mScenes[(UINT)ESceneType::Ending];
-				break;
-			case ESceneType::Tutorial:
-				mActiveScene = mScenes[(UINT)ESceneType::Tutorial];
-				break;
-			case ESceneType::MoveWorldIntro:
-				mActiveScene = mScenes[(UINT)ESceneType::MoveWorldIntro];
-				break;
-			}*/
 			scene->Initialize();
 		}
 
@@ -215,15 +176,7 @@ namespace yeram_client
 			delete scene;
 			scene = nullptr;
 		}
-		core::ObjectPool<SlatPhase3>::Release();
-		core::ObjectPool<PepperBullet>::Release();
-		core::ObjectPool<Pepper>::Release();
-		core::ObjectPool<MintBullet>::Release();
-		core::ObjectPool<LemonBullet>::Release();
-		core::ObjectPool<BerryBullet>::Release();
-		core::ObjectPool<SugarBullet>::Release();
-		core::ObjectPool<CookieBullet>::Release();
-		core::ObjectPool<SaltBaker>::Release();
+	
 		core::ObjectPool<PixelCrash>::Release();
 		
 		//core::ObjectPool<UI>::Release();
@@ -243,6 +196,7 @@ namespace yeram_client
 
 		mLoadingScreen->Release();
 		delete mLoadingScreen;
+		CloseHandle(mHThread);
 	}
 
 	void SceneManager::LoadScene(ESceneType _type)

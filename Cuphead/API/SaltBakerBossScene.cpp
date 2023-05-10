@@ -5,14 +5,21 @@
 #include "Layer.h"
 #include "MoveObject.h"
 #include "ZigZagBullet.h"
-#include "SaltBaker.h"
 #include "Ground.h"
 #include "Player.h"
 #include "Character.h"
 #include "ColliderManager.h"
 #include "Camera.h"
 #include "Time.h"
-
+#include "SaltBaker.h"
+#include "CookieBullet.h"
+#include "SugarBullet.h"
+#include "BerryBullet.h"
+#include "LemonBullet.h"
+#include "MintBullet.h"
+#include "PepperBullet.h"
+#include "Pepper.h"
+#include "SlatPhase3.h"
 
 extern yeram_client::Application application;
 namespace yeram_client
@@ -68,7 +75,7 @@ namespace yeram_client
 					else if (mTime - mPhase3CloseTime >= 10.0f)
 					{
 						salt->SetPhase3Intro();
-						Camera::FadeIn();		
+						Camera::FadeIn();
 					}
 				}
 			}
@@ -94,7 +101,7 @@ namespace yeram_client
 			}
 			break;
 		case EPhaseType::PHASE3:
-			
+
 			if (mbPhase3_Flag == false)
 			{
 				mbPhase3_Flag = true;
@@ -191,6 +198,27 @@ namespace yeram_client
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE1, std::vector<std::shared_ptr<GameObject>>()));
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE2, std::vector<std::shared_ptr<GameObject>>()));
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE3, std::vector<std::shared_ptr<GameObject>>()));
+
+#pragma region objectpool init
+		if (core::ObjectPool<SaltBaker>::ActiveObjectPool() == false)
+			core::ObjectPool<SaltBaker>::Initialize(1);
+		if (core::ObjectPool<CookieBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<CookieBullet>::Initialize(50, 100);
+		if (core::ObjectPool<SugarBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<SugarBullet>::Initialize(50, 100);
+		if (core::ObjectPool<BerryBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<BerryBullet>::Initialize(50, 100);
+		if (core::ObjectPool<LemonBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<LemonBullet>::Initialize(50, 100);
+		if (core::ObjectPool<MintBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<MintBullet>::Initialize(50, 100);
+		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<PepperBullet>::Initialize(50, 100);
+		if (core::ObjectPool<Pepper>::ActiveObjectPool() == false)
+			core::ObjectPool<Pepper>::Initialize(10, 100);
+		if (core::ObjectPool<SlatPhase3>::ActiveObjectPool() == false)
+			core::ObjectPool<SlatPhase3>::Initialize(1, 1);
+#pragma endregion
 		Phase1_Info_Register();
 		Phase2_Info_Register();
 
@@ -214,6 +242,16 @@ namespace yeram_client
 				vec_itr.reset();
 			}
 		}
+
+		core::ObjectPool<SlatPhase3>::Release();
+		core::ObjectPool<PepperBullet>::Release();
+		core::ObjectPool<Pepper>::Release();
+		core::ObjectPool<MintBullet>::Release();
+		core::ObjectPool<LemonBullet>::Release();
+		core::ObjectPool<BerryBullet>::Release();
+		core::ObjectPool<SugarBullet>::Release();
+		core::ObjectPool<CookieBullet>::Release();
+		core::ObjectPool<SaltBaker>::Release();
 	}
 	void SaltBakerBossScene::Phase1_Info_Register()
 	{
@@ -381,11 +419,11 @@ namespace yeram_client
 			MoveObject* mv = bg1->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,winsize.y * 2.0f }, true, true);
 			mv->SetArriveEvent(std::bind([mv, this]()->void
-			{
-				GameObject* owner = mv->GetOwner();
-				SceneManager::RemoveObjectRequest(owner);
-				RemovePhaseObject(EPhaseType::PHASE1);
-			}));
+				{
+					GameObject* owner = mv->GetOwner();
+					SceneManager::RemoveObjectRequest(owner);
+					RemovePhaseObject(EPhaseType::PHASE1);
+				}));
 			SpriteRenderer* sprite = bg1->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlbg1", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\11-sb_ph1_ph2_bg_main_transition_area_low.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -402,8 +440,8 @@ namespace yeram_client
 			MoveObject* mv = front->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,winsize.y * 2.0f }, true, true);
 			mv->SetArriveEvent(std::bind([]()->void
-			{
-			}));
+				{
+				}));
 			SpriteRenderer* sprite = front->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlfront", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\02-sb_ph1_ph2_fg_transition_area_pipes.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -421,10 +459,10 @@ namespace yeram_client
 			MoveObject* mv = bg2->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,winsize.y * 2.0f }, true, true);
 			mv->SetArriveEvent(std::bind([mv]()->void
-			{
-				GameObject* owner = mv->GetOwner();
-				SceneManager::RemoveObjectRequest(owner);
-			}));
+				{
+					GameObject* owner = mv->GetOwner();
+					SceneManager::RemoveObjectRequest(owner);
+				}));
 			SpriteRenderer* sprite = bg2->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlbg2", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\10-sb_ph1_ph2_bg_main_transition_area_mid.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -442,8 +480,8 @@ namespace yeram_client
 			MoveObject* mv = bg3->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,winsize.y - (winsize.y / 5.0f) - 100.0f });
 			mv->SetArriveEvent(std::bind([]()->void
-			{
-			}));
+				{
+				}));
 			SpriteRenderer* sprite = bg3->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlbg3", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\09-sb_ph1_ph2_bg_main_transition_area_high.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -462,8 +500,8 @@ namespace yeram_client
 			MoveObject* mv = bg4->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,-100.0f });
 			mv->SetArriveEvent(std::bind([]()->void
-			{
-			}));
+				{
+				}));
 			SpriteRenderer* sprite = bg4->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlbg4", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\15-sb_ph1_ph2_bg_far_shadow_sky.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -480,8 +518,8 @@ namespace yeram_client
 			MoveObject* mv = bg5->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,-100.0f });
 			mv->SetArriveEvent(std::bind([]()->void
-			{
-			}));
+				{
+				}));
 			SpriteRenderer* sprite = bg5->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlbg5", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\14-sb_ph1_ph2_bg_upper_debris.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -498,8 +536,8 @@ namespace yeram_client
 			MoveObject* mv = bg6->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,(winsize.y / 2.0f) - 200.0f });
 			mv->SetArriveEvent(std::bind([]()->void
-			{
-			}));
+				{
+				}));
 			SpriteRenderer* sprite = bg6->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlbg6", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\12-sb_ph1_ph2_bg_upper_shadow.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -517,8 +555,8 @@ namespace yeram_client
 			MoveObject* mv = bg7->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,mPhase2SceneMoveSpeed }, Vector2{ 0.0f,1.0f }, Vector2{ 0.0f,-100.0f });
 			mv->SetArriveEvent(std::bind([]()->void
-			{
-			}));
+				{
+				}));
 			SpriteRenderer* sprite = bg7->GetComponent<SpriteRenderer>();
 			sprite->SetImage(L"ph1_ph2_tlbg7", L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_1\\translate_phase2\\p1_p2_bg\\13-sb_ph1_ph2_bg_upper_main.bmp");
 			sprite->SetRenderType(ERenderType::TransParentBlt);
@@ -573,15 +611,15 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathHand\\Type2", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathHandType2", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathHandType2") = std::bind([this, ani]()->void
-			{
-				if (ani->GetComEventPlayCnt() >= 1)
-					return;
-				std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype1");
-				Animator* ani = nextrock->GetComponent<Animator>();
-				ani->Play(L"translate_p2_p3DeathHandType1", false);
-				ani->SetActive(true);
-				nextrock->GetComponent<MoveObject>()->SetActive(true);
-			});
+				{
+					if (ani->GetComEventPlayCnt() >= 1)
+						return;
+					std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype1");
+					Animator* ani = nextrock->GetComponent<Animator>();
+					ani->Play(L"translate_p2_p3DeathHandType1", false);
+					ani->SetActive(true);
+					nextrock->GetComponent<MoveObject>()->SetActive(true);
+				});
 			MoveObject* mv = hand_mid_rock2->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,800.0f }, false, false);
 			mv->SetActive(true);
@@ -599,15 +637,15 @@ namespace yeram_client
 			ani->SetActive(false);
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathHand\\Type1", Vector2::Zero, 0.05f);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathHandType1") = std::bind([this, ani]()->void
-			{
-				if (ani->GetComEventPlayCnt() >= 1)
-					return;
-				std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype5");
-				Animator* ani = nextrock->GetComponent<Animator>();
-				ani->Play(L"translate_p2_p3DeathHandType5", false);
-				ani->SetActive(true);
-				nextrock->GetComponent<MoveObject>()->SetActive(true);
-			});
+				{
+					if (ani->GetComEventPlayCnt() >= 1)
+						return;
+					std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype5");
+					Animator* ani = nextrock->GetComponent<Animator>();
+					ani->Play(L"translate_p2_p3DeathHandType5", false);
+					ani->SetActive(true);
+					nextrock->GetComponent<MoveObject>()->SetActive(true);
+				});
 			MoveObject* mv = hand_mid_rock3->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,750.0f }, false, false);
 			mv->SetActive(false);
@@ -625,19 +663,19 @@ namespace yeram_client
 			ani->SetActive(false);
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathHand\\Type5", Vector2::Zero, 0.05f);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathHandType5") = std::bind([this, ani]()->void
-			{
-				if (ani->GetComEventPlayCnt() >= 1)
-					return;
-				std::shared_ptr<GameObject> nextmid = SceneManager::FindObject(L"p2deathmid_type1");
-				nextmid->GetComponent<Animator>()->SetActive(true);
-				nextmid->GetComponent<MoveObject>()->SetActive(true);
+				{
+					if (ani->GetComEventPlayCnt() >= 1)
+						return;
+					std::shared_ptr<GameObject> nextmid = SceneManager::FindObject(L"p2deathmid_type1");
+					nextmid->GetComponent<Animator>()->SetActive(true);
+					nextmid->GetComponent<MoveObject>()->SetActive(true);
 
-				std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype6");
-				Animator* ani = nextrock->GetComponent<Animator>();
-				ani->Play(L"translate_p2_p3DeathHandType6", false);
-				ani->SetActive(true);
-				nextrock->GetComponent<MoveObject>()->SetActive(true);
-			});
+					std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype6");
+					Animator* ani = nextrock->GetComponent<Animator>();
+					ani->Play(L"translate_p2_p3DeathHandType6", false);
+					ani->SetActive(true);
+					nextrock->GetComponent<MoveObject>()->SetActive(true);
+				});
 			MoveObject* mv = hand_mid_rock4->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,750.0f }, false, false);
 			mv->SetActive(false);
@@ -661,7 +699,7 @@ namespace yeram_client
 			mBgObjects[EPhaseType::PHASE3].push_back(hand_mid_rock5);
 			AddGameObject(hand_mid_rock5, ELayerType::FrontObject);
 		}
-		
+
 #pragma endregion
 #pragma region mid 
 		translate_obj_cnt++;
@@ -676,19 +714,19 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3Deathmid\\Type1", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathmidType1", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathmidType1") = std::bind([this, ani]()->void
-			{
-				if (ani->GetComEventPlayCnt() >= 1)
-					return;
-				std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathmid_type2");
-				Animator* next_ani = next->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next->GetComponent<MoveObject>()->SetActive(true);
+				{
+					if (ani->GetComEventPlayCnt() >= 1)
+						return;
+					std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathmid_type2");
+					Animator* next_ani = next->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next->GetComponent<MoveObject>()->SetActive(true);
 
-				std::shared_ptr<GameObject> next2 = SceneManager::FindObject(L"p2deathmid_type4intro");
-				next_ani = next2->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next2->GetComponent<MoveObject>()->SetActive(true);
-			});
+					std::shared_ptr<GameObject> next2 = SceneManager::FindObject(L"p2deathmid_type4intro");
+					next_ani = next2->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next2->GetComponent<MoveObject>()->SetActive(true);
+				});
 			MoveObject* mv = mid->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,1500.0f }, false, false);
 			mv->SetActive(false);
@@ -707,15 +745,15 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3Deathmid\\Type2", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathmidType2", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathmidType2") = std::bind([this, ani]()->void
-			{
-				/*if (ani->GetComEventPlayCnt() >= 1)
-					return;
-				std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype1");
-				Animator* ani = nextrock->GetComponent<Animator>();
-				ani->Play(L"translate_p2_p3DeathHandType1", false);
-				ani->SetActive(true);
-				nextrock->GetComponent<MoveObject>()->SetActive(true);*/
-			});
+				{
+					/*if (ani->GetComEventPlayCnt() >= 1)
+						return;
+					std::shared_ptr<GameObject> nextrock = SceneManager::FindObject(L"hand_mid_rocktype1");
+					Animator* ani = nextrock->GetComponent<Animator>();
+					ani->Play(L"translate_p2_p3DeathHandType1", false);
+					ani->SetActive(true);
+					nextrock->GetComponent<MoveObject>()->SetActive(true);*/
+				});
 			MoveObject* mv = mid2->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,1500.0f }, false, false);
 			mv->SetActive(false);
@@ -735,14 +773,14 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3Deathmid\\Type4idle", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathmidType4intro", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathmidType4intro") = std::bind([this, ani]()->void
-			{
-				std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathleftback_type4intro");
-				Animator* next_ani = next->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next->GetComponent<MoveObject>()->SetActive(true);
+				{
+					std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathleftback_type4intro");
+					Animator* next_ani = next->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next->GetComponent<MoveObject>()->SetActive(true);
 
-				ani->Play(L"translate_p2_p3DeathmidType4idle", true);
-			});
+					ani->Play(L"translate_p2_p3DeathmidType4idle", true);
+				});
 			MoveObject* mv = mid3->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,710.0f }, false, false);
 			mv->SetActive(false);
@@ -765,14 +803,14 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathLeftBack\\idle", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathLeftBackintro", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathLeftBackintro") = std::bind([this, ani]()->void
-			{
-				std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathrightbackintro");
-				Animator* next_ani = next->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next->GetComponent<MoveObject>()->SetActive(true);
+				{
+					std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathrightbackintro");
+					Animator* next_ani = next->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next->GetComponent<MoveObject>()->SetActive(true);
 
-				ani->Play(L"translate_p2_p3DeathLeftBackidle", true);
-			});
+					ani->Play(L"translate_p2_p3DeathLeftBackidle", true);
+				});
 			MoveObject* mv = leftback->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,670.0f }, false, false);
 			mv->SetActive(false);
@@ -792,14 +830,14 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathRightBack\\idle", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathRightBackintro", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathRightBackintro") = std::bind([this, ani]()->void
-			{
-				std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathleftfrontintro");
-				Animator* next_ani = next->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next->GetComponent<MoveObject>()->SetActive(true);
+				{
+					std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathleftfrontintro");
+					Animator* next_ani = next->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next->GetComponent<MoveObject>()->SetActive(true);
 
-				ani->Play(L"translate_p2_p3DeathRightBackidle", true);
-			});
+					ani->Play(L"translate_p2_p3DeathRightBackidle", true);
+				});
 			MoveObject* mv = Rightback->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,670.0f }, false, false);
 			mv->SetActive(false);
@@ -822,17 +860,17 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathFrontGround\\translate_p2_p3DeathFrontGroundLeft\\idle", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathFrontGroundLeftintro", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathFrontGroundLeftintro") = std::bind([this, ani]()->void
-			{
-				std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathfront_type1");
-				Animator* next_ani = next->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next->GetComponent<MoveObject>()->SetActive(true);
+				{
+					std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathfront_type1");
+					Animator* next_ani = next->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next->GetComponent<MoveObject>()->SetActive(true);
 
-				ani->Play(L"translate_p2_p3DeathFrontGroundLeftidle", true);
+					ani->Play(L"translate_p2_p3DeathFrontGroundLeftidle", true);
 
-				Camera::FadeOut();
-				Camera::SetAlphaSpeed(2.0f);
-			});
+					Camera::FadeOut();
+					Camera::SetAlphaSpeed(2.0f);
+				});
 			MoveObject* mv = leftFront->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,900.0f }, false, false);
 			mv->SetActive(false);
@@ -852,14 +890,14 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathFrontGround\\Type1", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathFrontGroundType1", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathFrontGroundType1") = std::bind([this, ani]()->void
-			{
-				if (ani->GetComEventPlayCnt() >= 1)
-					return;
-				std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathfront_type2");
-				Animator* next_ani = next->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next->GetComponent<MoveObject>()->SetActive(true);
-			});
+				{
+					if (ani->GetComEventPlayCnt() >= 1)
+						return;
+					std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathfront_type2");
+					Animator* next_ani = next->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next->GetComponent<MoveObject>()->SetActive(true);
+				});
 			MoveObject* mv = FrontType1->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,1500.0f }, false, false);
 			mv->SetActive(false);
@@ -879,14 +917,14 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathFrontGround\\Type2", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathFrontGroundType2", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathFrontGroundType2") = std::bind([this, ani]()->void
-			{
-				if (ani->GetComEventPlayCnt() >= 1)
-					return;
-				std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathfront_type3");
-				Animator* next_ani = next->GetComponent<Animator>();
-				next_ani->SetActive(true);
-				next->GetComponent<MoveObject>()->SetActive(true);
-			});
+				{
+					if (ani->GetComEventPlayCnt() >= 1)
+						return;
+					std::shared_ptr<GameObject> next = SceneManager::FindObject(L"p2deathfront_type3");
+					Animator* next_ani = next->GetComponent<Animator>();
+					next_ani->SetActive(true);
+					next->GetComponent<MoveObject>()->SetActive(true);
+				});
 			MoveObject* mv = FrontType2->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,1500.0f }, false, false);
 			mv->SetActive(false);
@@ -906,10 +944,10 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathFrontGround\\Type3", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathFrontGroundType3", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathFrontGroundType3") = std::bind([this, ani]()->void
-			{
-				if (ani->GetComEventPlayCnt() >= 1)
-					return;
-			});
+				{
+					if (ani->GetComEventPlayCnt() >= 1)
+						return;
+				});
 			MoveObject* mv = FrontType3->AddComponent<MoveObject>();
 			mv->CreateInfo(Vector2{ 0.0f,2000.0f }, Vector2{ 0.0f,1.0f }, Vector2{ tf->GetPos().x,1500.0f }, false, false);
 			mv->SetActive(false);
@@ -925,9 +963,9 @@ namespace yeram_client
 			obj->SetName(L"sb_p3_ground");
 			obj->SetActive(false);
 			Transform* tf = obj->GetComponent<Transform>();
-			tf->SetPos(Vector2{ -winsize.x,winsize.y-150.0f });
+			tf->SetPos(Vector2{ -winsize.x,winsize.y - 150.0f });
 			Collider* col = obj->GetComponent<Collider>();
-			col->SetSize(Vector2{ winsize.x*4.0f,300.0f });
+			col->SetSize(Vector2{ winsize.x * 4.0f,300.0f });
 			mBgObjects[EPhaseType::PHASE3].push_back(obj);
 			AddGameObject(obj, ELayerType::Ground);
 		}
@@ -1072,7 +1110,7 @@ namespace yeram_client
 	{
 		Phase3_Info_Register();
 		SceneManager::RemoveObjectRequest(ELayerType::Monster);
-	
+
 		for (int i = 0; i < mPhaseTranslateObj_Cnt; i++)
 		{
 			mBgObjects[EPhaseType::PHASE3][i]->SetActive(true);
@@ -1080,9 +1118,9 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase3_2Run()
 	{
-		
+
 		int size = mBgObjects[EPhaseType::PHASE3].size();
-		for (int i=0; i < size; i++)
+		for (int i = 0; i < size; i++)
 		{
 			if (i >= mPhaseTranslateObj_Cnt)
 				break;
@@ -1096,7 +1134,7 @@ namespace yeram_client
 		}
 		ActivePhaseObject(EPhaseType::PHASE3, true);
 		ActivePhaseObject(EPhaseType::PHASE2, false);
-		ColliderManager::SetLayer(ELayerType::Monster, ELayerType::Ground,true);
+		ColliderManager::SetLayer(ELayerType::Monster, ELayerType::Ground, true);
 	}
 	void SaltBakerBossScene::ActivePhaseObject(EPhaseType _type, bool _flag)
 	{

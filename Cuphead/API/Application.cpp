@@ -42,6 +42,11 @@ namespace yeram_client
 		SceneManager::Initalize();
 		Time::Initailize();
 		Camera::Initialize();
+
+		//thread 
+		mResourceDeleterHandle = CreateThread(NULL, 0, core::ResourceDeleterThread::DeleterThread, nullptr, 0, NULL);
+		if (mResourceDeleterHandle == NULL) exit(1);
+
 	}
 	void Application::Run()
 	{
@@ -51,6 +56,7 @@ namespace yeram_client
 	void Application::Update()
 	{
 		core::Input::Update();
+		Resources::Update();
 		SceneManager::Update();
 		Camera::Update();
 		Time::Update();
@@ -69,6 +75,7 @@ namespace yeram_client
 	}
 	void Application::Release()
 	{
+		CloseHandle(mResourceDeleterHandle);
 		core::Input::Release();
 		SceneManager::Release();
 		Time::Release();

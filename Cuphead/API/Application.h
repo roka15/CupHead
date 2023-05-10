@@ -31,6 +31,8 @@ namespace yeram_client
 
 		UINT mWidth;
 		UINT mHeight;
+
+		HANDLE mResourceDeleterHandle;
 	};
 }
 

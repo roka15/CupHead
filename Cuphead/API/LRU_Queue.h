@@ -4,6 +4,7 @@ class LRU_Queue
 {
 public:
 	LRU_Queue(int _capacity) :capacity(_capacity) { queue = new PriorityQueue<T,_Pr>(_capacity); }
+	~LRU_Queue() { delete queue; }
 	bool Push(T _data, T& outdata)
 	{
 		bool flag = false;

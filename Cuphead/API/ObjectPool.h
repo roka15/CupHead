@@ -9,6 +9,7 @@ namespace core
 	class ObjectPool
 	{
 	public:
+		static bool ActiveObjectPool();
 		static void Initialize(size_t _capacity = 100, size_t _max_capacity = 500);
 		static void Initialize(yeram_client::GameObject* _origin, size_t _capacity = 100, size_t _max_capacity = 500);
 		static void Release();
@@ -20,11 +21,14 @@ namespace core
 		ObjectPool() = delete;
 		~ObjectPool() = delete;
 	private:
+		static bool mbInit;
 		static size_t mcapacity;
 		static size_t mlimit_capacity;
 		static std::queue<yeram_client::GameObject*> mpools;
 		static yeram_client::GameObject* mOrigin;
 	};
+	template<typename T>
+	bool ObjectPool<T>::mbInit = false;
 	template <typename T>
 	size_t ObjectPool<T>::mcapacity = 0;
 	template <typename T>
@@ -33,9 +37,18 @@ namespace core
 	size_t ObjectPool<T>::mlimit_capacity = 0;
 	template <typename T>
 	yeram_client::GameObject* ObjectPool<T>::mOrigin = nullptr;
+	
+
+	template<typename T>
+	inline bool ObjectPool<T>::ActiveObjectPool()
+	{
+		return mbInit == true;
+	}
+
 	template<typename T>
 	inline void ObjectPool<T>::Initialize(size_t _capacity, size_t _max_capacity)
 	{
+		mbInit = true;
 		mcapacity = _capacity;
 		mlimit_capacity = _max_capacity;
 		int temp_min = mcapacity < mlimit_capacity ? mcapacity : mlimit_capacity;
@@ -50,6 +63,7 @@ namespace core
 	template<typename T>
 	inline void ObjectPool<T>::Initialize(yeram_client::GameObject* _origin, size_t _capacity, size_t _max_capacity)
 	{
+		mbInit = true;
 		mcapacity = _capacity;
 		mlimit_capacity = _max_capacity;
 		int temp_min = mcapacity < mlimit_capacity ? mcapacity : mlimit_capacity;
@@ -87,6 +101,7 @@ namespace core
 			delete mOrigin;
 			mOrigin = nullptr;
 		}
+		mbInit = false;
 	}
 	template<typename T>
 	inline std::shared_ptr<yeram_client::GameObject> ObjectPool<T>::Spawn()

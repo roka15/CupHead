@@ -69,7 +69,7 @@ namespace yeram_client
 
 	void SpriteRenderer::SetImage(const std::wstring& _filename, const std::wstring& _path)
 	{
-		Image* image = Resources::Load<Image>(_filename.c_str(), _path.c_str());
+		Image* image = Resources::Load<Image>(_filename, _path);
 		mImageKey = image->GetKey();
 		mPath = _path;
 		Transform* tf = mOwner->GetComponent<Transform>();
