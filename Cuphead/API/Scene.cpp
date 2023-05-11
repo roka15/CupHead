@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "Application.h"
 #include "Layer.h"
-
+#include "ResourceDeleterThread.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -52,6 +52,7 @@ namespace yeram_client
 
 	void Scene::OnEnter()
 	{
+		core::ResourceDeleterThread::SetResourceQueueCapacity(MAX_RESOURCE);
 	}
 
 	void Scene::OnExit()
@@ -80,6 +81,7 @@ namespace yeram_client
 				continue;
 			layer->Release();
 		}
+		core::ResourceDeleterThread::SetResourceQueueCapacity(0);
 	}
 
 	void Scene::ChagePosGameObjects(const Vector2& _offset)

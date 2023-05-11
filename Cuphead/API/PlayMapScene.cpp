@@ -76,6 +76,7 @@ namespace yeram_client
 	}
 	void PlayMapScene::OnEnter()
 	{
+		Scene::OnEnter();
 		Camera::SetHorizontalMove(true);
 		Camera::SetVerticalMove(true);
 		ColliderManager::SetLayer(ELayerType::BackColObject, ELayerType::Player, true);
@@ -181,7 +182,7 @@ namespace yeram_client
 		}
 #pragma endregion
 		//Camera::PlayLoad();
-		Scene::OnEnter();
+		
 	}
 	void PlayMapScene::OnExit()
 	{

@@ -119,7 +119,7 @@ namespace yeram_client
 		mbLoadScreenFlag = false;
 
 
-		LoadScene(ESceneType::SaltBakerBossIntro);
+		LoadScene(ESceneType::Title);
 	}
 
 	void SceneManager::Update()

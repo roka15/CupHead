@@ -62,6 +62,8 @@ void yeram_client::MainMenuScene::Release()
 void yeram_client::MainMenuScene::OnEnter()
 {
 #pragma region main menu window
+
+	Scene::OnEnter();
 	Vector2 size = application.GetWindowSize();
 	std::shared_ptr<GameObject> rectangle = core::ObjectPool<SpriteRenderer>::Spawn();
 	{
@@ -134,7 +136,7 @@ void yeram_client::MainMenuScene::OnEnter()
 	//rectangle->AddChild(options_btn);
 
 #pragma endregion
-	Scene::OnEnter();
+	
 }
 
 void yeram_client::MainMenuScene::OnExit()

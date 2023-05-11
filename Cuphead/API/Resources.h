@@ -52,12 +52,12 @@ namespace yeram_client
 		}
 		static void Release()
 		{
-			for (auto pair : mResources)
+			/*for (auto pair : mResources)
 			{
 				delete pair.second;
 				pair.second = nullptr;
 			}
-			mResources.clear();
+			mResources.clear();*/
 		}
 	private:
 		static std::map<std::wstring, My_Resource*> mResources;

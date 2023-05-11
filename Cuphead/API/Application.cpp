@@ -3,6 +3,7 @@
 #include "Time.h"
 #include "Input.h"
 #include "Resources.h"
+#include "ResourceDeleterThread.h"
 #include "Camera.h"
 #include "ColliderManager.h"
 #include "MoveObjectManager.h"
@@ -37,16 +38,12 @@ namespace yeram_client
 		HBITMAP default_Bitmap=(HBITMAP)SelectObject(mBackHdc, mBackBuffer);
 		DeleteObject(default_Bitmap);
 
+		core::ResourceDeleterThread::Initialize();
 		core::Input::Initialize();
 		//WindowManager::Initialize();
 		SceneManager::Initalize();
 		Time::Initailize();
 		Camera::Initialize();
-
-		//thread 
-		mResourceDeleterHandle = CreateThread(NULL, 0, core::ResourceDeleterThread::DeleterThread, nullptr, 0, NULL);
-		if (mResourceDeleterHandle == NULL) exit(1);
-
 	}
 	void Application::Run()
 	{
@@ -75,11 +72,12 @@ namespace yeram_client
 	}
 	void Application::Release()
 	{
-		CloseHandle(mResourceDeleterHandle);
+		
 		core::Input::Release();
 		SceneManager::Release();
 		Time::Release();
 		Camera::Release();
+		core::ResourceDeleterThread::Release();
 		Resources::Release();
 		//WindowManager::Release();
 	}

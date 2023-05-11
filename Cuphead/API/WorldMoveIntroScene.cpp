@@ -62,6 +62,7 @@ namespace yeram_client
 	}
 	void WorldMoveIntroScene::OnEnter()
 	{
+		Scene::OnEnter();
 		Vector2 size = application.GetWindowSize();
 		Camera::FadeIn();
 		Resources::Load<Image>(L"worldmove_intro_text", L"..\\Resources\\worldmove_intro\\bg\\cutscene_intro_s1_logo.bmp");
@@ -175,8 +176,6 @@ namespace yeram_client
 				AddGameObject(grass, ELayerType::FrontObject);
 			}
 		}
-		
-		Scene::OnEnter();
 	}
 	void WorldMoveIntroScene::OnExit()
 	{

@@ -164,11 +164,13 @@ namespace yeram_client
 		std::vector<Vector2> sizes = {};
 		std::wstring key = fs.parent_path().filename();
 		key += fs.filename();
-		if (FindAnimation(key) != nullptr)
-			return key;
+
 		Image* findImage = Resources::Find<Image>(key);
+		
 		if (findImage != nullptr)
 		{
+			if (FindAnimation(key) != nullptr)
+				return key;
 			CreateAnimation(key);
 			return key;
 		}

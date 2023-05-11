@@ -79,6 +79,7 @@ void yeram_client::SaltBakeryShopScene::Release()
 
 void yeram_client::SaltBakeryShopScene::OnEnter()
 {
+	Scene::OnEnter();
 	ColliderManager::SetLayer(ELayerType::Player, ELayerType::BackColObject, true);
 	mPlayer = mLayers[(UINT)ELayerType::Player]->FindObject(L"Player");
 	Player* player = mPlayer->GetComponent<Player>();
@@ -297,7 +298,7 @@ void yeram_client::SaltBakeryShopScene::OnEnter()
 		tf->SetPos(Vector2{ 2640.0f,390.0f });
 		AddGameObject(flameaniobj4, ELayerType::BackObject);
 	}
-	Scene::OnEnter();
+
 }
 
 void yeram_client::SaltBakeryShopScene::OnExit()

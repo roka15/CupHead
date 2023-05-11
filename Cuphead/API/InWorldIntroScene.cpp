@@ -43,6 +43,7 @@ namespace yeram_client
 	}
 	void InWorldIntroScene::OnEnter()
 	{
+		Scene::OnEnter();
 		Vector2 size = application.GetWindowSize();
 		std::shared_ptr<GameObject> sky = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
@@ -844,7 +845,6 @@ namespace yeram_client
 		}
 		AddGameObject(letterboxTop, ELayerType::FrontObject);
 		AddGameObject(letterboxBottom, ELayerType::FrontObject);
-		Scene::OnEnter();
 	}
 	void InWorldIntroScene::OnExit()
 	{

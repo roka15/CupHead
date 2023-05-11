@@ -33,12 +33,13 @@ public:
 	{
 		return queue->Size();
 	}
-	
+
 	void Capacity(size_t _capacity)
 	{
 		if (capacity > _capacity)
 		{
-			CustomDelete<T>(capacity - _capacity);
+			size_t diff = capacity > queue->Size() ? queue->Size() : capacity;
+			CustomDelete<T>(diff - _capacity);
 		}
 		capacity = _capacity;
 	}
@@ -49,13 +50,14 @@ public:
 		return (*queue)[_index];
 	}
 protected:
-	template<typename U = T, typename = std::enable_if_t<!std::is_pointer_v<U>>>
+	template<typename U = T, typename = std::enable_if_t<std::is_same_v<U, std::shared_ptr<typename T::element_type>>>>
 	void CustomDelete(size_t _delete_cnt)
 	{
 		for (int i = 0; i < _delete_cnt; i++)
 		{
 			T data = queue->Front();
 			queue->Pop();
+			data.reset();
 		}
 	}
 	template<typename U = T, typename std::enable_if_t<std::is_pointer_v<U>>* = nullptr>
@@ -65,10 +67,10 @@ protected:
 		{
 			T data = queue->Front();
 			queue->Pop();
+
 			delete data;
 		}
 	}
-
 protected:
 	PriorityQueue<T, _Pr>* queue;
 private:

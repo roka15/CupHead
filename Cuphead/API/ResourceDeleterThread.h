@@ -13,15 +13,22 @@ namespace core
 	{
 	protected:
 		typedef yeram_client::My_Resource myResource;
-		typedef yeram_client::Resource_Greater<myResource> resource_greater;
-		typedef yeram_client::Resource_Less<myResource> resource_less;
+		typedef yeram_client::Resource_Greater<std::shared_ptr<myResource>> resource_greater;
+		//typedef yeram_client::Resource_Less<std::shared_ptr<myResource>> resource_less;
 		typedef yeram_client::Resources Resources;
 	public:
+		static void Initialize();
 		static void RegisterResourceInfo(myResource* _resource);
 		static DWORD __stdcall DeleterThread(PVOID _param);
 		static void SetResourceQueueCapacity(size_t _capacity);
+		static void WriteLogConsole(myResource* _resource);
+		static void Release();
+		static void CloseConsloe();
 	private:
-		static LRU_Queue<myResource*, resource_greater> mLRUQueue;
+		static LRU_Queue<std::shared_ptr<myResource>, resource_greater> mLRUQueue;
+		static std::queue<std::wstring> mDeleteMessage;
+		static HANDLE mhConsole;
+		static HANDLE mDeleteThread;
 	};
 }
 

@@ -2,31 +2,36 @@
 #include "CommonInclude.h"
 namespace yeram_client
 {
-	template <typename T, typename = decltype(std::declval<T>().GetTime()) >
+	template <typename T>
 	struct Resource_Greater
 	{
-		bool operator()(T _obj1, T _obj2)
-		{
-			return _obj1.GetTime() > _obj2.GetTime();
-		}
-		bool operator()(T* _obj1, T* _obj2)
+		bool operator()(const T& _obj1, const T& _obj2)
 		{
 			return _obj1->GetTime() > _obj2->GetTime();
 		}
 	};
 
-	template <typename T, typename = decltype(std::declval<T>().GetTime()) >
+	/*template <typename T, typename = decltype(std::declval<T>().GetTime()) >
 	struct Resource_Less
 	{
-		bool operator()(T _obj1, T _obj2)
+		template <typename U = T>
+		bool operator()(const U _obj1, const U _obj2)
 		{
 			return _obj1.GetTime() < _obj2.GetTime();
 		}
-		bool operator()(T* _obj1, T* _obj2)
+
+		template <typename U = T>
+		bool operator()(const std::shared_ptr<U>& _obj1, const std::shared_ptr<U>& _obj2)
 		{
 			return _obj1->GetTime() < _obj2->GetTime();
 		}
-	};
+
+		template <typename U = T>
+		bool operator()(const U* _obj1, const U* _obj2)
+		{
+			return _obj1->GetTime() < _obj2->GetTime();
+		}
+	};*/
 	class My_Resource
 	{
 	public:
