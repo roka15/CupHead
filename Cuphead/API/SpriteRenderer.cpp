@@ -69,13 +69,18 @@ namespace yeram_client
 
 	void SpriteRenderer::SetImage(const std::wstring& _filename, const std::wstring& _path)
 	{
-		Image* image = Resources::Load<Image>(_filename, _path);
-		mImageKey = image->GetKey();
-		mPath = _path;
+		Image* image = Resources::Find<Image>(_filename);
+		if (image == nullptr)
+		{
+			image=Resources::Load<Image>(_filename, _path);
+			mImageKey = image->GetKey();
+			mPath = _path;
+		
+			Resources::Insert<Image>(mImageKey, image);
+			core::ResourceDeleterThread::RegisterResourceInfo(image);
+		}
 		Transform* tf = mOwner->GetComponent<Transform>();
 		Vector2 pos = tf->GetPos();
-		Resources::Insert<Image>(mImageKey, image);
-		core::ResourceDeleterThread::RegisterResourceInfo(image);
 		mImageSize = Vector2{(int)image->GetWidth(),(int)image->GetHeight()};
 		pos.x -= mImageSize.x;
 		pos.y -= mImageSize.y;

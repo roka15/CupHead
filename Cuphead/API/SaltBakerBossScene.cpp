@@ -20,6 +20,7 @@
 #include "PepperBullet.h"
 #include "Pepper.h"
 #include "SlatPhase3.h"
+#include "ResourceDeleterThread.h"
 
 extern yeram_client::Application application;
 namespace yeram_client
@@ -422,6 +423,8 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase2_Info_Register()
 	{
+		core::ResourceDeleterThread::SetResourceQueueCapacity(0);
+		core::ResourceDeleterThread::SetResourceQueueCapacity(3000);
 		if (core::ObjectPool<MintBullet>::ActiveObjectPool() == false)
 			core::ObjectPool<MintBullet>::Initialize(50, 100);
 		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == false)

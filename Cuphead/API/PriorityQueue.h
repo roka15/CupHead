@@ -30,38 +30,38 @@ private:
 			} while (child != 0);
 		}
 	}
+	void heapify(int i)
+	{
+		int parent = i;
+		int child = i * 2+1;
+		int size = contain.size() - 1;
+		if (child > size)
+			return;
+		if (child + 1 <= size && this->mycompare(contain[child], contain[child + 1])) child++;
+
+		if (this->mycompare(contain[parent], contain[child]))
+		{
+			T temp = contain[parent];
+			contain[parent] = contain[child];
+			contain[child] = temp;
+
+			if (child <= size / 2)
+			{
+				heapify(child);
+			}
+		}
+	}
 	void VecSort()
 	{
-		if (contain.size() == 1)
+		int size = contain.size();
+		if (size == 1)
 		{
 			return;
 		}
-		int size = contain.size() - 1;
-		T temp = contain[0];
-		contain[0] = contain[size];
-		contain[size] = temp;
-		int root = 0;
-		int child = 1;
-		do
+		for (int i = size / 2-1; i >= 0; i--)
 		{
-			child = root * 2 + 1;
-
-			if (size >= child + 1 && size - 1 >= child)
-			{
-				if (this->mycompare(contain[child], contain[child + 1]))
-				{
-					child++;
-				}
-			}
-
-			if (size >= child && this->mycompare(contain[root], contain[child]))
-			{
-				temp = contain[root];
-				contain[root] = contain[child];
-				contain[child] = temp;
-			}
-			root = child;
-		} while (size >= child);
+			heapify(i);
+		}
 	}
 public:
 	PriorityQueue(int capacity = 40)
