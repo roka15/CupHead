@@ -114,9 +114,9 @@ namespace core
 	{
 		SetResourceQueueCapacity(0);
 	}
-	void ResourceDeleterThread::CloseConsloe()
+	void ResourceDeleterThread::DeleterQueueSort()
 	{
-		//FreeConsole();
+		mLRUQueue.Sort();
 	}
 
 }

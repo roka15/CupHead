@@ -25,6 +25,7 @@ namespace yeram_client
 		image->mHeight = _height;
 
 		image->SetKey(_key);
+		image->SetTime(Resources::GetTime());
 		Resources::Insert(_key, image);
 
 		HBRUSH myBrush = (HBRUSH)CreateSolidBrush(rgb);
@@ -33,7 +34,7 @@ namespace yeram_client
 		Rectangle(image->mHdc, -1, -1, _width + 1, _height + 1);
 
 		DeleteObject(SelectObject(image->mHdc, oldBrush));
-
+	
 		core::ResourceDeleterThread::RegisterResourceInfo(image);
 		return image;
 	}

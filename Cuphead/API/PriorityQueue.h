@@ -36,29 +36,32 @@ private:
 		{
 			return;
 		}
-		for (int i = contain.size() - 1; i >= 0; i--)
+		int size = contain.size() - 1;
+		T temp = contain[0];
+		contain[0] = contain[size];
+		contain[size] = temp;
+		int root = 0;
+		int child = 1;
+		do
 		{
-			T temp = contain[0];
-			contain[0] = contain[i];
-			contain[i] = temp;
-			int root = 0;
-			int child = 1;
-			do
+			child = root * 2 + 1;
+
+			if (size >= child + 1 && size - 1 >= child)
 			{
-				child = root * 2 + 1;
-				if (this->mycompare(contain[child], contain[child + 1]) && child < i - 1)
+				if (this->mycompare(contain[child], contain[child + 1]))
 				{
 					child++;
 				}
-				if (this->mycompare(contain[root], contain[child]) && child < i)
-				{
-					temp = contain[root];
-					contain[root] = contain[child];
-					contain[child] = temp;
-				}
-				root = child;
-			} while (child < i);
-		}
+			}
+
+			if (size >= child && this->mycompare(contain[root], contain[child]))
+			{
+				temp = contain[root];
+				contain[root] = contain[child];
+				contain[child] = temp;
+			}
+			root = child;
+		} while (size >= child);
 	}
 public:
 	PriorityQueue(int capacity = 40)
@@ -74,15 +77,9 @@ public:
 	{
 		int size = contain.size() - 1;
 		T data;
-		if (this->mycompare(contain[0], contain[size]) == false) // 우선순위 조건이 동일한 경우 들어온 순서대로 나간다.
-		{
-			data = contain[0];
-		}
-		else
-		{
-			data = contain[size];
-		}
-		
+
+		data = contain[size];
+
 		for (auto itr = contain.begin(); itr != contain.end(); itr++)
 		{
 			if (data == *itr)
@@ -98,10 +95,11 @@ public:
 		T data;
 		T temp = contain[0];
 		int size = contain.size() - 1;
-		if (this->mycompare(contain[0], contain[size]) == false) // 우선순위 조건이 동일한 경우 들어온 순서대로 나간다.
+		if (this->mycompare(contain[size], contain[0]) == false) // 우선순위 조건이 동일한 경우 들어온 순서대로 나간다.
 		{
-			data = contain[0];
-			return data;
+			contain[0] = contain[size];
+			contain[size] = temp;
+			return temp;
 		}
 		contain[0] = contain[size];
 		contain[size] = temp;
@@ -133,6 +131,10 @@ public:
 	bool Empty()
 	{
 		return contain.size() == 0;
+	}
+	void Sort()
+	{
+		VecSort();
 	}
 	const T& operator[](int _index)
 	{

@@ -74,6 +74,8 @@ namespace yeram_client
 		mPath = _path;
 		Transform* tf = mOwner->GetComponent<Transform>();
 		Vector2 pos = tf->GetPos();
+		Resources::Insert<Image>(mImageKey, image);
+		core::ResourceDeleterThread::RegisterResourceInfo(image);
 		mImageSize = Vector2{(int)image->GetWidth(),(int)image->GetHeight()};
 		pos.x -= mImageSize.x;
 		pos.y -= mImageSize.y;

@@ -135,7 +135,24 @@ namespace yeram_client
 			}
 			mBgObjects.clear();
 		}
-
+		if (core::ObjectPool<SlatPhase3>::ActiveObjectPool() == true)
+			core::ObjectPool<SlatPhase3>::Release();
+		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == true)
+			core::ObjectPool<PepperBullet>::Release();
+		if (core::ObjectPool<Pepper>::ActiveObjectPool() == true)
+			core::ObjectPool<Pepper>::Release();
+		if (core::ObjectPool<MintBullet>::ActiveObjectPool() == true)
+			core::ObjectPool<MintBullet>::Release();
+		if (core::ObjectPool<LemonBullet>::ActiveObjectPool() == true)
+			core::ObjectPool<LemonBullet>::Release();
+		if (core::ObjectPool<BerryBullet>::ActiveObjectPool() == true)
+			core::ObjectPool<BerryBullet>::Release();
+		if (core::ObjectPool<SugarBullet>::ActiveObjectPool() == true)
+			core::ObjectPool<SugarBullet>::Release();
+		if (core::ObjectPool<CookieBullet>::ActiveObjectPool() == true)
+			core::ObjectPool<CookieBullet>::Release();
+		if (core::ObjectPool<SaltBaker>::ActiveObjectPool() == true)
+			core::ObjectPool<SaltBaker>::Release();
 		Scene::Release();
 	}
 
@@ -199,28 +216,8 @@ namespace yeram_client
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE2, std::vector<std::shared_ptr<GameObject>>()));
 		mBgObjects.insert(std::make_pair(EPhaseType::PHASE3, std::vector<std::shared_ptr<GameObject>>()));
 
-#pragma region objectpool init
-		if (core::ObjectPool<SaltBaker>::ActiveObjectPool() == false)
-			core::ObjectPool<SaltBaker>::Initialize(1);
-		if (core::ObjectPool<CookieBullet>::ActiveObjectPool() == false)
-			core::ObjectPool<CookieBullet>::Initialize(50, 100);
-		if (core::ObjectPool<SugarBullet>::ActiveObjectPool() == false)
-			core::ObjectPool<SugarBullet>::Initialize(50, 100);
-		if (core::ObjectPool<BerryBullet>::ActiveObjectPool() == false)
-			core::ObjectPool<BerryBullet>::Initialize(50, 100);
-		if (core::ObjectPool<LemonBullet>::ActiveObjectPool() == false)
-			core::ObjectPool<LemonBullet>::Initialize(50, 100);
-		if (core::ObjectPool<MintBullet>::ActiveObjectPool() == false)
-			core::ObjectPool<MintBullet>::Initialize(50, 100);
-		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == false)
-			core::ObjectPool<PepperBullet>::Initialize(50, 100);
-		if (core::ObjectPool<Pepper>::ActiveObjectPool() == false)
-			core::ObjectPool<Pepper>::Initialize(10, 100);
-		if (core::ObjectPool<SlatPhase3>::ActiveObjectPool() == false)
-			core::ObjectPool<SlatPhase3>::Initialize(1, 1);
-#pragma endregion
 		Phase1_Info_Register();
-		
+
 
 		//test
 		{
@@ -242,19 +239,37 @@ namespace yeram_client
 				vec_itr.reset();
 			}
 		}
-
-		core::ObjectPool<SlatPhase3>::Release();
+		if (core::ObjectPool<SlatPhase3>::ActiveObjectPool() == true)
+			core::ObjectPool<SlatPhase3>::Release();
+		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == true)
 		core::ObjectPool<PepperBullet>::Release();
+		if (core::ObjectPool<Pepper>::ActiveObjectPool() == true)
 		core::ObjectPool<Pepper>::Release();
+		if (core::ObjectPool<MintBullet>::ActiveObjectPool() == true)
 		core::ObjectPool<MintBullet>::Release();
+		if (core::ObjectPool<LemonBullet>::ActiveObjectPool() == true)
 		core::ObjectPool<LemonBullet>::Release();
+		if (core::ObjectPool<BerryBullet>::ActiveObjectPool() == true)
 		core::ObjectPool<BerryBullet>::Release();
+		if (core::ObjectPool<SugarBullet>::ActiveObjectPool() == true)
 		core::ObjectPool<SugarBullet>::Release();
+		if (core::ObjectPool<CookieBullet>::ActiveObjectPool() == true)
 		core::ObjectPool<CookieBullet>::Release();
+		if (core::ObjectPool<SaltBaker>::ActiveObjectPool() == true)
 		core::ObjectPool<SaltBaker>::Release();
 	}
 	void SaltBakerBossScene::Phase1_Info_Register()
 	{
+		if (core::ObjectPool<SaltBaker>::ActiveObjectPool() == false)
+			core::ObjectPool<SaltBaker>::Initialize(1);
+		if (core::ObjectPool<CookieBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<CookieBullet>::Initialize(50, 100);
+		if (core::ObjectPool<SugarBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<SugarBullet>::Initialize(50, 100);
+		if (core::ObjectPool<BerryBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<BerryBullet>::Initialize(50, 100);
+		if (core::ObjectPool<LemonBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<LemonBullet>::Initialize(50, 100);
 		Vector2 pos = application.GetWindowSize();
 		std::shared_ptr<GameObject> farbg = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
@@ -407,6 +422,13 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase2_Info_Register()
 	{
+		if (core::ObjectPool<MintBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<MintBullet>::Initialize(50, 100);
+		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == false)
+			core::ObjectPool<PepperBullet>::Initialize(50, 100);
+		if (core::ObjectPool<Pepper>::ActiveObjectPool() == false)
+			core::ObjectPool<Pepper>::Initialize(10, 100);
+
 		Vector2 winsize = application.GetWindowSize();
 		Vector2 nextpos = Vector2{ 0.0f,-(winsize.y) };
 		std::shared_ptr<GameObject> bg1 = core::ObjectPool<SpriteRenderer>::Spawn();
@@ -566,6 +588,8 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase3_Info_Register()
 	{
+		if (core::ObjectPool<SlatPhase3>::ActiveObjectPool() == false)
+			core::ObjectPool<SlatPhase3>::Initialize(1, 1);
 		Vector2 winsize = application.GetWindowSize();
 		Vector2 center = Vector2{ winsize.x / 2.0f,winsize.y };
 

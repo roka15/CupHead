@@ -15,6 +15,8 @@ namespace yeram_client
 			if (itr != mResources.end())
 			{
 				itr->second->SetTime(mTime);
+				//sort Ω√≈∞±‚.
+				core::ResourceDeleterThread::DeleterQueueSort();
 				return dynamic_cast<T*>(itr->second);
 			}
 
@@ -36,8 +38,7 @@ namespace yeram_client
 			resource->SetKey(_key);
 			resource->SetPath(_path);
 			resource->SetTime(mTime);
-			mResources.insert(std::make_pair(_key, resource));
-			core::ResourceDeleterThread::RegisterResourceInfo(resource);
+		
 			return dynamic_cast<T*>(resource);
 		}
 		template<typename T>
@@ -59,6 +60,7 @@ namespace yeram_client
 			}
 			mResources.clear();*/
 		}
+		static double GetTime() { return mTime; }
 	private:
 		static std::map<std::wstring, My_Resource*> mResources;
 		static double mTime;

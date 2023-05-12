@@ -211,9 +211,10 @@ namespace yeram_client
 				, image->GetWidth(), image->GetHeight()
 				, image->GetHDC(), 0, 0, SRCCOPY);
 
-
+			delete image;
 			index++;
 		}
+		
 		CreateAniInfo public_info(key,_path,Vector2::Zero, index, 1, index, _offset, _duration, sizes, _alpha);
 		mPublicAniInfo.insert(std::make_pair(key, public_info));
 		CreateAnimation(key);

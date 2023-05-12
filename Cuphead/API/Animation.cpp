@@ -148,6 +148,8 @@ namespace yeram_client
 				if (animationName.compare(imageName) != 0) // 원래 sprite 인 경우
 				{
 					_image = Resources::Load<Image>(imageName,pubInfo.mPath);
+					Resources::Insert<Image>(imageName, _image);
+					core::ResourceDeleterThread::RegisterResourceInfo(_image);
 				}
 				else // 폴더 읽어와서 sprite화 시키는 경우
 				{

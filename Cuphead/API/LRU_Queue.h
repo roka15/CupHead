@@ -33,7 +33,10 @@ public:
 	{
 		return queue->Size();
 	}
-
+	void Sort()
+	{
+		queue->Sort();
+	}
 	void Capacity(size_t _capacity)
 	{
 		if (capacity > _capacity)

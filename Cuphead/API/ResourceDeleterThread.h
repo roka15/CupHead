@@ -23,7 +23,7 @@ namespace core
 		static void SetResourceQueueCapacity(size_t _capacity);
 		static void WriteLogConsole(myResource* _resource);
 		static void Release();
-		static void CloseConsloe();
+		static void DeleterQueueSort();
 	private:
 		static LRU_Queue<std::shared_ptr<myResource>, resource_greater> mLRUQueue;
 		static std::queue<std::wstring> mDeleteMessage;
