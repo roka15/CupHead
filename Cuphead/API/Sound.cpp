@@ -3,7 +3,11 @@
 
 namespace yeram_client
 {
-    HRESULT Sound::Load(const std::wstring& path)
+	Sound::~Sound()
+	{
+		mSoundBuffer->Release();
+	}
+	HRESULT Sound::Load(const std::wstring& path)
     {
         if (nullptr == SoundManager::GetDevice())
             assert(nullptr); // 사운드 객체 생성되지 않음
@@ -84,7 +88,6 @@ namespace yeram_client
 		mSoundBuffer->Unlock(pWrite1, dwlength1, pWrite2, dwlength2);
 
 		mmioClose(hFile, 0);
-
 		// 초기 음량 절반으로 설정
 		SetVolume(50.f);
 

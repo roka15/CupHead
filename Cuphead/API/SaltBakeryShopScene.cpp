@@ -10,6 +10,7 @@
 #include "ObjectPool.h"
 #include "ColliderManager.h"
 #include "Application.h"
+#include "Resources.h"
 extern yeram_client::Application application;
 yeram_client::SaltBakeryShopScene::SaltBakeryShopScene()
 {
@@ -95,7 +96,11 @@ void yeram_client::SaltBakeryShopScene::OnEnter()
 
 	Camera::SetTarget(nullptr);
 
+	Sound* sound = Resources::Load<Sound>(L"shop_enter_bell_sound", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_WorldMap_BoatTravelAccept.wav");
+	sound->Play(false);
 
+	Sound* skip_sound = Resources::Load<Sound>(L"shop_skip_sound", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_kitchen_skip.wav");
+	skip_sound->Play(true);
 	std::shared_ptr<GameObject> bg = core::ObjectPool<SpriteRenderer>::Spawn();
 	{
 		bg->SetName(L"sbshop_bg");
@@ -314,6 +319,11 @@ void yeram_client::SaltBakeryShopScene::ActiveScene1()
 	tf->SetPos(Vector2{ 100.0f,400.0f });
 	mWindowPos = tf->GetPos();
 
+	Sound* sound = Resources::Find<Sound>(L"shop_skip_sound");
+	sound->Stop(true);
+
+	Sound* base_sound = Resources::Load<Sound>(L"shop_base_sound", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_kitchen_basement.wav");
+	base_sound->Play(true);
 
 	std::shared_ptr<GameObject> ground_col = FindObject(L"sbshop_ground");
 	{

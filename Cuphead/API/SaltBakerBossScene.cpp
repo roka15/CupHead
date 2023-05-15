@@ -136,6 +136,10 @@ namespace yeram_client
 			}
 			mBgObjects.clear();
 		}
+		mPlayer.reset();
+		mBoss.reset();
+		Scene::Release();
+
 		if (core::ObjectPool<SlatPhase3>::ActiveObjectPool() == true)
 			core::ObjectPool<SlatPhase3>::Release();
 		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == true)
@@ -154,7 +158,7 @@ namespace yeram_client
 			core::ObjectPool<CookieBullet>::Release();
 		if (core::ObjectPool<SaltBaker>::ActiveObjectPool() == true)
 			core::ObjectPool<SaltBaker>::Release();
-		Scene::Release();
+		
 	}
 
 	void SaltBakerBossScene::OnEnter()

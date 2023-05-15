@@ -112,7 +112,7 @@ namespace yeram_client
 		mComponents.clear();
 	
 
-		for (std::shared_ptr<GameObject> child : mChilds)
+		for (std::shared_ptr<GameObject>& child : mChilds)
 		{
 			if (child == nullptr)
 				continue;

@@ -81,6 +81,8 @@ namespace yeram_client
 		}
 		Transform* tf = mOwner->GetComponent<Transform>();
 		Vector2 pos = tf->GetPos();
+		mImageKey = image->GetKey();
+		mPath = _path;
 		mImageSize = Vector2{(int)image->GetWidth(),(int)image->GetHeight()};
 		pos.x -= mImageSize.x;
 		pos.y -= mImageSize.y;

@@ -119,6 +119,9 @@
     <Filter Include="Contents\Scene\WorldInIntro">
       <UniqueIdentifier>{135803b7-4a0d-4fb6-8b97-75f92ff3e635}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\Manager\SoundManager">
+      <UniqueIdentifier>{907bbf29-6007-418a-a1bb-3d5c0c706671}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -316,8 +319,6 @@
       <Filter>Contents\Script\Monster</Filter>
     </ClInclude>
     <ClInclude Include="SkillInfo.h" />
-    <ClInclude Include="Sound.h" />
-    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="HomingBullet.h">
       <Filter>Contents\Script\Bullet</Filter>
     </ClInclude>
@@ -353,6 +354,12 @@
     </ClInclude>
     <ClInclude Include="InWorldIntroScene.h">
       <Filter>Contents\Scene\WorldInIntro</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Engine\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Contents\Manager\SoundManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -538,8 +545,6 @@
       <Filter>Contents\Script\Monster</Filter>
     </ClCompile>
     <ClCompile Include="SkillInfo.cpp" />
-    <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="HomingBullet.cpp">
       <Filter>Contents\Script\Bullet</Filter>
     </ClCompile>
@@ -569,6 +574,12 @@
     </ClCompile>
     <ClCompile Include="InWorldIntroScene.cpp">
       <Filter>Contents\Scene\WorldInIntro</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Engine\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Contents\Manager\SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

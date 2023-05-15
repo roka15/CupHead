@@ -6,6 +6,8 @@
 #include "ObjectPool.h"
 #include "MoveObject.h"
 #include "Time.h"
+#include "Resources.h"
+#include "Camera.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -41,8 +43,15 @@ namespace yeram_client
 		{
 			mTime += Time::DeltaTime();
 		}
-		if (mTime >= 5.0 &&mTime<10.0f)
+
+		if (mTime >= 5.0 && mTime < 10.0f)
 		{
+			if (mbSoundFlag == false)
+			{
+				Sound* find_sound = Resources::Find<Sound>(L"shopintro_cuphead_helpsound");
+				find_sound->Play(true);
+				mbSoundFlag = true;
+			}
 			std::shared_ptr<GameObject> cuphead = FindObject(L"sb_intro_cuphead");
 			Transform* tf = cuphead->GetComponent<Transform>();
 			tf->SetPos(Vector2{ 730.0f,630.0f });
@@ -66,6 +75,17 @@ namespace yeram_client
 		}
 		else if (mTime >= 10.0f)
 		{
+			if (mNextSceneTime != 0.0 && mTime - mNextSceneTime >= 10.0f)
+			{
+				SceneManager::SetLoadSceneMessage(std::bind([this]()->void {SceneManager::LoadScene(ESceneType::SaltBakerBoss); }));
+			}
+
+			if (mbSoundFlag == true)
+			{
+				mbSoundFlag = false;
+				Sound* find_sound = Resources::Find<Sound>(L"shopintro_cuphead_helpsound");
+				find_sound->Stop(true);
+			}
 			std::shared_ptr<GameObject> sb = FindObject(L"sb_intro_salt");
 			sb->SetActive(true);
 			std::shared_ptr<GameObject> cuphead = FindObject(L"sb_intro_cuphead");
@@ -87,6 +107,7 @@ namespace yeram_client
 			std::shared_ptr<GameObject> backobj = FindObject(L"sb_intro_back_desk");
 			backobj->SetActive(true);
 		}
+		
 		Scene::Update();
 	}
 
@@ -103,7 +124,18 @@ namespace yeram_client
 	void SaltBakerIntroScene::OnEnter()
 	{
 		Scene::OnEnter();
+		Sound* base = Resources::Load<Sound>(L"shop_base_sound", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_kitchen_basement.wav");
+		Sound* knife_sound = Resources::Load<Sound>(L"shopintro_knife_sound", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Cutscene_SaltBakerPre_KnifeSwipe.wav");
+		Sound* knife_end_sound = Resources::Load<Sound>(L"shopintro_knife_endsound", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Cutscene_SaltBakerPre_KnifeDefinitelyOakTable.wav");
+		Sound* cuphead_show_sound = Resources::Load<Sound>(L"shopintro_cuphead_introsound", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Cutscene_SaltBakerPre_ChaliceReveal.wav");
+		Sound* cuphead_help_sound = Resources::Load<Sound>(L"shopintro_cuphead_helpsound", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Cutscene_SaltBakerPre_HelpClose.wav");
+		Sound* cuphead_desk_sound = Resources::Load<Sound>(L"shopintro_desk_col_sound", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Cutscene_SaltBakerPre_EndLeanIn.wav");
+
+		base->Play(true);
 		Vector2 WindowSize = application.GetWindowSize();
+
+	
+
 		std::shared_ptr<GameObject> player = FindObject(L"Player");
 		{
 			if (player != nullptr)
@@ -177,7 +209,7 @@ namespace yeram_client
 			ani->Play(L"salt_baker_boss_intro_scene4_knife", true);
 			AddGameObject(knife, ELayerType::BackObject);
 		}
-	
+
 		std::shared_ptr<GameObject> saltbaker = core::ObjectPool<CutScenePlayAnimation>::Spawn();
 		{
 			saltbaker->SetName(L"sb_intro_salt");
@@ -200,83 +232,94 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\5_2", Vector2::Zero, 0.1);
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\5_3", Vector2::Zero, 0.1);
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene1") =
-				std::bind([ani]()->void
-			{
-				GameObject* owner = ani->GetOwner();
-				owner->GetComponent<MoveObject>()->SetActive(true);
-			});
+				std::bind([ani, this]()->void
+					{
+						GameObject* owner = ani->GetOwner();
+						owner->GetComponent<MoveObject>()->SetActive(true);
+						Sound* find_sound = Resources::Find<Sound>(L"shopintro_knife_sound");
+						find_sound->Play(false);
+					});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene2") =
 				std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
-				arm->SetActive(true);
-				arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene2_arm", false);
-			});
-			ani->GetEndEvent(L"salt_baker_boss_intro_scene3")=
-				std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
-				arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene3_arm", false);
-			});
+					{
+						std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
+						arm->SetActive(true);
+						arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene2_arm", false);
+						Sound* find_sound = Resources::Find<Sound>(L"shopintro_knife_endsound");
+						find_sound->Play(false);
+					});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene3") =
 				std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
-				arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene4_arm", false);
-			});
+					{
+						std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
+						arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene3_arm", false);
+					});
+			ani->GetEndEvent(L"salt_baker_boss_intro_scene3") =
+				std::bind([this]()->void
+					{
+						std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
+						arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene4_arm", false);
+					});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene4") =
 				std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
-				arm->SetActive(false);
-			});
+					{
+						std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
+						arm->SetActive(false);
+					});
 			ani->GetStartEvent(L"salt_baker_boss_intro_scene4_1") =
-				std::bind([this,ani]()->void
-			{
-				GameObject* owner = ani->GetOwner();
-				MoveObject* mv = owner->GetComponent<MoveObject>();
-				Vector2 pos = owner->GetComponent<Transform>()->GetPos();
-				mv->SetActive(true);
-				mv->CreateInfo(Vector2{ 1.0f,200.0f }, Vector2{ 1.0f,-1.0f }, Vector2{ pos.x+50.0f,pos.y-100.0f});
-				std::shared_ptr<GameObject> knife = FindObject(L"sb_intro_knife");
-				knife->SetActive(true);
-			});
+				std::bind([this, ani]()->void
+					{
+						GameObject* owner = ani->GetOwner();
+						MoveObject* mv = owner->GetComponent<MoveObject>();
+						Vector2 pos = owner->GetComponent<Transform>()->GetPos();
+						mv->SetActive(true);
+						mv->CreateInfo(Vector2{ 1.0f,200.0f }, Vector2{ 1.0f,-1.0f }, Vector2{ pos.x + 50.0f,pos.y - 100.0f });
+						std::shared_ptr<GameObject> knife = FindObject(L"sb_intro_knife");
+						knife->SetActive(true);
+					});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene4_1") =
 				std::bind([this, ani]()->void
-			{
-				GameObject* owner = ani->GetOwner();
-				MoveObject* mv = owner->GetComponent<MoveObject>();
-				mv->SetActive(false);
-			});
+					{
+						GameObject* owner = ani->GetOwner();
+						MoveObject* mv = owner->GetComponent<MoveObject>();
+						mv->SetActive(false);
+						Sound* find_sound = Resources::Find<Sound>(L"shopintro_cuphead_introsound");
+						find_sound->Play(false);
+					});
 			ani->GetStartEvent(L"salt_baker_boss_intro_scene4_2") =
-				std::bind([this,WindowSize]()->void
-			{
-				mbStartTimer = true;
-			});
+				std::bind([this, WindowSize]()->void
+					{
+						mbStartTimer = true;
+					});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene5") =
 				std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
-				arm->SetActive(true);
-				arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene5_arm", false);
-				Transform* tf = arm->GetComponent<Transform>();
-				Vector2 pos = tf->GetPos();
-				pos.x += 100.0f;
-				pos.y += 80.0f;
-				tf->SetPos(pos);
-			});
+					{
+						std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
+						arm->SetActive(true);
+						arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene5_arm", false);
+						Transform* tf = arm->GetComponent<Transform>();
+						Vector2 pos = tf->GetPos();
+						pos.x += 100.0f;
+						pos.y += 80.0f;
+						tf->SetPos(pos);
+
+						Sound* find_sound = Resources::Find<Sound>(L"shopintro_desk_col_sound");
+						find_sound->Play(false);
+					});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene5_1") =
 				std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
-				arm->SetActive(true);
-				arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene5_arm2", true);
-			});
+					{
+						std::shared_ptr<GameObject> arm = FindObject(L"sb_intro_arm");
+						arm->SetActive(true);
+						arm->GetComponent<Animator>()->Play(L"salt_baker_boss_intro_scene5_arm2", true);
+					});
 			ani->GetEndEvent(L"salt_baker_boss_intro_scene5_3") =
 				std::bind([this]()->void
-			{
-				SceneManager::SetLoadSceneMessage(std::bind([this]()->void {SceneManager::LoadScene(ESceneType::SaltBakerBoss); }));
-			});
+					{
+						mNextSceneTime = mTime;
+						Camera::SetFadeImage(L"");
+						Camera::FadeOut();
+					});
 
 			CutScenePlayAnimation* cutscene = saltbaker->GetComponent<CutScenePlayAnimation>();
 			cutscene->SetAnimation(L"salt_baker_boss_intro_scene1", 5.0);
@@ -316,14 +359,53 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\4_arm", Vector2::Zero, 0.1);
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\5_arm", Vector2::Zero, 0.1);
 			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\salt_baker_boss_intro_scene\\5_arm2", Vector2::Zero, 0.1);
-			
+
 			AddGameObject(arm, ELayerType::FrontObject);
 		}
 
+		std::shared_ptr<GameObject> letterboxTop = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			letterboxTop->SetActive(true);
+			letterboxTop->SetName(L"letterboxTop");
+
+			SpriteRenderer* sprite = letterboxTop->GetComponent<SpriteRenderer>();
+			sprite->SetImage(letterboxTop->GetName(), L"..\\Resources\\black.bmp");
+			sprite->SetRenderType(ERenderType::StretchBlt);
+
+			Transform* tf = letterboxTop->GetComponent<Transform>();
+			Vector2 size;
+			size.x = sprite->GetWidth();
+			size.y = sprite->GetHeight() * 2.5f;
+			tf->SetSize(size);
+		}
+		std::shared_ptr<GameObject> letterboxBottom = core::ObjectPool<SpriteRenderer>::Spawn();
+		{
+			letterboxBottom->SetActive(true);
+			letterboxBottom->SetName(L"letterboxBottom");
+
+			RECT rc;
+			GetClientRect(application.GetHandle(), &rc);
+
+			SpriteRenderer* sprite = letterboxBottom->GetComponent<SpriteRenderer>();
+			sprite->SetImage(letterboxBottom->GetName(), L"..\\Resources\\black.bmp");
+			sprite->SetRenderType(ERenderType::StretchBlt);
+
+			Transform* tf = letterboxBottom->GetComponent<Transform>();
+			Vector2 size;
+			size.x = sprite->GetWidth();
+			size.y = sprite->GetHeight() * 2.5f;
+			tf->SetSize(size);
+			tf->SetPos(Vector2{ 0.0f, rc.bottom - rc.top - size.y });
+			//tf->SetPos(Vector2 { 0.0f, application.GetWindowSize().y - size.y });
+		}
+		AddGameObject(letterboxTop, ELayerType::FrontObject);
+		AddGameObject(letterboxBottom, ELayerType::FrontObject);
 	}
 
 	void SaltBakerIntroScene::OnExit()
 	{
+		Sound* base_sound = Resources::Find<Sound>(L"shop_base_sound");
+		base_sound->Stop(true);
 		Scene::OnExit();
 	}
 

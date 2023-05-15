@@ -6,6 +6,7 @@ namespace yeram_client
 		public My_Resource
 	{
 	public:
+		virtual ~Sound();
 		virtual HRESULT Load(const std::wstring& path) override;
 		bool LoadWavFile(const std::wstring& path);
 		void Play(bool loop);

@@ -34,11 +34,11 @@ namespace yeram_client
 
 	void SaltBaker::Initialize()
 	{
-		
+
 		mbPepperSpawnCheck = false;
 		mbPhase3IntroStart = false;
 		Boss::Initialize();
-		mMoveObject->CreateInfo(Vector2{ 550.0f,20.0f }, Vector2{ -1.0f,-1.0f });
+		mMoveObject->CreateInfo(Vector2{ 1000.0f,20.0f }, Vector2{ -1.0f,-1.0f });
 		mMoveObject->SetActive(false);
 
 		mCol->SetCenter(Vector2{ -125.0f,-480.0f });
@@ -152,12 +152,12 @@ namespace yeram_client
 
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype1", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_AttackType1\\sb_p2_boss\\attacktype2", Vector2::Zero, speed);
-		
+
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\LeftDown", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\LeftUp", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\RightDown", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_HitBoss\\RightUp", Vector2::Zero, speed);
-		
+
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\1", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\2", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\3", Vector2::Zero, speed);
@@ -166,9 +166,9 @@ namespace yeram_client
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_Death\\6", Vector2::Zero, speed);
 
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_boss\\idle", Vector2::Zero, speed);
-	
-		
-		
+
+
+
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\1", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\2", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\3", Vector2::Zero, speed);
@@ -185,512 +185,536 @@ namespace yeram_client
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\14", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\15", Vector2::Zero, speed);
 		mAni->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_3\\sb_p3_intro\\sb_p3_introacc\\16", Vector2::Zero, speed);
-		
-	
+
+
 		Animator* ani = mAni;
 		MoveObject* mv = mMoveObject;
 		SetPhase(EPhaseType::PHASE1);
+
+		Audio* audio = GetOwner()->AddComponent<Audio>();
+		audio->Play(L"boss_p1_bgm", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_saltbaker_phase_1_a.wav", true, 80);
+
 #pragma region intro event
+		mAni->GetStartEvent(L"saltbaker_phase_1intro") = std::bind([audio]()->void
+			{
+				audio->Play(L"boss_p1_bowtie", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_Intro_BowTiePull.wav", false);
+			});
 		mAni->GetCompleteEvent(L"saltbaker_phase_1intro") = std::bind([ani]()->void
-		{
-			ani->Play(L"saltbaker_phase_1intro2", false);
-		});
+			{
+				ani->Play(L"saltbaker_phase_1intro2", false);
+			});
 
-		mAni->GetCompleteEvent(L"saltbaker_phase_1intro2") = std::bind([ani, mv, this]()->void
-		{
-			mv->SetActive(true);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			arm->GetComponent<MoveObject>()->SetActive(true);
-			ani->Play(L"saltbaker_phase_1intro3", false);
-		});
+		mAni->GetCompleteEvent(L"saltbaker_phase_1intro2") = std::bind([ani, mv, audio, this]()->void
+			{
+				mv->SetActive(true);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				arm->GetComponent<MoveObject>()->SetActive(true);
+				ani->Play(L"saltbaker_phase_1intro3", false);
+
+				audio->Play(L"boss_p1_intro_swipe", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_Intro_HandSwipe_LimesSugar.wav", false);
+			});
 		mAni->GetCompleteEvent(L"saltbaker_phase_1intro3") = std::bind([ani, mv, this]()->void
-		{
-			mv->SetActive(true);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* a_tf = arm->GetComponent<Transform>();
-			Vector2 pos = a_tf->GetPos();
-			//pos.x += 50.0f;
-			pos.y += 20.0f;
-			a_tf->SetPos(pos);
-			arm->SetActive(false);
-			arm->GetComponent<MoveObject>()->SetActive(false);
-			ani->Play(L"saltbaker_phase_1intro4", false);
-		});
+			{
+				mv->SetActive(true);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* a_tf = arm->GetComponent<Transform>();
+				Vector2 pos = a_tf->GetPos();
+				//pos.x += 50.0f;
+				pos.y += 20.0f;
+				a_tf->SetPos(pos);
+				arm->SetActive(false);
+				arm->GetComponent<MoveObject>()->SetActive(false);
+				ani->Play(L"saltbaker_phase_1intro4", false);
+			});
 		mAni->GetCompleteEvent(L"saltbaker_phase_1intro4") = std::bind([ani, mv, this]()->void
-		{
-			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type1]->mActive = true;
-			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type2]->mActive = true;
-			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type5]->mActive = true;
-			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type4]->mActive = true;
+			{
+				//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type1]->mActive = true;
+				//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type2]->mActive = true;
+				//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type5]->mActive = true;
+				//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type4]->mActive = true;
 
-			mv->SetActive(false);
-			ani->Play(L"saltbaker_phase_1idle", false);
-		});
+				mv->SetActive(false);
+				ani->Play(L"saltbaker_phase_1idle", false);
+			});
 
 		mAni->GetCompleteEvent(L"saltbaker_phase_1idle") = std::bind([ani]()->void
-		{
+			{
 
-			//switch (mPhaseType)
-			//{
-			//default:
-			//	Phase1();
-			//}
+				//switch (mPhaseType)
+				//{
+				//default:
+				//	Phase1();
+				//}
 
-			ani->Play(L"attack_type11", false);
-		});
+				ani->Play(L"attack_type11", false);
+			});
 #pragma endregion
 #pragma region p1 attacktype1 event
 
-		mAni->GetStartEvent(L"attack_type11") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* o_tf = owner->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			MoveObject* o_mv = owner->GetComponent<MoveObject>();
-			o_mv->SetActive(true);
-			o_mv->CreateInfo(Vector2{ 0.0f,100.0f }, Vector2{ 0.0f,1.0f }, Vector2{ pos.x,pos.y + 40.0f });
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(true);
-			Transform* acc_tf = acc->GetComponent<Transform>();
-			acc_tf->SetPos(Vector2{ pos.x - 400.0f, pos.y + 40.0f });
-			Animator* acc_ani = acc->GetComponent<Animator>();
-			acc_ani->Play(L"attack_type1dough_attack1", false);
-			MoveObject* mv = acc->GetComponent<MoveObject>();
-			mv->CreateInfo(Vector2{ 100.0f,0.0f }, Vector2{ 1.0f,0.0f }, Vector2{ pos.x - 40.0f ,pos.y });
-			mv->SetActive(true);
-		});
-		mAni->GetCompleteEvent(L"attack_type11") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(false);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			arm->GetComponent<Animator>()->Play(L"attack_type12_arm", false);
-			Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 o_pos = o_tf->GetPos();
+		mAni->GetStartEvent(L"attack_type11") = std::bind([ani, audio, this]()->void
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* o_tf = owner->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				MoveObject* o_mv = owner->GetComponent<MoveObject>();
+				o_mv->SetActive(true);
+				o_mv->CreateInfo(Vector2{ 0.0f,100.0f }, Vector2{ 0.0f,1.0f }, Vector2{ pos.x,pos.y + 40.0f });
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(true);
+				Transform* acc_tf = acc->GetComponent<Transform>();
+				acc_tf->SetPos(Vector2{ pos.x - 400.0f, pos.y + 40.0f });
+				Animator* acc_ani = acc->GetComponent<Animator>();
+				acc_ani->Play(L"attack_type1dough_attack1", false);
+				MoveObject* mv = acc->GetComponent<MoveObject>();
+				mv->CreateInfo(Vector2{ 100.0f,0.0f }, Vector2{ 1.0f,0.0f }, Vector2{ pos.x - 40.0f ,pos.y });
+				mv->SetActive(true);
 
-			Transform* a_tf = arm->GetComponent<Transform>();
-			Vector2 pos = o_pos;
-			pos.x -= 80.0f;
-			//pos.y += 30.0f;
-			a_tf->SetPos(pos);
-			GameObject* owner = ani->GetOwner();
-			MoveObject* o_mv = owner->GetComponent<MoveObject>();
-			o_mv->SetActive(false);
-			ani->Play(L"attack_type12", false);
+				audio->Play(L"boss_p1_rollpin", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_DoughAttack_RollingPinAppear.wav", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type11") = std::bind([ani, audio, this]()->void
+			{
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(false);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				arm->GetComponent<Animator>()->Play(L"attack_type12_arm", false);
+				Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 o_pos = o_tf->GetPos();
 
-			//std::shared_ptr<GameObject> arm = SceneManager::GetActiveScene()->FindObject(L"sb_arm");
-			//arm->SetActive(true);
-			//Animator* arm_ani = arm->GetComponent<Animator>();
-			//arm_ani->Play(L"attack_type1dough_attack1", false);
-		});
+				Transform* a_tf = arm->GetComponent<Transform>();
+				Vector2 pos = o_pos;
+				pos.x -= 80.0f;
+				//pos.y += 30.0f;
+				a_tf->SetPos(pos);
+				GameObject* owner = ani->GetOwner();
+				MoveObject* o_mv = owner->GetComponent<MoveObject>();
+				o_mv->SetActive(false);
+				ani->Play(L"attack_type12", false);
+				audio->Play(L"boss_p1_rollandknead", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_DoughAttack_RollAndKnead.wav", false);
+				//std::shared_ptr<GameObject> arm = SceneManager::GetActiveScene()->FindObject(L"sb_arm");
+				//arm->SetActive(true);
+				//Animator* arm_ani = arm->GetComponent<Animator>();
+				//arm_ani->Play(L"attack_type1dough_attack1", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type12") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->GetComponent<Animator>()->Play(L"attack_type12_1arm", false);
-			Transform* a_tf = arm->GetComponent<Transform>();
-			Vector2 pos = a_tf->GetPos();
-			pos.x += 150.0f;
-			pos.y += 10.0f;
-			a_tf->SetPos(pos);
-			GameObject* owner = ani->GetOwner();
-			MoveObject* o_mv = owner->GetComponent<MoveObject>();
-			o_mv->SetActive(false);
-			ani->Play(L"attack_type12_1", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->GetComponent<Animator>()->Play(L"attack_type12_1arm", false);
+				Transform* a_tf = arm->GetComponent<Transform>();
+				Vector2 pos = a_tf->GetPos();
+				pos.x += 150.0f;
+				pos.y += 10.0f;
+				a_tf->SetPos(pos);
+				GameObject* owner = ani->GetOwner();
+				MoveObject* o_mv = owner->GetComponent<MoveObject>();
+				o_mv->SetActive(false);
+				ani->Play(L"attack_type12_1", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type12_1") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->GetComponent<Animator>()->Play(L"attack_type12_2arm", false);
-			Transform* a_tf = arm->GetComponent<Transform>();
-			Vector2 pos = a_tf->GetPos();
-			pos.x -= 50.0f;
-			pos.y += 30.0f;
-			a_tf->SetPos(pos);
-			GameObject* owner = ani->GetOwner();
-			ani->Play(L"attack_type12_2", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->GetComponent<Animator>()->Play(L"attack_type12_2arm", false);
+				Transform* a_tf = arm->GetComponent<Transform>();
+				Vector2 pos = a_tf->GetPos();
+				pos.x -= 50.0f;
+				pos.y += 30.0f;
+				a_tf->SetPos(pos);
+				GameObject* owner = ani->GetOwner();
+				ani->Play(L"attack_type12_2", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type12_2") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->GetComponent<Animator>()->Play(L"attack_type13_arm", true);
-			GameObject* owner = ani->GetOwner();
-			ani->Play(L"attack_type13", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->GetComponent<Animator>()->Play(L"attack_type13_arm", true);
+				GameObject* owner = ani->GetOwner();
+				ani->Play(L"attack_type13", false);
+			});
 
 
 		mAni->GetCompleteEvent(L"attack_type13") = std::bind([ani, this]()->void
-		{
-			ani->Play(L"attack_type14", false);
+			{
+				ani->Play(L"attack_type14", false);
 
-			Transform* tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 o_pos = tf->GetPos();
-			o_pos.y += 50.0f;
-			tf->SetPos(o_pos);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* a_tf = arm->GetComponent<Transform>();
-			Vector2 pos = a_tf->GetPos();
-			pos.x -= 60.0f;
-			pos.y += 40.0f;
-			a_tf->SetPos(pos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"attack_type14_arm", false);
-		});
+				Transform* tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 o_pos = tf->GetPos();
+				o_pos.y += 50.0f;
+				tf->SetPos(o_pos);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* a_tf = arm->GetComponent<Transform>();
+				Vector2 pos = a_tf->GetPos();
+				pos.x -= 60.0f;
+				pos.y += 40.0f;
+				a_tf->SetPos(pos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"attack_type14_arm", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type14") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* a_tf = arm->GetComponent<Transform>();
-			Vector2 pos = a_tf->GetPos();
-			pos.x += 40.0f;
-			pos.y -= 80.0f;
-			a_tf->SetPos(pos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"attack_type15_arm", false);
-			ani->Play(L"attack_type15", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* a_tf = arm->GetComponent<Transform>();
+				Vector2 pos = a_tf->GetPos();
+				pos.x += 40.0f;
+				pos.y -= 80.0f;
+				a_tf->SetPos(pos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"attack_type15_arm", false);
+				ani->Play(L"attack_type15", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type15") = std::bind([ani]()->void
-		{
-			ani->Play(L"attack_type15_2", false);
-		});
+			{
+				ani->Play(L"attack_type15_2", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type15_2") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(true);
-			Vector2 pos = arm->GetComponent<Transform>()->GetPos();
-			acc->GetComponent<Transform>()->SetPos(pos);
-			acc->GetComponent<Animator>()->Play(L"attack_type1dough_attack2_1", false);
-			ani->Play(L"attack_type15_3", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(true);
+				Vector2 pos = arm->GetComponent<Transform>()->GetPos();
+				acc->GetComponent<Transform>()->SetPos(pos);
+				acc->GetComponent<Animator>()->Play(L"attack_type1dough_attack2_1", false);
+				ani->Play(L"attack_type15_3", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type15_3") = std::bind([ani]()->void
-		{
-
-			ani->Play(L"attack_type16", false);
-		});
-
-		mAni->GetStartEvent(L"attack_type16") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* o_tf = owner->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			MoveObject* o_mv = owner->GetComponent<MoveObject>();
-			o_mv->SetActive(true);
-			o_mv->CreateInfo(Vector2{ 0.0f,100.0f }, Vector2{ 0.0f,-1.0f }, Vector2{ pos.x,pos.y - 50.0f });
-		});
-		mAni->GetCompleteEvent(L"attack_type16") = std::bind([ani, mv, this]()->void
-		{
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(false);
-			GameObject* owner = ani->GetOwner();
-			Transform* o_tf = owner->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			MoveObject* o_mv = owner->GetComponent<MoveObject>();
-			o_mv->SetActive(false);
-			mAttackCheck[EPhaseType::PHASE1][EAttackType::Type1]->mActive = true;
-			//ani->Play(L"saltbaker_phase_1idle", true);
-			//test
-			mv->SetActive(true);
-			mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ 1.0f,0.0f }, Vector2{ application.GetWindowSize().x - 250.0f,pos.y });
-			mv->SetArriveEvent(std::bind([ani, mv]()->void
 			{
-				ani->Play(L"attack_type41", false);
-				mv->SetActive(false);
-				mv->SetArriveEvent(std::bind([mv]()->void { mv->SetActive(false); }));
-			}));
-			ani->Play(L"attack_type17", false);
-		});
+
+				ani->Play(L"attack_type16", false);
+			});
+
+		mAni->GetStartEvent(L"attack_type16") = std::bind([ani, audio]()->void
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* o_tf = owner->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				MoveObject* o_mv = owner->GetComponent<MoveObject>();
+				o_mv->SetActive(true);
+				o_mv->CreateInfo(Vector2{ 0.0f,100.0f }, Vector2{ 0.0f,-1.0f }, Vector2{ pos.x,pos.y - 50.0f });
+				audio->Play(L"boss_p1_cookiemagic", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_MagicCookies.wav", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type16") = std::bind([ani, mv, this]()->void
+			{
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(false);
+				GameObject* owner = ani->GetOwner();
+				Transform* o_tf = owner->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				MoveObject* o_mv = owner->GetComponent<MoveObject>();
+				o_mv->SetActive(false);
+				mAttackCheck[EPhaseType::PHASE1][EAttackType::Type1]->mActive = true;
+				//ani->Play(L"saltbaker_phase_1idle", true);
+				//test
+				mv->SetActive(true);
+				mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ 1.0f,0.0f }, Vector2{ application.GetWindowSize().x - 250.0f,pos.y });
+				mv->SetArriveEvent(std::bind([ani, mv]()->void
+					{
+						ani->Play(L"attack_type41", false);
+						mv->SetActive(false);
+						mv->SetArriveEvent(std::bind([mv]()->void { mv->SetActive(false); }));
+					}));
+				ani->Play(L"attack_type17", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type17") = std::bind([ani, this]()->void
-		{
-			/*GameObject* owner = ani->GetOwner();
-			Transform* o_tf = owner->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			MoveObject* o_mv = owner->GetComponent<MoveObject>();
-			o_mv->SetActive(false);*/
-			//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type1]->mActive = true;
-			//ani->Play(L"saltbaker_phase_1idle", true);
-			//test
-			//ani->Play(L"attack_type41", false);
-		});
+			{
+				/*GameObject* owner = ani->GetOwner();
+				Transform* o_tf = owner->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				MoveObject* o_mv = owner->GetComponent<MoveObject>();
+				o_mv->SetActive(false);*/
+				//mAttackCheck[EPhaseType::PHASE1][EAttackType::Type1]->mActive = true;
+				//ani->Play(L"saltbaker_phase_1idle", true);
+				//test
+				//ani->Play(L"attack_type41", false);
+			});
 #pragma endregion
 #pragma region p1 attacktype2 event
 
-		mAni->GetCompleteEvent(L"attack_type21") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->SetActive(true);
-			sugar->GetComponent<Animator>()->Play(L"attack_type21_2reg", false);
-			Vector2 pos = ani->GetOwner()->GetComponent<Transform>()->GetPos();
-			Transform* stf = sugar->GetComponent<Transform>();
-			stf->SetPos(pos);
-			//1_2reg 켜주기
-			ani->Play(L"attack_type21_2", false);
-		});
+		mAni->GetCompleteEvent(L"attack_type21") = std::bind([ani,audio, this]()->void
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->SetActive(true);
+				sugar->GetComponent<Animator>()->Play(L"attack_type21_2reg", false);
+				Vector2 pos = ani->GetOwner()->GetComponent<Transform>()->GetPos();
+				Transform* stf = sugar->GetComponent<Transform>();
+				stf->SetPos(pos);
+				//1_2reg 켜주기
+				ani->Play(L"attack_type21_2", false);
+				
+				audio->Play(L"boss_p1_sugar_placeOntable", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_SugarCube_PlaceOnTable.wav",false);
+			});
 		mAni->GetCompleteEvent(L"attack_type21_2") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			Transform* s_tf = sugar->GetComponent<Transform>();
-			Vector2 pos = s_tf->GetPos();
-			pos.x -= 100.0f;
-			pos.y += 110.0f;
-			s_tf->SetPos(pos);
-			sugar->GetComponent<Animator>()->Play(L"attack_type22_sugar", false);
-			ani->Play(L"attack_type22", false);
-		});
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				Transform* s_tf = sugar->GetComponent<Transform>();
+				Vector2 pos = s_tf->GetPos();
+				pos.x -= 100.0f;
+				pos.y += 110.0f;
+				s_tf->SetPos(pos);
+				sugar->GetComponent<Animator>()->Play(L"attack_type22_sugar", false);
+				ani->Play(L"attack_type22", false);
+			});
 
-		mAni->GetCompleteEvent(L"attack_type22") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->GetComponent<Animator>()->Play(L"attack_type23_sugar", false);
-			ani->Play(L"attack_type23", false);
-		});
+		mAni->GetCompleteEvent(L"attack_type22") = std::bind([ani, audio, this]()->void
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->GetComponent<Animator>()->Play(L"attack_type23_sugar", false);
+				ani->Play(L"attack_type23", false);
+			
+			});
 
-		mAni->GetCompleteEvent(L"attack_type23") = std::bind([ani, mv, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->GetComponent<Animator>()->Play(L"attack_type24_sugar", true);
+		mAni->GetCompleteEvent(L"attack_type23") = std::bind([ani, mv,audio, this]()->void
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->GetComponent<Animator>()->Play(L"attack_type24_sugar", true);
 
-			Transform* tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
+				Transform* tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
 
-			mv->SetActive(true);
-			mv->CreateInfo(Vector2{ 330.0f,0.0f }, Vector2{ 1.0,0.0f }, Vector2{ pos.x + 330.0f,pos.y }, false, false);
-			ani->Play(L"attack_type24", false);
-		});
+				mv->SetActive(true);
+				mv->CreateInfo(Vector2{ 330.0f,0.0f }, Vector2{ 1.0,0.0f }, Vector2{ pos.x + 330.0f,pos.y }, false, false);
+				ani->Play(L"attack_type24", false);
+			
+			});
 
 		mAni->GetCompleteEvent(L"attack_type24") = std::bind([ani, mv]()->void
-		{
-			mv->SetActive(false);
-			ani->Play(L"attack_type25", false);
-		});
+			{
+				mv->SetActive(false);
+				ani->Play(L"attack_type25", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type25") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->GetComponent<Animator>()->Play(L"attack_type26_sugar", false);
-			ani->Play(L"attack_type26", false);
-		});
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->GetComponent<Animator>()->Play(L"attack_type26_sugar", false);
+				ani->Play(L"attack_type26", false);
+			});
 
-		mAni->GetCompleteEvent(L"attack_type26") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->GetComponent<Animator>()->Play(L"attack_type27_sugar", false);
-			ani->Play(L"attack_type27", false);
-		});
+		mAni->GetCompleteEvent(L"attack_type26") = std::bind([ani,audio, this]()->void
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->GetComponent<Animator>()->Play(L"attack_type27_sugar", false);
+				ani->Play(L"attack_type27", false);
+			
+			});
 
 		mAni->GetCompleteEvent(L"attack_type27") = std::bind([ani, mv, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->GetComponent<Animator>()->Play(L"attack_type28_sugar", false);
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->GetComponent<Animator>()->Play(L"attack_type28_sugar", false);
 
-			Transform* tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			mv->SetActive(true);
-			mv->CreateInfo(Vector2{ 200.0f,0.0f }, Vector2{ 1.0,0.0f }, Vector2{ pos.x + 60.0f,pos.y }, false, false);
-			ani->Play(L"attack_type28", false);
-		});
-		mAni->GetCompleteEvent(L"attack_type28") = std::bind([ani, mv, this]()->void
-		{
-			mv->SetActive(false);
-			Transform* tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x -= 240.0f;
-			pos.y -= 50.0f;
-			tf->SetPos(pos);
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->GetComponent<Animator>()->Play(L"attack_type28_2_sugar", false);
-			ani->Play(L"attack_type28_2", false);
-		});
+				Transform* tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				mv->SetActive(true);
+				mv->CreateInfo(Vector2{ 200.0f,0.0f }, Vector2{ 1.0,0.0f }, Vector2{ pos.x + 60.0f,pos.y }, false, false);
+				ani->Play(L"attack_type28", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type28") = std::bind([ani, mv,audio, this]()->void
+			{
+				mv->SetActive(false);
+				Transform* tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x -= 240.0f;
+				pos.y -= 50.0f;
+				tf->SetPos(pos);
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->GetComponent<Animator>()->Play(L"attack_type28_2_sugar", false);
+				ani->Play(L"attack_type28_2", false);
+				audio->Play(L"boss_p1_sugar_break", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_SugarCube_KnockAndBreak.wav", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type28_2") = std::bind([ani, mv, this]()->void
-		{
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->GetComponent<Animator>()->Play(L"attack_type29_sugar", false);
+			{
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->GetComponent<Animator>()->Play(L"attack_type29_sugar", false);
 
-			ani->Play(L"attack_type29", false);
-		});
+				ani->Play(L"attack_type29", false);
+			});
 
-		mAni->GetCompleteEvent(L"attack_type29") = std::bind([ani, mv, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
-			sugar->SetActive(false);
+		mAni->GetCompleteEvent(L"attack_type29") = std::bind([ani, mv,audio, this]()->void
+			{
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> sugar = mParts[EParts::ACC];
+				sugar->SetActive(false);
 
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* otf = owner->GetComponent<Transform>();
-			Vector2 pos = otf->GetPos();
-			Transform* tf = arm->GetComponent<Transform>();
-			pos.x -= 200.0f;
-			pos.y += 135.0f;
-			tf->SetPos(pos);
-			arm->GetComponent<Animator>()->Play(L"attack_type210_arm", false);
-			/*	Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
-				Vector2 o_pos = o_tf->GetPos();
-				o_pos.y += 10.0f;
-				mv->SetActive(true);
-				mv->CreateInfo(Vector2{0.0f,100.0f}, Vector2{0.0f,1.0f}, o_pos,false,false);*/
-			ani->Play(L"attack_type210", false);
-		});
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* otf = owner->GetComponent<Transform>();
+				Vector2 pos = otf->GetPos();
+				Transform* tf = arm->GetComponent<Transform>();
+				pos.x -= 200.0f;
+				pos.y += 135.0f;
+				tf->SetPos(pos);
+				arm->GetComponent<Animator>()->Play(L"attack_type210_arm", false);
+				/*	Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
+					Vector2 o_pos = o_tf->GetPos();
+					o_pos.y += 10.0f;
+					mv->SetActive(true);
+					mv->CreateInfo(Vector2{0.0f,100.0f}, Vector2{0.0f,1.0f}, o_pos,false,false);*/
+				ani->Play(L"attack_type210", false);
+				audio->Play(L"boss_p1_sugar_blow", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_SugarCube_Blow.wav", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type210") = std::bind([ani]()->void
-		{
-			ani->Play(L"attack_type211", false);
-		});
+			{
+				ani->Play(L"attack_type211", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type211") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->GetComponent<Animator>()->Play(L"attack_type211_2_arm", false);
-			Transform* tf = arm->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x += 300.0f;
-			//pos.y -= 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"attack_type211_2", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->GetComponent<Animator>()->Play(L"attack_type211_2_arm", false);
+				Transform* tf = arm->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x += 300.0f;
+				//pos.y -= 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"attack_type211_2", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type211_2") = std::bind([ani, this]()->void
-		{
-			mAttackCheck[EPhaseType::PHASE1][EAttackType::Type2]->mActive = true;
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			Transform* tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.y += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"attack_type212", false);
-		});
+			{
+				mAttackCheck[EPhaseType::PHASE1][EAttackType::Type2]->mActive = true;
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				Transform* tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.y += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"attack_type212", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type212") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			Transform* tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			//pos.y += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"attack_type51", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				Transform* tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				//pos.y += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"attack_type51", false);
+			});
 
 #pragma endregion
 #pragma region p1 attacktype4 event
 		mAni->GetCompleteEvent(L"attack_type41") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			Transform* a_tf = arm->GetComponent<Transform>();
-			pos.x -= 100.0f;
-			//pos.y += 100.0f;
-			a_tf->SetPos(pos);
-			Animator* a_ani = arm->GetComponent<Animator>();
-			a_ani->Play(L"attack_type42_arm", false);
-			ani->Play(L"attack_type42", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				Transform* a_tf = arm->GetComponent<Transform>();
+				pos.x -= 100.0f;
+				//pos.y += 100.0f;
+				a_tf->SetPos(pos);
+				Animator* a_ani = arm->GetComponent<Animator>();
+				a_ani->Play(L"attack_type42_arm", false);
+				ani->Play(L"attack_type42", false);
+			});
 
-		mAni->GetCompleteEvent(L"attack_type42") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(true);
+		mAni->GetCompleteEvent(L"attack_type42") = std::bind([ani,audio, this]()->void
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(true);
 
-			Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			Transform* a_tf = acc->GetComponent<Transform>();
-			pos.x -= 00.0f;
-			//pos.y += 100.0f;
-			a_tf->SetPos(pos);
-			Animator* a_ani = acc->GetComponent<Animator>();
-			a_ani->Play(L"attack_type43_remon", false);
-			ani->Play(L"attack_type43", false);
-		});
+				Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				Transform* a_tf = acc->GetComponent<Transform>();
+				pos.x -= 00.0f;
+				//pos.y += 100.0f;
+				a_tf->SetPos(pos);
+				Animator* a_ani = acc->GetComponent<Animator>();
+				a_ani->Play(L"attack_type43_remon", false);
+				ani->Play(L"attack_type43", false);
 
-		mAni->GetCompleteEvent(L"attack_type43") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(false);
+				audio->Play(L"boss_p1_limesliceswing", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_Limes_Knife_SliceSwing.wav", false);
+			});
 
-			Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			Transform* a_tf = arm->GetComponent<Transform>();
-			pos.x += 250.0f;
-			//pos.y += 50.0f;
-			a_tf->SetPos(pos);
-			MoveObject* amv = arm->GetComponent<MoveObject>();
-			//amv->SetActive(true);
-			//amv->CreateInfo(Vector2{ 10.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ pos.x - 50.0f,pos.y }, false, false);
-			Animator* a_ani = arm->GetComponent<Animator>();
-			a_ani->Play(L"attack_type44_arm", false);
-			ani->Play(L"attack_type44", false);
-		});
+		mAni->GetCompleteEvent(L"attack_type43") = std::bind([ani,audio, this]()->void
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(false);
+
+				Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				Transform* a_tf = arm->GetComponent<Transform>();
+				pos.x += 250.0f;
+				//pos.y += 50.0f;
+				a_tf->SetPos(pos);
+				MoveObject* amv = arm->GetComponent<MoveObject>();
+				//amv->SetActive(true);
+				//amv->CreateInfo(Vector2{ 10.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ pos.x - 50.0f,pos.y }, false, false);
+				Animator* a_ani = arm->GetComponent<Animator>();
+				a_ani->Play(L"attack_type44_arm", false);
+				ani->Play(L"attack_type44", false);
+				audio->Play(L"boss_p1_limechopcut", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_Limes_Knife_ChopCut.wav", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type44") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(true);
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(true);
 
-			Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			Transform* a_tf = acc->GetComponent<Transform>();
-			pos.x -= 00.0f;
-			//pos.y += 100.0f;
-			a_tf->SetPos(pos);
-			Animator* a_ani = acc->GetComponent<Animator>();
-			a_ani->Play(L"attack_type45_remon", false);
-			ani->Play(L"attack_type45", false);
-		});
+				Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				Transform* a_tf = acc->GetComponent<Transform>();
+				pos.x -= 00.0f;
+				//pos.y += 100.0f;
+				a_tf->SetPos(pos);
+				Animator* a_ani = acc->GetComponent<Animator>();
+				a_ani->Play(L"attack_type45_remon", false);
+				ani->Play(L"attack_type45", false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type45") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(false);
-
-			Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = o_tf->GetPos();
-			Transform* a_tf = arm->GetComponent<Transform>();
-			pos.x += 120.0f;
-			//pos.y += 100.0f;
-			a_tf->SetPos(pos);
-			//MoveObject* amv = acc->GetComponent<MoveObject>();
-			//amv->SetActive(true);
-			//amv->CreateInfo(Vector2{ 10.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ pos.x - 50.0f,pos.y }, false, false);
-			Animator* a_ani = arm->GetComponent<Animator>();
-			a_ani->Play(L"attack_type46_arm", false);
-			ani->Play(L"attack_type46", false);
-		});
-
-		mAni->GetCompleteEvent(L"attack_type46") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-
-			ani->Play(L"attack_type47", false);
-		});
-		mAni->GetCompleteEvent(L"attack_type47") = std::bind([ani, mv, this]()->void
-		{
-			mAttackCheck[EPhaseType::PHASE1][EAttackType::Type4]->mActive = true;
-			mv->SetActive(true);
-			Vector2 pos = mv->GetOwner()->GetComponent<Transform>()->GetPos();
-			mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ 300.0f,pos.y });
-			mv->SetArriveEvent(std::bind([mv, ani]()->void
 			{
-				ani->Play(L"attack_type21", false);
-				mv->SetActive(false);
-				mv->SetArriveEvent(std::bind([mv]()->void { mv->SetActive(false); }));
-			}));
-			ani->Play(L"attack_type48", false);
-		});
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(false);
+
+				Transform* o_tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = o_tf->GetPos();
+				Transform* a_tf = arm->GetComponent<Transform>();
+				pos.x += 120.0f;
+				//pos.y += 100.0f;
+				a_tf->SetPos(pos);
+				//MoveObject* amv = acc->GetComponent<MoveObject>();
+				//amv->SetActive(true);
+				//amv->CreateInfo(Vector2{ 10.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ pos.x - 50.0f,pos.y }, false, false);
+				Animator* a_ani = arm->GetComponent<Animator>();
+				a_ani->Play(L"attack_type46_arm", false);
+				ani->Play(L"attack_type46", false);
+			});
+
+		mAni->GetCompleteEvent(L"attack_type46") = std::bind([ani,audio, this]()->void
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+
+				ani->Play(L"attack_type47", false);
+				audio->Play(L"boss_p1_limescrpae", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_Limes_Knife_Scrape.wav", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type47") = std::bind([ani, mv, this]()->void
+			{
+				mAttackCheck[EPhaseType::PHASE1][EAttackType::Type4]->mActive = true;
+				mv->SetActive(true);
+				Vector2 pos = mv->GetOwner()->GetComponent<Transform>()->GetPos();
+				mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ 300.0f,pos.y });
+				mv->SetArriveEvent(std::bind([mv, ani]()->void
+					{
+						ani->Play(L"attack_type21", false);
+						mv->SetActive(false);
+						mv->SetArriveEvent(std::bind([mv]()->void { mv->SetActive(false); }));
+					}));
+				ani->Play(L"attack_type48", false);
+			});
 
 		//mAni->GetCompleteEvent(L"attack_type46") = std::bind([ani, this]()->void
 		//{
@@ -715,810 +739,814 @@ namespace yeram_client
 #pragma endregion
 #pragma region p1 attacktype5 event
 		mAni->GetCompleteEvent(L"attack_type51") = std::bind([ani, mv, this]()->void
-		{
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
 			{
-				acc->SetActive(true);
-				Transform* a_tf = acc->GetComponent<Transform>();
-				a_tf->SetPos(Vector2{ application.GetWindowSize().x - 10.0f,600.0f });
-				Vector2 pos = a_tf->GetPos();
-				MoveObject* a_mv = acc->GetComponent<MoveObject>();
-				a_mv->SetActive(true);
-				a_mv->CreateInfo(Vector2{ 300.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ pos.x / 2.0f,pos.y }, false, false);
-				acc->GetComponent<Animator>()->Play(L"attack_type52_berrybox", true);
-			}
-			Transform* tf = mv->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			mv->SetActive(true);
-			mv->CreateInfo(Vector2{ 850.0f,0.0f }, Vector2{ 1.0f,0.0f }, Vector2{ pos.x + 850.0f ,pos.y }, false, false);
-
-			ani->Play(L"attack_type52", false);
-		});
-		mAni->GetCompleteEvent(L"attack_type52") = std::bind([ani, mv]()->void
-		{
-			mv->SetActive(false);
-			ani->Play(L"attack_type53", false);
-		});
-		mAni->GetCompleteEvent(L"attack_type53") = std::bind([ani]()->void
-		{
-			Transform* tf = ani->GetOwner()->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.y -= 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"attack_type54", false);
-		});
-		mAni->GetCompleteEvent(L"attack_type54") = std::bind([ani]()->void
-		{
-
-			ani->Play(L"attack_type55", false);
-		});
-		mAni->GetCompleteEvent(L"attack_type55") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(false);
-			Vector2 pos = acc->GetComponent<Transform>()->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			{
-				arm->SetActive(true);
-				Transform* a_tf = arm->GetComponent<Transform>();
-				//pos.x -= 90.0f;
-				//pos.y -= 90.0f;
-				a_tf->SetPos(pos);
-				MoveObject* a_mv = arm->GetComponent<MoveObject>();
-				a_mv->SetActive(false);
-				arm->GetComponent<Animator>()->Play(L"attack_type56_arm", false);
-			}
-			ani->Play(L"attack_type56", false);
-		});
-		mAni->GetCompleteEvent(L"attack_type56") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			{
-				arm->SetActive(false);
-			}
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			{
-				acc->SetActive(true);
-				Transform* tf = owner->GetComponent<Transform>();
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				{
+					acc->SetActive(true);
+					Transform* a_tf = acc->GetComponent<Transform>();
+					a_tf->SetPos(Vector2{ application.GetWindowSize().x - 10.0f,600.0f });
+					Vector2 pos = a_tf->GetPos();
+					MoveObject* a_mv = acc->GetComponent<MoveObject>();
+					a_mv->SetActive(true);
+					a_mv->CreateInfo(Vector2{ 500.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ pos.x / 2.0f,pos.y }, false, false);
+					acc->GetComponent<Animator>()->Play(L"attack_type52_berrybox", true);
+				}
+				Transform* tf = mv->GetOwner()->GetComponent<Transform>();
 				Vector2 pos = tf->GetPos();
-				pos.x += 75.0f;
-				pos.y += 0.0f;
-				Transform* a_tf = acc->GetComponent<Transform>();
-				a_tf->SetPos(pos);
-				MoveObject* a_mv = acc->GetComponent<MoveObject>();
-				a_mv->SetActive(false);
-				acc->GetComponent<Animator>()->Play(L"attack_type57_berrybox", false);
-			}
-			ani->Play(L"attack_type57", false);
-		});
+				mv->SetActive(true);
+				mv->CreateInfo(Vector2{ 850.0f,0.0f }, Vector2{ 1.0f,0.0f }, Vector2{ pos.x + 850.0f ,pos.y }, false, false);
+
+				ani->Play(L"attack_type52", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type52") = std::bind([ani, mv]()->void
+			{
+				mv->SetActive(false);
+				ani->Play(L"attack_type53", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type53") = std::bind([ani]()->void
+			{
+				Transform* tf = ani->GetOwner()->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.y -= 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"attack_type54", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type54") = std::bind([ani]()->void
+			{
+
+				ani->Play(L"attack_type55", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type55") = std::bind([ani, this]()->void
+			{
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(false);
+				Vector2 pos = acc->GetComponent<Transform>()->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				{
+					arm->SetActive(true);
+					Transform* a_tf = arm->GetComponent<Transform>();
+					//pos.x -= 90.0f;
+					//pos.y -= 90.0f;
+					a_tf->SetPos(pos);
+					MoveObject* a_mv = arm->GetComponent<MoveObject>();
+					a_mv->SetActive(false);
+					arm->GetComponent<Animator>()->Play(L"attack_type56_arm", false);
+				}
+				ani->Play(L"attack_type56", false);
+			});
+		mAni->GetCompleteEvent(L"attack_type56") = std::bind([ani,audio, this]()->void
+			{
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				{
+					arm->SetActive(false);
+				}
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				{
+					acc->SetActive(true);
+					Transform* tf = owner->GetComponent<Transform>();
+					Vector2 pos = tf->GetPos();
+					pos.x += 75.0f;
+					pos.y += 0.0f;
+					Transform* a_tf = acc->GetComponent<Transform>();
+					a_tf->SetPos(pos);
+					MoveObject* a_mv = acc->GetComponent<MoveObject>();
+					a_mv->SetActive(false);
+					acc->GetComponent<Animator>()->Play(L"attack_type57_berrybox", false);
+				}
+				ani->Play(L"attack_type57", false);
+			
+				audio->Play(L"boss_p1_strawberrysqueeze", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_StrawberrySqueeze_Attack.wav",false);
+			});
 
 		mAni->GetCompleteEvent(L"attack_type57") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
 			{
-				Transform* tf = owner->GetComponent<Transform>();
-				Vector2 pos = tf->GetPos();
-				pos.x += 75.0f;
-				//pos.y += 120.0f;
-				Transform* a_tf = acc->GetComponent<Transform>();
-				a_tf->SetPos(pos);
-				acc->GetComponent<Animator>()->Play(L"attack_type58_berrybox", false);
-			}
-			ani->Play(L"attack_type58", false);
-		});
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				{
+					Transform* tf = owner->GetComponent<Transform>();
+					Vector2 pos = tf->GetPos();
+					pos.x += 75.0f;
+					//pos.y += 120.0f;
+					Transform* a_tf = acc->GetComponent<Transform>();
+					a_tf->SetPos(pos);
+					acc->GetComponent<Animator>()->Play(L"attack_type58_berrybox", false);
+				}
+				ani->Play(L"attack_type58", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type58") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
 			{
-				Transform* tf = owner->GetComponent<Transform>();
-				Vector2 pos = tf->GetPos();
-				pos.x += 85.0f;
-				//pos.y += 120.0f;
-				Transform* a_tf = acc->GetComponent<Transform>();
-				a_tf->SetPos(pos);
-				acc->GetComponent<Animator>()->Play(L"attack_type59_berrybox", false);
-			}
-			ani->Play(L"attack_type59", false);
-		});
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				{
+					Transform* tf = owner->GetComponent<Transform>();
+					Vector2 pos = tf->GetPos();
+					pos.x += 85.0f;
+					//pos.y += 120.0f;
+					Transform* a_tf = acc->GetComponent<Transform>();
+					a_tf->SetPos(pos);
+					acc->GetComponent<Animator>()->Play(L"attack_type59_berrybox", false);
+				}
+				ani->Play(L"attack_type59", false);
+			});
 
 
 		mAni->GetCompleteEvent(L"attack_type59") = std::bind([ani, mv, this]()->void
-		{
-			mAttackCheck[EPhaseType::PHASE1][EAttackType::Type5]->mActive = true;
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
 			{
+				mAttackCheck[EPhaseType::PHASE1][EAttackType::Type5]->mActive = true;
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				{
 
-				Transform* tf = owner->GetComponent<Transform>();
-				Vector2 pos = tf->GetPos();
-				pos.x += 85.0f;
-				pos.y += 150.0f;
-				Transform* a_tf = acc->GetComponent<Transform>();
-				a_tf->SetPos(pos);
-				acc->GetComponent<Animator>()->Play(L"attack_type510_berrybox", true);
-				MoveObject* a_mv = acc->GetComponent<MoveObject>();
-				a_mv->SetActive(true);
-				a_mv->CreateInfo(Vector2{ 300.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ -500.0f,pos.y }, true, true);
-			}
-			mv->SetActive(true);
-			Vector2 pos = ani->GetOwner()->GetComponent<Transform>()->GetPos();
-			pos.x -= 600.0f;
-			mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ -1.0f,0.0f }, pos, false, false);
+					Transform* tf = owner->GetComponent<Transform>();
+					Vector2 pos = tf->GetPos();
+					pos.x += 85.0f;
+					pos.y += 150.0f;
+					Transform* a_tf = acc->GetComponent<Transform>();
+					a_tf->SetPos(pos);
+					acc->GetComponent<Animator>()->Play(L"attack_type510_berrybox", true);
+					MoveObject* a_mv = acc->GetComponent<MoveObject>();
+					a_mv->SetActive(true);
+					a_mv->CreateInfo(Vector2{ 300.0f,0.0f }, Vector2{ -1.0f,0.0f }, Vector2{ -500.0f,pos.y }, true, true);
+					
+				}
+				mv->SetActive(true);
+				Vector2 pos = ani->GetOwner()->GetComponent<Transform>()->GetPos();
+				pos.x -= 600.0f;
+				mv->CreateInfo(Vector2{ 400.0f,0.0f }, Vector2{ -1.0f,0.0f }, pos, false, false);
 
-			ani->Play(L"attack_type510", false);
-		});
+				ani->Play(L"attack_type510", false);
+			});
 
-		mAni->GetCompleteEvent(L"attack_type510") = std::bind([ani, mv, this]()->void
-		{
-			ani->Play(L"attack_type511", false);
-		});
+		mAni->GetCompleteEvent(L"attack_type510") = std::bind([ani, mv,audio, this]()->void
+			{
+				ani->Play(L"attack_type511", false);
+				audio->Play(L"boss_p1_strawberrycryingrun", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P1_StrawberryBag_CryingRunOff_02.wav", false);
+			});
 		mAni->GetCompleteEvent(L"attack_type511") = std::bind([ani]()->void
-		{
-			ani->Play(L"attack_type11", false);
-		});
+			{
+				ani->Play(L"attack_type11", false);
+			});
 #pragma endregion
 #pragma region translate p1-p2 event
 		mAni->GetCompleteEvent(L"translate_p1_p21") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			owner->GetComponent<Transform>()->SetPos(Vector2{ application.GetWindowSize().x / 2.0f, 650.0f });
-			Vector2 pos = owner->GetComponent<Transform>()->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			pos.x += 25.0f;
-			pos.y += 90.0f;
-			arm_tf->SetPos(pos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p22_arm", false);
-			ani->Play(L"translate_p1_p22", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				owner->GetComponent<Transform>()->SetPos(Vector2{ application.GetWindowSize().x / 2.0f, 650.0f });
+				Vector2 pos = owner->GetComponent<Transform>()->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				pos.x += 25.0f;
+				pos.y += 90.0f;
+				arm_tf->SetPos(pos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p22_arm", false);
+				ani->Play(L"translate_p1_p22", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p22") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Vector2 pos = owner->GetComponent<Transform>()->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			pos.x += 5.0f;
-			pos.y += 90.0f;
-			arm_tf->SetPos(pos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p23_arm", false);
-			ani->Play(L"translate_p1_p23", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Vector2 pos = owner->GetComponent<Transform>()->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				pos.x += 5.0f;
+				pos.y += 90.0f;
+				arm_tf->SetPos(pos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p23_arm", false);
+				ani->Play(L"translate_p1_p23", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p23") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Vector2 pos = owner->GetComponent<Transform>()->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x = pos.x + 30.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p24_arm", false);
-			ani->Play(L"translate_p1_p24", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Vector2 pos = owner->GetComponent<Transform>()->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x = pos.x + 30.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p24_arm", false);
+				ani->Play(L"translate_p1_p24", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p24") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Vector2 pos = owner->GetComponent<Transform>()->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x += 30.0f;
-			setpos.y += 20.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p25_arm", false);
-			ani->Play(L"translate_p1_p25", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Vector2 pos = owner->GetComponent<Transform>()->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x += 30.0f;
+				setpos.y += 20.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p25_arm", false);
+				ani->Play(L"translate_p1_p25", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p25") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Vector2 pos = owner->GetComponent<Transform>()->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			ani->Play(L"translate_p1_p26", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Vector2 pos = owner->GetComponent<Transform>()->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				ani->Play(L"translate_p1_p26", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p26") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			ani->Play(L"translate_p1_p27", false);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				ani->Play(L"translate_p1_p27", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p27") = std::bind([ani, this]()->void
-		{
-			ani->Play(L"translate_p1_p28", false);
-		});
+			{
+				ani->Play(L"translate_p1_p28", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p28") = std::bind([ani, this]()->void
-		{
-			ani->Play(L"translate_p1_p29", false);
-		});
+			{
+				ani->Play(L"translate_p1_p29", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p29") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.y += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p29_2", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.y += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p29_2", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p29_2") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.y += 50.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p29_3", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.y += 50.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p29_3", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p29_3") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.y += 50.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p29_4", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.y += 50.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p29_4", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p29_4") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.y -= 200.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p210", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.y -= 200.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p210", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p210") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			Vector2 scale = tf->GetScale();
-			tf->SetScale(Vector2{ 1.2f,scale.y });
-			ani->Play(L"translate_p1_p211", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				Vector2 scale = tf->GetScale();
+				tf->SetScale(Vector2{ 1.2f,scale.y });
+				ani->Play(L"translate_p1_p211", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p211") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 scale = tf->GetScale();
-			Vector2 pos = tf->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			arm_tf->SetScale(scale);
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x -= 50.0f;
-			setpos.y -= 80.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p212_arm", false);
-			ani->Play(L"translate_p1_p212", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 scale = tf->GetScale();
+				Vector2 pos = tf->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				arm_tf->SetScale(scale);
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x -= 50.0f;
+				setpos.y -= 80.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p212_arm", false);
+				ani->Play(L"translate_p1_p212", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p212") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			tf->SetPos(Vector2{ pos.x - 100.0f,pos.y });
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			/*Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x -= 100.0f;
-			setpos.y -= 100.0f;
-			arm_tf->SetPos(setpos);*/
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p213_arm", false);
-			ani->Play(L"translate_p1_p213", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				tf->SetPos(Vector2{ pos.x - 100.0f,pos.y });
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				/*Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x -= 100.0f;
+				setpos.y -= 100.0f;
+				arm_tf->SetPos(setpos);*/
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p213_arm", false);
+				ani->Play(L"translate_p1_p213", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p213") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			SceneManager::ChageLayer(owner, ELayerType::FrontObject);
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			pos.x += 120.0f;
-			pos.y += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p214", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				SceneManager::ChageLayer(owner, ELayerType::FrontObject);
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				pos.x += 120.0f;
+				pos.y += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p214", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p214") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.y += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p214_2", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.y += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p214_2", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p214_2") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x += 10.0f;
-			setpos.y += 110.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p215_arm", false);
-			//pos.y += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p215", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x += 10.0f;
+				setpos.y += 110.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p215_arm", false);
+				//pos.y += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p215", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p215") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x -= 10.0f;
-			setpos.y += 120.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p216_arm", false);
-			pos.y -= 200.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p216", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x -= 10.0f;
+				setpos.y += 120.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p216_arm", false);
+				pos.y -= 200.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p216", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p216") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x -= 30.0f;
-			setpos.y += 25.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p217_arm", false);
-			pos.x += 100.0f;
-			pos.y += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"translate_p1_p217", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x -= 30.0f;
+				setpos.y += 25.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p217_arm", false);
+				pos.x += 100.0f;
+				pos.y += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"translate_p1_p217", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p217") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			owner->SetActive(false);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p218_arm", false);
+			{
+				GameObject* owner = ani->GetOwner();
+				owner->SetActive(false);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p218_arm", false);
 
-			std::shared_ptr<GameObject> player = SceneManager::FindObject(L"Player");
-			player->GetComponent<Rigidbody>()->SetActive(false);
-			player->GetComponent<Rigidbody>()->SetGround(false);
-			player->GetComponent<Transform>()->SetPos(Vector2{ 500.0f,400.0f });
-			player->GetComponent<Animator>()->Play(L"JumpRight", true);
-			player->SetActive(false);
-		});
+				std::shared_ptr<GameObject> player = SceneManager::FindObject(L"Player");
+				player->GetComponent<Rigidbody>()->SetActive(false);
+				player->GetComponent<Rigidbody>()->SetGround(false);
+				player->GetComponent<Transform>()->SetPos(Vector2{ 500.0f,400.0f });
+				player->GetComponent<Animator>()->Play(L"JumpRight", true);
+				player->SetActive(false);
+			});
 		mAni->GetStartEvent(L"translate_p1_p218") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			SceneManager::ChageLayer(owner, ELayerType::Boss);
-			std::shared_ptr<GameObject> arm2 = mParts[EParts::ARM2];
-			SceneManager::ChageLayer(arm2.get(), ELayerType::Boss);
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x -= 100.0f;
-			pos.y += 220.0f;
-			tf->SetPos(pos);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x += 15.0f;
-			setpos.y -= 100.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p218_3_arm", false);
-			ani->Play(L"translate_p1_p218_3", false);
+			{
+				GameObject* owner = ani->GetOwner();
+				SceneManager::ChageLayer(owner, ELayerType::Boss);
+				std::shared_ptr<GameObject> arm2 = mParts[EParts::ARM2];
+				SceneManager::ChageLayer(arm2.get(), ELayerType::Boss);
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x -= 100.0f;
+				pos.y += 220.0f;
+				tf->SetPos(pos);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x += 15.0f;
+				setpos.y -= 100.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p218_3_arm", false);
+				ani->Play(L"translate_p1_p218_3", false);
 
-			mParts[EParts::ACC]->SetActive(false);
-			mPhaseType = EPhaseType::PHASE2;
-		});
+				mParts[EParts::ACC]->SetActive(false);
+				mPhaseType = EPhaseType::PHASE2;
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p218_3") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x += 10.0f;
-			setpos.y -= 80.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p219_arm", false);
-			ani->Play(L"translate_p1_p219", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x += 10.0f;
+				setpos.y -= 80.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p219_arm", false);
+				ani->Play(L"translate_p1_p219", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p219") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.x -= 50.0f;
-			setpos.y += 50.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p220_arm", false);
-			ani->Play(L"translate_p1_p220", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.x -= 50.0f;
+				setpos.y += 50.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p220_arm", false);
+				ani->Play(L"translate_p1_p220", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p220") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x += 100.0f;
-			tf->SetPos(pos);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			ani->Play(L"translate_p1_p221", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x += 100.0f;
+				tf->SetPos(pos);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				ani->Play(L"translate_p1_p221", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p221") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x += 130.0f;
-			tf->SetPos(pos);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p222_arm", false);
-			ani->Play(L"translate_p1_p222", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x += 130.0f;
+				tf->SetPos(pos);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p222_arm", false);
+				ani->Play(L"translate_p1_p222", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p222") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> player = SceneManager::FindObject(L"Player");
-			player->SetActive(true);
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			/*Vector2 pos = tf->GetPos();
-			pos.y += 100.0f;
-			tf->SetPos(pos);*/
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.y -= 400.0f;
-			arm_tf->SetPos(setpos);
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p223_arm", false);
-			ani->Play(L"translate_p1_p223", false);
-		});
+			{
+				std::shared_ptr<GameObject> player = SceneManager::FindObject(L"Player");
+				player->SetActive(true);
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				/*Vector2 pos = tf->GetPos();
+				pos.y += 100.0f;
+				tf->SetPos(pos);*/
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.y -= 400.0f;
+				arm_tf->SetPos(setpos);
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p223_arm", false);
+				ani->Play(L"translate_p1_p223", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p223") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-			ani->Play(L"translate_p1_p224", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+				ani->Play(L"translate_p1_p224", false);
+			});
 		mAni->GetCompleteEvent(L"translate_p1_p224") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			owner->SetActive(false);
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(true);
-			SceneManager::ChageLayer(arm.get(), ELayerType::Ground);
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = arm_tf->GetPos();
-			Vector2 setpos = armpos;
-			setpos.y += 500.0f;
-			arm_tf->SetPos(setpos);
+			{
+				GameObject* owner = ani->GetOwner();
+				owner->SetActive(false);
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(true);
+				SceneManager::ChageLayer(arm.get(), ELayerType::Ground);
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = arm_tf->GetPos();
+				Vector2 setpos = armpos;
+				setpos.y += 500.0f;
+				arm_tf->SetPos(setpos);
 
-			Animator* arm_ani = arm->GetComponent<Animator>();
-			arm_ani->Play(L"translate_p1_p225_arm", false);
-			Ground* ground = arm->AddComponent<Ground>();
-			Collider* col = arm->GetComponent<Collider>();
-			Vector2 size = arm_ani->GetSpriteSize();
-			col->SetCenter(Vector2{ -size.x / 2.0f,-100.0f });
-			col->SetSize(Vector2{ size.x,size.y / 2.0f });
-		});
+				Animator* arm_ani = arm->GetComponent<Animator>();
+				arm_ani->Play(L"translate_p1_p225_arm", false);
+				Ground* ground = arm->AddComponent<Ground>();
+				Collider* col = arm->GetComponent<Collider>();
+				Vector2 size = arm_ani->GetSpriteSize();
+				col->SetCenter(Vector2{ -size.x / 2.0f,-100.0f });
+				col->SetSize(Vector2{ size.x,size.y / 2.0f });
+			});
 #pragma endregion
 #pragma region p2 intro event
 		mAni->GetStartEvent(L"sb_p2_Intro1") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			owner->SetActive(true);
-			Collider* col = owner->GetComponent<Collider>();
-			Vector2 center = col->GetCenter();
-			col->SetCenter(Vector2{ center.x - 50.0f ,center.y - 250.0f });
-			col->SetSize(Vector2{ 500.0f,300.0f });
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x += 500.0f;
-			tf->SetPos(pos);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				owner->SetActive(true);
+				Collider* col = owner->GetComponent<Collider>();
+				Vector2 center = col->GetCenter();
+				col->SetCenter(Vector2{ center.x - 50.0f ,center.y - 250.0f });
+				col->SetSize(Vector2{ 500.0f,300.0f });
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x += 500.0f;
+				tf->SetPos(pos);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro1") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x -= 110.0f;
-			pos.y += 50.0f;
-			tf->SetPos(pos);
-			ani->Play(L"sb_p2_Intro1_2", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x -= 110.0f;
+				pos.y += 50.0f;
+				tf->SetPos(pos);
+				ani->Play(L"sb_p2_Intro1_2", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro1_2") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x -= 120.0f;
-			tf->SetPos(pos);
-			ani->Play(L"sb_p2_Intro1_3", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x -= 120.0f;
+				tf->SetPos(pos);
+				ani->Play(L"sb_p2_Intro1_3", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro1_3") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x -= 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"sb_p2_Intro1_4", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x -= 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"sb_p2_Intro1_4", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro1_4") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x -= 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"sb_p2_Intro2", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x -= 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"sb_p2_Intro2", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro2") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			ani->Play(L"sb_p2_Intro3", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				ani->Play(L"sb_p2_Intro3", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro3") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			ani->Play(L"sb_p2_Intro3_1", false);
+			{
+				GameObject* owner = ani->GetOwner();
+				ani->Play(L"sb_p2_Intro3_1", false);
 
-			std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-			acc->SetActive(true);
-			Transform* a_tf = acc->GetComponent<Transform>();
-			a_tf->SetPos(Vector2{ 700.0f,550.0f });
-			Animator* a_ani = acc->GetComponent<Animator>();
-			a_ani->Play(L"sb_p2_pepperintro_flash", false);
-		});
+				std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+				acc->SetActive(true);
+				Transform* a_tf = acc->GetComponent<Transform>();
+				a_tf->SetPos(Vector2{ 700.0f,550.0f });
+				Animator* a_ani = acc->GetComponent<Animator>();
+				a_ani->Play(L"sb_p2_pepperintro_flash", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro3_1") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			ani->Play(L"sb_p2_Intro3_2", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				ani->Play(L"sb_p2_Intro3_2", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro3_2") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x += 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"sb_p2_Intro4", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x += 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"sb_p2_Intro4", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro4") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			ani->Play(L"sb_p2_Intro5", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				ani->Play(L"sb_p2_Intro5", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro5") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			ani->Play(L"sb_p2_Intro6", false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				ani->Play(L"sb_p2_Intro6", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Intro6") = std::bind([ani]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			pos.x -= 100.0f;
-			tf->SetPos(pos);
-			ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				pos.x -= 100.0f;
+				tf->SetPos(pos);
+				ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
+			});
 		mAni->GetCompleteEvent(L"saltbaker_phase_2sb_p2_Idle") = std::bind([this]()->void
-		{
-			mbSkillUseCheck = false;
-		});
+			{
+				mbSkillUseCheck = false;
+			});
 #pragma endregion
 #pragma region p2 attacktype1 event
 		mAni->GetStartEvent(L"sb_p2_bossattacktype1") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
-			arm->SetActive(true);
-			arm->GetComponent<Animator>()->Play(L"sb_p2_handattacktype1", false);
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = pos;
-			armpos.x -= 800.0f;
-			armpos.y -= 50.0f;
-			arm_tf->SetPos(armpos);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+				arm->SetActive(true);
+				arm->GetComponent<Animator>()->Play(L"sb_p2_handattacktype1", false);
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = pos;
+				armpos.x -= 800.0f;
+				armpos.y -= 50.0f;
+				arm_tf->SetPos(armpos);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_bossattacktype1") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
-			arm->SetActive(false);
-			ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			
-			mP2BossSkill.SetUseTime(mTime);
-			mbSkillUseCheck = false;
-			mAttackCheck[EPhaseType::PHASE2][EAttackType::Type1]->mActive = true;
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+				arm->SetActive(false);
+				ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+
+				mP2BossSkill.SetUseTime(mTime);
+				mbSkillUseCheck = false;
+				mAttackCheck[EPhaseType::PHASE2][EAttackType::Type1]->mActive = true;
+			});
 #pragma endregion
 #pragma region p2 attacktype2 event
 		mAni->GetStartEvent(L"sb_p2_bossattacktype2") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
-			arm->SetActive(true);
-			arm->GetComponent<Animator>()->Play(L"sb_p2_handattacktype2", false);
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			Vector2 pos = tf->GetPos();
-		
-			Transform* arm_tf = arm->GetComponent<Transform>();
-			Vector2 armpos = pos;
-			armpos.x -= 800.0f;
-			armpos.y -= 50.0f;
-			arm_tf->SetPos(armpos);
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+				arm->SetActive(true);
+				arm->GetComponent<Animator>()->Play(L"sb_p2_handattacktype2", false);
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				Vector2 pos = tf->GetPos();
+
+				Transform* arm_tf = arm->GetComponent<Transform>();
+				Vector2 armpos = pos;
+				armpos.x -= 800.0f;
+				armpos.y -= 50.0f;
+				arm_tf->SetPos(armpos);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_bossattacktype2") = std::bind([ani, this]()->void
-		{
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
-			arm->SetActive(false);
-			ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-		
-			mP2BossSkill.SetUseTime(mTime);
-			mbSkillUseCheck = false;
-			mAttackCheck[EPhaseType::PHASE2][EAttackType::Type1]->mActive = true;
-		});
+			{
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM2];
+				arm->SetActive(false);
+				ani->Play(L"saltbaker_phase_2sb_p2_Idle", true);
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+
+				mP2BossSkill.SetUseTime(mTime);
+				mbSkillUseCheck = false;
+				mAttackCheck[EPhaseType::PHASE2][EAttackType::Type1]->mActive = true;
+			});
 #pragma endregion
 #pragma region death event
-		mAni->GetCompleteEvent(L"sb_p2_Death1") = std::bind([ani,this]()->void
-		{
-			mParts[EParts::ARM2]->SetActive(false);
-			ani->Play(L"sb_p2_Death2", false);
-		});
+		mAni->GetCompleteEvent(L"sb_p2_Death1") = std::bind([ani, this]()->void
+			{
+				mParts[EParts::ARM2]->SetActive(false);
+				ani->Play(L"sb_p2_Death2", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Death2") = std::bind([ani]()->void
-		{
-			ani->Play(L"sb_p2_Death3", false);
-		});
+			{
+				ani->Play(L"sb_p2_Death3", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Death3") = std::bind([ani]()->void
-		{
-			ani->Play(L"sb_p2_Death4", false);
-		});
+			{
+				ani->Play(L"sb_p2_Death4", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Death4") = std::bind([ani]()->void
-		{
-			ani->Play(L"sb_p2_Death5", false);
-		});
+			{
+				ani->Play(L"sb_p2_Death5", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Death5") = std::bind([ani]()->void
-		{
-			ani->Play(L"sb_p2_Death6", false);
-		});
+			{
+				ani->Play(L"sb_p2_Death6", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p2_Death6") = std::bind([ani]()->void
-		{
-			if (ani->GetComEventPlayCnt() >= 1)
-				return;
-			ani->SetActive(false);
-		});
-		
+			{
+				if (ani->GetComEventPlayCnt() >= 1)
+					return;
+				ani->SetActive(false);
+			});
+
 #pragma endregion
 #pragma region p3 intro
 		mAni->GetStartEvent(L"sb_p3_introacc1") = std::bind([ani, this]()->void
-		{
-			GameObject* owner = ani->GetOwner();
-			Transform* tf = owner->GetComponent<Transform>();
-			tf->SetPos(Vector2{ 300.0f,400.0f });
-			std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
-			arm->SetActive(false);
-		});
+			{
+				GameObject* owner = ani->GetOwner();
+				Transform* tf = owner->GetComponent<Transform>();
+				tf->SetPos(Vector2{ 300.0f,400.0f });
+				std::shared_ptr<GameObject> arm = mParts[EParts::ARM];
+				arm->SetActive(false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc1") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc2", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc2", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc2") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc3", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc3", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc3") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc4", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc4", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc4") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc5", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc5", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc5") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc6", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc6", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc6") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc7", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc7", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc7") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc8", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc8", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc8") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc9", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc9", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc9") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc10", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc10", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc10") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc11", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc11", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc11") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc12", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc12", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc12") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc13", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc13", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc13") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc14", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc14", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc14") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc15", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc15", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc15") = std::bind([ani, this]()->void
-		{
-			mAni->Play(L"sb_p3_introacc16", false);
-		});
+			{
+				mAni->Play(L"sb_p3_introacc16", false);
+			});
 		mAni->GetCompleteEvent(L"sb_p3_introacc16") = std::bind([ani, this]()->void
-		{
-			if (mAni->GetComEventPlayCnt() > 1)
-				return;
-			std::shared_ptr<GameObject> phase3_obj = core::ObjectPool<SlatPhase3>::Spawn();
-			SlatPhase3* salt = phase3_obj->GetComponent<SlatPhase3>();
-			salt->SetCompleteEvent();
-			salt->SetColCenter();
-			SceneManager::GetActiveScene()->AddGameObject(phase3_obj, ELayerType::Monster);
-		});
+			{
+				if (mAni->GetComEventPlayCnt() > 1)
+					return;
+				std::shared_ptr<GameObject> phase3_obj = core::ObjectPool<SlatPhase3>::Spawn();
+				SlatPhase3* salt = phase3_obj->GetComponent<SlatPhase3>();
+				salt->SetCompleteEvent();
+				salt->SetColCenter();
+				SceneManager::GetActiveScene()->AddGameObject(phase3_obj, ELayerType::Monster);
+			});
 
 
 #pragma endregion
@@ -1581,49 +1609,49 @@ namespace yeram_client
 
 				ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\sb_p2_ground\\Idle", Vector2::Zero, 0.1f);
 				ani->GetCompleteEvent(L"attack_type210_arm") = std::bind([ani, tf]()->void
-				{
-					Vector2 pos = tf->GetPos();
-					pos.x += 210.0f;
-					pos.y -= 100.0f;
-					tf->SetPos(pos);
-					ani->Play(L"attack_type211_arm", false);
-				});
+					{
+						Vector2 pos = tf->GetPos();
+						pos.x += 210.0f;
+						pos.y -= 100.0f;
+						tf->SetPos(pos);
+						ani->Play(L"attack_type211_arm", false);
+					});
 				ani->GetCompleteEvent(L"attack_type44_arm") = std::bind([ani]()->void
-				{
-					GameObject* owner = ani->GetOwner();
-					Transform* tf = owner->GetComponent<Transform>();
-					Vector2 pos = tf->GetPos();
-					pos.x -= 200.0f;
-					pos.y += 100.0f;
-					tf->SetPos(pos);
+					{
+						GameObject* owner = ani->GetOwner();
+						Transform* tf = owner->GetComponent<Transform>();
+						Vector2 pos = tf->GetPos();
+						pos.x -= 200.0f;
+						pos.y += 100.0f;
+						tf->SetPos(pos);
 
-					ani->Play(L"attack_type44_2arm", false);
-				});
+						ani->Play(L"attack_type44_2arm", false);
+					});
 				ani->GetCompleteEvent(L"translate_p1_p22_arm") = std::bind([ani]()->void
-				{
-					GameObject* owner = ani->GetOwner();
-					Transform* tf = owner->GetComponent<Transform>();
-					Vector2 pos = tf->GetPos();
-					pos.x -= 45.0f;
-					pos.y -= 15.0f;
-					tf->SetPos(pos);
-					ani->Play(L"translate_p1_p22_2arm", false);
-				});
+					{
+						GameObject* owner = ani->GetOwner();
+						Transform* tf = owner->GetComponent<Transform>();
+						Vector2 pos = tf->GetPos();
+						pos.x -= 45.0f;
+						pos.y -= 15.0f;
+						tf->SetPos(pos);
+						ani->Play(L"translate_p1_p22_2arm", false);
+					});
 				ani->GetCompleteEvent(L"translate_p1_p218_arm") = std::bind([ani, this]()->void
-				{
-					ani->Play(L"translate_p1_p218_2_arm", false);
-				});
+					{
+						ani->Play(L"translate_p1_p218_2_arm", false);
+					});
 				ani->GetCompleteEvent(L"translate_p1_p218_2_arm") = std::bind([ani, this]()->void
-				{
-					this->GetOwner()->SetActive(true);
-					this->GetOwner()->GetComponent<Animator>()->Play(L"translate_p1_p218", false);
-				});
+					{
+						this->GetOwner()->SetActive(true);
+						this->GetOwner()->GetComponent<Animator>()->Play(L"translate_p1_p218", false);
+					});
 				ani->GetCompleteEvent(L"translate_p1_p225_arm") = std::bind([ani, this]()->void
-				{
-					mAni->Play(L"sb_p2_Intro1", false);
-					SceneManager::FindObject(L"Player")->GetComponent<Rigidbody>()->SetActive(true);
-					ani->Play(L"sb_p2_groundIdle", true);
-				});
+					{
+						mAni->Play(L"sb_p2_Intro1", false);
+						SceneManager::FindObject(L"Player")->GetComponent<Rigidbody>()->SetActive(true);
+						ani->Play(L"sb_p2_groundIdle", true);
+					});
 				ani->Play(L"saltbaker_phase_1intro_arm", false);
 				arm->SetActive(false);
 				//ani->Play(L"attack_type44_2arm", false);
@@ -1692,36 +1720,36 @@ namespace yeram_client
 
 
 				ani->GetCompleteEvent(L"attack_type1dough_attack1") = std::bind([ani]()->void
-				{
-					ani->Play(L"attack_type1dough_attack2", false);
-				});
-				ani->GetCompleteEvent(L"sb_p2_pepperintro_flash") = std::bind([ani, this]()->void
-				{
-					std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-					Transform* tf = acc->GetComponent<Transform>();
-					Vector2 pos = tf->GetPos();
-					pos.x += 200.0f;
-					pos.y += 250.0f;
-					tf->SetPos(pos);
-					ani->Play(L"sb_p2_pepperintro_flash2", false);
-				});
-				ani->GetCompleteEvent(L"sb_p2_pepperintro_flash2") = std::bind([this]()->void
-				{
-					std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
-					acc->SetActive(false);
-					SceneManager::ChageLayer(acc.get(), ELayerType::BackObject);
-					//pepper 생성 및 인트로 재생하기.
-					for (int i = 0; i < Pepper::mSpawnMax; i++)
 					{
-						std::shared_ptr<GameObject> pepper_obj = core::ObjectPool<Pepper>::Spawn();
-						Pepper* pepper = pepper_obj->GetComponent<Pepper>();
-						pepper->SetSpawnPos();
-						pepper->Intro();
-						mPeppers.push_back(pepper_obj);
-						SceneManager::GetActiveScene()->AddGameObject(pepper_obj, ELayerType::Monster);
-					}
-				});
-		      
+						ani->Play(L"attack_type1dough_attack2", false);
+					});
+				ani->GetCompleteEvent(L"sb_p2_pepperintro_flash") = std::bind([ani, this]()->void
+					{
+						std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+						Transform* tf = acc->GetComponent<Transform>();
+						Vector2 pos = tf->GetPos();
+						pos.x += 200.0f;
+						pos.y += 250.0f;
+						tf->SetPos(pos);
+						ani->Play(L"sb_p2_pepperintro_flash2", false);
+					});
+				ani->GetCompleteEvent(L"sb_p2_pepperintro_flash2") = std::bind([this]()->void
+					{
+						std::shared_ptr<GameObject> acc = mParts[EParts::ACC];
+						acc->SetActive(false);
+						SceneManager::ChageLayer(acc.get(), ELayerType::BackObject);
+						//pepper 생성 및 인트로 재생하기.
+						for (int i = 0; i < Pepper::mSpawnMax; i++)
+						{
+							std::shared_ptr<GameObject> pepper_obj = core::ObjectPool<Pepper>::Spawn();
+							Pepper* pepper = pepper_obj->GetComponent<Pepper>();
+							pepper->SetSpawnPos();
+							pepper->Intro();
+							mPeppers.push_back(pepper_obj);
+							SceneManager::GetActiveScene()->AddGameObject(pepper_obj, ELayerType::Monster);
+						}
+					});
+
 			}
 			mParts.insert(std::make_pair(EParts::ACC, acc));
 		}
@@ -1772,27 +1800,27 @@ namespace yeram_client
 
 		mAttackCheck.insert(std::make_pair(EPhaseType::PHASE1, std::map<EAttackType, std::shared_ptr<SpawnInfo>>()));
 		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type1, std::make_shared<SpawnInfo>(false, 3.0, 7, 7, 0, std::bind([this]()->void
-		{
-			P1AttackType1();
-		}))));
+			{
+				P1AttackType1();
+			}))));
 		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type2, std::make_shared<SpawnInfo>(false, 3.0, 8, 8, 0, std::bind([this]()->void
-		{
-			P1AttackType2();
-		}))));
+			{
+				P1AttackType2();
+			}))));
 		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type4, std::make_shared<SpawnInfo>(false, 4.0, 8, 8, 0, std::bind([this]()->void
-		{
-			P1AttackType4();
-		}))));
+			{
+				P1AttackType4();
+			}))));
 		mAttackCheck[EPhaseType::PHASE1].insert(std::make_pair(EAttackType::Type5, std::make_shared<SpawnInfo>(false, 3.0, 8, 8, 0, std::bind([this]()->void
-		{
-			P1AttackType5();
-		}))));
+			{
+				P1AttackType5();
+			}))));
 		mAttackCheck[EPhaseType::PHASE2].insert(std::make_pair(EAttackType::Type1, std::make_shared<SpawnInfo>(false, 0.0, 0, 0, 0, std::bind([this]()->void
-		{
-			P2AttackType1();
-		}))));
+			{
+				P2AttackType1();
+			}))));
 		Phase1();
-		
+
 		//test
 		//mPhaseType = EPhaseType::PHASE2;
 		//Phase2();
@@ -1801,17 +1829,17 @@ namespace yeram_client
 	void SaltBaker::Update()
 	{
 		Boss::Update();
-		if (mbPhase3IntroStart ==true)//fadein 됨.
+		if (mbPhase3IntroStart == true)//fadein 됨.
 		{
-			mAni->Play(L"sb_p3_introacc1",false);
+			mAni->Play(L"sb_p3_introacc1", false);
 			mbPhase3IntroStart = false;
 		}
-		if (mPhaseType == EPhaseType::PHASE2&& mbSkillUseCheck == false)
+		if (mPhaseType == EPhaseType::PHASE2 && mbSkillUseCheck == false)
 		{
-				if (mP2BossSkill.GetUseTime() == 0.0 || mTime - mP2BossSkill.GetUseTime() >= mP2BossSkill.GetCoolTime())
-				{
-					P2AttackAni();
-				}
+			if (mP2BossSkill.GetUseTime() == 0.0 || mTime - mP2BossSkill.GetUseTime() >= mP2BossSkill.GetCoolTime())
+			{
+				P2AttackAni();
+			}
 		}
 		std::map<EAttackType, std::shared_ptr<SpawnInfo>> map = mAttackCheck[mPhaseType];
 		for (auto& spawn_info : map)
@@ -1868,7 +1896,7 @@ namespace yeram_client
 			m.second.clear();
 		}
 		mAttackCheck.clear();
-		
+
 	}
 
 	void SaltBaker::OnCollisionEnter(Collider* other)
@@ -1881,21 +1909,21 @@ namespace yeram_client
 			if (pepper != nullptr)
 			{
 				TakeDamage();
-				std::wstring dirstr =pepper->GetSpawnDir();
+				std::wstring dirstr = pepper->GetSpawnDir();
 				std::wstring aniname = mAni->GetCurAniName();
 				UINT curindex = mAni->GetAniIndex();
 				mAni->Play(L"sb_p2_HitBoss" + dirstr, false);
-				mAni->GetCompleteEvent(L"sb_p2_HitBoss" + dirstr) = std::bind([this,aniname,curindex]()->void
-				{
-					if (mbSkillUseCheck == true)
-						mbSkillUseCheck = false;
+				mAni->GetCompleteEvent(L"sb_p2_HitBoss" + dirstr) = std::bind([this, aniname, curindex]()->void
+					{
+						if (mbSkillUseCheck == true)
+							mbSkillUseCheck = false;
 
-					mAni->Play(aniname, false);
-					mAni->SetCurAniIndex(curindex);
-				});
+						mAni->Play(aniname, false);
+						mAni->SetCurAniIndex(curindex);
+					});
 			}
 		}
-		
+
 	}
 
 	void SaltBaker::OnCollisionStay(Collider* other)
@@ -2024,7 +2052,7 @@ namespace yeram_client
 		}
 		mbSkillUseCheck = true;
 	}
-	
+
 	void SaltBaker::Phase1()
 	{
 		mAni->Play(L"saltbaker_phase_1intro", false);

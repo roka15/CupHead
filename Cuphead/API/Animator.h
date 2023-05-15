@@ -99,6 +99,7 @@ namespace yeram_client
 		const std::wstring& GetImageKey() { return mActiveAnimation->GetImageKey(); }
 		const std::wstring& GetImagePath() { return mPublicAniInfo[mActiveAnimation->GetName()].mPath; }
 
+		static void PublicInfoRelease();
 	private:
 		std::map<std::wstring, Animation*> mAnimations;
 		std::map <std::wstring, Events*> mEvents;

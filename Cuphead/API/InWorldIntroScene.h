@@ -25,6 +25,7 @@ namespace yeram_client
 		void ActiveShot6();
 	private:
 		bool mbEndFlag;
+		double mTime;
 	};
 }
 

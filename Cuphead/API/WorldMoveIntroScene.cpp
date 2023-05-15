@@ -42,6 +42,8 @@ namespace yeram_client
 		}
 		if (mTime< 21.0f&&mTime >= 20.0f)
 		{
+			Sound* sound = Resources::Find<Sound>(L"intro_start_sound");
+			sound->Stop(true);
 			Camera::SetFadeImage(L"");
 			Camera::FadeOut();
 		}
@@ -63,9 +65,13 @@ namespace yeram_client
 	void WorldMoveIntroScene::OnEnter()
 	{
 		Scene::OnEnter();
+		Sound* sound = Resources::Load<Sound>(L"intro_start_sound", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_intro_start.wav");
+		sound->Play(true);
 		Vector2 size = application.GetWindowSize();
 		Camera::FadeIn();
-		Resources::Load<Image>(L"worldmove_intro_text", L"..\\Resources\\worldmove_intro\\bg\\cutscene_intro_s1_logo.bmp");
+		Image* image =Resources::Load<Image>(L"worldmove_intro_text", L"..\\Resources\\worldmove_intro\\bg\\cutscene_intro_s1_logo.bmp");
+		Resources::Insert(L"worldmove_intro_text", image);
+		core::ResourceDeleterThread::RegisterResourceInfo(image);
 		std::shared_ptr<GameObject> background = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
 			background->SetName(L"moveintro_background");

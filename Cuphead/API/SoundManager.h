@@ -8,7 +8,7 @@ namespace yeram_client
 	public:
 		static bool Initialize();
 		static LPDIRECTSOUND8 GetDevice() { return mSoundDevice; }
-
+		static void Release();
 	private:
 		static LPDIRECTSOUND8 mSoundDevice;
 	};

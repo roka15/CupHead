@@ -24,11 +24,13 @@ namespace core
 		static void WriteLogConsole(myResource* _resource);
 		static void Release();
 		static void DeleterQueueSort();
+		static void DeleteConsole();
 	private:
 		static LRU_Queue<std::shared_ptr<myResource>, resource_greater> mLRUQueue;
 		static std::queue<std::wstring> mDeleteMessage;
-		static HANDLE mhConsole;
 		static HANDLE mDeleteThread;
+		static BOOL mEndFlag;
+		static CRITICAL_SECTION mCs;
 	};
 }
 

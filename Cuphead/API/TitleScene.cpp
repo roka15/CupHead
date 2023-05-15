@@ -87,6 +87,8 @@ void yeram_client::TitleScene::OnEnter()
 {
 	Vector2 size = application.GetWindowSize();
 
+	Sound* sound = Resources::Load<Sound>(L"title_sound", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_title.wav");
+	sound->Play(true);
 	std::shared_ptr<GameObject> title = core::ObjectPool<SpriteRenderer>::Spawn();
 	{
 		title->SetName(L"TitleBackGround");
@@ -176,5 +178,7 @@ void yeram_client::TitleScene::OnEnter()
 
 void yeram_client::TitleScene::OnExit()
 {
+	Sound* sound = Resources::Find<Sound>(L"title_sound");
+	sound->Stop(true);
 	Scene::OnExit();
 }

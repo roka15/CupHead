@@ -5,6 +5,8 @@
 #include "Time.h"
 #include "CutScenePlayAnimation.h"
 #include "MoveObject.h"
+#include "Resources.h"
+#include "Camera.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -31,7 +33,14 @@ namespace yeram_client
 	{
 		Scene::Update();
 		if (mbEndFlag == true)
+		{
+			/*mTime += Time::DeltaTime();
+			Camera::SetFadeImage(L"");
+			Camera::FadeOut();*/
 			SceneManager::LoadScene(ESceneType::PlayMap);
+		}
+	/*	if (mTime >= 10.0f)
+			SceneManager::LoadScene(ESceneType::PlayMap);*/
 	}
 	void InWorldIntroScene::Render(HDC hdc)
 	{
@@ -44,6 +53,11 @@ namespace yeram_client
 	void InWorldIntroScene::OnEnter()
 	{
 		Scene::OnEnter();
+		Sound* sound = Resources::Load<Sound>(L"intro_sound", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_intro.wav");
+		sound->Play(true);
+
+		Sound* start_sound = Resources::Load<Sound>(L"worldintro_goststart", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_WorldMap_GhostSwap.wav");
+
 		Vector2 size = application.GetWindowSize();
 		std::shared_ptr<GameObject> sky = core::ObjectPool<SpriteRenderer>::Spawn();
 		{
@@ -195,66 +209,68 @@ namespace yeram_client
 				cutscene->SetAnimation(L"World4IntroAnichalice2", 0.0);
 				cutscene->SetAnimation(L"World4IntroAnichalice2_2", 0.0);
 
+
 				head_ani->GetEndEvent(L"World4IntroAnichalice1") = std::bind([mouse_ani]()->void
-				{
-					mouse_ani->Stop();
-					mouse_ani->GetOwner()->SetActive(false);
-				});
+					{
+						
+						mouse_ani->Stop();
+						mouse_ani->GetOwner()->SetActive(false);
+					});
 				head_ani->GetEndEvent(L"World4IntroAnichalice2") = std::bind([arm_ani, head_ani]()->void
-				{
-					head_ani->GetOwner()->GetComponent<Transform>()->SetOffset(Vector2{ -45.0f,0.0f });
-					arm_ani->GetOwner()->SetActive(true);
-				});
+					{
+						head_ani->GetOwner()->GetComponent<Transform>()->SetOffset(Vector2{ -45.0f,0.0f });
+						arm_ani->GetOwner()->SetActive(true);
+					});
 				head_ani->GetStartEvent(L"World4IntroAnichalice3") = std::bind([arm_ani]()->void
-				{
-					arm_ani->Play(L"World4IntroAnichalice3_arm", false);
-				});
+					{
+						arm_ani->Play(L"World4IntroAnichalice3_arm", false);
+					});
 				head_ani->GetCompleteEvent(L"World4IntroAnichalice4") = std::bind([tail_ani]()->void
-				{
-					tail_ani->GetOwner()->SetActive(false);
-				});
+					{
+						tail_ani->GetOwner()->SetActive(false);
+					});
 				head_ani->GetCompleteEvent(L"World4IntroAnichalice4_2") = std::bind([this]()->void
-				{
-					std::shared_ptr<GameObject> soul = FindObject(L"portal")->FindChild(L"soul");
-					std::shared_ptr<GameObject> gost = FindObject(L"gost");
-					gost->SetActive(false);
-					soul->SetActive(true);
-					Vector2 pos = gost->GetComponent<Transform>()->GetPos();
-					soul->GetComponent<Transform>()->SetPos(pos);
-					soul->GetComponent<Animator>()->Play(L"World4IntroAnichalice5_light", false);
-					MoveObject* mv = soul->GetComponent<MoveObject>();
-					mv->CreateInfo(Vector2{ 300.0f,-100.0f }, EDirType::LEFT);
-					mv->SetActive(true);
-				});
+					{
+						std::shared_ptr<GameObject> soul = FindObject(L"portal")->FindChild(L"soul");
+						std::shared_ptr<GameObject> gost = FindObject(L"gost");
+						gost->SetActive(false);
+						soul->SetActive(true);
+						Vector2 pos = gost->GetComponent<Transform>()->GetPos();
+						soul->GetComponent<Transform>()->SetPos(pos);
+						soul->GetComponent<Animator>()->Play(L"World4IntroAnichalice5_light", false);
+						MoveObject* mv = soul->GetComponent<MoveObject>();
+						mv->CreateInfo(Vector2{ 300.0f,-100.0f }, EDirType::LEFT);
+						mv->SetActive(true);
+					});
 				head_ani->GetStartEvent(L"World4IntroAnimugman7") = std::bind([this]()->void
-				{
-					std::shared_ptr<GameObject> gost = FindObject(L"gost");
-					std::shared_ptr<GameObject> arm = gost->FindChild(L"arm");
-					arm->GetComponent<Animator>()->Play(L"World4IntroAnimugman7_8arm", true);
-					std::shared_ptr<GameObject> tail = gost->FindChild(L"tail");
-					tail->SetActive(true);
-					tail->GetComponent<Animator>()->Play(L"World4IntroAnichalicetail", true);
-					arm->SetActive(true);
-				});
+					{
+						std::shared_ptr<GameObject> gost = FindObject(L"gost");
+						std::shared_ptr<GameObject> arm = gost->FindChild(L"arm");
+						arm->GetComponent<Animator>()->Play(L"World4IntroAnimugman7_8arm", true);
+						std::shared_ptr<GameObject> tail = gost->FindChild(L"tail");
+						tail->SetActive(true);
+						tail->GetComponent<Animator>()->Play(L"World4IntroAnichalicetail", true);
+						arm->SetActive(true);
+					});
 				head_ani->GetStartEvent(L"World4IntroAnimugman8") = std::bind([this]()->void
-				{
-					std::shared_ptr<GameObject> gost = FindObject(L"gost");
-					std::shared_ptr<GameObject> mouse = gost->FindChild(L"mouse");
-					mouse->SetActive(false);
-				});
+					{
+						std::shared_ptr<GameObject> gost = FindObject(L"gost");
+						std::shared_ptr<GameObject> mouse = gost->FindChild(L"mouse");
+						mouse->SetActive(false);
+					});
 				head_ani->GetStartEvent(L"World4IntroAnichalice16_head") = std::bind([mouse_ani, this]()->void
-				{
-					mouse_ani->GetOwner()->SetActive(true);
-					mouse_ani->Play(L"World4IntroAnichalice16_mouse", true, 5.0f);
-				});
+					{
+						mouse_ani->GetOwner()->SetActive(true);
+						mouse_ani->Play(L"World4IntroAnichalice16_mouse", true, 5.0f);
+					});
 				head_ani->GetStartEvent(L"World4IntroAnichalice17_1") = std::bind([eye_ani, this]()->void
-				{
-					eye_ani->GetOwner()->SetActive(false);
-				});
+					{
+						eye_ani->GetOwner()->SetActive(false);
+					});
 				head_ani->GetCompleteEvent(L"World4IntroAnichalice17_1") = std::bind([eye_ani, this]()->void
-				{
-					mbEndFlag = true;
-				});
+					{
+						mbEndFlag = true;
+					});
 				tf = head->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ -70.0f,-15.0f });
 			}
@@ -283,7 +299,7 @@ namespace yeram_client
 			Animator* soul_ani = nullptr;
 			MoveObject* mv = portal->AddComponent<MoveObject>();
 			mv->SetActive(false);
-	
+
 			std::shared_ptr<GameObject> soul = core::ObjectPool<Animator>::Spawn();
 			{
 				soul->SetName(L"soul");
@@ -294,31 +310,33 @@ namespace yeram_client
 				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\5_light", Vector2::Zero, 0.07f, false);
 				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnimugman\\9", Vector2::Zero, 0.07f, false);
 				soul_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\15_effect", Vector2::Zero, 0.07f, false);
-
-				soul_ani->GetCompleteEvent(L"World4IntroAniportalchalice_intro") = std::bind([soul_ani, gost_ani]()->void {
+				
+				soul_ani->GetCompleteEvent(L"World4IntroAniportalchalice_intro") = std::bind([soul_ani, gost_ani,this]()->void 
+					{
+					Resources::Find<Sound>(L"worldintro_goststart")->Play(false);
 					soul_ani->GetOwner()->SetActive(false);
 					gost_ani->GetOwner()->SetActive(true);
-				});
+					});
 				soul_ani->GetCompleteEvent(L"World4IntroAnichalice5_light") = std::bind([soul_ani, gost_ani]()->void {
 					soul_ani->GetOwner()->SetActive(false);
 					gost_ani->GetOwner()->SetActive(true);
-				});
+					});
 				soul_ani->GetStartEvent(L"World4IntroAnimugman9") = std::bind([soul_ani]()->void
-				{
-					soul_ani->SetActive(true);
-					GameObject* owner = soul_ani->GetOwner();
-					owner->SetActive(true);
-					MoveObject* mv = owner->GetComponent<MoveObject>();
-					mv->SetActive(false);
-					Transform* tf = owner->GetComponent<Transform>();
-					tf->SetOffset(Vector2{ 140.0f,-20.0f });
-				});
+					{
+						soul_ani->SetActive(true);
+						GameObject* owner = soul_ani->GetOwner();
+						owner->SetActive(true);
+						MoveObject* mv = owner->GetComponent<MoveObject>();
+						mv->SetActive(false);
+						Transform* tf = owner->GetComponent<Transform>();
+						tf->SetOffset(Vector2{ 140.0f,-20.0f });
+					});
 				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
 				soul_ani->GetCompleteEvent(L"World4IntroAnichalice15_effect") = std::bind([soul_ani, gost_ani]()->void
-				{
-					soul_ani->SetActive(false);
-					gost_ani->GetOwner()->SetActive(true);
-				});
+					{
+						soul_ani->SetActive(false);
+						gost_ani->GetOwner()->SetActive(true);
+					});
 
 				Transform* tf = soul->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ -25.0f,-100.0f });
@@ -326,9 +344,9 @@ namespace yeram_client
 			portal->AddChild(soul);
 			ani->GetCompleteEvent(L"World4IntroAniportalintro") = std::bind([ani, soul_ani]()->
 				void {
-				ani->Play(L"World4IntroAniportalnormal", true);
-				soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
-			});
+					ani->Play(L"World4IntroAniportalnormal", true);
+					soul_ani->Play(L"World4IntroAniportalchalice_intro", false);
+				});
 
 			ani->Play(L"World4IntroAniportalintro", false);
 			Transform* tf = portal->GetComponent<Transform>();
@@ -355,9 +373,9 @@ namespace yeram_client
 				mouse_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnicuphead\\7_mouse", Vector2::Zero, 0.1f, false);
 				mouse_ani->Play(L"World4IntroAnicuphead_2_mouse", true, 5.0f);
 				mouse_ani->GetEndEvent(L"World4IntroAnicuphead_2_mouse") = std::bind([mouse_ani]()->void
-				{
-					mouse_ani->Play(L"World4IntroAnicuphead_2_mouse_2", true);
-				});
+					{
+						mouse_ani->Play(L"World4IntroAnicuphead_2_mouse_2", true);
+					});
 				Transform* tf = mouse->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ 20.0f, -220.0f });
 			}
@@ -376,21 +394,21 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnicuphead\\10", Vector2::Zero, 0.15f, false);
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnicuphead\\11", Vector2::Zero, 0.1f, false);
 			ani->GetStartEvent(L"World4IntroAnicuphead_2") = std::bind([mouse_ani]()->void
-			{
-				mouse_ani->GetOwner()->SetActive(true);
-			});
+				{
+					mouse_ani->GetOwner()->SetActive(true);
+				});
 			ani->GetEndEvent(L"World4IntroAnicuphead_2") = std::bind([mouse_ani]()->void
-			{
-				mouse_ani->GetOwner()->SetActive(false);
-			});
+				{
+					mouse_ani->GetOwner()->SetActive(false);
+				});
 			ani->GetStartEvent(L"World4IntroAnicuphead7") = std::bind([mouse_ani]()->void
-			{
-				GameObject* owner = mouse_ani->GetOwner();
-				owner->SetActive(true);
-				mouse_ani->Play(L"World4IntroAnicuphead7_mouse", false);
-				Transform* tf = owner->GetComponent<Transform>();
-				tf->SetOffset(Vector2{ 40.0f,-140.0f });
-			});
+				{
+					GameObject* owner = mouse_ani->GetOwner();
+					owner->SetActive(true);
+					mouse_ani->Play(L"World4IntroAnicuphead7_mouse", false);
+					Transform* tf = owner->GetComponent<Transform>();
+					tf->SetOffset(Vector2{ 40.0f,-140.0f });
+				});
 			cutscene->SetAnimation(L"World4IntroAnicuphead_2", 15);
 			cutscene->SetAnimation(L"World4IntroAnicuphead3", 0.0);
 			cutscene->SetAnimation(L"World4IntroAnicuphead4", 5);
@@ -456,109 +474,109 @@ namespace yeram_client
 				mouse_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\13_mouse", Vector2::Zero, 0.1f, false);
 				mouse_ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnichalice\\14_mouse", Vector2::Zero, 0.1f, false);
 				mouse_ani->GetEndEvent(L"World4IntroAnichalice11_mouse") = std::bind([mouse_ani]()->void
-				{
-					mouse_ani->GetOwner()->SetActive(false);
-				});
+					{
+						mouse_ani->GetOwner()->SetActive(false);
+					});
 				mouse_ani->GetCompleteEvent(L"World4IntroAnichalice14_mouse") = std::bind([mouse_ani, this]()->void
-				{
-					ActiveShot6();
-				});
+					{
+						ActiveShot6();
+					});
 				Transform* tf = mouse->GetComponent<Transform>();
 				tf->SetOffset(Vector2{ -10.0f, -200.0f });
 			}
 			ani->GetStartEvent(L"World4IntroAnimugman_1") = std::bind([mouse_ani]()->void
-			{
-				mouse_ani->GetOwner()->SetActive(true);
-				mouse_ani->Play(L"World4IntroAnimugman_2_mouse", true);
-			});
+				{
+					mouse_ani->GetOwner()->SetActive(true);
+					mouse_ani->Play(L"World4IntroAnimugman_2_mouse", true);
+				});
 			ani->GetEndEvent(L"World4IntroAnimugman_1") = std::bind([mouse_ani]()->void
-			{
-				mouse_ani->GetOwner()->SetActive(false);
-				mouse_ani->ActiveReset();
-			});
+				{
+					mouse_ani->GetOwner()->SetActive(false);
+					mouse_ani->ActiveReset();
+				});
 			ani->GetStartEvent(L"World4IntroAnimugman3") = std::bind([portal_ani]()->void
-			{
-				portal_ani->GetOwner()->SetActive(true);
-			});
+				{
+					portal_ani->GetOwner()->SetActive(true);
+				});
 			ani->GetStartEvent(L"World4IntroAnimugman5") = std::bind([this]()->void
-			{
-				this->ActiveShot2();
-			}
+				{
+					this->ActiveShot2();
+				}
 			);
 			ani->GetStartEvent(L"World4IntroAnimugman5_2") = std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> effect = this->FindObject(L"effect1");
-				std::shared_ptr<GameObject> mugman = this->FindObject(L"player2");
-				Transform* tf = mugman->GetComponent<Transform>();
-				Vector2 pos = tf->GetPos();
-				Vector2 scale = tf->GetScale();
-				Transform* e_tf = effect->GetComponent<Transform>();
-				pos.y += 15.0f;
-				e_tf->SetPos(pos);
-				e_tf->SetScale(scale);
-				effect->SetActive(true);
-			});
+				{
+					std::shared_ptr<GameObject> effect = this->FindObject(L"effect1");
+					std::shared_ptr<GameObject> mugman = this->FindObject(L"player2");
+					Transform* tf = mugman->GetComponent<Transform>();
+					Vector2 pos = tf->GetPos();
+					Vector2 scale = tf->GetScale();
+					Transform* e_tf = effect->GetComponent<Transform>();
+					pos.y += 15.0f;
+					e_tf->SetPos(pos);
+					e_tf->SetScale(scale);
+					effect->SetActive(true);
+				});
 			ani->GetCompleteEvent(L"World4IntroAnimugman5_2") = std::bind([this]()->void
-			{
-				ActiveShot1();
-			}
+				{
+					ActiveShot1();
+				}
 			);
 			ani->GetStartEvent(L"World4IntroAnichalice6") = std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> player1 = FindObject(L"player1");
-				CutScenePlayAnimation* cutscene = player1->GetComponent<CutScenePlayAnimation>();
-				cutscene->SetAnimation(L"World4IntroAnicuphead5", 0.0);
-				cutscene->SetAnimation(L"World4IntroAnicuphead6", 5.0);
-				std::shared_ptr<GameObject> player = FindObject(L"player2");
-				std::shared_ptr<GameObject> mouse = player->FindChild(L"mouse");
-				//mouse->SetActive(true);
-				//mouse->GetComponent<Animator>()->Play(L"World4IntroAnichalice6_mouse", false);
-				player->SetActive(true);
-			});
-			ani->GetStartEvent(L"World4IntroAnichalice8") = std::bind([this]()->void
-			{
-				std::shared_ptr<GameObject> player = FindObject(L"player2");
-				MoveObject* mv = player->GetComponent<MoveObject>();
-				mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::RIGHT);
-				mv->SetActive(true);
-			});
-			ani->GetStartEvent(L"World4IntroAnichalice9") = std::bind([this]()->void
-			{
-				ActiveShot3();
-			});
-			ani->GetStartEvent(L"World4IntroAnichalice10") = std::bind([this]()->void
-			{
-				ActiveShot4();
-			});
-			ani->GetStartEvent(L"World4IntroAnichalice11") = std::bind([mouse_ani]()->void
-			{
-				mouse_ani->GetOwner()->SetActive(true);
-			});
-			ani->GetStartEvent(L"World4IntroAnichalice12") = std::bind([this]()->void
-			{
-				ActiveShot5();
-			});
-			ani->GetStartEvent(L"World4IntroAnichalice13") = std::bind([mouse_ani, this]()->void
-			{
-				mouse_ani->GetOwner()->SetActive(true);
-				mouse_ani->Play(L"World4IntroAnichalice13_mouse", true);
-				std::shared_ptr<GameObject> sb = FindObject(L"salt_bakery");
-				sb->SetActive(true);
-			});
-			ani->GetStartEvent(L"World4IntroAnichalice14") = std::bind([mouse_ani, this]()->void
-			{
-				mouse_ani->Play(L"World4IntroAnichalice14_mouse", false);
-				std::shared_ptr<GameObject> player2 = FindObject(L"player2");
-				std::shared_ptr<GameObject> effect = FindObject(L"effect1");
 				{
-					effect->SetActive(true);
-					effect->GetComponent<Animator>()->Play(L"World4IntroAnichalice14_light", true);
-					Transform* tf = effect->GetComponent<Transform>();
-					Transform* ptf = player2->GetComponent<Transform>();
-					tf->SetScale(ptf->GetScale());
-					tf->SetPos(ptf->GetPos());
-				}
-			});
+					std::shared_ptr<GameObject> player1 = FindObject(L"player1");
+					CutScenePlayAnimation* cutscene = player1->GetComponent<CutScenePlayAnimation>();
+					cutscene->SetAnimation(L"World4IntroAnicuphead5", 0.0);
+					cutscene->SetAnimation(L"World4IntroAnicuphead6", 5.0);
+					std::shared_ptr<GameObject> player = FindObject(L"player2");
+					std::shared_ptr<GameObject> mouse = player->FindChild(L"mouse");
+					//mouse->SetActive(true);
+					//mouse->GetComponent<Animator>()->Play(L"World4IntroAnichalice6_mouse", false);
+					player->SetActive(true);
+				});
+			ani->GetStartEvent(L"World4IntroAnichalice8") = std::bind([this]()->void
+				{
+					std::shared_ptr<GameObject> player = FindObject(L"player2");
+					MoveObject* mv = player->GetComponent<MoveObject>();
+					mv->CreateInfo(Vector2{ 300.0f,0.0f }, EDirType::RIGHT);
+					mv->SetActive(true);
+				});
+			ani->GetStartEvent(L"World4IntroAnichalice9") = std::bind([this]()->void
+				{
+					ActiveShot3();
+				});
+			ani->GetStartEvent(L"World4IntroAnichalice10") = std::bind([this]()->void
+				{
+					ActiveShot4();
+				});
+			ani->GetStartEvent(L"World4IntroAnichalice11") = std::bind([mouse_ani]()->void
+				{
+					mouse_ani->GetOwner()->SetActive(true);
+				});
+			ani->GetStartEvent(L"World4IntroAnichalice12") = std::bind([this]()->void
+				{
+					ActiveShot5();
+				});
+			ani->GetStartEvent(L"World4IntroAnichalice13") = std::bind([mouse_ani, this]()->void
+				{
+					mouse_ani->GetOwner()->SetActive(true);
+					mouse_ani->Play(L"World4IntroAnichalice13_mouse", true);
+					std::shared_ptr<GameObject> sb = FindObject(L"salt_bakery");
+					sb->SetActive(true);
+				});
+			ani->GetStartEvent(L"World4IntroAnichalice14") = std::bind([mouse_ani, this]()->void
+				{
+					mouse_ani->Play(L"World4IntroAnichalice14_mouse", false);
+					std::shared_ptr<GameObject> player2 = FindObject(L"player2");
+					std::shared_ptr<GameObject> effect = FindObject(L"effect1");
+					{
+						effect->SetActive(true);
+						effect->GetComponent<Animator>()->Play(L"World4IntroAnichalice14_light", true);
+						Transform* tf = effect->GetComponent<Transform>();
+						Transform* ptf = player2->GetComponent<Transform>();
+						tf->SetScale(ptf->GetScale());
+						tf->SetPos(ptf->GetPos());
+					}
+				});
 
 			mugman->AddChild(mouse);
 
@@ -627,39 +645,39 @@ namespace yeram_client
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnimugman\\11", Vector2::Zero, 0.1f, false);
 			ani->CreateAnimations(L"..\\Resources\\World4IntroAni\\World4IntroAnimugman\\12_1", Vector2::Zero, 0.1f, false);
 			ani->GetCompleteEvent(L"World4IntroAnimugman6_light") = std::bind([ani, this]()->void
-			{
-				FindObject(L"player2")->SetActive(false);
-				ani->Play(L"World4IntroAnimugman7_light", false);
-				ani->GetOwner()->GetComponent<MoveObject>()->SetActive(true);
-			}
+				{
+					FindObject(L"player2")->SetActive(false);
+					ani->Play(L"World4IntroAnimugman7_light", false);
+					ani->GetOwner()->GetComponent<MoveObject>()->SetActive(true);
+				}
 			);
 			ani->GetCompleteEvent(L"World4IntroAnimugman7_light") = std::bind([ani, this]()->void
-			{
-				std::shared_ptr<GameObject> gost = FindObject(L"gost");
-				gost->SetActive(true);
-				std::shared_ptr<GameObject> player = FindObject(L"player2");
-				player->SetActive(true);
-				CutScenePlayAnimation* cutscene = gost->GetComponent<CutScenePlayAnimation>();
-				//here
-				MoveObject* mv = ani->GetOwner()->GetComponent<MoveObject>();
-				mv->SetActive(false);
-				ani->GetOwner()->SetActive(false);
-			}
+				{
+					std::shared_ptr<GameObject> gost = FindObject(L"gost");
+					gost->SetActive(true);
+					std::shared_ptr<GameObject> player = FindObject(L"player2");
+					player->SetActive(true);
+					CutScenePlayAnimation* cutscene = gost->GetComponent<CutScenePlayAnimation>();
+					//here
+					MoveObject* mv = ani->GetOwner()->GetComponent<MoveObject>();
+					mv->SetActive(false);
+					ani->GetOwner()->SetActive(false);
+				}
 			);
 
 			ani->GetCompleteEvent(L"World4IntroAnimugman11") = std::bind([ani, this]()->void
-			{
-				ani->Play(L"World4IntroAnimugman12_1", false);
-			}
+				{
+					ani->Play(L"World4IntroAnimugman12_1", false);
+				}
 			);
 			ani->GetCompleteEvent(L"World4IntroAnimugman12_1") = std::bind([ani, this]()->void
-			{
-				ani->GetOwner()->SetActive(false);
-				std::shared_ptr<GameObject> player2 = FindObject(L"player2");
 				{
-					player2->SetActive(true);
+					ani->GetOwner()->SetActive(false);
+					std::shared_ptr<GameObject> player2 = FindObject(L"player2");
+					{
+						player2->SetActive(true);
+					}
 				}
-			}
 			);
 			ani->Play(L"World4IntroAnimugman5_2_light", true);
 			effect1->SetActive(false);
@@ -700,7 +718,7 @@ namespace yeram_client
 			Vector2 spritesize;
 			spritesize.x = sprite->GetWidth();
 			spritesize.y = sprite->GetHeight();
-			tf->SetPos(Vector2{ nextpos.x-10.0f,180.0f });
+			tf->SetPos(Vector2{ nextpos.x - 10.0f,180.0f });
 			Vector2 pos = tf->GetPos();
 			nextpos.x = pos.x + spritesize.x;
 			nextpos.y = pos.y;
@@ -848,6 +866,8 @@ namespace yeram_client
 	}
 	void InWorldIntroScene::OnExit()
 	{
+		Sound* sound = Resources::Find<Sound>(L"intro_sound");
+		sound->Stop(true);
 		Scene::OnExit();
 	}
 	void InWorldIntroScene::ActiveShot1()
@@ -932,7 +952,7 @@ namespace yeram_client
 		std::shared_ptr<GameObject> p2 = FindObject(L"player2");
 		{
 			Transform* tf = p2->GetComponent<Transform>();
-			//tf->SetScale(Vector2{ 1.0f,1.0f });
+			tf->SetScale(Vector2{ 1.0f,1.0f });
 			tf->SetPos(Vector2{ 400.0f,800.0f });
 		}
 		std::shared_ptr<GameObject> portal = FindObject(L"portal");
@@ -946,7 +966,7 @@ namespace yeram_client
 		std::shared_ptr<GameObject> gost = FindObject(L"gost");
 		{
 			Transform* tf = gost->GetComponent<Transform>();
-			//tf->SetScale(Vector2{ 1.0f,1.0f });
+			tf->SetScale(Vector2{ 1.0f,1.0f });
 			tf->SetPos(Vector2{ 1200.0f,600.0f });
 			Transform* t_tf = gost->FindChild(L"tail")->GetComponent<Transform>();
 			t_tf->SetScale(Vector2{ 2.0f,2.0f });
@@ -1301,6 +1321,7 @@ namespace yeram_client
 			Transform* tf = player2->GetComponent<Transform>();
 			Vector2 pos = tf->GetPos();
 			pos.x += 50.0f;
+			pos.y -= 70.0f;
 			tf->SetPos(pos);
 			tf->SetScale(Vector2::One);
 			std::shared_ptr<GameObject> mouse = player2->FindChild(L"mouse");

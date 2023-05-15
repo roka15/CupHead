@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "ColliderManager.h"
 #include "MoveObjectManager.h"
+#include "SoundManager.h"
 //#include "WindowManager.h"
 namespace yeram_client
 {
@@ -41,6 +42,7 @@ namespace yeram_client
 		core::ResourceDeleterThread::Initialize();
 		core::Input::Initialize();
 		//WindowManager::Initialize();
+		SoundManager::Initialize();
 		SceneManager::Initalize();
 		Time::Initailize();
 		Camera::Initialize();

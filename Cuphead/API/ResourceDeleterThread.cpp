@@ -8,16 +8,26 @@ namespace core
 	typedef yeram_client::Audio Audio;
 	LRU_Queue<std::shared_ptr<ResourceDeleterThread::myResource>, ResourceDeleterThread::resource_greater> ResourceDeleterThread::mLRUQueue(MAX_RESOURCE);
 	std::queue<std::wstring> ResourceDeleterThread::mDeleteMessage;
-	HANDLE ResourceDeleterThread::mhConsole;
 	HANDLE ResourceDeleterThread::mDeleteThread;
+	BOOL ResourceDeleterThread::mEndFlag=false;
+	CRITICAL_SECTION ResourceDeleterThread::mCs;
 	void ResourceDeleterThread::Initialize()
 	{
 		BOOL suc = AllocConsole();
+
+		HWND consoleHandle = GetConsoleWindow();
+
+		// 콘솔 창 위치와 크기 설정
+		RECT consoleRect;
+		GetWindowRect(consoleHandle, &consoleRect);
+		MoveWindow(consoleHandle, 1500, 100, 1100, 800, TRUE);
+
 		if (suc == false)
 		{
 
 		}
 		LPVOID lpParam = nullptr;
+		InitializeCriticalSection(&mCs);
 		mDeleteThread = CreateThread(NULL, 0, DeleterThread,lpParam, 0, NULL);
 		if (mDeleteThread == NULL)
 		{
@@ -56,6 +66,7 @@ namespace core
 			DWORD waitResult = WaitForSingleObject(mDeleteThread, 0);
 			if (waitResult == WAIT_TIMEOUT)
 			{
+				EnterCriticalSection(&mCs);
 				if (mDeleteMessage.empty() == false)
 				{
 					std::wstring deleteMsg = mDeleteMessage.front();
@@ -66,6 +77,17 @@ namespace core
 					size_t bufferSize = (deleteMsg.length() + 1) * sizeof(wchar_t);
 					WriteFile(subConsoleHandle, deleteMsg.c_str(), static_cast<DWORD>(bufferSize), &dwByte, NULL);
 				}
+				else if(mEndFlag==true)
+				{
+				
+					if (mDeleteThread != NULL)
+						CloseHandle(mDeleteThread);
+
+					DeleteCriticalSection(&mCs);	
+					FreeConsole();
+					return 0;
+				}
+				LeaveCriticalSection(&mCs);
 			}
 			else 
 			{
@@ -73,9 +95,10 @@ namespace core
 				{
 					
 				}
-				FreeConsole();
 				if (mDeleteThread != NULL)
 					CloseHandle(mDeleteThread);
+				DeleteCriticalSection(&mCs);
+				FreeConsole();
 				return 0;
 			}
 		}
@@ -113,6 +136,7 @@ namespace core
 	void ResourceDeleterThread::Release()
 	{
 		SetResourceQueueCapacity(0);
+		mEndFlag = true;
 	}
 	void ResourceDeleterThread::DeleterQueueSort()
 	{

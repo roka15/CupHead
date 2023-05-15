@@ -2,6 +2,7 @@
 #include "Resources.h"
 #include "GameObject.h"
 #include "Time.h"
+#include "ResourceDeleterThread.h"
 namespace yeram_client
 {
 	std::map<std::wstring, Animator::CreateAniInfo> Animator::mPublicAniInfo;
@@ -182,6 +183,7 @@ namespace yeram_client
 			std::wstring fileName = itr.path().filename();
 			std::wstring fullName = _path + L"\\" + fileName;
 			Image* image = Resources::Load<Image>(fileName, fullName);
+			
 			images.push_back(image);
 
 			Vector2 size = Vector2{ (float)image->GetWidth(),(float)image->GetHeight() };
@@ -472,5 +474,9 @@ namespace yeram_client
 		cursor = _dir.find(L"Right");
 		if (std::wstring::npos != cursor)
 			_horizontal = EDirType::RIGHT;
+	}
+	void Animator::PublicInfoRelease()
+	{
+		mPublicAniInfo.clear();
 	}
 }

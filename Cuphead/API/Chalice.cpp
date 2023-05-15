@@ -289,7 +289,9 @@ namespace yeram_client
 					mDirType = h_key;
 					ani_name = ani->GetDirAniKey(L"ShootStraight", h_key);
 					shoot_dir = ani->GetDirAniKey(L"", h_key);
-					mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(1, h_key));
+					Vector2 pos = GetShooterSpawnPos(1, h_key);
+					pos.y -= 30.0f;
+					mShooter->GetComponent<Transform>()->SetOffset(pos);
 				}
 				else if (vertical_flag == true)
 				{
@@ -309,7 +311,9 @@ namespace yeram_client
 				{
 					ani_name = ani->GetDirAniKey(L"ShootStraight", mDirType);
 					shoot_dir = ani->GetDirAniKey(L"", mDirType);
-					mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(1, mDirType));
+					Vector2 pos = GetShooterSpawnPos(1, mDirType);
+					pos.y -= 30.0f;
+					mShooter->GetComponent<Transform>()->SetOffset(pos);
 				}
 
 			}
@@ -349,7 +353,9 @@ namespace yeram_client
 					mDirType = h_key;
 					ani_name = ani->GetDirAniKey(L"RunShootStraight", h_key);
 					shoot_dir = ani->GetDirAniKey(L"", h_key);
-					mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(2, EDirType::RUN, h_key));
+					Vector2 pos = GetShooterSpawnPos(2, EDirType::RUN, h_key);
+					pos.y -= 30.0f;
+					mShooter->GetComponent<Transform>()->SetOffset(pos);
 				}
 				else if (vertical_flag == true)
 				{
@@ -363,7 +369,9 @@ namespace yeram_client
 				{
 					shoot_dir = ani->GetDirAniKey(L"", mDirType);
 					ani_name = ani->GetDirAniKey(L"ShootStraight", mDirType);
-					mShooter->GetComponent<Transform>()->SetOffset(GetShooterSpawnPos(1, mDirType));
+					Vector2 pos = GetShooterSpawnPos(1, mDirType);
+					pos.y -= 30.0f;
+					mShooter->GetComponent<Transform>()->SetOffset(pos);
 				}
 			}
 
@@ -810,6 +818,9 @@ namespace yeram_client
 		EDirType v_key = GetDirType(vertical_key);
 
 		std::wstring dir_key;
+
+		Vector2 start_pos = mShooter->GetComponent<Transform>()->GetPos();
+
 		if (horizontal_flag == true && vertical_flag == true)
 		{
 			if (v_key == EDirType::DOWN && (core::Input::GetKey(core::EKeyCode::C) || core::Input::GetKeyDown(core::EKeyCode::C)))
@@ -829,6 +840,7 @@ namespace yeram_client
 		else if (horizontal_flag == true)
 		{
 			dir_key = mAni->GetDirAniKey(L"", h_key);
+			start_pos.y -= 30.0f;
 		}
 		else if (vertical_flag == true)
 		{
@@ -852,8 +864,8 @@ namespace yeram_client
 		{
 			dir_key = mAni->GetDirAniKey(L"", mDirType);
 		}
+	
 		
-		Vector2 start_pos = mShooter->GetComponent<Transform>()->GetPos();
 		double time_diff = mTime - mbulletInfo.mshoot_time;
 		if (time_diff < mBulletDelayTime)
 			return;

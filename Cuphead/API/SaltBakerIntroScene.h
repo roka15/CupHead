@@ -19,6 +19,8 @@ namespace yeram_client
 	private:
 		double mTime;
 		bool mbStartTimer;
+		bool mbSoundFlag;
+		double mNextSceneTime;
 	};
 }
 

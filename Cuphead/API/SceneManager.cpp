@@ -189,6 +189,7 @@ namespace yeram_client
         
 		core::ObjectPool<MoveObject>::Release();
 		core::ObjectPool<Animator>::Release();
+		Animator::PublicInfoRelease();
 		core::ObjectPool<SpriteRenderer>::Release();
 		core::ObjectPool<Collider>::Release();
 		core::Loading::Release();

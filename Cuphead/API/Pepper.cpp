@@ -31,6 +31,7 @@ namespace yeram_client
 		mReSpawnTime = 5.0;
 		mbReSpawn = false;
 		mbDeath = false;
+		Audio* audio = GetOwner()->AddComponent<Audio>();
 		Vector2 winsize = application.GetWindowSize();
 		if (mbSpawnInit == false)
 		{
@@ -125,6 +126,7 @@ namespace yeram_client
 
 	void Pepper::Death(Collider* _other)
 	{
+		Audio* audio = GetOwner()->GetComponent<Audio>();
 		Vector2 center = application.GetWindowSize()/2.0f;
 		Vector2 pos = mTransform->GetPos();
 		if (pos.x < center.x && pos.y<center.y)//left up
@@ -133,13 +135,16 @@ namespace yeram_client
 			mAni->Play(L"sb_p2_pepperDeathLeftUp", false);
 			
 			mMoveObject->CreateInfo(Vector2{ 800.0f,400.0f }, Vector2{ 1.0f,1.0f }, Vector2{ 1000.0f,500.0f }, true, true);
-			mMoveObject->SetArriveEvent(std::bind([this]()->void
+			mMoveObject->SetArriveEvent(std::bind([this,audio]()->void
 			{
 				mbReSpawn = true;
 				mAni->SetActive(false);
 				mCol->SetActive(false);
 				mMoveObject->SetActive(false);
 				mDeSpawnStartTime = mTime;
+				audio->Play(L"boss_p2_pepper_death1", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_Disappear_01.wav", false);
+				audio->Play(L"boss_p2_pepper_deathimpact1", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_LaunchImpact_01.wav", false);
+				audio->Play(L"boss_p2_pepper_saltdamage1", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Vocal_Pain_01.wav", false);
 			}));
 			mMoveObject->SetActive(true);
 		}
@@ -149,13 +154,17 @@ namespace yeram_client
 			mAni->Play(L"sb_p2_pepperDeathLeftDown", false);
 			
 			mMoveObject->CreateInfo(Vector2{ 800.0f,400.0f }, Vector2{ 1.0f,-1.0f }, Vector2{ 1000.0f,500.0f }, true, true);
-			mMoveObject->SetArriveEvent(std::bind([this]()->void
+			mMoveObject->SetArriveEvent(std::bind([this,audio]()->void
 			{
 				mbReSpawn = true;
 				mAni->SetActive(false);
 				mCol->SetActive(false);
 				mMoveObject->SetActive(false);
 				mDeSpawnStartTime = mTime;
+				audio->Play(L"boss_p2_pepper_death2", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_Disappear_02.wav", false);
+				audio->Play(L"boss_p2_pepper_deathimpact2", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_LaunchImpact_02.wav", false);
+				audio->Play(L"boss_p2_pepper_saltdamage2", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Vocal_Pain_02.wav", false);
+
 			})); 
 			mMoveObject->SetActive(true);
 		}
@@ -165,13 +174,16 @@ namespace yeram_client
 			mAni->Play(L"sb_p2_pepperDeathRightUp", false);
 		
 			mMoveObject->CreateInfo(Vector2{ 800.0f,400.0f }, Vector2{ -1.0f,1.0f }, Vector2{ 1000.0f,500.0f }, true, true);
-			mMoveObject->SetArriveEvent(std::bind([this]()->void
+			mMoveObject->SetArriveEvent(std::bind([this, audio]()->void
 			{
 				mbReSpawn = true;
 				mAni->SetActive(false);
 				mCol->SetActive(false);
 				mMoveObject->SetActive(false);
 				mDeSpawnStartTime = mTime;
+				audio->Play(L"boss_p2_pepper_death3", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_Disappear_03.wav", false);
+				audio->Play(L"boss_p2_pepper_deathimpact3", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_LaunchImpact_03.wav", false);
+				audio->Play(L"boss_p2_pepper_saltdamage3", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Vocal_Pain_03.wav", false);
 			}));
 			mMoveObject->SetActive(true);
 		}
@@ -181,13 +193,16 @@ namespace yeram_client
 			mAni->Play(L"sb_p2_pepperDeathRightUp", false);
 			
 			mMoveObject->CreateInfo(Vector2{ 800.0f,400.0f }, Vector2{ -1.0f,-1.0f }, Vector2{ 1000.0f,500.0f }, true, true);
-			mMoveObject->SetArriveEvent(std::bind([this]()->void
+			mMoveObject->SetArriveEvent(std::bind([this, audio]()->void
 			{
 				mbReSpawn = true;
 				mAni->SetActive(false);
 				mCol->SetActive(false);
 				mMoveObject->SetActive(false);
 				mDeSpawnStartTime = mTime;
+				audio->Play(L"boss_p2_pepper_death4", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_Disappear_04.wav", false);
+				audio->Play(L"boss_p2_pepper_deathimpact1", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_LaunchImpact_01.wav", false);
+				audio->Play(L"boss_p2_pepper_saltdamage4", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Vocal_Pain_04.wav", false);
 			}));
 			mMoveObject->SetActive(true);
 		}
@@ -195,6 +210,7 @@ namespace yeram_client
 
 	void Pepper::Attack()
 	{
+		Audio* audio = GetOwner()->GetComponent<Audio>();
 		Vector2 center = application.GetWindowSize();
 		center.x /= 2.0f;
 
@@ -202,16 +218,19 @@ namespace yeram_client
 		if (pos.x < center.x)
 		{
 			mAni->Play(L"sb_p2_pepperattackaniLeft", false);
+			audio->Play(L"boss_p2_pepper_sneeze3", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_SneezeAttack_03.wav", false);
 		}
 		else
 		{
 			mAni->Play(L"sb_p2_pepperattackaniRight", false);
+			audio->Play(L"boss_p2_pepper_sneeze1", L"..\\Resources\\AudioSource\\AudioClip\\sfx_DLC_Saltbaker_P2_Saltshaker_SneezeAttack_01.wav", false);
 		}
 		std::shared_ptr<GameObject> obj = core::ObjectPool<PepperBullet>::Spawn();
 		PepperBullet* pb = obj->GetComponent<PepperBullet>();
 		Vector2 pos2 = mTransform->GetPos();
 		pb->SetPos(Vector2{ pos2.x,pos2.y-100.0f});
 		pb->Shoot();
+		
 		SceneManager::GetActiveScene()->AddGameObject(obj, ELayerType::Bullet);
 	}
 

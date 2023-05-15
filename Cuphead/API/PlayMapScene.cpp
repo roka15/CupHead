@@ -15,6 +15,7 @@
 #include "Camera.h"
 #include "ColliderManager.h"
 #include "TitleCardUI.h"
+#include "Resources.h"
 extern yeram_client::Application application;
 namespace yeram_client
 {
@@ -77,6 +78,8 @@ namespace yeram_client
 	void PlayMapScene::OnEnter()
 	{
 		Scene::OnEnter();
+		Sound* sound = Resources::Load<Sound>(L"map_sound", L"..\\Resources\\AudioSource\\AudioClip\\mus_dlc_map_b.wav");
+		sound->Play(true);
 		Camera::SetHorizontalMove(true);
 		Camera::SetVerticalMove(true);
 		ColliderManager::SetLayer(ELayerType::BackColObject, ELayerType::Player, true);
@@ -186,6 +189,8 @@ namespace yeram_client
 	}
 	void PlayMapScene::OnExit()
 	{
+		Sound* sound = Resources::Find<Sound>(L"map_sound");
+		sound->Stop(true);
 		ColliderManager::SetLayer(ELayerType::BackColObject, ELayerType::Player, false);
 		//switch 로 로드할 맵 타입에 따라 load 달리하기
 		Camera::SetTarget(nullptr);

@@ -1,5 +1,6 @@
 #pragma once
 #include "ResourceDeleterThread.h"
+#include "Sound.h"
 namespace yeram_client
 {
 
@@ -40,6 +41,27 @@ namespace yeram_client
 			resource->SetTime(mTime);
 		
 			return dynamic_cast<T*>(resource);
+		}
+		template <>
+		static Sound* Load(const std::wstring& _key, const std::wstring& _path)
+		{
+			Sound* resource = Find<Sound>(_key);
+			if (resource != nullptr)
+				return resource;
+
+			resource = new Sound();
+			if (FAILED(resource->Load(_path)))
+			{
+				assert(false);
+				return nullptr;
+			}
+			resource->SetKey(_key);
+			resource->SetPath(_path);
+			resource->SetTime(mTime);
+
+			Resources::Insert(_key, resource);
+			core::ResourceDeleterThread::RegisterResourceInfo(resource);
+			return dynamic_cast<Sound*>(resource);
 		}
 		template<typename T>
 		static void Insert(const std::wstring& _key, T* _resource)

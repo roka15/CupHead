@@ -23,5 +23,10 @@ namespace yeram_client
 
 		return true;
 	}
+	void SoundManager::Release()
+	{
+		mSoundDevice->Release();
+		mSoundDevice = NULL;
+	}
 }
 
