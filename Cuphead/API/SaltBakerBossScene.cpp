@@ -423,8 +423,8 @@ namespace yeram_client
 	}
 	void SaltBakerBossScene::Phase2_Info_Register()
 	{
-		core::ResourceDeleterThread::SetResourceQueueCapacity(0);
-		core::ResourceDeleterThread::SetResourceQueueCapacity(3000);
+		//core::ResourceDeleterThread::SetResourceQueueCapacity(0);
+		//core::ResourceDeleterThread::SetResourceQueueCapacity(3000);
 		if (core::ObjectPool<MintBullet>::ActiveObjectPool() == false)
 			core::ObjectPool<MintBullet>::Initialize(50, 100);
 		if (core::ObjectPool<PepperBullet>::ActiveObjectPool() == false)
@@ -883,8 +883,8 @@ namespace yeram_client
 			tf->SetScale(Vector2{ 1.0f,1.5f });
 			Animator* ani = leftFront->GetComponent<Animator>();
 			ani->SetActive(false);
-			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathFrontGround\\translate_p2_p3DeathFrontGroundLeft\\intro", Vector2::Zero, 0.05f);
-			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\translate_p2_p3Death\\translate_p2_p3DeathFrontGround\\translate_p2_p3DeathFrontGroundLeft\\idle", Vector2::Zero, 0.05f);
+			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\\\translate_p2_p3DeathFrontGroundLeft\\intro", Vector2::Zero, 0.05f);
+			ani->CreateAnimations(L"..\\Resources\\scene\\dlc\\saltbaker_boss_scene\\saltbaker_phase_2\\translate_p2_p3\\\\translate_p2_p3DeathFrontGroundLeft\\idle", Vector2::Zero, 0.05f);
 			ani->Play(L"translate_p2_p3DeathFrontGroundLeftintro", false);
 			ani->GetCompleteEvent(L"translate_p2_p3DeathFrontGroundLeftintro") = std::bind([this, ani]()->void
 				{
